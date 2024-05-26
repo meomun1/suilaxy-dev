@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap");
+* {
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-image: url("https://images6.alphacoders.com/995/995178.jpg");
+}
+
+#app {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+#app::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: -1;
+}
+
+.parent {
+  display: flex;
+  height: 250px;
+}
+
+.heading-h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+  color: white;
+}
+
+.child {
+  width: 45%;
+}
+.child--featured {
+  flex-shrink: 1;
+}
+
+/*# sourceMappingURL=output.css.map */

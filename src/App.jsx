@@ -6,39 +6,6 @@ import {
 	useSuiClientQuery,
 } from '@mysten/dapp-kit'
 
-function App() {
-	//  References to the PhaserGame component (game and scene are exposed)
-	const phaserRef = useRef()
-
-	const changeScene = () => {
-		const scene = phaserRef.current.scene
-
-		if (scene) {
-			scene.changeScene()
-		}
-	}
-
-	// Event emitted from the PhaserGame component
-	const currentScene = (scene) => {
-		console.log(scene)
-	}
-
-	return (
-		<div id="app">
-			<PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
-			<div>
-				<div>
-					<button className="button" onClick={changeScene}>
-						Change Scene
-					</button>
-					<ConnectButton />
-					<ConnectedAccount />
-				</div>
-			</div>
-		</div>
-	)
-}
-
 function ConnectedAccount() {
 	const account = useCurrentAccount()
 
@@ -74,6 +41,58 @@ function OwnedObjects(props) {
 				</li>
 			))}
 		</ul>
+	)
+}
+
+function App() {
+	//  References to the PhaserGame component (game and scene are exposed)
+	const phaserRef = useRef()
+
+	// Event emitted from the PhaserGame component
+	const currentScene = (scene) => {
+		console.log(scene)
+	}
+
+	return (
+		<div id="app" className="parent">
+			{/* Game Info */}
+			<div className="child heading">
+				<h1 className="heading-h1">
+					Currently Suilaxy is running with Beta version on Sui Blockchain
+					testnet.
+				</h1>
+			</div>
+
+			{/* Game Canvas */}
+			<div className="child">
+				<PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
+			</div>
+
+			{/* Connect Wallet + Other */}
+			<div className="child">
+				<ConnectButton
+					style={{
+						display: 'block',
+						backgroundColor: '#4E97F3',
+						color: 'white',
+						padding: '15px',
+						textAlign: 'center',
+						textDecoration: 'none',
+						display: 'inline-block',
+						fontSize: '16px',
+						margin: '4px 2px',
+						cursor: 'pointer',
+						borderRadius: '15px',
+					}}
+				/>
+				<ConnectedAccount
+					style={{
+						textAlign: 'center',
+						color: '#4E97F3',
+					}}
+				/>
+			</div>
+		</div>
 	)
 }
 

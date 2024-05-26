@@ -22,7 +22,8 @@
 	],
 	"scripts": {
 		"dev": "vite --config vite/config.dev.mjs",
-		"build": "vite build --config vite/config.prod.mjs"
+		"build": "vite build --config vite/config.prod.mjs",
+		"build:css": "sass public/style.scss public/style.css"
 	},
 	"dependencies": {
 		"@mysten/dapp-kit": "^0.13.2",
@@ -40,6 +41,7 @@
 		"eslint-plugin-react": "^7.33.2",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"eslint-plugin-react-refresh": "^0.4.5",
+		"sass": "^1.77.2",
 		"terser": "^5.28.1",
 		"vite": "^5.1.4"
 	}

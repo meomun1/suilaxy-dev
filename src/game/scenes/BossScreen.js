@@ -125,11 +125,11 @@ class BossScreen extends Phaser.Scene {
 		})
 		// }
 
-		this.boss = new Boss(this, config.width / 2, 0, 100000)
+		this.boss = new Boss(this, config.width / 2, 0, 10000)
 		this.boss.play('boss_move_anim')
 
-		this.firstMini = new MiniBot(this, config.width / 5, -96, 10000)
-		this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 10000)
+		this.firstMini = new MiniBot(this, config.width / 5, -96, 500)
+		this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 500)
 
 		this.player = new Player(
 			this,
@@ -144,18 +144,18 @@ class BossScreen extends Phaser.Scene {
 		this.player.selectedPlayer = this.selectedPlayerIndex
 
 		// Spawn the Enemies
-		this.bug3_1 = new Bug3(this, 50, 0, 2000)
+		this.bug3_1 = new Bug3(this, 50, 0, 400)
 		this.bug3_1.play('bug3_anim')
 		this.bug3_1.setScale(2)
-		this.bug3_2 = new Bug3(this, config.width - 50, 0, 2000)
+		this.bug3_2 = new Bug3(this, config.width - 50, 0, 400)
 		this.bug3_2.play('bug3_anim')
 		this.bug3_2.setScale(2)
 
-		this.bug5 = new Bug5(this, 100, 0, 1000)
+		this.bug5 = new Bug5(this, 100, 0, 400)
 		this.bug5.play('bug5_anim')
 		this.bug5.setScale(0.6)
 
-		this.bug5_2 = new Bug5(this, 500, 0, 1000)
+		this.bug5_2 = new Bug5(this, 500, 0, 400)
 		this.bug5_2.play('bug5_anim')
 		this.bug5_2.setScale(0.6)
 
@@ -340,10 +340,27 @@ class BossScreen extends Phaser.Scene {
 				if (enemy.health > 0) {
 					enemy.takeDamage(100000)
 				}
+				gameSettings.isBossDead = true
 			})
 
+			if(isBossDead === true){
+				this.UtilitiesManager.addNftForPlayer()
+
+				this.CollideManager1 = new CollideManager(
+					this,
+					this.player,
+					this.EnemyManager.enemies,
+					this.UtilitiesManager.HealthPacks,
+					this.UtilitiesManager.shieldPacks,
+					this.UtilitiesManager.nftCollections,
+					this.shield,
+					this.SoundManager,
+				)
+			}
+
+
 			this.time.delayedCall(
-				500,
+				5000,
 				() => {
 					this.scene.start('victoryScreen')
 				},

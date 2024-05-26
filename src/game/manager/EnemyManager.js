@@ -175,7 +175,7 @@ class EnemyManager {
 			const y = -20
 
 			// Create a new bug
-			const newBug = new Bug1(this.scene, x, y, 600)
+			const newBug = new Bug1(this.scene, x, y, 400)
 			newBug.play('bug1_anim')
 			this.addEnemyForOnce(newBug)
 
@@ -204,7 +204,7 @@ class EnemyManager {
 			const y = Phaser.Math.Between(0, config.height / 3)
 
 			// Create a new bug
-			const newBug = new Bug1(this.scene, x, y, 600)
+			const newBug = new Bug1(this.scene, x, y, 400)
 			newBug.play('bug1_anim')
 			newBug.angle = 45
 			this.addEnemyForOnce(newBug)
@@ -235,7 +235,7 @@ class EnemyManager {
 			const y = Phaser.Math.Between(0, config.height / 3)
 
 			// Create a new bug
-			const newBug = new Bug1(this.scene, x, y, 600)
+			const newBug = new Bug1(this.scene, x, y, 400)
 			newBug.play('bug1_anim')
 			newBug.angle = -45
 			this.addEnemyForOnce(newBug)
@@ -266,7 +266,7 @@ class EnemyManager {
 			const y = config.height + 20 // Start the bug off the bottom edge of the screen
 
 			// Create a new bug
-			const newBug = new Bug1(this.scene, x, y, 600)
+			const newBug = new Bug1(this.scene, x, y, 400)
 			newBug.play('bug1_anim')
 			newBug.angle = -180 // Make the bug face upwards
 			this.addEnemyForOnce(newBug)

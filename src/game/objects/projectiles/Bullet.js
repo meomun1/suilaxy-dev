@@ -16,7 +16,7 @@ class Bullet extends Entity {
 
 		this.body.velocity.y = -gameSettings.bulletSpeed
 
-		this.damage = scene.player.bulletDamage
+		this.damage = gameSettings.savePlayerBulletDamage
 
 		this.bulletSize = scene.player.bulletSize
 

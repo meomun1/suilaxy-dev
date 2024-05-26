@@ -1,30 +1,129 @@
-import { EventBus } from '../EventBus';
-import { Scene } from 'phaser';
+import Phaser from 'phaser'
+import config from '../config/config.js'
+import GuiManager from '../manager/GuiManager.js'
+import KeyboardManager from '../manager/KeyboardManager.js'
+import InterfaceManager from './InterfaceScene.js'
 
-export class GameOver extends Scene
-{
-    constructor ()
-    {
-        super('GameOver');
-    }
+class GameOver extends Phaser.Scene {
+	constructor() {
+		super('gameOver')
+	}
 
-    create ()
-    {
-        this.cameras.main.setBackgroundColor(0xff0000);
+	init(data) {
+		this.callingScene = data.key
+	}
 
-        this.add.image(512, 384, 'background').setAlpha(0.5);
+	preload() {
+		this.load.spritesheet({
+			key: 'button_continue_hover',
+			url: 'assets/gui/button_play_hover.png',
+			frameConfig: {
+				frameWidth: 93,
+				frameHeight: 28,
+				startFrame: 3,
+				endFrame: 3,
+			},
+		})
 
-        this.add.text(512, 384, 'Game Over', {
-            fontFamily: 'Arial Black', fontSize: 64, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        }).setOrigin(0.5).setDepth(100);
+		this.load.spritesheet({
+			key: 'button_continue',
+			url: 'assets/gui/button_play.png',
+			frameConfig: {
+				frameWidth: 93,
+				frameHeight: 28,
+				startFrame: 3,
+				endFrame: 3,
+			},
+		})
+	}
 
-        EventBus.emit('current-scene-ready', this);
-    }
+	create() {
+		// Add a game over message
+		this.keyboardManager = new KeyboardManager(this)
+		this.guiManager = new GuiManager(this)
+		this.interfaceManager = new InterfaceManager(this)
 
-    changeScene ()
-    {
-        this.scene.start('MainMenu');
-    }
+		// Define the "R" key to restart the game
+		this.keyboardManager.restartGame()
+
+		// Define the "T" key to back to the title screen
+		this.keyboardManager.titleScreen()
+
+		// Define the "L" key to show the leaderboard
+		this.keyboardManager.showLeaderboard()
+
+		this.buttonContinue = this.add.sprite(
+			config.width / 2,
+			(2 * config.height) / 3 - 30,
+			'button_continue',
+			0,
+		)
+		this.buttonContinue.setInteractive()
+
+		this.buttonContinue.on('pointerdown', () => {
+			this.scene.start(this.callingScene)
+			this.scene.stop('gameOver')
+		})
+
+		this.buttonContinue.on('pointerover', () => {
+			this.buttonContinue.setTexture('button_continue_hover')
+		})
+
+		this.buttonContinue.on('pointerout', () => {
+			this.buttonContinue.setTexture('button_continue')
+		})
+
+		// Automatically transition to leaderboard after 5 seconds with countdown
+		this.countdownTimer = this.time.addEvent({
+			delay: 1000, // 1 second interval
+			callback: this.updateCountdown,
+			callbackScope: this,
+			repeat: 5, // 5 times for a total of 5 seconds
+		})
+
+		this.countdownNumber = this.add.text(
+			config.width / 2,
+			(config.height / 4) * 3,
+			'',
+			{
+				fontFamily: 'Pixelify Sans',
+				fontSize: '40px',
+				fill: '#FFFB73',
+			},
+		)
+		this.countdownNumber.setOrigin(0.5)
+
+		this.countdownText = this.add.text(
+			config.width / 2,
+			(config.height / 4) * 3 + 50,
+			'seconds to leaderboard',
+			{
+				fontFamily: 'Pixelify Sans',
+				fontSize: '32px',
+				fill: '#fff',
+			},
+		)
+		this.countdownText.setOrigin(0.5)
+
+		// Start the countdown
+		this.updateCountdown()
+	}
+
+	updateCountdown() {
+		const remainingTime = this.countdownTimer.repeatCount
+		this.countdownNumber.text = remainingTime > 0 ? remainingTime : 'GO!'
+
+		if (remainingTime === 0) {
+			// Transition to leaderboard after countdown
+			this.transitionToLeaderboard()
+		}
+	}
+
+	transitionToLeaderboard() {
+		// Stop the current scene and start the leaderboard scene
+		this.scene.stop(this.callingScene)
+		this.scene.start('leaderboard')
+	}
 }
+
+export default GameOver

@@ -23,7 +23,7 @@
 	"scripts": {
 		"dev": "vite --config vite/config.dev.mjs",
 		"build": "vite build --config vite/config.prod.mjs",
-		"build:css": "sass public/style.scss public/style.css"
+		"build:css": "sass --watch public/input.scss public/output.css"
 	},
 	"dependencies": {
 		"@mysten/dapp-kit": "^0.13.2",

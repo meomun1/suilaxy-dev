@@ -10,11 +10,13 @@ import UpgradeScreen from './scenes/UpgradeScreen.js'
 import TutorialScreen from './scenes/TutorialScreen.js'
 import LevelTwoScreen from './scenes/LevelTwoScreen.js'
 import LevelThreeScreen from './scenes/LevelThreeScreen.js'
-import Leaderboard from './scenes/Leaderboard.js'
 import BossScreen from './scenes/BossScreen.js'
 import CreditScreen from './scenes/CreditScreen.js'
-import VictoryScreen from './scenes/VictoryScreen.js'
 import NewShipScreen from './scenes/NewShipScreen.js'
+
+// Temporary Disable
+import VictoryScreen from './scenes/VictoryScreen.js'
+import Leaderboard from './scenes/Leaderboard.js'
 
 // Find out more information about the Game Config at:
 // https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -38,8 +40,6 @@ const config = {
 		UpgradeScreen,
 		GameOver,
 		CreditScreen,
-		Leaderboard,
-		VictoryScreen,
 	],
 	pixelArt: true,
 	input: {

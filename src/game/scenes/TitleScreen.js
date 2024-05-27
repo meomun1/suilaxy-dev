@@ -23,8 +23,6 @@ class TitleScreen extends Phaser.Scene {
 			'assets/images/backgrounds/background_title.png',
 		)
 
-		this.load.image('logo', 'logo.png')
-
 		this.load.spritesheet({
 			key: 'button_play',
 			url: 'assets/gui/button_play.png',
@@ -185,15 +183,6 @@ class TitleScreen extends Phaser.Scene {
 		)
 		guardianText.setOrigin(0.5)
 		guardianText.setShadow(3, 3, '#F27CA4', 2, false, true)
-
-		// Create "LOGO" image
-		const bottomLeftImage = this.add.image(
-			(config.width / 10) * 8.5,
-			(config.height / 10) * 9.78,
-			'logo',
-		)
-		bottomLeftImage.setOrigin(0, 1)
-		bottomLeftImage.setScale(0.3)
 
 		// Tween animation for the rainbow effect on "GUARDIAN"
 		this.tweens.add({

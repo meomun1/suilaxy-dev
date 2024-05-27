@@ -278,7 +278,6 @@ class BossScreen extends Phaser.Scene {
 	}
 
 	update() {
-		
 		// update for mute and sound button
 		if (this.music.musicOn === false && this.music.soundOn === false) {
 			this.musicButton = this.add.image(config.width - 60, 30, 'mute_texture')
@@ -326,7 +325,6 @@ class BossScreen extends Phaser.Scene {
 			})
 
 			if (gameSettings.isBossDead === true) {
-
 				this.UtilitiesManager.addNftForPlayer()
 
 				this.CollideManager1 = new CollideManager(
@@ -340,7 +338,7 @@ class BossScreen extends Phaser.Scene {
 					this.SoundManager,
 				)
 
-				gameSettings.isBossDead = false
+				gameSettings.isBossDead = true
 			}
 
 			this.time.delayedCall(

@@ -66,7 +66,6 @@ class CollideManager {
 			this,
 		)
 
-
 		// Add collision between player and nft collections
 		this.scene.physics.add.overlap(
 			this.player,

@@ -1,7 +1,7 @@
 var gameSettings = {
 	// game settings
-	playerSpeed: 250,
-	playerBulletDamage: 100,
+	playerSpeed: 300,
+	playerBulletDamage: 500,
 	playerLifesteal: 0,
 	playerBulletSpeed: 400,
 	playerScore: 0,
@@ -13,8 +13,8 @@ var gameSettings = {
 	playerUpgradeThreshold: 300,
 
 	// save settings
-	savePlayerSpeed: 250,
-	savePlayerBulletDamage: 100,
+	savePlayerSpeed: 300,
+	savePlayerBulletDamage: 500,
 	savePlayerLifesteal: 0,
 	savePlayerBulletSpeed: 400,
 	savePlayerScore: 0,
@@ -29,6 +29,11 @@ var gameSettings = {
 	enemySpeed: 200,
 	bulletSpeed: 400,
 	healthPackSpeed: 100,
+
+	// boss settings
+	isBossDead: true,
+	nft_weapon: 'nft_weapon',
+	nft_frame : 'nft_frame',
 }
 
 export default gameSettings

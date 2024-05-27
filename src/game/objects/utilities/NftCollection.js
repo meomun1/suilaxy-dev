@@ -2,18 +2,22 @@ import Entity from '../Entity.js'
 import gameSettings from '../../config/gameSettings.js'
 import Phaser from 'phaser'
 
-class HealthPack extends Entity {
+class NftCollection extends Entity {
 	constructor(scene, x, y) {
-		super(scene, x, y, 'healthPack_texture') // Replace with your health pack texture key
+		super(scene, x, y, 'nft_texture') // Replace with your health pack texture key
 		scene.add.existing(this)
 		scene.physics.add.existing(this)
 
+        this.type = 'tear'
+		this.frame = 'diamond'
+
+
+		// Randomly set initial velocity for movement
 		this.setRandomVelocity()
 		this.setInteractiveEntity()
 		this.body.setCollideWorldBounds(true) // Semicolon here instead of dot
 		this.body.setBounce(1)
 	}
-
 
 	setRandomVelocity() {
 		const randomVelocityX = Phaser.Math.Between(-100, 100)
@@ -31,4 +35,4 @@ class HealthPack extends Entity {
 
 }
 
-export default HealthPack
+export default NftCollection

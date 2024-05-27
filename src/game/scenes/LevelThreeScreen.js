@@ -134,13 +134,13 @@ class LevelThreeScreen extends Phaser.Scene {
 			18000,
 			() => {
 				// chasing enemies
-				this.bug5_1 = new Bug5(this, 30, -20, 900)
-				this.bug5_2 = new Bug5(this, 120, -20, 900)
-				this.bug5_3 = new Bug5(this, 210, -20, 900)
-				this.bug5_4 = new Bug5(this, 300, -20, 900)
-				this.bug5_5 = new Bug5(this, 390, -20, 900)
-				this.bug5_6 = new Bug5(this, 480, -20, 900)
-				this.bug5_7 = new Bug5(this, 570, -20, 900)
+				this.bug5_1 = new Bug5(this, 30, -20, 400)
+				this.bug5_2 = new Bug5(this, 120, -20, 400)
+				this.bug5_3 = new Bug5(this, 210, -20, 400)
+				this.bug5_4 = new Bug5(this, 300, -20, 400)
+				this.bug5_5 = new Bug5(this, 390, -20, 400)
+				this.bug5_6 = new Bug5(this, 480, -20, 400)
+				this.bug5_7 = new Bug5(this, 570, -20, 400)
 			},
 			null,
 			this,

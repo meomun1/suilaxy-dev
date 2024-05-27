@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import HealthPack from '../objects/utilities/HealthPack'
 import ShieldPack from '../objects/utilities/ShieldPack'
+import NftCollection from '../objects/utilities/NftCollection'
 class UtilitiesManager {
 	constructor(scene) {
 		this.scene = scene
@@ -9,6 +10,7 @@ class UtilitiesManager {
 		this.delayTime = 3000 // Set your desired delay time in milliseconds
 		this.timeElapsed = 0
 		this.shieldPacksSpawned = false
+		this.nftCollection = null 
 	}
 
 	generateRandomPosition() {
@@ -21,6 +23,12 @@ class UtilitiesManager {
 		const randomY = Phaser.Math.Between(minY, maxY)
 
 		return { x: randomX, y: randomY }
+	}
+
+	addNftForPlayer(){
+		const randomPos = this.generateRandomPosition()
+		this.nftCollection = new NftCollection(this.scene, randomPos.x, randomPos.y)
+		this.nftCollection.setTexture('nft_texture')
 	}
 
 	addUtilitiesForPlayingScreen(numHealth, numShield) {

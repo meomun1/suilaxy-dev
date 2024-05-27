@@ -224,8 +224,12 @@ class ChoosePlayer extends Phaser.Scene {
 	}
 
 	hideTextInput() {
-		const playerNameInput = document.getElementById('playerNameInput')
-		playerNameInput.style.display = 'none'
+		const playerNameInput = document.getElementById('playerNameInput');
+		if (playerNameInput) {
+			playerNameInput.style.display = 'none';
+		} else {
+			console.warn('Element with id "playerNameInput" not found');
+		}
 	}
 }
 

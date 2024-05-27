@@ -45,6 +45,7 @@ class BossScreen extends Phaser.Scene {
 
 	create() {
 		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
+
 		this.guiManager = new GuiManager(this)
 		this.guiManager.createBackground('background_texture_04')
 
@@ -125,11 +126,11 @@ class BossScreen extends Phaser.Scene {
 		})
 		// }
 
-		this.boss = new Boss(this, config.width / 2, 0, 100000)
+		this.boss = new Boss(this, config.width / 2, 0, 10000)
 		this.boss.play('boss_move_anim')
 
-		this.firstMini = new MiniBot(this, config.width / 5, -96, 10000)
-		this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 10000)
+		this.firstMini = new MiniBot(this, config.width / 5, -96, 500)
+		this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 500)
 
 		this.player = new Player(
 			this,
@@ -144,18 +145,18 @@ class BossScreen extends Phaser.Scene {
 		this.player.selectedPlayer = this.selectedPlayerIndex
 
 		// Spawn the Enemies
-		this.bug3_1 = new Bug3(this, 50, 0, 2000)
+		this.bug3_1 = new Bug3(this, 50, 0, 400)
 		this.bug3_1.play('bug3_anim')
 		this.bug3_1.setScale(2)
-		this.bug3_2 = new Bug3(this, config.width - 50, 0, 2000)
+		this.bug3_2 = new Bug3(this, config.width - 50, 0, 400)
 		this.bug3_2.play('bug3_anim')
 		this.bug3_2.setScale(2)
 
-		this.bug5 = new Bug5(this, 100, 0, 1000)
+		this.bug5 = new Bug5(this, 100, 0, 400)
 		this.bug5.play('bug5_anim')
 		this.bug5.setScale(0.6)
 
-		this.bug5_2 = new Bug5(this, 500, 0, 1000)
+		this.bug5_2 = new Bug5(this, 500, 0, 400)
 		this.bug5_2.play('bug5_anim')
 		this.bug5_2.setScale(0.6)
 
@@ -199,27 +200,6 @@ class BossScreen extends Phaser.Scene {
 			)
 		}
 
-		// this.EnemyManager.spawnCircleOfBugsLv1(
-		//   config.width / 2,
-		//   config.height / 2,
-		//   150,
-		//   8
-		// );
-
-		// FINAL WAVE
-		// this.time.delayedCall(
-		//   20000,
-		//   () => {
-		//     // Destroy all spawned enemies
-		//     this.destroySpawnedEnemies();
-
-		//     // Start the final wave
-		//     this.startFinalWave();
-		//   },
-		//   null,
-		//   this
-		// );
-
 		this.UtilitiesManager = new UtilitiesManager(this)
 		this.SoundManager = new SoundManager(this)
 		// Add a delayed event to spawn utilities after a delay
@@ -234,6 +214,7 @@ class BossScreen extends Phaser.Scene {
 					this.EnemyManager.enemies,
 					this.UtilitiesManager.HealthPacks,
 					this.UtilitiesManager.shieldPacks,
+					this.UtilitiesManager.nftCollection,
 					this.shield,
 					this.SoundManager,
 				)
@@ -259,6 +240,7 @@ class BossScreen extends Phaser.Scene {
 			this.EnemyManager.enemies,
 			this.UtilitiesManager.HealthPacks,
 			this.UtilitiesManager.shieldPacks,
+			this.UtilitiesManager.nftCollection,
 			this.shield,
 			this.SoundManager,
 		)
@@ -296,6 +278,7 @@ class BossScreen extends Phaser.Scene {
 	}
 
 	update() {
+		
 		// update for mute and sound button
 		if (this.music.musicOn === false && this.music.soundOn === false) {
 			this.musicButton = this.add.image(config.width - 60, 30, 'mute_texture')
@@ -342,8 +325,26 @@ class BossScreen extends Phaser.Scene {
 				}
 			})
 
+			if (gameSettings.isBossDead === true) {
+
+				this.UtilitiesManager.addNftForPlayer()
+
+				this.CollideManager1 = new CollideManager(
+					this,
+					this.player,
+					this.EnemyManager.enemies,
+					this.UtilitiesManager.HealthPacks,
+					this.UtilitiesManager.shieldPacks,
+					this.UtilitiesManager.nftCollections,
+					this.shield,
+					this.SoundManager,
+				)
+
+				gameSettings.isBossDead = false
+			}
+
 			this.time.delayedCall(
-				500,
+				5000,
 				() => {
 					this.scene.start('victoryScreen')
 				},

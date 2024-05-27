@@ -96,6 +96,8 @@ class LoadingScreen extends Phaser.Scene {
 			},
 		})
 
+		this.load.image('nft_texture', 'favicon.png')
+
 		// Load health pack Spritesheet
 		this.load.spritesheet({
 			key: 'healthPack_texture',
@@ -363,6 +365,7 @@ class LoadingScreen extends Phaser.Scene {
 		this.load.audio('health', 'assets/audio/health.wav')
 		this.load.audio('shield', 'assets/audio/shield.wav')
 		this.load.audio('bossMusic', 'assets/audio/boss.mp3')
+
 	}
 
 	create() {

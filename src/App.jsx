@@ -5,6 +5,7 @@ import {
 	useCurrentAccount,
 	useSuiClientQuery,
 } from '@mysten/dapp-kit'
+import MintNFT from './sui/MintNFT'
 
 function ConnectedAccount() {
 	const account = useCurrentAccount()
@@ -54,6 +55,7 @@ function App() {
 				<div className="child-right">
 					<ConnectButton className="button" />
 					<ConnectedAccount />
+					<MintNFT />
 				</div>
 			</div>
 		</>

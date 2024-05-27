@@ -13,12 +13,7 @@ function ConnectedAccount() {
 		return null
 	}
 
-	return (
-		<div>
-			<div>Connected to {account.address}</div>
-			<OwnedObjects address={account.address} />
-		</div>
-	)
+	return <OwnedObjects address={account.address} />
 }
 
 function OwnedObjects(props) {
@@ -28,20 +23,6 @@ function OwnedObjects(props) {
 	if (!data) {
 		return null
 	}
-
-	return (
-		<ul>
-			{data.data.map((object) => (
-				<li key={object.data?.objectId}>
-					<a
-						href={`https://example-explorer.com/object/${object.data?.objectId}`}
-					>
-						{object.data?.objectId}
-					</a>
-				</li>
-			))}
-		</ul>
-	)
 }
 
 function App() {
@@ -54,27 +35,28 @@ function App() {
 	}
 
 	return (
-		<div id="app">
-			{/* Game Info */}
-			<div className="overlay"></div>
-			<div className="child-left">
-				<h1 className="h1">
-					Currently Suilaxy is running with Beta version on Sui Blockchain
-					testnet.
-				</h1>
-			</div>
+		<>
+			<div id="app">
+				{/* Game Info */}
+				<div className="child-left">
+					<h1 className="h1">
+						Currently Suilaxy is running with Beta version on Sui Blockchain
+						testnet.
+					</h1>
+				</div>
 
-			{/* Game Canvas */}
-			<div className="child-main">
-				<PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
-			</div>
+				{/* Game Canvas */}
+				<div className="child-main">
+					<PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
+				</div>
 
-			{/* Connect Wallet + Other */}
-			<div className="child-right">
-				<ConnectButton className="button" />
-				<ConnectedAccount />
+				{/* Connect Wallet + Other */}
+				<div className="child-right">
+					<ConnectButton className="button" />
+					<ConnectedAccount />
+				</div>
 			</div>
-		</div>
+		</>
 	)
 }
 

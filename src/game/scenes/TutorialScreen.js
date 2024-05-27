@@ -137,14 +137,19 @@ class TutorialScreen extends Phaser.Scene {
 		this.projectileManager.createEnemyBullet()
 		this.projectileManager.createChaseBullet()
 
+		
+
 		this.CollideManager = new CollideManager(
 			this,
 			this.player,
 			this.EnemyManager.enemies,
 			this.UtilitiesManager.HealthPacks,
 			this.UtilitiesManager.shieldPacks,
+			this.UtilitiesManager.nftCollection,
 			this.shield,
 		)
+
+
 
 		// Score System
 		this.UpgradeManager = new UpgradeManager(this, this.callingScene)
@@ -269,7 +274,7 @@ class TutorialScreen extends Phaser.Scene {
 				Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
 				(cam, effect) => {
 					this.scene.stop()
-					this.scene.start('playGame', { number: this.selectedPlayerIndex })
+					this.scene.start('bossGame', { number: this.selectedPlayerIndex })
 				},
 			)
 		})

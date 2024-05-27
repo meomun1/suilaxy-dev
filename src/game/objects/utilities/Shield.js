@@ -15,12 +15,12 @@ class Shield extends Entity {
 
 	show() {
 		this.setVisible(true) // Show the shield
-		this.input.enabled = false // Disable input events on the shield
+		// this.input.enabled = false // Disable input events on the shield
 	}
 
 	hide() {
 		this.setVisible(false) // Hide the shield
-		this.input.enabled = true // Enable input events on the shield
+		// this.input.enabled = true // Enable input events on the shield
 	}
 
 	updatePosition(player) {

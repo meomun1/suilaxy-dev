@@ -1,3 +1,5 @@
+import gameSettings from '../config/gameSettings'
+
 class CollideManager {
 	constructor(
 		scene,
@@ -5,6 +7,7 @@ class CollideManager {
 		enemies,
 		healthPacks,
 		shieldPacks,
+		nftCollection,
 		shield,
 		soundManager,
 	) {
@@ -13,6 +16,7 @@ class CollideManager {
 		this.enemies = enemies
 		this.healthPacks = healthPacks
 		this.shieldPacks = shieldPacks
+		this.nftCollection = nftCollection
 		this.shield = shield
 		this.shieldActive = false
 		this.soundManager = soundManager
@@ -58,6 +62,16 @@ class CollideManager {
 			this.player,
 			this.enemies,
 			this.playerHitEnemy,
+			null,
+			this,
+		)
+
+
+		// Add collision between player and nft collections
+		this.scene.physics.add.overlap(
+			this.player,
+			this.nftCollection,
+			this.playerCollideNftCollection,
 			null,
 			this,
 		)
@@ -128,6 +142,12 @@ class CollideManager {
 		shieldPack.destroy()
 		this.shield.show()
 		this.shieldActive = true
+	}
+
+	playerCollideNftCollection(player, nftCollection) {
+		nftCollection.destroy()
+		gameSettings.nft_weapon = nftCollection.type
+		gameSettings.nft_frame = nftCollection.frame
 	}
 }
 

@@ -31,7 +31,7 @@ var gameSettings = {
 	healthPackSpeed: 100,
 
 	// boss settings
-	isBossDead: false,
+	isBossDead: true,
 	nft_weapon: 'nft_weapon',
 	nft_frame : 'nft_frame',
 }

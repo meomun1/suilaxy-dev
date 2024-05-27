@@ -45,6 +45,7 @@ class BossScreen extends Phaser.Scene {
 
 	create() {
 		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
+
 		this.guiManager = new GuiManager(this)
 		this.guiManager.createBackground('background_texture_04')
 
@@ -199,27 +200,6 @@ class BossScreen extends Phaser.Scene {
 			)
 		}
 
-		// this.EnemyManager.spawnCircleOfBugsLv1(
-		//   config.width / 2,
-		//   config.height / 2,
-		//   150,
-		//   8
-		// );
-
-		// FINAL WAVE
-		// this.time.delayedCall(
-		//   20000,
-		//   () => {
-		//     // Destroy all spawned enemies
-		//     this.destroySpawnedEnemies();
-
-		//     // Start the final wave
-		//     this.startFinalWave();
-		//   },
-		//   null,
-		//   this
-		// );
-
 		this.UtilitiesManager = new UtilitiesManager(this)
 		this.SoundManager = new SoundManager(this)
 		// Add a delayed event to spawn utilities after a delay
@@ -234,6 +214,7 @@ class BossScreen extends Phaser.Scene {
 					this.EnemyManager.enemies,
 					this.UtilitiesManager.HealthPacks,
 					this.UtilitiesManager.shieldPacks,
+					this.UtilitiesManager.nftCollection,
 					this.shield,
 					this.SoundManager,
 				)
@@ -259,6 +240,7 @@ class BossScreen extends Phaser.Scene {
 			this.EnemyManager.enemies,
 			this.UtilitiesManager.HealthPacks,
 			this.UtilitiesManager.shieldPacks,
+			this.UtilitiesManager.nftCollection,
 			this.shield,
 			this.SoundManager,
 		)
@@ -296,6 +278,7 @@ class BossScreen extends Phaser.Scene {
 	}
 
 	update() {
+		
 		// update for mute and sound button
 		if (this.music.musicOn === false && this.music.soundOn === false) {
 			this.musicButton = this.add.image(config.width - 60, 30, 'mute_texture')
@@ -340,10 +323,10 @@ class BossScreen extends Phaser.Scene {
 				if (enemy.health > 0) {
 					enemy.takeDamage(100000)
 				}
-				gameSettings.isBossDead = true
 			})
 
-			if(isBossDead === true){
+			if (gameSettings.isBossDead === true) {
+
 				this.UtilitiesManager.addNftForPlayer()
 
 				this.CollideManager1 = new CollideManager(
@@ -356,8 +339,9 @@ class BossScreen extends Phaser.Scene {
 					this.shield,
 					this.SoundManager,
 				)
-			}
 
+				gameSettings.isBossDead = false
+			}
 
 			this.time.delayedCall(
 				5000,

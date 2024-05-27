@@ -335,7 +335,7 @@ class BossScreen extends Phaser.Scene {
 					this.EnemyManager.enemies,
 					this.UtilitiesManager.HealthPacks,
 					this.UtilitiesManager.shieldPacks,
-					this.UtilitiesManager.nftCollections,
+					this.UtilitiesManager.nftCollection,
 					this.shield,
 					this.SoundManager,
 				)

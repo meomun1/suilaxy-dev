@@ -148,6 +148,7 @@ class CollideManager {
 		nftCollection.destroy()
 		gameSettings.nft_weapon = nftCollection.type
 		gameSettings.nft_frame = nftCollection.frame
+		alert('You have collected a nft')
 	}
 }
 

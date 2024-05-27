@@ -8,10 +8,6 @@ class NftCollection extends Entity {
 		scene.add.existing(this)
 		scene.physics.add.existing(this)
 
-        this.type = 'tear'
-		this.frame = 'diamond'
-
-
 		// Randomly set initial velocity for movement
 		this.setRandomVelocity()
 		this.setInteractiveEntity()

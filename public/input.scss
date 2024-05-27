@@ -4,53 +4,66 @@
 	font-family: 'Pixelify Sans', sans-serif;
 }
 
-body {
-	margin: 0;
-	padding: 0;
-	background-color: rgba(0, 0, 0, 0.5);
-	background-image: url('https://images6.alphacoders.com/995/995178.jpg');
-}
-
 // App Container, Background Image Dimmed
 #app {
 	width: 100%;
 	height: 100vh;
 	overflow: hidden;
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
-
 	position: relative;
-	&::before {
-		content: '';
+
+	.overlay {
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background-color: rgba(0, 0, 0, 0.1);
+		background-image: url('https://images6.alphacoders.com/995/995178.jpg');
+		background-size: cover;
 		z-index: -1;
 	}
-}
 
-// Parent and Child Components (Flexbox Layout)
-.parent {
-	display: flex;
-	height: 250px;
-}
+	.child {
+		&-left,
+		&-main,
+		&-right {
+			flex: 1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 
-.heading {
-	&-h1 {
-		font-size: 1.8rem;
-		font-weight: 600;
-		text-align: center;
-		color: white;
-	}
-}
+		&-left {
+			.h1 {
+				font-size: 1.8rem;
+				font-weight: 600;
+				text-align: center;
+				color: white;
+			}
+		}
 
-.child {
-	width: 45%;
-	&--featured {
-		flex-shrink: 1;
+		&-main {
+			padding: 0 20px;
+		}
+
+		&-right {
+			.button {
+				background-color: #4e97f3;
+				color: white;
+				border: none;
+				padding: 20px 20px;
+				font-size: 1rem;
+				font-weight: 600;
+				cursor: pointer;
+				border-radius: 10px;
+				transition: all 0.3s ease;
+				&:hover {
+					background-color: #fff;
+					color: black;
+				}
+			}
+		}
 	}
 }

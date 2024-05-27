@@ -54,43 +54,25 @@ function App() {
 	}
 
 	return (
-		<div id="app" className="parent">
+		<div id="app">
 			{/* Game Info */}
-			<div className="child heading">
-				<h1 className="heading-h1">
+			<div className="overlay"></div>
+			<div className="child-left">
+				<h1 className="h1">
 					Currently Suilaxy is running with Beta version on Sui Blockchain
 					testnet.
 				</h1>
 			</div>
 
 			{/* Game Canvas */}
-			<div className="child">
+			<div className="child-main">
 				<PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
 			</div>
 
 			{/* Connect Wallet + Other */}
-			<div className="child">
-				<ConnectButton
-					style={{
-						display: 'block',
-						backgroundColor: '#4E97F3',
-						color: 'white',
-						padding: '15px',
-						textAlign: 'center',
-						textDecoration: 'none',
-						display: 'inline-block',
-						fontSize: '16px',
-						margin: '4px 2px',
-						cursor: 'pointer',
-						borderRadius: '15px',
-					}}
-				/>
-				<ConnectedAccount
-					style={{
-						textAlign: 'center',
-						color: '#4E97F3',
-					}}
-				/>
+			<div className="child-right">
+				<ConnectButton className="button" />
+				<ConnectedAccount />
 			</div>
 		</div>
 	)

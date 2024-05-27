@@ -140,7 +140,7 @@ class TitleScreen extends Phaser.Scene {
 		// && this.music.bgMusicPlaying === false
 		if (this.music.musicOn === true) {
 			this.bgMusic = this.sound.add('main_menu_music', {
-				volume: 0.6,
+				volume: 0.5,
 				loop: true,
 			})
 			this.bgMusic.play()

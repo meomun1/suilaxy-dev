@@ -50,14 +50,7 @@ class BossScreen extends Phaser.Scene {
 		this.guiManager.createBackground('background_texture_04')
 
 		this.music = this.sys.game.globals.music
-		if (this.music.musicOn === true) {
-			this.sys.game.globals.bgMusic.stop()
-			this.bgMusic = this.sound.add('bossMusic', { volume: 0.3, loop: true })
-			this.bgMusic.play()
-			this.music.bgMusicPlaying = true
-			this.sys.game.globals.bgMusic = this.bgMusic
-			this.sys.game.globals.bgMusic.play()
-		}
+
 
 		// if (!(this.anims && this.anims.exists && this.anims.exists("player_anim"))) {
 		this.anims.create({
@@ -341,6 +334,7 @@ class BossScreen extends Phaser.Scene {
 				)
 
 				gameSettings.isBossDead = false
+				
 			}
 
 			this.time.delayedCall(

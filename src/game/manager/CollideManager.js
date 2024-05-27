@@ -146,9 +146,37 @@ class CollideManager {
 
 	playerCollideNftCollection(player, nftCollection) {
 		nftCollection.destroy()
-		gameSettings.nft_weapon = nftCollection.type
-		gameSettings.nft_frame = nftCollection.frame
-		alert('You have collected a nft')
+		
+		const arrayFrame = ['bronze', 'silver', 'gold', 'emerald', 'diamond', 'master', 'grandmaster', 'challenger', 'legendary']
+
+		const randomNum = Math.random() * 100;
+
+		let item;
+		if (randomNum < 0.01) {
+			item = arrayFrame[8]; // 'legendary'
+		} else if (randomNum < 0.1) {
+			item = arrayFrame[7]; // 'challenger'
+		} else if (randomNum < 1) {
+			item = arrayFrame[6]; // 'grandmaster'
+		} else if (randomNum < 5) {
+			item = arrayFrame[5]; // 'master'
+		} else if (randomNum < 10) {
+			item = arrayFrame[4]; // 'diamond'
+		} else if (randomNum < 20) {
+			item = arrayFrame[3]; // 'emerald'
+		} else if (randomNum < 30) {
+			item = arrayFrame[2]; // 'gold'
+		} else if (randomNum < 50) {
+			item = arrayFrame[1]; // 'silver'
+		} else {
+			item = arrayFrame[0]; // 'bronze'
+		}
+
+		gameSettings.nft_frame = item;
+		gameSettings.nft_weapon = 'weapon';
+
+		
+		console.log(gameSettings.nft_frame + ' ' + gameSettings.nft_weapon)
 	}
 }
 

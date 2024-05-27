@@ -13,12 +13,7 @@ function ConnectedAccount() {
 		return null
 	}
 
-	return (
-		<div>
-			<div>Connected to {account.address}</div>
-			<OwnedObjects address={account.address} />
-		</div>
-	)
+	return <OwnedObjects address={account.address} />
 }
 
 function OwnedObjects(props) {
@@ -28,20 +23,6 @@ function OwnedObjects(props) {
 	if (!data) {
 		return null
 	}
-
-	return (
-		<ul>
-			{data.data.map((object) => (
-				<li key={object.data?.objectId}>
-					<a
-						href={`https://example-explorer.com/object/${object.data?.objectId}`}
-					>
-						{object.data?.objectId}
-					</a>
-				</li>
-			))}
-		</ul>
-	)
 }
 
 function App() {
@@ -54,45 +35,28 @@ function App() {
 	}
 
 	return (
-		<div id="app" className="parent">
-			{/* Game Info */}
-			<div className="child heading">
-				<h1 className="heading-h1">
-					Currently Suilaxy is running with Beta version on Sui Blockchain
-					testnet.
-				</h1>
-			</div>
+		<>
+			<div id="app">
+				{/* Game Info */}
+				<div className="child-left">
+					<h1 className="h1">
+						Currently Suilaxy is running with Beta version on Sui Blockchain
+						testnet.
+					</h1>
+				</div>
 
-			{/* Game Canvas */}
-			<div className="child">
-				<PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
-			</div>
+				{/* Game Canvas */}
+				<div className="child-main">
+					<PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
+				</div>
 
-			{/* Connect Wallet + Other */}
-			<div className="child">
-				<ConnectButton
-					style={{
-						display: 'block',
-						backgroundColor: '#4E97F3',
-						color: 'white',
-						padding: '15px',
-						textAlign: 'center',
-						textDecoration: 'none',
-						display: 'inline-block',
-						fontSize: '16px',
-						margin: '4px 2px',
-						cursor: 'pointer',
-						borderRadius: '15px',
-					}}
-				/>
-				<ConnectedAccount
-					style={{
-						textAlign: 'center',
-						color: '#4E97F3',
-					}}
-				/>
+				{/* Connect Wallet + Other */}
+				<div className="child-right">
+					<ConnectButton className="button" />
+					<ConnectedAccount />
+				</div>
 			</div>
-		</div>
+		</>
 	)
 }
 

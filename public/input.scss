@@ -2,13 +2,23 @@
 
 * {
 	font-family: 'Pixelify Sans', sans-serif;
-}
-
-body {
 	margin: 0;
 	padding: 0;
-	background-color: rgba(0, 0, 0, 0.5);
-	background-image: url('https://images6.alphacoders.com/995/995178.jpg');
+	box-sizing: border-box;
+}
+
+html {
+	background-image: url('/public/background.png');
+	z-index: -1;
+	opacity: 1;
+}
+
+ul {
+	list-style-type: none;
+}
+
+a {
+	text-decoration: none;
 }
 
 // App Container, Background Image Dimmed
@@ -17,40 +27,80 @@ body {
 	height: 100vh;
 	overflow: hidden;
 	display: flex;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
-
 	position: relative;
-	&::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(0, 0, 0, 0.1);
-		z-index: -1;
-	}
-}
 
-// Parent and Child Components (Flexbox Layout)
-.parent {
-	display: flex;
-	height: 250px;
-}
+	.child {
+		&-left,
+		&-main,
+		&-right {
+			flex: 1;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 
-.heading {
-	&-h1 {
-		font-size: 1.8rem;
-		font-weight: 600;
-		text-align: center;
-		color: white;
-	}
-}
+		&-left {
+			margin-left: 40px;
+			margin-right: 40px;
+			.h1 {
+				font-size: 1.5rem;
+				font-weight: 600;
+				text-align: center;
+				color: white;
+			}
+		}
 
-.child {
-	width: 45%;
-	&--featured {
-		flex-shrink: 1;
+		&-main {
+			padding: 0;
+			border: 5px solid #f6d4fc;
+
+			-webkit-border-radius: 4px;
+			-moz-border-radius: 4px;
+			border-radius: 4px;
+
+			-webkit-box-shadow: 0px 10px 40px #89619e;
+			-moz-box-shadow: 0px 0px 40px #89619e;
+			box-shadow: 0px 0px 40px #89619e;
+		}
+
+		&-right {
+			display: flex;
+			flex-direction: column;
+			position: relative;
+
+			.button {
+				background-color: #5ba0f1;
+				color: white;
+				border: none;
+				padding: 20px 20px;
+				font-size: 1rem;
+				font-weight: 600;
+				cursor: pointer;
+				border-radius: 10px;
+				transition: all 0.3s ease;
+				&:hover {
+					background-color: #fff;
+					color: black;
+				}
+			}
+
+			button {
+				background-color: #6ec531;
+				color: white;
+				border: none;
+				padding: 20px 20px;
+				font-size: 1rem;
+				font-weight: 600;
+				cursor: pointer;
+				border-radius: 10px;
+				transition: all 0.3s ease;
+				&:hover {
+					background-color: #fff;
+					color: black;
+				}
+			}
+		}
 	}
 }

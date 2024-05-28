@@ -36,7 +36,7 @@ class SoundManager extends Phaser.GameObjects.Sprite {
 
 	playBulletSound() {
 		if (this.scene.sys.game.globals.music.soundOn) {
-			const BulletSound = this.scene.sound.add('shootSound', { volume: 0.2 })
+			const BulletSound = this.scene.sound.add('shootSound', { volume: 0.05 })
 			BulletSound.play()
 		}
 	}
@@ -44,7 +44,7 @@ class SoundManager extends Phaser.GameObjects.Sprite {
 	playExplosionSound() {
 		if (this.scene.sys.game.globals.music.soundOn) {
 			const explosionSound = this.scene.sound.add('explosionSound', {
-				volume: 0.2,
+				volume: 0.05,
 			})
 			explosionSound.play()
 		}

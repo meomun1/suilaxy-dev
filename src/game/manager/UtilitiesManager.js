@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import HealthPack from '../objects/utilities/HealthPack'
 import ShieldPack from '../objects/utilities/ShieldPack'
 import NftCollection from '../objects/utilities/NftCollection'
+import config from '../config/config'
 class UtilitiesManager {
 	constructor(scene) {
 		this.scene = scene
@@ -27,7 +28,7 @@ class UtilitiesManager {
 
 	addNftForPlayer(){
 		const randomPos = this.generateRandomPosition()
-		this.nftCollection = new NftCollection(this.scene, randomPos.x, randomPos.y)
+		this.nftCollection = new NftCollection(this.scene, config.width/2, config.height/2)
 		this.nftCollection.setTexture('nft_texture')
 	}
 

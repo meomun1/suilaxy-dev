@@ -3,9 +3,9 @@ import { getFaucetHost, requestSuiFromFaucetV1 } from '@mysten/sui.js/faucet'
 import { MIST_PER_SUI } from '@mysten/sui.js/utils'
 
 const MY_ADDRESS =
-	'0x12c4cfc14d6b1ead73b07ba64aefa0f1750d3d4988dcd783685d7626e9961525'
+	'0x73648b19372b2fc19711d8b562fa15b80b985fa11f4329bb04b30fae8a627333'
 
-const suiClient = new SuiClient({ url: getFullnodeUrl('devnet') })
+const suiClient = new SuiClient({ url: getFullnodeUrl('testnet') })
 
 // Convert MIST to Sui
 const balance = (balance) => {
@@ -18,7 +18,7 @@ const suiBefore = await suiClient.getBalance({
 })
 
 await requestSuiFromFaucetV1({
-	host: getFaucetHost('devnet'),
+	host: getFaucetHost('testnet'),
 	recipient: MY_ADDRESS,
 })
 

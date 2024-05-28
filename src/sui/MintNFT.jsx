@@ -1,97 +1,109 @@
-import React, { useState } from 'react'
-import { getFullnodeUrl, SuiClient } from '@mysten/sui.js/client'
-import { TransactionBlock } from '@mysten/sui.js/transactions'
-import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519'
+import React, { useState } from 'react';
+import { getFullnodeUrl, SuiClient } from '@mysten/sui.js/client';
+import { TransactionBlock } from '@mysten/sui.js/transactions';
+import {
+    ConnectButton,
+    useCurrentAccount,
+    useSignAndExecuteTransactionBlock,
+} from '@mysten/dapp-kit';
+
+// Testnet package: 0x10484340eef2b5fcf5de4237ff0264890a93d648aa927468faf650e09a0738fa
 
 // Initialize Sui client
-const suiClient = new SuiClient({ url: getFullnodeUrl('devnet') })
-
-const keypair = Ed25519Keypair.generate()
+const suiClient = new SuiClient({ url: getFullnodeUrl('testnet') });
 
 const MintNFT = () => {
-	const [name, setName] = useState('')
-	const [description, setDescription] = useState('')
-	const [url, setUrl] = useState('')
-	const [txResult, setTxResult] = useState(null)
-	const [error, setError] = useState(null)
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [url, setUrl] = useState('');
+    const [digest, setDigest] = useState('');
+    const [error, setError] = useState(null);
 
-	const handleMint = async () => {
-		try {
-			if (!name || !description || !url) {
-				throw new Error('All fields are required')
-			}
+    const currentAccount = useCurrentAccount();
+    const { mutate: signAndExecuteTransactionBlock } = useSignAndExecuteTransactionBlock();
 
-			console.log('Name:', name)
-			console.log('Description:', description)
-			console.log('URL:', url)
+    const handleMint = async () => {
+        try {
+            if (!currentAccount) {
+                throw new Error('No account connected');
+            }
 
-			// Create a new transaction block
-			const txb = new TransactionBlock()
-			const sender = keypair.getPublicKey().toSuiAddress()
-			txb.setSender(sender)
-			console.log('Sender:', sender) // Print out the sender address
-			txb.moveCall({
-				target:
-					'0x6eaaeb29ff4f946d0fb5b6ddd5dee6c50d13b036dbca79656aa58248b8492c51::suilaxy_nft::mint_to_sender',
-				arguments: [txb.pure(name), txb.pure(description), txb.pure(url)],
-			})
+            if (!name || !description || !url) {
+                throw new Error('All fields are required');
+            }
 
-			// Sign the transaction block
-			const signedTxn = await txb.sign({
-				client: suiClient,
-				signer: keypair,
-			})
+            console.log('Name:', name);
+            console.log('Description:', description);
+            console.log('URL:', url);
 
-			// Log signed transaction details
-			console.log('Signed Transaction:', signedTxn)
+            // Create a new transaction block
+            const txb = new TransactionBlock();
+            const sender = currentAccount.address;
+            txb.setSender(sender);
+            console.log('Sender:', sender); // Print out the sender address
+            txb.moveCall({
+                target:
+                    '0x10484340eef2b5fcf5de4237ff0264890a93d648aa927468faf650e09a0738fa::suilaxy_nft::mint_to_sender',
+                arguments: [txb.pure(name), txb.pure(description), txb.pure(url)],
+            });
 
-			// Execute the transaction block
-			const result = await suiClient.executeTransactionBlock({
-				transactionBlock: signedTxn.bytes,
-				signature: signedTxn.signature,
-				requestType: 'WaitForLocalExecution',
-				options: {
-					showEffects: true,
-				},
-			})
+            // Sign and execute the transaction block using the current account's keypair
+            signAndExecuteTransactionBlock(
+                {
+                    transactionBlock: txb,
+                    chain: 'sui:testnet',
+                },
+                {
+                    onSuccess: (result) => {
+                        console.log('Executed transaction block', result);
+                        setDigest(result.digest);
+                    },
+                    onError: (err) => {
+                        setError(err.message);
+                        console.error('Failed to mint NFT:', err);
+                    },
+                }
+            );
+        } catch (err) {
+            setError(err.message);
+            console.error('Failed to mint NFT:', err);
+            console.error('Complete Error:', err);
+        }
+    };
 
-			setTxResult(result)
-			console.log('Transaction Result:', result)
-		} catch (err) {
-			setError(err.message)
-			console.error('Failed to mint NFT:', err)
-			console.error('Complete Error:', err)
-		}
-	}
+    return (
+        <div style={{ padding: 20 }}>
+            <ConnectButton />
+            {currentAccount && (
+                <>
+                    <h2>Mint Your NFT</h2>
+                    <input
+                        type="text"
+                        placeholder="Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="URL"
+                        value={url}
+                        onChange={(e) => setUrl(e.target.value)}
+                    />
+                    <button onClick={handleMint}>Mint NFT</button>
+                    {digest && (
+                        <p>NFT minted successfully! Transaction: {digest}</p>
+                    )}
+                    {error && <p>Error: {error}</p>}
+                </>
+            )}
+        </div>
+    );
+};
 
-	return (
-		<div>
-			<h2>Mint Your NFT</h2>
-			<input
-				type="text"
-				placeholder="Name"
-				value={name}
-				onChange={(e) => setName(e.target.value)}
-			/>
-			<input
-				type="text"
-				placeholder="Description"
-				value={description}
-				onChange={(e) => setDescription(e.target.value)}
-			/>
-			<input
-				type="text"
-				placeholder="URL"
-				value={url}
-				onChange={(e) => setUrl(e.target.value)}
-			/>
-			<button onClick={handleMint}>Mint NFT</button>
-			{txResult && (
-				<p>NFT minted successfully! Transaction: {txResult.digest}</p>
-			)}
-			{error && <p>Error: {error}</p>}
-		</div>
-	)
-}
-
-export default MintNFT
+export default MintNFT;

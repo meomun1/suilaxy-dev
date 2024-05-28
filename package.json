@@ -23,11 +23,12 @@
 	"scripts": {
 		"dev": "vite --config vite/config.dev.mjs",
 		"build": "vite build --config vite/config.prod.mjs",
-		"build:css": "sass public/style.scss public/style.css"
+		"build:css": "sass --watch public/input.scss public/output.css"
 	},
 	"dependencies": {
 		"@mysten/dapp-kit": "^0.13.2",
 		"@mysten/sui.js": "^0.54.1",
+		"@suiet/wallet-kit": "^0.2.24",
 		"@tanstack/react-query": "^5.39.0",
 		"phaser": "^3.80.1",
 		"react": "^18.2.0",

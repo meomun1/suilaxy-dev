@@ -9,7 +9,7 @@ var gameSettings = {
 	playerFireRate: 700,
 	playerDefaultBulletSize: 1.2,
 	playerBulletSize: 1.2,
-	playerMaxHealth: 1000,
+	playerMaxHealth: 1000000000,
 	playerUpgradeThreshold: 300,
 
 	// save settings
@@ -22,7 +22,7 @@ var gameSettings = {
 	savePlayerFireRate: 700,
 	savePlayerDefaultBulletSize: 1.2,
 	savePlayerBulletSize: 1.2,
-	savePlayerMaxHealth: 1000,
+	savePlayerMaxHealth: 1000000000,
 	savePlayerUpgradeThreshold: 500,
 
 	// enemy settings
@@ -33,7 +33,7 @@ var gameSettings = {
 	// boss settings
 	isBossDead: true,
 	nft_weapon: 'nft_weapon',
-	nft_frame : 'nft_frame',
+	nft_frame: 'nft_frame',
 }
 
 export default gameSettings

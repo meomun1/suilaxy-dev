@@ -53,8 +53,8 @@ function App() {
 
 				{/* Connect Wallet + Other */}
 				<div className="child-right">
-					<ConnectButton className="button" />
-					<ConnectedAccount />
+					{/* <ConnectButton className="button" />
+					<ConnectedAccount /> */}
 					<MintNFT />
 				</div>
 			</div>

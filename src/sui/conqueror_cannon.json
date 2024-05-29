@@ -1,0 +1,56 @@
+[
+    {
+        "name": "Bronze Conqueror Cannon",
+        "description": "This robust cannon boasts a Bronze Frame, a symbol of resilience and the raw power that kicks off your NFT journey. Perfect for collectors ready to make a big bang.",
+        "frame": "bronze",
+        "url_img": "REPLACE_WITH_IMAGE_URL"  
+      },
+      {
+        "name": "Silver Conqueror Cannon",
+        "description": "Encased in a gleaming Silver Frame, this cannon unleashes precision firepower. A step up from bronze, it's ideal for collectors seeking to expand their digital arsenal.",
+        "frame": "silver",
+        "url_img": "REPLACE_WITH_IMAGE URL"  
+      },
+      {
+        "name": "Gold Conqueror Cannon",
+        "description": "This magnificent cannon, adorned with a Gold Frame, radiates power and prestige. A trophy for any collector seeking to dominate the battlefield and showcase their refined taste.",
+        "frame": "gold",
+        "url_img": "REPLACE_WITH_IMAGE_URL"  
+      },
+      {
+        "name": "Emerald Conqueror Cannon",
+        "description": "Enveloped in a radiant Emerald Frame, this cannon is a rare gem. Its vibrant green hue embodies explosive growth and unstoppable force, making it a standout addition to any collection.",
+        "frame": "emerald",
+        "url_img": "REPLACE_WITH_IMAGE_URL"  
+      },
+      {
+        "name": "Diamond Conqueror Cannon",
+        "description": "Framed with dazzling Diamonds, this cannon is a force of unmatched brilliance. Its cutting-edge design makes it a coveted weapon for the most discerning collectors.",
+        "frame": "diamond",
+        "url_img": "REPLACE_WITH_IMAGE_URL"  
+      },
+      {
+        "name": "Master Conqueror Cannon",
+        "description": "This cannon, enshrined in a Master Frame, embodies mastery of the battlefield. It's a testament to the collector's expertise and relentless pursuit of victory in the NFT arena.",
+        "frame": "master",
+        "url_img": "REPLACE_WITH_IMAGE_URL"  
+      },
+      {
+        "name": "Grandmaster Conqueror Cannon",
+        "description": "Crafted with a Grandmaster Frame, this cannon represents unparalleled achievement. Its imposing presence signifies the collector's reign supreme in the NFT arena, a true champion's trophy.",
+        "frame": "grandmaster",
+        "url_img": "REPLACE_WITH_IMAGE_URL"  
+      },
+      {
+        "name": "Challenger Conqueror Cannon",
+        "description": "Forged in a Challenger Frame, this cannon ignites the spirit of conquest. Its dynamic design signifies the collector's unwavering pursuit of victory, a weapon for those who leave their mark on the battlefield.",
+        "frame": "challenger",
+        "url_img": "REPLACE_WITH_IMAGE_URL"  
+      },
+      {
+        "name": "Legendary Conqueror Cannon",
+        "description": "Woven with the essence of legend, this Legendary Frame imbues the cannon with mythical power. A coveted symbol of triumph, it signifies the collector's place among the NFT legends.",
+        "frame": "legendary",
+        "url_img": "REPLACE_WITH_IMAGE_URL"  
+      }
+]

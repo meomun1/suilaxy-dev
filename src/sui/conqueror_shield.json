@@ -1,0 +1,60 @@
+[
+{
+    "name": "Bronze Conqueror Shield",
+    "description": "This sturdy Bronze-framed Conqueror Shield provides a dependable foundation for your NFT journey. Its versatility allows you to adapt your defense and explore different strategies.",
+    "frame": "bronze",
+    "url_img": "REPLACE_WITH_IMAGE_URL"  
+  },
+  {
+    "name": "Silver Conqueror Shield",
+    "description": "Encased in a sleek Silver Frame, this Conqueror Shield offers both resilience and tactical flexibility. A step up for collectors seeking to refine their defensive strategies in the NFT arena.",
+    "frame": "silver",
+    "url_img": "REPLACE_WITH_IMAGE_URL"  
+  },
+  {
+    "name": "Gold Conqueror Shield",
+    "description": "This magnificent Gold-framed Conqueror Shield embodies both power and strategic prowess. A prized piece for collectors seeking to showcase their defensive dominance and tactical mastery.",
+    "frame": "gold",
+    "url_img": "REPLACE_WITH_IMAGE_URL"  
+  },
+  {
+    "name": "Emerald Conqueror Shield",
+    "description": "Enveloped in a radiant Emerald Frame, this Conqueror Shield signifies flourishing defense and strategic adaptability. Its vibrant green hue reflects growth and tactical prowess, making it a standout addition to any collection.",
+    "frame": "emerald",
+    "url_img": "REPLACE_WITH_IMAGE_URL"  
+  },
+  {
+    "name": "Diamond Conqueror Shield",
+    "description": "Framed with dazzling Diamonds, this Conqueror Shield represents the pinnacle of defensive strategy. Its unmatched brilliance makes it a coveted piece for discerning collectors seeking the ultimate tactical advantage.",
+    "frame": "diamond",
+    "url_img": "REPLACE_WITH_IMAGE_URL"  
+  },
+  {
+    "name": "Master Conqueror Shield",
+    "description": "Enshrined in a Master Frame, this Conqueror Shield signifies mastery of defensive tactics. It’s a testament to the collector's strategic brilliance and unwavering resolve in the NFT arena.",
+    "frame": "master",
+    "url_img": "REPLACE_WITH_IMAGE_URL"  
+  },
+  {
+    "name": "Grandmaster Conqueror Shield",
+    "description": "Crafted with a Grandmaster Frame, this shield embodies unparalleled defensive strategy. Its imposing presence reflects the collector's mastery of the NFT arena, a symbol of impenetrable tactics.",
+    "frame": "grandmaster",
+    "url_img": "REPLACE_WITH_IMAGE_URL"  
+  },
+  {
+    "name": "Challenger Conqueror Shield",
+    "description": "Forged in a Challenger Frame, this shield ignites the spirit of strategic defense. Its dynamic design signifies the collector's unwavering ability to adapt and overcome any challenge, a shield for those who outmaneuver their opponents.",
+    "frame": "challenger",
+    "url_img": "REPLACE_WITH_IMAGE_URL"  
+  },
+  {
+    "name": "Legendary Conqueror Shield",
+    "description": "Woven with the essence of legend, this Legendary Frame imbues the shield with an aura of myth and strategic brilliance. A coveted symbol of resilience, it signifies the collector's place among the NFT legends.",
+    "frame": "legendary",
+    "url_img": "REPLACE_WITH_IMAGE_URL"  
+  }
+
+
+
+
+]

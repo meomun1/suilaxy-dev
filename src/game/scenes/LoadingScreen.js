@@ -10,6 +10,7 @@ class LoadingScreen extends Phaser.Scene {
 
 	init(data) {
 		this.selectedPlayerIndex = data.number
+		this.url_img = data.string
 	}
 
 	preload() {
@@ -96,7 +97,7 @@ class LoadingScreen extends Phaser.Scene {
 			},
 		})
 
-		this.load.image('nft_texture', 'favicon.png')
+		this.load.image('nft_texture', this.url_img)
 
 		// Load health pack Spritesheet
 		this.load.spritesheet({

@@ -1,0 +1,59 @@
+[
+
+    {
+      "name": "Bronze Conqueror Blaster",
+      "description": "This sturdy weapon is encased in a Bronze Frame, symbolizing reliability and the start of a grand journey. Ideal for novice collectors beginning their NFT adventure.",
+      "frame": "bronze",
+      "url_img": "REPLACE_WITH_IMAGE_URL"  
+    },
+    {
+      "name": "Silver Conqueror Blaster",
+      "description": "Encased in a sleek Silver Frame, this gun exudes sophistication and precision. A step up from bronze, it’s perfect for collectors aiming to enhance their digital armory.",
+      "frame": "silver",
+      "url_img": "REPLACE_WITH_IMAGE_URL"  
+    },
+    {
+      "name": "Gold Conqueror Blaster",
+      "description": "This magnificent gun is framed in Gold, representing wealth and prestige. A prized piece for any collector seeking to showcase their status and refined taste.",
+      "frame": "gold",
+      "url_img": "REPLACE_WITH_IMAGE_URL"  
+    },
+    {
+      "name": "Emerald Conqueror Blaster",
+      "description": "Enveloped in a radiant Emerald Frame, this gun is a rare treasure. Its vibrant green hue signifies growth and vitality, making it a standout addition to any collection.",
+      "frame": "emerald",
+      "url_img": "REPLACE_WITH_IMAGE_URL"  
+    },
+    {
+      "name": "Diamond Conqueror Blaster",
+      "description": "Framed with dazzling Diamonds, this gun is the epitome of elegance and excellence. Its unmatched brilliance makes it a coveted piece for discerning collectors.",
+      "frame": "diamond",
+      "url_img": "REPLACE_WITH_IMAGE_URL"  
+    },
+    {
+      "name": "Master Conqueror Blaster",
+      "description": "Enshrined in a Master Frame, this gun signifies superior skill and mastery. It’s a testament to the collector's dedication and expertise in the NFT realm.",
+      "frame": "master",
+      "url_img": "REPLACE_WITH_IMAGE_URL"  
+    },
+    {
+      "name": "Grandmaster Conqueror Blaster",
+      "description": "Crafted with a Grandmaster Frame, this weapon embodies unparalleled achievement. Its imposing presence reflects the collector's dominance in the NFT arena, a trophy for the elite.",
+      "frame": "grandmaster",
+      "url_img": "REPLACE_WITH_IMAGE_URL"  
+    },
+    {
+      "name": "Challenger Conqueror Blaster",
+      "description": "Forged in a Challenger Frame, this gun ignites the spirit of competition. Its dynamic design signifies the collector's unwavering pursuit of victory, a weapon for those who rise to the challenge.",
+      "frame": "challenger",
+      "url_img": "REPLACE_WITH_IMAGE_URL"  
+    },
+    {
+      "name": "Legendary Conqueror Blaster",
+      "description": "Woven with the essence of legend, this Legendary Frame imbues the gun with an aura of myth and power. A coveted symbol of triumph, it signifies the collector's place among the NFT greats.",
+      "frame": "legendary",
+      "url_img": "REPLACE_WITH_IMAGE_URL"  
+    }      
+
+  ]
+  

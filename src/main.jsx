@@ -13,6 +13,7 @@ const queryClient = new QueryClient()
 
 const networks = {
 	devnet: { url: getFullnodeUrl('devnet') },
+	testnet: { url: getFullnodeUrl('testnet') },
 	mainnet: { url: getFullnodeUrl('mainnet') },
 }
 
@@ -22,7 +23,7 @@ if (rootElement) {
 	ReactDOM.createRoot(rootElement).render(
 		<React.StrictMode>
 			<QueryClientProvider client={queryClient}>
-				<SuiClientProvider networks={networks} defaultNetwork="devnet">
+				<SuiClientProvider networks={networks} defaultNetwork="testnet">
 					<WalletProvider>
 						<App />
 					</WalletProvider>

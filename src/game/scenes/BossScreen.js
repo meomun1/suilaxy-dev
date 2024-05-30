@@ -51,7 +51,6 @@ class BossScreen extends Phaser.Scene {
 
 		this.music = this.sys.game.globals.music
 
-
 		// if (!(this.anims && this.anims.exists && this.anims.exists("player_anim"))) {
 		this.anims.create({
 			key: 'player_anim',
@@ -332,7 +331,6 @@ class BossScreen extends Phaser.Scene {
 				)
 
 				gameSettings.isBossDead = false
-				
 			}
 
 			this.time.delayedCall(

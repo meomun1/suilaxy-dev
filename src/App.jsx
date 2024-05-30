@@ -31,7 +31,7 @@ function App() {
 	const phaserRef = useRef()
 
 	// Event emitted from the PhaserGame component
-	const currentScene = (scene) => {
+	const onCurrentActiveScene = (scene) => {
 		console.log(scene)
 	}
 
@@ -48,7 +48,10 @@ function App() {
 
 				{/* Game Canvas */}
 				<div className="child-main">
-					<PhaserGame ref={phaserRef} currentActiveScene={currentScene} />
+					<PhaserGame
+						ref={phaserRef}
+						currentActiveScene={onCurrentActiveScene}
+					/>
 				</div>
 
 				{/* Connect Wallet + Other */}

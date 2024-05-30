@@ -13,6 +13,8 @@ import UpgradeManager from '../manager/UpgradeManager.js'
 import MobileManager from '../manager/MobileManager.js'
 import gameSettings from '../config/gameSettings.js'
 
+import { EventBus } from '../EventBus.js'
+
 const BACKGROUND_SCROLL_SPEED = 0.5
 class TutorialScreen extends Phaser.Scene {
 	constructor() {
@@ -137,8 +139,6 @@ class TutorialScreen extends Phaser.Scene {
 		this.projectileManager.createEnemyBullet()
 		this.projectileManager.createChaseBullet()
 
-		
-
 		this.CollideManager = new CollideManager(
 			this,
 			this.player,
@@ -148,8 +148,6 @@ class TutorialScreen extends Phaser.Scene {
 			this.UtilitiesManager.nftCollection,
 			this.shield,
 		)
-
-
 
 		// Score System
 		this.UpgradeManager = new UpgradeManager(this, this.callingScene)
@@ -167,6 +165,8 @@ class TutorialScreen extends Phaser.Scene {
 			},
 			this,
 		)
+
+		EventBus.emit('current-scene-ready', this)
 	}
 
 	update() {

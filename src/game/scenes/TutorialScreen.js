@@ -166,7 +166,15 @@ class TutorialScreen extends Phaser.Scene {
 			this,
 		)
 
-		EventBus.emit('current-scene-ready', this)
+		EventBus.emit('current-scene-ready', {
+			key: { callingScene: this.callingScene },
+			nftProperties: {
+				name: gameSettings.nft_weapon,
+				frame: gameSettings.nft_frame,
+				description: gameSettings.nft_description,
+				url: gameSettings.nft_img_url,
+			},
+		})
 	}
 
 	update() {

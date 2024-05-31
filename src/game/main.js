@@ -24,7 +24,7 @@ const config = {
 	width: 600,
 	height: 850,
 	parent: 'game-container',
-	backgroundColor: '#028af8',
+	backgroundColor: 'black',
 	scene: [
 		TitleScreen,
 		LoadingScreen,

@@ -47,10 +47,10 @@ const MintNFT = () => {
 			) {
 				phaserRef.current = eventData.key.callingScene
 				const { name, frame, description, url } = eventData.nftProperties
-				setName(name)
-				setDescription(description)
-				setUrl(url)
-				setFrame(frame)
+				setName(name || '')
+				setDescription(description || '')
+				setUrl(url || '')
+				setFrame(frame || '')
 			} else {
 				console.error('Invalid event data:', eventData)
 			}
@@ -67,7 +67,7 @@ const MintNFT = () => {
 			EventBus.off('current-scene-ready', handleSceneReady)
 			EventBus.off('mint-nft-clicked', handleMintClicked)
 		}
-	}, [currentAccount])
+	}, [currentAccount, name, description, frame, url])
 
 	const handleMint = async (name, description, frame, url) => {
 		try {
@@ -76,8 +76,16 @@ const MintNFT = () => {
 			}
 
 			if (!name || !description || !url || !frame) {
-				console.error('Missing fields:', { name, description, url, frame })
-				throw new Error('All fields are required')
+				const missingFields = []
+				if (!name) missingFields.push('name')
+				if (!description) missingFields.push('description')
+				if (!url) missingFields.push('url')
+				if (!frame) missingFields.push('frame')
+				throw new Error(
+					`All fields are required. Missing fields: ${missingFields.join(
+						', ',
+					)}`,
+				)
 			}
 
 			const txb = new TransactionBlock()
@@ -113,22 +121,12 @@ const MintNFT = () => {
 		} catch (err) {
 			setError(err.message)
 			console.error('Failed to mint NFT:', err)
-			console.error('Complete Error:', err)
 		}
 	}
 
 	return (
 		<div>
 			<ConnectButton />
-			{/* {currentAccount && (
-				<>
-					<button onClick={() => handleMint(name, description, frame, url)}>
-						Mint NFT
-					</button>
-					{digest && <p>NFT minted successfully! Transaction: {digest}</p>}
-					{error && <p>Error: {error}</p>}
-				</>
-			)} */}
 		</div>
 	)
 }

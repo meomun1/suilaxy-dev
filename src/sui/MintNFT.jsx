@@ -7,7 +7,6 @@ import {
 } from '@mysten/dapp-kit'
 
 import { useRef } from 'react'
-
 import { EventBus } from '../game/EventBus'
 
 const PACKAGE_ADDRESS =
@@ -23,15 +22,28 @@ const MintNFT = () => {
 
 	const phaserRef = useRef()
 	const currentAccount = useCurrentAccount()
+
 	const { mutate: signAndExecuteTransactionBlock } =
 		useSignAndExecuteTransactionBlock()
 
-	// Only when it is after the choose player scene, which is the tutorial scene
+	useEffect(() => {
+		if (currentAccount) {
+			EventBus.emit('wallet-connected', { connected: true })
+		} else {
+			EventBus.emit('wallet-connected', { connected: false })
+		}
+	}, [currentAccount])
+
 	// Use EventBus to emit the event
 	useEffect(() => {
 		const handleSceneReady = (eventData) => {
-			console.log('Event data received:', eventData)
+			if (currentAccount) {
+				EventBus.emit('wallet-connected', { connected: true })
+			} else {
+				EventBus.emit('wallet-connected', { connected: false })
+			}
 
+			console.log('Event data received:', eventData)
 			if (
 				eventData &&
 				eventData.key &&
@@ -54,7 +66,7 @@ const MintNFT = () => {
 		return () => {
 			EventBus.off('current-scene-ready', handleSceneReady)
 		}
-	}, [])
+	}, [currentAccount])
 
 	const handleMint = async () => {
 		try {

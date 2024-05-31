@@ -32,7 +32,7 @@ var gameSettings = {
 
 	// boss settings
 	isBossDead: true,
-	nft_id : 0,
+	nft_id: 0,
 	nft_hastag: 0,
 	nft_weapon: 'nft_weapon',
 	nft_frame: 'nft_frame',

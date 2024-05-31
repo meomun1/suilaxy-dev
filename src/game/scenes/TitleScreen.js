@@ -187,21 +187,21 @@ class TitleScreen extends Phaser.Scene {
 		// Tween animation for the rainbow effect on "GUARDIAN"
 		this.tweens.add({
 			targets: guardianText,
-			duration: 1000, // Adjust the duration as needed
+			duration: 1000,
 			ease: 'Sine.easeInOut',
 			repeat: -1,
 			yoyo: true,
-			alpha: 0.2, // Optional: You can adjust the alpha for a fading effect
+			alpha: 0.2,
 		})
 
 		// Tween animation for the rainbow effect on "SPACE"
 		this.tweens.add({
 			targets: spaceText,
-			duration: 1000, // Adjust the duration as needed
+			duration: 1000,
 			ease: 'Sine.easeInOut',
 			repeat: -1,
 			yoyo: true,
-			alpha: 0.2, // Optional: You can adjust the alpha for a fading effect
+			alpha: 0.2,
 		})
 
 		// Create Play Button
@@ -213,6 +213,7 @@ class TitleScreen extends Phaser.Scene {
 			'button_play_hover',
 			'choosePlayer',
 		)
+		this.button_play.setSize(93, 28)
 		this.button_play.setInteractive()
 
 		// Event listeners for the play button
@@ -244,6 +245,7 @@ class TitleScreen extends Phaser.Scene {
 			'button_rank_hover',
 			'leaderboard',
 		)
+		this.button_rank.setSize(93, 28)
 		this.button_rank.setInteractive()
 
 		// Create Credit Button
@@ -271,13 +273,6 @@ class TitleScreen extends Phaser.Scene {
 		this.button_play.setScale(1.5)
 		this.button_rank.setScale(1.5)
 		this.button_credit.setScale(1.5)
-
-		// this.showTextInput()
 	}
-
-	// showTextInput() {
-	// 	const playerNameInput = document.getElementById('playerNameInput')
-	// 	playerNameInput.style.display = 'block'
-	// }
 }
 export default TitleScreen

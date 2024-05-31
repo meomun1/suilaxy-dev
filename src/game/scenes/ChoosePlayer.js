@@ -1,8 +1,7 @@
-import Phaser, { Create } from 'phaser'
+import Phaser from 'phaser'
 import config from '../config/config.js'
 import gameSettings from '../config/gameSettings.js'
-import { v4 as uuidv4 } from 'uuid';
-
+import { v4 as uuidv4 } from 'uuid'
 
 class ChoosePlayer extends Phaser.Scene {
 	constructor() {
@@ -143,12 +142,9 @@ class ChoosePlayer extends Phaser.Scene {
 		bottomLeftImage.setOrigin(0, 1)
 		bottomLeftImage.setScale(0.3)
 
-		
 		this.randomNFT()
 
 		this.hideTextInput()
-
-
 	}
 
 	update() {
@@ -202,7 +198,7 @@ class ChoosePlayer extends Phaser.Scene {
 
 		let url_img = this.randomNFT()
 
-		this.scene.start('loadingScreen', { number: value, string : url_img})
+		this.scene.start('loadingScreen', { number: value, string: url_img })
 	}
 
 	getPlayerIndexByPosition(x, y) {
@@ -234,84 +230,112 @@ class ChoosePlayer extends Phaser.Scene {
 	}
 
 	hideTextInput() {
-		const playerNameInput = document.getElementById('playerNameInput');
+		const playerNameInput = document.getElementById('playerNameInput')
 		if (playerNameInput) {
-			playerNameInput.style.display = 'none';
+			playerNameInput.style.display = 'none'
 		} else {
-			console.warn('Element with id "playerNameInput" not found');
+			console.warn('Element with id "playerNameInput" not found')
 		}
 	}
 
-	randomNFT(){
-		const arrayFrame = ['Bronze', 'Silver', 'Gold', 'Emerald', 'Diamond', 'Master', 'Grandmaster', 'Challenger', 'Legendary']
+	randomNFT() {
+		const arrayFrame = [
+			'Bronze',
+			'Silver',
+			'Gold',
+			'Emerald',
+			'Diamond',
+			'Master',
+			'Grandmaster',
+			'Challenger',
+			'Legendary',
+		]
 
-		const randomNum = Math.random() * 100;
+		const randomNum = Math.random() * 100
 
-		let item;
-		let hashTag;
-		let url_img;
-		let description;
+		let item
+		let hashTag
+		let url_img
+		let description
 
 		if (randomNum < 0.01) {
-			url_img = "https://bafkreicelixacf7np74iu6rbdikstlr4x6rot73ilsuvrfk55crvmwkgre.ipfs.nftstorage.link/"
-			item = arrayFrame[8]; // 'legendary'
+			url_img =
+				'https://bafkreicelixacf7np74iu6rbdikstlr4x6rot73ilsuvrfk55crvmwkgre.ipfs.nftstorage.link/'
+			item = arrayFrame[8] // 'legendary'
 			hashTag = 9
-			description = "Woven with the essence of legend, this Legendary Frame imbues the gun with an aura of myth and power. A coveted symbol of triumph, it signifies the collector's place among the NFT greats."
+			description =
+				"Woven with the essence of legend, this Legendary Frame imbues the gun with an aura of myth and power. A coveted symbol of triumph, it signifies the collector's place among the NFT greats."
 		} else if (randomNum < 0.1) {
-			url_img = "https://bafkreickfhx57ajogrrixyvjwjmu6rzfhnllok7fexnlmb3gttcaxfhoxi.ipfs.nftstorage.link/"
-			item = arrayFrame[7]; // 'challenger'
+			url_img =
+				'https://bafkreickfhx57ajogrrixyvjwjmu6rzfhnllok7fexnlmb3gttcaxfhoxi.ipfs.nftstorage.link/'
+			item = arrayFrame[7] // 'challenger'
 			hashTag = 8
-			description = "Forged in a Challenger Frame, this gun ignites the spirit of competition. Its dynamic design signifies the collector's unwavering pursuit of victory, a weapon for those who rise to the challenge."
+			description =
+				"Forged in a Challenger Frame, this gun ignites the spirit of competition. Its dynamic design signifies the collector's unwavering pursuit of victory, a weapon for those who rise to the challenge."
 		} else if (randomNum < 1) {
-			url_img = "https://bafkreiecvcao5uukbc436dmghejpf2tepixwz6gfh46o2wblrhzyhlluqa.ipfs.nftstorage.link/"
-			item = arrayFrame[6]; // 'grandmaster'
+			url_img =
+				'https://bafkreiecvcao5uukbc436dmghejpf2tepixwz6gfh46o2wblrhzyhlluqa.ipfs.nftstorage.link/'
+			item = arrayFrame[6] // 'grandmaster'
 			hashTag = 7
-			description = "Crafted with a Grandmaster Frame, this weapon embodies unparalleled achievement. Its imposing presence reflects the collector's dominance in the NFT arena, a trophy for the elite."
+			description =
+				"Crafted with a Grandmaster Frame, this weapon embodies unparalleled achievement. Its imposing presence reflects the collector's dominance in the NFT arena, a trophy for the elite."
 		} else if (randomNum < 5) {
-			url_img = "https://bafkreihi2dcwezvhjpp5omdja45nyo5d7wvbuyephar5owcifjemoy37bi.ipfs.nftstorage.link/"
-			item = arrayFrame[5]; // 'master'
+			url_img =
+				'https://bafkreihi2dcwezvhjpp5omdja45nyo5d7wvbuyephar5owcifjemoy37bi.ipfs.nftstorage.link/'
+			item = arrayFrame[5] // 'master'
 			hashTag = 6
-			description = "Enshrined in a Master Frame, this gun signifies superior skill and mastery. It’s a testament to the collector's dedication and expertise in the NFT realm."
+			description =
+				"Enshrined in a Master Frame, this gun signifies superior skill and mastery. It’s a testament to the collector's dedication and expertise in the NFT realm."
 		} else if (randomNum < 10) {
-			url_img = "https://bafkreih6bgdgundl42sgnpdu3cgyzpeb5azqxzejfsw7rsfvsnmkc6dgqu.ipfs.nftstorage.link/"
-			item = arrayFrame[4]; // 'diamond'
+			url_img =
+				'https://bafkreih6bgdgundl42sgnpdu3cgyzpeb5azqxzejfsw7rsfvsnmkc6dgqu.ipfs.nftstorage.link/'
+			item = arrayFrame[4] // 'diamond'
 			hashTag = 5
-			description = "Framed with dazzling Diamonds, this gun is the epitome of elegance and excellence. Its unmatched brilliance makes it a coveted piece for discerning collectors."
+			description =
+				'Framed with dazzling Diamonds, this gun is the epitome of elegance and excellence. Its unmatched brilliance makes it a coveted piece for discerning collectors.'
 		} else if (randomNum < 20) {
-			url_img = "https://bafkreid4t3haxbpqcya7nqybt2l64rkk4iterqgdkx4waa62nwmsobbjpm.ipfs.nftstorage.link/"
-			item = arrayFrame[3]; // 'emerald'
+			url_img =
+				'https://bafkreid4t3haxbpqcya7nqybt2l64rkk4iterqgdkx4waa62nwmsobbjpm.ipfs.nftstorage.link/'
+			item = arrayFrame[3] // 'emerald'
 			hashTag = 4
-			description = "Enveloped in a radiant Emerald Frame, this gun is a rare treasure. Its vibrant green hue signifies growth and vitality, making it a standout addition to any collection."
+			description =
+				'Enveloped in a radiant Emerald Frame, this gun is a rare treasure. Its vibrant green hue signifies growth and vitality, making it a standout addition to any collection.'
 		} else if (randomNum < 30) {
-			url_img = "https://bafkreid5dhduya5ufjmgcgct7432wlluq7ew73o2colaazx2nsgdjyxi3i.ipfs.nftstorage.link/"
-			item = arrayFrame[2]; // 'gold'
+			url_img =
+				'https://bafkreid5dhduya5ufjmgcgct7432wlluq7ew73o2colaazx2nsgdjyxi3i.ipfs.nftstorage.link/'
+			item = arrayFrame[2] // 'gold'
 			hashTag = 3
-			description = "This magnificent gun is framed in Gold, representing wealth and prestige. A prized piece for any collector seeking to showcase their status and refined taste."
+			description =
+				'This magnificent gun is framed in Gold, representing wealth and prestige. A prized piece for any collector seeking to showcase their status and refined taste.'
 		} else if (randomNum < 50) {
-			url_img = "https://bafkreihi2dcwezvhjpp5omdja45nyo5d7wvbuyephar5owcifjemoy37bi.ipfs.nftstorage.link/"
-			item = arrayFrame[1]; // 'silver'
+			url_img =
+				'https://bafkreihi2dcwezvhjpp5omdja45nyo5d7wvbuyephar5owcifjemoy37bi.ipfs.nftstorage.link/'
+			item = arrayFrame[1] // 'silver'
 			hashTag = 2
-			description = "Encased in a sleek Silver Frame, this gun exudes sophistication and precision. A step up from bronze, it’s perfect for collectors aiming to enhance their digital armory."
+			description =
+				'Encased in a sleek Silver Frame, this gun exudes sophistication and precision. A step up from bronze, it’s perfect for collectors aiming to enhance their digital armory.'
 		} else {
-			url_img = "https://bafkreif7gnjzl6nfggk534zvkn6bkihr3zkf77p74cwic4ktnnb763uogu.ipfs.nftstorage.link/"
-			item = arrayFrame[0]; // 'bronze'
+			url_img =
+				'https://bafkreif7gnjzl6nfggk534zvkn6bkihr3zkf77p74cwic4ktnnb763uogu.ipfs.nftstorage.link/'
+			item = arrayFrame[0] // 'bronze'
 			hashTag = 1
-			description = "This gun is encased in a Bronze Frame, a symbol of strength and resilience. A great starting point for collectors, it’s the foundation for building a powerful NFT arsenal."
+			description =
+				'This gun is encased in a Bronze Frame, a symbol of strength and resilience. A great starting point for collectors, it’s the foundation for building a powerful NFT arsenal.'
 		}
 
-		gameSettings.nft_id = uuidv4();
-		gameSettings.nft_frame = item;
-		gameSettings.nft_weapon = 'Conqueror Blaster' + " #" + hashTag;
-		gameSettings.nft_img_url = url_img;
-		gameSettings.nft_description = description;
-		
-		console.log(gameSettings.nft_frame);
-		console.log(gameSettings.nft_weapon);
-		console.log(gameSettings.nft_description);
-		console.log(gameSettings.nft_img_url);
-		console.log(gameSettings.nft_id);
+		gameSettings.nft_id = uuidv4()
+		gameSettings.nft_frame = item
+		gameSettings.nft_weapon = 'Conqueror Blaster' + ' #' + hashTag
+		gameSettings.nft_img_url = url_img
+		gameSettings.nft_description = description
 
-		return url_img;
+		console.log(gameSettings.nft_frame)
+		console.log(gameSettings.nft_weapon)
+		console.log(gameSettings.nft_description)
+		console.log(gameSettings.nft_img_url)
+		console.log(gameSettings.nft_id)
+
+		return url_img
 	}
 }
 

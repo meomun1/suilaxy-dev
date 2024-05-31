@@ -2,7 +2,6 @@ import Entity from '../Entity'
 import gameSettings from '../../config/gameSettings'
 import HPBar from '../ui/HPBar'
 import config from '../../config/config'
-import UpgradeManager from '../../manager/UpgradeManager'
 
 class Bug5 extends Entity {
 	constructor(scene, x, y, health, scale = 1) {

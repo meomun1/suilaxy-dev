@@ -8,10 +8,8 @@ import {
 
 import { useRef } from 'react'
 
-import gameSettings from '../game/config/gameSettings'
 import { EventBus } from '../game/EventBus'
 
-// Placeholder for the correct package address
 const PACKAGE_ADDRESS =
 	'0xdf295d1b88035db4a8c308ede33088e8c5df24d27f0448e41df2b8175afdae49'
 
@@ -32,7 +30,7 @@ const MintNFT = () => {
 	// Use EventBus to emit the event
 	useEffect(() => {
 		const handleSceneReady = (eventData) => {
-			console.log('Event data received:', eventData) // Add debug log
+			console.log('Event data received:', eventData)
 
 			if (
 				eventData &&
@@ -77,8 +75,6 @@ const MintNFT = () => {
 			const txb = new TransactionBlock()
 			const sender = currentAccount.address
 			txb.setSender(sender)
-
-			console.log('Sender:', sender) // Print out the sender address
 
 			txb.moveCall({
 				target: `${PACKAGE_ADDRESS}::suilaxy_nft::mint_to_sender`,

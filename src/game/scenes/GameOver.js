@@ -3,6 +3,7 @@ import config from '../config/config.js'
 import GuiManager from '../manager/GuiManager.js'
 import KeyboardManager from '../manager/KeyboardManager.js'
 import InterfaceManager from './InterfaceScene.js'
+import gameSettings from '../config/gameSettings.js'
 
 class GameOver extends Phaser.Scene {
 	constructor() {
@@ -38,6 +39,7 @@ class GameOver extends Phaser.Scene {
 	}
 
 	create() {
+		gameSettings.isBossDead = true
 		// Add a game over message
 		this.keyboardManager = new KeyboardManager(this)
 		this.guiManager = new GuiManager(this)

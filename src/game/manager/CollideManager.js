@@ -143,6 +143,8 @@ class CollideManager {
 
 	playerCollideNftCollection(player, nftCollection) {
 		nftCollection.destroy()
+		this.scene.scene.stop()
+		this.scene.scene.start('createNft')
 	}
 }
 

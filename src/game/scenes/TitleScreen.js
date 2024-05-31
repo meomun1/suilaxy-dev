@@ -27,7 +27,7 @@ class TitleScreen extends Phaser.Scene {
 		)
 		this.load.spritesheet({
 			key: 'button_play',
-			url: 'assets/gui/button_play.png',
+			url: 'assets/gui/button.png',
 			frameConfig: {
 				frameWidth: 93,
 				frameHeight: 28,
@@ -37,7 +37,7 @@ class TitleScreen extends Phaser.Scene {
 		})
 		this.load.spritesheet({
 			key: 'button_play_hover',
-			url: 'assets/gui/button_play_hover.png',
+			url: 'assets/gui/button_hover.png',
 			frameConfig: {
 				frameWidth: 93,
 				frameHeight: 28,

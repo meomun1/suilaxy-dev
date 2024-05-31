@@ -233,8 +233,6 @@ class ChoosePlayer extends Phaser.Scene {
 		const playerNameInput = document.getElementById('playerNameInput')
 		if (playerNameInput) {
 			playerNameInput.style.display = 'none'
-		} else {
-			console.warn('Element with id "playerNameInput" not found')
 		}
 	}
 
@@ -328,12 +326,6 @@ class ChoosePlayer extends Phaser.Scene {
 		gameSettings.nft_weapon = 'Conqueror Blaster' + ' #' + hashTag
 		gameSettings.nft_img_url = url_img
 		gameSettings.nft_description = description
-
-		console.log(gameSettings.nft_frame)
-		console.log(gameSettings.nft_weapon)
-		console.log(gameSettings.nft_description)
-		console.log(gameSettings.nft_img_url)
-		console.log(gameSettings.nft_id)
 
 		return url_img
 	}

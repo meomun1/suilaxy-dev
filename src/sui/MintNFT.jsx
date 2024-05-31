@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { TransactionBlock } from '@mysten/sui.js/transactions'
 import {
 	ConnectButton,
 	useCurrentAccount,
 	useSignAndExecuteTransactionBlock,
 } from '@mysten/dapp-kit'
-
-import { useRef } from 'react'
 import { EventBus } from '../game/EventBus'
 
 const PACKAGE_ADDRESS =
@@ -34,7 +32,6 @@ const MintNFT = () => {
 		}
 	}, [currentAccount])
 
-	// Use EventBus to emit the event
 	useEffect(() => {
 		const handleSceneReady = (eventData) => {
 			if (currentAccount) {
@@ -43,11 +40,10 @@ const MintNFT = () => {
 				EventBus.emit('wallet-connected', { connected: false })
 			}
 
-			console.log('Event data received:', eventData)
 			if (
 				eventData &&
 				eventData.key &&
-				eventData.key.callingScene === 'playTutorial'
+				eventData.key.callingScene === 'createNft'
 			) {
 				phaserRef.current = eventData.key.callingScene
 				const { name, frame, description, url } = eventData.nftProperties
@@ -55,35 +51,35 @@ const MintNFT = () => {
 				setDescription(description)
 				setUrl(url)
 				setFrame(frame)
-				console.log('NFT Properties:', name, frame, description, url)
 			} else {
 				console.error('Invalid event data:', eventData)
 			}
 		}
 
+		const handleMintClicked = () => {
+			handleMint(name, description, frame, url)
+		}
+
 		EventBus.on('current-scene-ready', handleSceneReady)
+		EventBus.on('mint-nft-clicked', handleMintClicked)
 
 		return () => {
 			EventBus.off('current-scene-ready', handleSceneReady)
+			EventBus.off('mint-nft-clicked', handleMintClicked)
 		}
 	}, [currentAccount])
 
-	const handleMint = async () => {
+	const handleMint = async (name, description, frame, url) => {
 		try {
 			if (!currentAccount) {
 				throw new Error('No account connected')
 			}
 
 			if (!name || !description || !url || !frame) {
+				console.error('Missing fields:', { name, description, url, frame })
 				throw new Error('All fields are required')
 			}
 
-			console.log('Name:', name)
-			console.log('Description:', description)
-			console.log('Frame:', frame)
-			console.log('URL:', url)
-
-			// Create a new transaction block
 			const txb = new TransactionBlock()
 			const sender = currentAccount.address
 			txb.setSender(sender)
@@ -98,7 +94,6 @@ const MintNFT = () => {
 				],
 			})
 
-			// Sign and execute the transaction block using the current account's keypair
 			signAndExecuteTransactionBlock(
 				{
 					transactionBlock: txb,
@@ -123,15 +118,17 @@ const MintNFT = () => {
 	}
 
 	return (
-		<div style={{ padding: 20 }}>
+		<div>
 			<ConnectButton />
-			{currentAccount && (
+			{/* {currentAccount && (
 				<>
-					<button onClick={handleMint}>Mint NFT</button>
+					<button onClick={() => handleMint(name, description, frame, url)}>
+						Mint NFT
+					</button>
 					{digest && <p>NFT minted successfully! Transaction: {digest}</p>}
 					{error && <p>Error: {error}</p>}
 				</>
-			)}
+			)} */}
 		</div>
 	)
 }

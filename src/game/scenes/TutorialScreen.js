@@ -13,8 +13,6 @@ import UpgradeManager from '../manager/UpgradeManager.js'
 import MobileManager from '../manager/MobileManager.js'
 import gameSettings from '../config/gameSettings.js'
 
-import { EventBus } from '../EventBus.js'
-
 const BACKGROUND_SCROLL_SPEED = 0.5
 class TutorialScreen extends Phaser.Scene {
 	constructor() {
@@ -166,16 +164,6 @@ class TutorialScreen extends Phaser.Scene {
 			},
 			this,
 		)
-
-		EventBus.emit('current-scene-ready', {
-			key: { callingScene: this.callingScene },
-			nftProperties: {
-				name: gameSettings.nft_weapon,
-				frame: gameSettings.nft_frame,
-				description: gameSettings.nft_description,
-				url: gameSettings.nft_img_url,
-			},
-		})
 	}
 
 	update() {
@@ -274,7 +262,6 @@ class TutorialScreen extends Phaser.Scene {
 	}
 
 	startGame() {
-
 		this.scene.stop('upgradeScreen')
 
 		this.time.delayedCall(3000, () => {

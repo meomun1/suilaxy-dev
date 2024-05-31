@@ -9,7 +9,7 @@ var gameSettings = {
 	playerFireRate: 700,
 	playerDefaultBulletSize: 1.2,
 	playerBulletSize: 1.2,
-	playerMaxHealth: 1000,
+	playerMaxHealth: 4000,
 	playerUpgradeThreshold: 300,
 
 	// save settings
@@ -22,7 +22,7 @@ var gameSettings = {
 	savePlayerFireRate: 700,
 	savePlayerDefaultBulletSize: 1.2,
 	savePlayerBulletSize: 1.2,
-	savePlayerMaxHealth: 1000,
+	savePlayerMaxHealth: 4000,
 	savePlayerUpgradeThreshold: 500,
 
 	// enemy settings

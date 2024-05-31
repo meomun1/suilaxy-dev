@@ -336,7 +336,7 @@ class BossScreen extends Phaser.Scene {
 			this.time.delayedCall(
 				5000,
 				() => {
-					this.scene.start('victoryScreen')
+					this.scene.start('createNft')
 				},
 				null,
 				this,

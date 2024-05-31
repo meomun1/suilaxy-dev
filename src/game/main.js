@@ -13,6 +13,7 @@ import LevelThreeScreen from './scenes/LevelThreeScreen.js'
 import BossScreen from './scenes/BossScreen.js'
 import CreditScreen from './scenes/CreditScreen.js'
 import NewShipScreen from './scenes/NewShipScreen.js'
+import NftScreen from './scenes/NftScreen.js'
 
 // Temporary Disable
 import VictoryScreen from './scenes/VictoryScreen.js'
@@ -40,6 +41,7 @@ const config = {
 		UpgradeScreen,
 		GameOver,
 		CreditScreen,
+		NftScreen,
 	],
 	pixelArt: true,
 	input: {

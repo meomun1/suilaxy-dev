@@ -31,6 +31,7 @@ class TutorialScreen extends Phaser.Scene {
 	}
 
 	create() {
+		gameSettings.isBossDead = true
 		// global music
 		this.music = this.sys.game.globals.music
 
@@ -273,6 +274,7 @@ class TutorialScreen extends Phaser.Scene {
 	}
 
 	startGame() {
+
 		this.scene.stop('upgradeScreen')
 
 		this.time.delayedCall(3000, () => {

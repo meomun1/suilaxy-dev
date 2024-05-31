@@ -1,6 +1,5 @@
 import Phaser from 'phaser'
 import config from '../config/config'
-import Button from '../objects/Button.js'
 import gameSettings from '../config/gameSettings'
 
 class Leaderboard extends Phaser.Scene {

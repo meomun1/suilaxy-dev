@@ -1,7 +1,6 @@
 import Entity from '../Entity'
 import gameSettings from '../../config/gameSettings'
 import HPBar from '../ui/HPBar'
-import config from '../../config/config'
 import EnemyBullet from '../projectiles/EnemyBullet'
 
 class MiniBot extends Entity {

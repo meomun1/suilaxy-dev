@@ -1,5 +1,3 @@
-import gameSettings from '../config/gameSettings'
-
 class CollideManager {
 	constructor(
 		scene,

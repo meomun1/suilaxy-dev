@@ -1,5 +1,5 @@
-const gameWidth = 600
-const gameHeight = 850
+const gameWidth = 633
+const gameHeight = 950
 
 const config = {
 	width: gameWidth,

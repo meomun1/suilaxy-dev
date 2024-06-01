@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap");
 * {
+  -webkit-font-smoothing: antialiased;
   font-family: "Pixelify Sans", sans-serif;
   margin: 0;
   padding: 0;
@@ -10,6 +11,11 @@ html {
   background-image: url("/public/background.png");
   z-index: -1;
   opacity: 1;
+}
+
+button:focus-visible {
+  outline: 2px solid #f68fde !important;
+  outline: -webkit-focus-ring-color auto 5px !important;
 }
 
 ul {
@@ -38,22 +44,62 @@ a {
 #app .child-left {
   margin-left: 40px;
   margin-right: 40px;
+  flex-direction: column;
+  gap: 20px;
 }
-#app .child-left .h1 {
+#app .child-left .text-wrapper {
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid;
+  border-color: rgba(255, 255, 255, 0.1019607843);
+  border-radius: 15px;
+}
+#app .child-left .text-wrapper h1 {
   font-size: 1.5rem;
   font-weight: 600;
   text-align: center;
   color: white;
 }
+#app .child-left .text-wrapper .top {
+  padding: 20px 20px;
+}
+#app .child-left .text-wrapper .top .special-text {
+  -webkit-text-stroke: 1px #ec7cc4;
+  color: #ffffff;
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 64px;
+  font-weight: 800;
+  left: 76px;
+  letter-spacing: 5.76px;
+  line-height: normal;
+  text-shadow: 0px 0px 10px #f68fde, 0px 0px 20px #f68fde;
+}
+#app .child-left .text-wrapper .bottom {
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+#app .child-left .text-wrapper .bottom .h1-two {
+  padding-top: 20px;
+}
+#app .child-left .text-wrapper .bottom a {
+  color: #f68fde;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding-top: 20px;
+}
+#app .child-left .text-wrapper .bottom a:hover {
+  color: #ec7cc4;
+}
 #app .child-main {
-  padding: 0;
-  border: 5px solid #f6d4fc;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  -webkit-box-shadow: 0px 10px 40px #89619e;
-  -moz-box-shadow: 0px 0px 40px #89619e;
-  box-shadow: 0px 0px 40px #89619e;
+  -webkit-backdrop-filter: blur(18px) brightness(100%);
+  backdrop-filter: blur(18px) brightness(100%);
+  background-color: rgba(240, 213, 249, 0.0117647059);
+  box-shadow: 0px 0px 21.5px 4px #f4b3dd;
 }
 #app .child-right {
   display: flex;

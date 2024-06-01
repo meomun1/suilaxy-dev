@@ -21,10 +21,10 @@ import Leaderboard from './scenes/Leaderboard.js'
 
 const config = {
 	type: Phaser.AUTO,
-	width: 600,
-	height: 850,
+	width: 633,
+	height: 950,
 	parent: 'game-container',
-	backgroundColor: 'black',
+	backgroundColor: 'rgba(0, 0, 0)',
 	scene: [
 		TitleScreen,
 		LoadingScreen,

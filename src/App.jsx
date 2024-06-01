@@ -1,10 +1,6 @@
 import { useRef } from 'react'
 import { PhaserGame } from './game/PhaserGame'
-import {
-	ConnectButton,
-	useCurrentAccount,
-	useSuiClientQuery,
-} from '@mysten/dapp-kit'
+import { useCurrentAccount, useSuiClientQuery } from '@mysten/dapp-kit'
 import MintNFT from './sui/MintNFT'
 
 function ConnectedAccount() {
@@ -40,10 +36,29 @@ function App() {
 			<div id="app">
 				{/* Game Info */}
 				<div className="child-left">
-					<h1 className="h1">
-						Currently Suilaxy is running with Beta version on Sui Blockchain
-						testnet.
-					</h1>
+					<div className="text-wrapper">
+						<div className="top">
+							<h1 className="special-text">SUILAXY</h1>
+						</div>
+					</div>
+					<div className="text-wrapper">
+						<div className="bottom">
+							<h1>
+								Currently Suilaxy is running with Beta version on Sui Blockchain
+								testnet.
+							</h1>
+							<h1 className="h1-two">
+								For more information, please visit our Gitbook page.
+							</h1>
+							<a
+								href="https://suilaxy.gitbook.io/suilaxy"
+								target="_blank"
+								rel="noreferrer"
+							>
+								https://suilaxy.gitbook.io/suilaxy
+							</a>
+						</div>
+					</div>
 				</div>
 
 				{/* Game Canvas */}

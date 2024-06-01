@@ -53,7 +53,7 @@ class TitleScreen extends Phaser.Scene {
 			0,
 			config.width,
 			config.height,
-			0x000000,
+			0x00000010,
 		)
 		blackCover.setOrigin(0, 0)
 		blackCover.setDepth(100)

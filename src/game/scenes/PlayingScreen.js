@@ -218,7 +218,7 @@ class PlayingScreen extends Phaser.Scene {
 
 		// FINAL WAVE
 		this.time.delayedCall(
-			45000,
+			30000,
 			() => {
 				this.startFinalWave()
 			},
@@ -227,7 +227,7 @@ class PlayingScreen extends Phaser.Scene {
 		)
 
 		this.time.delayedCall(
-			57000,
+			42000,
 			() => {
 				this.EnemyManager.gameStarted = true
 			},
@@ -249,7 +249,6 @@ class PlayingScreen extends Phaser.Scene {
 					this.EnemyManager.enemies,
 					this.UtilitiesManager.HealthPacks,
 					this.UtilitiesManager.shieldPacks,
-					null,
 					this.shield,
 					this.SoundManager,
 				)
@@ -267,7 +266,6 @@ class PlayingScreen extends Phaser.Scene {
 					this.EnemyManager.enemies,
 					this.UtilitiesManager.HealthPacks,
 					this.UtilitiesManager.shieldPacks,
-					null,
 					this.shield,
 					this.SoundManager,
 				)

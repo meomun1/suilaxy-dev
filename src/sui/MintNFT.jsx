@@ -4,8 +4,10 @@ import {
 	ConnectButton,
 	useCurrentAccount,
 	useSignAndExecuteTransactionBlock,
+	useSuiClientQuery,
 } from '@mysten/dapp-kit'
 import { EventBus } from '../game/EventBus'
+import { saveAs } from 'file-saver'
 
 const PACKAGE_ADDRESS =
 	'0xdf295d1b88035db4a8c308ede33088e8c5df24d27f0448e41df2b8175afdae49'
@@ -20,6 +22,14 @@ const MintNFT = () => {
 
 	const phaserRef = useRef()
 	const currentAccount = useCurrentAccount()
+
+	// My changes 
+	const { data } = useSuiClientQuery('getOwnedObjects', {
+		owner: currentAccount?.address,
+	});
+	if(data){
+		console.log(data)
+	}
 
 	const { mutate: signAndExecuteTransactionBlock } =
 		useSignAndExecuteTransactionBlock()
@@ -130,5 +140,7 @@ const MintNFT = () => {
 		</div>
 	)
 }
+
+
 
 export default MintNFT

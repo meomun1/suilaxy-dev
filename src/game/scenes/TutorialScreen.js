@@ -144,7 +144,6 @@ class TutorialScreen extends Phaser.Scene {
 			this.EnemyManager.enemies,
 			this.UtilitiesManager.HealthPacks,
 			this.UtilitiesManager.shieldPacks,
-			this.UtilitiesManager.nftCollection,
 			this.shield,
 		)
 
@@ -271,7 +270,7 @@ class TutorialScreen extends Phaser.Scene {
 				Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
 				(cam, effect) => {
 					this.scene.stop()
-					this.scene.start('bossGame', { number: this.selectedPlayerIndex })
+					this.scene.start('playGame', { number: this.selectedPlayerIndex })
 				},
 			)
 		})

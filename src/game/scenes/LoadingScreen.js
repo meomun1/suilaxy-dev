@@ -41,332 +41,281 @@ class LoadingScreen extends Phaser.Scene {
 		)
 
 		// Load boss spritesheets
-		this.load.spritesheet({
-			key: 'boss_texture',
-			url: 'assets/spritesheets/enemies/boss-01.png',
-			frameConfig: {
-				frameWidth: 240,
-				frameHeight: 240,
-				startFrame: 0,
-				endFrame: 7,
-			},
-		})
 
-		this.load.spritesheet({
-			key: 'mini_texture',
-			url: 'assets/spritesheets/enemies/support-bot.png',
-			frameConfig: {
-				frameWidth: 96,
-				frameHeight: 96,
-				startFrame: 0,
-				endFrame: 0,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'boss_texture',
+			'assets/spritesheets/enemies/boss-01.png',
+			240,
+			240,
+			0,
+			7,
+		)
+		this.guiManager.loadSpriteSheet(
+			'mini_texture',
+			'assets/spritesheets/enemies/support-bot.png',
+			96,
+			96,
+			0,
+			0,
+		)
 
 		// Load Enemy Spritesheets
-		this.load.spritesheet({
-			key: 'bug1_texture',
-			url: 'assets/spritesheets/enemies/bug_1.png',
-			frameConfig: {
-				frameWidth: 64,
-				frameHeight: 64,
-				startFrame: 0,
-				endFrame: 5,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'bug1_texture',
+			'assets/spritesheets/enemies/bug_1.png',
+			64,
+			64,
+			0,
+			5,
+		)
 
-		this.load.spritesheet({
-			key: 'bug3_texture',
-			url: 'assets/spritesheets/enemies/bug_3.png',
-			frameConfig: {
-				frameWidth: 64,
-				frameHeight: 64,
-				startFrame: 0,
-				endFrame: 5,
-			},
-		})
+		// this.load.spritesheet({
+		this.guiManager.loadSpriteSheet(
+			'bug3_texture',
+			'assets/spritesheets/enemies/bug_3.png',
+			64,
+			64,
+			0,
+			5,
+		)
+		this.guiManager.loadSpriteSheet(
+			'bug5_texture',
+			'assets/spritesheets/enemies/bug_5.png',
+			64,
+			64,
+			0,
+			5,
+		)
 
-		this.load.spritesheet({
-			key: 'bug5_texture',
-			url: 'assets/spritesheets/enemies/bug_5.png',
-			frameConfig: {
-				frameWidth: 64,
-				frameHeight: 64,
-				startFrame: 0,
-				endFrame: 5,
-			},
-		})
-
-		this.load.image('nft_texture', this.url_img)
+		this.guiManager.loadImage('nft_texture', this.url_img)
 
 		// Load health pack Spritesheet
-		this.load.spritesheet({
-			key: 'healthPack_texture',
-			url: 'assets/spritesheets/vfx/healthPack.png',
-			frameConfig: {
-				frameWidth: 32,
-				frameHeight: 32,
-				startFrame: 0,
-				endFrame: 4,
-			},
-		})
+
+		this.guiManager.loadSpriteSheet(
+			'healthPack_texture',
+			'assets/spritesheets/vfx/healthPack.png',
+			32,
+			32,
+			0,
+			4,
+		)
 
 		// Load the HealthBar
-		this.load.spritesheet({
-			key: 'healthBar_texture',
-			url: 'assets/spritesheets/vfx/healthBar_01.png',
-			frameConfig: {
-				frameWidth: 331,
-				frameHeight: 154,
-				startFrame: 0,
-				endFrame: 0,
-			},
-		})
+
+		this.guiManager.loadSpriteSheet(
+			'healthBar_texture',
+			'assets/spritesheets/vfx/healthBar_01.png',
+			331,
+			154,
+			0,
+			0,
+		)
 
 		// Load the Pause display button
-		this.load.spritesheet({
-			key: 'pauseDis_texture',
-			url: 'assets/spritesheets/vfx/pauseDis.png',
-			frameConfig: {
-				frameWidth: 36,
-				frameHeight: 36,
-				startFrame: 0,
-				endFrame: 1,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'pauseDis_texture',
+			'assets/spritesheets/vfx/pauseDis.png',
+			36,
+			36,
+			0,
+			1,
+		)
 
 		// Load the setting button
-		this.load.spritesheet({
-			key: 'settingButton_texture',
-			url: 'assets/spritesheets/vfx/settingButton.png',
-			frameConfig: {
-				frameWidth: 36,
-				frameHeight: 36,
-				startFrame: 0,
-				endFrame: 0,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'settingButton_texture',
+			'assets/spritesheets/vfx/settingButton.png',
+			36,
+			36,
+			0,
+			0,
+		)
 
 		// Load the setting hover button
-		this.load.spritesheet({
-			key: 'mute_texture',
-			url: 'assets/spritesheets/vfx/mute.png',
-			frameConfig: {
-				frameWidth: 36,
-				frameHeight: 36,
-				startFrame: 0,
-				endFrame: 0,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'mute_texture',
+			'assets/spritesheets/vfx/mute.png',
+			36,
+			36,
+			0,
+			0,
+		)
 
 		// Load the setting button
-		this.load.spritesheet({
-			key: 'sound_texture',
-			url: 'assets/spritesheets/vfx/sound.png',
-			frameConfig: {
-				frameWidth: 36,
-				frameHeight: 36,
-				startFrame: 0,
-				endFrame: 0,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'sound_texture',
+			'assets/spritesheets/vfx/sound.png',
+			36,
+			36,
+			0,
+			0,
+		)
 
 		// Load the setting hover button
-		this.load.spritesheet({
-			key: 'settingHover_texture',
-			url: 'assets/spritesheets/vfx/settingHover.png',
-			frameConfig: {
-				frameWidth: 36,
-				frameHeight: 36,
-				startFrame: 0,
-				endFrame: 0,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'settingHover_texture',
+			'assets/spritesheets/vfx/settingHover.png',
+			36,
+			36,
+			0,
+			0,
+		)
 
 		// Load shield pack Spritesheet
-		this.load.spritesheet({
-			key: 'shieldPack_texture',
-			url: 'assets/spritesheets/vfx/shieldPack.png',
-			frameConfig: {
-				frameWidth: 32,
-				frameHeight: 32,
-				startFrame: 0,
-				endFrame: 4,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'shieldPack_texture',
+			'assets/spritesheets/vfx/shieldPack.png',
+			32,
+			32,
+			0,
+			4,
+		)
 
 		// Load shield Spritesheet
-		this.load.spritesheet({
-			key: 'shield_texture',
-			url: 'assets/spritesheets/vfx/shield.png',
-			frameConfig: {
-				frameWidth: 96,
-				frameHeight: 96,
-				startFrame: 0,
-				endFrame: 5,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'shield_texture',
+			'assets/spritesheets/vfx/shield.png',
+			96,
+			96,
+			0,
+			5,
+		)
 
 		// Load chase bullet Spritesheet
-		this.load.spritesheet({
-			key: `bulletChase_texture`,
-			url: `assets/spritesheets/vfx/chaseBullet_01.png`,
-			frameConfig: {
-				frameWidth: 24,
-				frameHeight: 24,
-				startFrame: 0,
-				endFrame: 5,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'bulletChase_texture',
+			'assets/spritesheets/vfx/chaseBullet_01.png',
+			24,
+			24,
+			0,
+			5,
+		)
 
-		// Load Bullet Spritesheet
 		if (this.selectedPlayerIndex == 1) {
-			this.load.spritesheet({
-				key: `bullet1_texture`,
-				url: `assets/spritesheets/vfx/bullet1.png`,
-				frameConfig: {
-					frameWidth: 32,
-					frameHeight: 11,
-					startFrame: 0,
-					endFrame: 1,
-				},
-			})
+			this.guiManager.loadSpriteSheet(
+				'bullet1_texture',
+				'assets/spritesheets/vfx/bullet1.png',
+				32,
+				11,
+				0,
+				1,
+			)
 		}
 
 		if (this.selectedPlayerIndex == 2) {
-			this.load.spritesheet({
-				key: `bullet2_texture`,
-				url: `assets/spritesheets/vfx/bullet2.png`,
-				frameConfig: {
-					frameWidth: 25,
-					frameHeight: 33,
-					startFrame: 0,
-					endFrame: 5,
-				},
-			})
+			this.guiManager.loadSpriteSheet(
+				'bullet2_texture',
+				'assets/spritesheets/vfx/bullet2.png',
+				25,
+				33,
+				0,
+				5,
+			)
 		}
 
 		if (this.selectedPlayerIndex == 3) {
-			this.load.spritesheet({
-				key: `bullet3_texture`,
-				url: `assets/spritesheets/vfx/bullet3.png`,
-				frameConfig: {
-					frameWidth: 20,
-					frameHeight: 32,
-					startFrame: 0,
-					endFrame: 4,
-				},
-			})
+			this.guiManager.loadSpriteSheet(
+				'bullet3_texture',
+				'assets/spritesheets/vfx/bullet3.png',
+				20,
+				32,
+				0,
+				4,
+			)
 		}
 
 		if (this.selectedPlayerIndex == 4) {
-			this.load.spritesheet({
-				key: `bullet${this.selectedPlayerIndex}_texture`,
-				url: `assets/spritesheets/vfx/bullet4.png`,
-				frameConfig: {
-					frameWidth: 22,
-					frameHeight: 22,
-					startFrame: 0,
-					endFrame: 5,
-				},
-			})
+			this.guiManager.loadSpriteSheet(
+				`bullet${this.selectedPlayerIndex}_texture`,
+				`assets/spritesheets/vfx/bullet4.png`,
+				22,
+				22,
+				0,
+				5,
+			)
 		}
 
 		if (this.selectedPlayerIndex == 5) {
-			this.load.spritesheet({
-				key: `bullet5_texture`,
-				url: `assets/spritesheets/vfx/bullet5.png`,
-				frameConfig: {
-					frameWidth: 20,
-					frameHeight: 39,
-					startFrame: 0,
-					endFrame: 3,
-				},
-			})
+			this.guiManager.loadSpriteSheet(
+				'bullet5_texture',
+				'assets/spritesheets/vfx/bullet5.png',
+				20,
+				39,
+				0,
+				3,
+			)
 		}
 
 		if (this.selectedPlayerIndex == 6) {
-			this.load.spritesheet({
-				key: `bullet6_texture`,
-				url: `assets/spritesheets/vfx/bullet6.png`,
-				frameConfig: {
-					frameWidth: 15,
-					frameHeight: 25,
-					startFrame: 0,
-					endFrame: 2,
-				},
-			})
+			this.guiManager.loadSpriteSheet(
+				'bullet6_texture',
+				'assets/spritesheets/vfx/bullet6.png',
+				15,
+				25,
+				0,
+				2,
+			)
 		}
 
 		if (this.selectedPlayerIndex == 7) {
-			this.load.spritesheet({
-				key: `bullet7_texture`,
-				url: `assets/spritesheets/vfx/bullet7.png`,
-				frameConfig: {
-					frameWidth: 20,
-					frameHeight: 30,
-					startFrame: 0,
-					endFrame: 3,
-				},
-			})
+			this.guiManager.loadSpriteSheet(
+				'bullet7_texture',
+				'assets/spritesheets/vfx/bullet7.png',
+				20,
+				30,
+				0,
+				3,
+			)
 		}
 
 		if (this.selectedPlayerIndex == 8) {
-			this.load.spritesheet({
-				key: `bullet8_texture`,
-				url: `assets/spritesheets/vfx/bullet8.png`,
-				frameConfig: {
-					frameWidth: 30,
-					frameHeight: 30,
-					startFrame: 0,
-					endFrame: 5,
-				},
-			})
+			this.guiManager.loadSpriteSheet(
+				'bullet8_texture',
+				'assets/spritesheets/vfx/bullet8.png',
+				30,
+				30,
+				0,
+				5,
+			)
 		}
 
 		if (this.selectedPlayerIndex == 9) {
-			this.load.spritesheet({
-				key: `bullet9_texture`,
-				url: `assets/spritesheets/vfx/bullet9.png`,
-				frameConfig: {
-					frameWidth: 20,
-					frameHeight: 30,
-					startFrame: 0,
-					endFrame: 3,
-				},
-			})
+			this.guiManager.loadSpriteSheet(
+				'bullet9_texture',
+				'assets/spritesheets/vfx/bullet9.png',
+				20,
+				30,
+				0,
+				3,
+			)
 		}
 
 		// Load enemy Bullet Spritesheet
-		this.load.spritesheet({
-			key: 'bullet_texture',
-			url: 'assets/spritesheets/vfx/bullet.png',
-			frameConfig: {
-				frameWidth: 12,
-				frameHeight: 26,
-				startFrame: 0,
-				endFrame: 2,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'bullet_texture',
+			'assets/spritesheets/vfx/bullet.png',
+			12,
+			26,
+			0,
+			2,
+		)
 
 		// Load Effect Spritesheets
-		this.load.spritesheet({
-			key: 'explosion_texture',
-			url: 'assets/spritesheets/vfx/explosion.png',
-			frameConfig: {
-				frameWidth: 100,
-				frameHeight: 100,
-				startFrame: 0,
-				endFrame: 11,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'explosion_texture',
+			'assets/spritesheets/vfx/explosion.png',
+			100,
+			100,
+			0,
+			11,
+		)
+
 		this.load.audio('explosionSound', 'assets/audio/DestroyEnemySmall.wav')
 		this.load.audio('shootSound', 'assets/audio/bullet.wav')
 		this.load.audio('main_menu_music', 'assets/audio/backgroundMusic.mp3')
 		this.load.audio('health', 'assets/audio/health.wav')
 		this.load.audio('shield', 'assets/audio/shield.wav')
 		this.load.audio('bossMusic', 'assets/audio/boss.mp3')
-
 	}
 
 	create() {

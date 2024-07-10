@@ -41,30 +41,6 @@ class EnemyManager {
 		}
 	}
 
-	moveEnemies(time) {
-		// Move enemies
-
-		let offScreenEnemy = this.enemies.find((enemy) => enemy.y >= config.height)
-		let offScreenEnemyIndex = this.enemies.findIndex(
-			(enemy) => enemy.y >= config.height,
-		)
-
-		const currentTime = this.scene.time.now
-
-		// Check if enough time has passed for the next respawn for this specific enemy
-		if (
-			currentTime - this.lastRespawnTimes[offScreenEnemyIndex] >=
-			this.respawnDelays[offScreenEnemyIndex]
-		) {
-			offScreenEnemy.y = 0
-			offScreenEnemy.x = Phaser.Math.Between(120, config.width - 120)
-
-			// Set a new random delay for the next respawn for this specific enemy
-			this.respawnDelays[offScreenEnemyIndex] = Phaser.Math.Between(2000, 4000)
-			this.lastRespawnTimes[offScreenEnemyIndex] = currentTime
-		}
-	}
-
 	// this can make the enemies respawn
 	addEnemy(enemy) {
 		// When adding a new enemy, initialize its random delay and last respawn time

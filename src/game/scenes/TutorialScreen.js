@@ -18,6 +18,7 @@ class TutorialScreen extends Phaser.Scene {
 	constructor() {
 		super('playTutorial')
 		this.callingScene = 'playTutorial'
+		this.guiManager = new GuiManager(this)
 	}
 
 	init(data) {
@@ -34,37 +35,61 @@ class TutorialScreen extends Phaser.Scene {
 		this.music = this.sys.game.globals.music
 
 		// Create player animations
-		this.guiManager = new GuiManager(this)
 		this.guiManager.createBackground('background_texture_03')
-		this.guiManager.createTutorialText(
+
+		this.guiManager.createTextWithDelay(
 			'Press SPACE to shoot',
 			config.width / 2,
 			config.height / 2 - 60,
+			'Pixelify Sans',
+			'28px',
+			'#ffffff',
+			0.5,
+			4000,
 		)
-		this.guiManager.createTutorialText(
+
+		this.guiManager.createTextWithDelay(
 			'Use Arrow Keys to move',
 			config.width / 2,
 			config.height / 2 - 30,
+			'Pixelify Sans',
+			'28px',
+			'#ffffff',
+			0.5,
+			4000,
 		)
 
+		// CALL TEXT AFTER 6 SECONDS
 		this.time.delayedCall(
 			6000,
 			() => {
-				this.guiManager.createTutorialText(
+				this.guiManager.createTextWithDelay(
 					'Press P to pause the game',
 					config.width / 2,
 					config.height / 2 - 60,
+					'Pixelify Sans',
+					'28px',
+					'#ffffff',
+					0.5,
+					4000,
 				)
-				this.guiManager.createTutorialText(
+
+				this.guiManager.createTextWithDelay(
 					'Take down the enemy for upgrade',
 					config.width / 2,
-					config.height / 2 - 30,
+					config.height / 2 - 100,
+					'Pixelify Sans',
+					'28px',
+					'#ffffff',
+					0.5,
+					4000,
 				)
 			},
 			null,
 			this,
 		)
 
+		// CALL TEXT AFTER 10 SECONDS
 		this.time.delayedCall(
 			10000,
 			() => {
@@ -80,9 +105,6 @@ class TutorialScreen extends Phaser.Scene {
 			null,
 			this,
 		)
-		// Create managers
-		this.keyboardManager = new KeyboardManager(this, this.music)
-		this.keyboardManager.MuteGame()
 
 		// Spawn the Player
 		this.player = new Player(
@@ -100,22 +122,19 @@ class TutorialScreen extends Phaser.Scene {
 		this.shield.play('shield_anim')
 
 		// Create managers
-		// Keyboard
-		this.keyboardManager = new KeyboardManager(this)
-
-		// Mobile
+		this.keyboardManager = new KeyboardManager(this, this.music)
+		this.keyboardManager.MuteGame()
 
 		this.mobileManager = new MobileManager(this)
 
-		// Player
 		this.PlayerManager = new PlayerManager(
 			this,
 			this.player,
 			this.selectedPlayerIndex,
 		)
-		// Utilities
+
 		this.UtilitiesManager = new UtilitiesManager(this)
-		// Enemy
+
 		this.EnemyManager = new EnemyManager(this)
 		this.time.delayedCall(
 			3000,

@@ -3,6 +3,7 @@ import config from '../config/config.js'
 import Button from '../objects/Button.js'
 import Music from '../mode/Music.js'
 import { EventBus } from '../EventBus.js'
+import GuiManager from '../manager/GuiManager.js'
 
 class TitleScreen extends Phaser.Scene {
 	constructor() {
@@ -12,6 +13,7 @@ class TitleScreen extends Phaser.Scene {
 		this.walletConnected = false
 		this.connectWalletText = null
 		this.button_play = null
+		this.guiManager = new GuiManager(this)
 	}
 
 	init() {
@@ -21,30 +23,27 @@ class TitleScreen extends Phaser.Scene {
 
 	preload() {
 		this.load.audio('main_menu_music', 'assets/audio/backgroundMusic.mp3')
-		this.load.image(
+
+		this.guiManager.loadImage(
 			'background',
 			'assets/images/backgrounds/background_title.png',
 		)
-		this.load.spritesheet({
-			key: 'button_play',
-			url: 'assets/gui/button.png',
-			frameConfig: {
-				frameWidth: 93,
-				frameHeight: 28,
-				startFrame: 2,
-				endFrame: 2,
-			},
-		})
-		this.load.spritesheet({
-			key: 'button_play_hover',
-			url: 'assets/gui/button_hover.png',
-			frameConfig: {
-				frameWidth: 93,
-				frameHeight: 28,
-				startFrame: 2,
-				endFrame: 2,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'button_play',
+			'assets/gui/button.png',
+			93,
+			28,
+			2,
+			2,
+		)
+		this.guiManager.loadSpriteSheet(
+			'button_play_hover',
+			'assets/gui/button_hover.png',
+			93,
+			28,
+			2,
+			2,
+		)
 	}
 
 	create() {
@@ -78,59 +77,9 @@ class TitleScreen extends Phaser.Scene {
 			this.sys.game.globals.bgMusic = this.bgMusic
 		}
 
-		this.background = this.add.tileSprite(
-			0,
-			0,
-			config.width,
-			config.height,
-			'background',
-		)
-		this.background.setOrigin(0, 0)
-
-		const spaceText = this.add.text(
-			config.width / 2,
-			config.height / 2 - 130,
-			'SPACE',
-			{
-				fontFamily: 'Pixelify Sans',
-				fontSize: '100px',
-				color: '#F3F8FF',
-				align: 'center',
-			},
-		)
-		spaceText.setOrigin(0.5)
-		spaceText.setShadow(3, 3, '#F27CA4', 2, false, true)
-
-		const guardianText = this.add.text(
-			config.width / 2,
-			config.height / 2 - 30,
-			'GUARDIAN',
-			{
-				fontFamily: 'Pixelify Sans',
-				color: '#F3F8FF',
-				fontSize: '100px',
-				align: 'center',
-			},
-		)
-		guardianText.setOrigin(0.5)
-		guardianText.setShadow(3, 3, '#F27CA4', 2, false, true)
-
-		this.tweens.add({
-			targets: guardianText,
-			duration: 1000,
-			ease: 'Sine.easeInOut',
-			repeat: -1,
-			yoyo: true,
-			alpha: 0.2,
-		})
-		this.tweens.add({
-			targets: spaceText,
-			duration: 1000,
-			ease: 'Sine.easeInOut',
-			repeat: -1,
-			yoyo: true,
-			alpha: 0.2,
-		})
+		this.guiManager.createBackground('background')
+		this.guiManager.createAnimatedText('GUARDIAN', -30)
+		this.guiManager.createAnimatedText('SPACE', -130)
 
 		this.connectWalletText = this.add.text(
 			config.width / 2,
@@ -175,25 +124,6 @@ class TitleScreen extends Phaser.Scene {
 		)
 		this.button_play.setSize(93, 28)
 		this.button_play.setInteractive()
-
-		this.button_play.on('pointerdown', () => {
-			this.cameras.main.fadeOut(1500, false, () => {
-				this.scene.start('choosePlayer')
-			})
-		})
-
-		this.button_play.on('pointerover', () => {
-			this.button_play.setTexture('button_play_hover')
-		})
-
-		this.button_play.on('pointerout', () => {
-			this.button_play.setTexture('button_play')
-		})
-
-		this.input.keyboard.on('keydown-ENTER', () => {
-			this.scene.start('choosePlayer')
-		})
-
 		this.button_play.setScale(1.5)
 	}
 

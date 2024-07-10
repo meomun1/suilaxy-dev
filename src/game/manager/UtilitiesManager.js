@@ -11,7 +11,7 @@ class UtilitiesManager {
 		this.delayTime = 3000 // Set your desired delay time in milliseconds
 		this.timeElapsed = 0
 		this.shieldPacksSpawned = false
-		this.nftCollection = null 
+		this.nftCollection = null
 	}
 
 	generateRandomPosition() {
@@ -26,11 +26,15 @@ class UtilitiesManager {
 		return { x: randomX, y: randomY }
 	}
 
-	addNftForPlayer(){
+	addNftForPlayer() {
 		const randomPos = this.generateRandomPosition()
-		this.nftCollection = new NftCollection(this.scene, config.width/2, config.height/2)
+		this.nftCollection = new NftCollection(
+			this.scene,
+			config.width / 2,
+			config.height / 2,
+		)
 		this.nftCollection.setTexture('nft_texture')
-		this.nftCollection.setScale(0.25);
+		this.nftCollection.setScale(0.25)
 	}
 
 	addUtilitiesForPlayingScreen(numHealth, numShield) {
@@ -61,24 +65,6 @@ class UtilitiesManager {
 		this.shieldPacks.push(ShieldPack)
 		// ... other code for managing respawn delays, etc.
 	}
-
-	// update(time) {
-	//   this.timeElapsed += time;
-
-	//   if (!this.shieldPacksSpawned && this.timeElapsed >= this.delayTime) {
-	//     this.shieldPacks.forEach((shieldPack) => {
-	//       shieldPack.setActive(true);
-	//       shieldPack.setVisible(true);
-	//     });
-	//     this.shieldPacksSpawned = true;
-	//   }
-	// Other update logic
 }
-// addUtility(utility) {
-//   // When adding a new enemy, initialize its random delay and last respawn time
-//   this.Utilities.push(utility);
-//   // this.respawnDelays.push(Phaser.Math.Between(5000, 7000));
-//   // this.lastRespawnTimes.push(0);
-// }
 
 export default UtilitiesManager

@@ -321,20 +321,6 @@ class PlayingScreen extends Phaser.Scene {
 			this.SoundManager,
 		)
 
-		// this.time.delayedCall(
-		//   58000,
-		//   () => {
-		//     this.time.delayedCall(
-		//       1000,
-		//       this.goToNextLevel,
-		//       null,
-		//       this
-		//     );
-		//   },
-		//   null,
-		//   this
-		// );
-
 		// create pause button
 		this.pic = this.add.image(config.width - 20, 30, 'pause')
 		// this.button = this.scene.add.sprite(60, 30, 'pause');

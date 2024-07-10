@@ -1,7 +1,8 @@
-import config from '../config/config'
 import PlayingScreen from '../scenes/PlayingScreen'
 import PauseScreen from '../scenes/PauseScreen'
 import GameOver from '../scenes/GameOver'
+import Phaser from 'phaser'
+import config from '../config/config.js'
 
 class GuiManager {
 	constructor(scene) {
@@ -102,10 +103,7 @@ class GuiManager {
 		)
 	}
 
-	createTitleGui() {
-		// Add later
-	}
-
+	// TEXT SESSION
 	createSimpleText(x, y, key, font, color, origin) {
 		const simpleText = this.scene.add.text(x, y, key, {
 			fontFamily: 'Pixelify Sans',
@@ -113,6 +111,49 @@ class GuiManager {
 			fill: color,
 		})
 		simpleText.setOrigin(origin)
+	}
+
+	createTextWithDelay(key, x, y, font, size, fill, origin, delay) {
+		const simpleText = this.scene.add.text(x, y, key, {
+			fontFamily: font,
+			fontSize: size,
+			fill: fill,
+		})
+		simpleText.setOrigin(origin)
+
+		this.scene.time.delayedCall(
+			delay,
+			() => {
+				simpleText.destroy()
+			},
+			null,
+			this,
+		)
+	}
+
+	createAnimatedText(text, yOffset) {
+		const textObject = this.scene.add.text(
+			config.width / 2,
+			config.height / 2 + yOffset,
+			text,
+			{
+				fontFamily: 'Pixelify Sans',
+				fontSize: '100px',
+				color: '#F3F8FF',
+				align: 'center',
+			},
+		)
+		textObject.setOrigin(0.5)
+		textObject.setShadow(3, 3, '#F27CA4', 2, false, true)
+
+		this.scene.tweens.add({
+			targets: textObject,
+			duration: 1000,
+			ease: 'Sine.easeInOut',
+			repeat: -1,
+			yoyo: true,
+			alpha: 0.2,
+		})
 	}
 
 	createBackground(key) {
@@ -126,41 +167,23 @@ class GuiManager {
 		this.scene.background.setOrigin(0, 0)
 	}
 
-	createLevelText(x, y, key, font, color) {
-		const LevelText = this.scene.add.text(x, y, key, {
-			fontFamily: 'Pixelify Sans',
-			fontSize: font,
-			fill: color,
-		})
-		LevelText.setOrigin(0.5)
+	// SPRITE SESSION
 
-		this.scene.time.delayedCall(
-			4000,
-			() => {
-				LevelText.destroy()
-			},
-			null,
-			this,
-		)
+	loadAudio(key, path) {
+		this.scene.load.audio(key, path)
 	}
 
-	createTutorialText(key, x, y) {
-		const TutorialText = this.scene.add
-			.text(x, y, key, {
-				fontFamily: 'Pixelify Sans',
-				fontSize: '28px',
-				fill: '#ffffff',
-			})
-			.setOrigin(0.5)
+	loadImage(key, path) {
+		this.scene.load.image(key, path)
+	}
 
-		this.scene.time.delayedCall(
-			4000,
-			() => {
-				TutorialText.destroy()
-			},
-			null,
-			this,
-		)
+	loadSpriteSheet(key, path, frameWidth, frameHeight, startFrame, endFrame) {
+		this.scene.load.spritesheet(key, path, {
+			frameWidth: frameWidth,
+			frameHeight: frameHeight,
+			startFrame: startFrame,
+			endFrame: endFrame,
+		})
 	}
 }
 

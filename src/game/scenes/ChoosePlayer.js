@@ -1,11 +1,13 @@
 import Phaser from 'phaser'
 import config from '../config/config.js'
 import gameSettings from '../config/gameSettings.js'
+import GuiManager from '../manager/GuiManager.js'
 import { v4 as uuidv4 } from 'uuid'
 
 class ChoosePlayer extends Phaser.Scene {
 	constructor() {
 		super('choosePlayer')
+		this.guiManager = new GuiManager(this)
 	}
 
 	preload() {
@@ -32,32 +34,20 @@ class ChoosePlayer extends Phaser.Scene {
 
 	create() {
 		this.cameras.main.fadeIn(1500)
+		this.guiManager.createBackground('background')
 
-		this.background = this.add.tileSprite(
-			0,
-			0,
-			config.width,
-			config.height,
-			'background',
-		)
-
-		this.background.setOrigin(0, 0)
-
-		const chooseText = this.add.text(
+		this.guiManager.createMediumText(
 			config.width / 2,
 			config.height / 4 - 130,
 			'CHOOSE YOUR SHIP!',
-			{
-				fontFamily: 'Pixelify Sans',
-				fontSize: '50px',
-				color: '#F3F8FF', // Set the color for "SPACE"
-				align: 'center',
-			},
+			'Pixelify Sans',
+			'50px',
+			'#F3F8FF',
+			'center',
+			0.5,
 		)
-		chooseText.setShadow(2, 2, '#F27CA4', 2, false, true)
-		chooseText.setOrigin(0.5)
 
-		let count = 1
+		// UNDER HOVER FOR PLAYER
 		this.under_player = this.add.image(
 			(config.width * 2) / 3 - config.width / 6,
 			(config.height * 2) / 4 + 12,
@@ -79,6 +69,8 @@ class ChoosePlayer extends Phaser.Scene {
 		this.under_player.setScale(2.2)
 		this.under_player.setAlpha(0.9)
 
+		// CREATE PLAYER IMAGES
+		let count = 1
 		for (let i = 1; i <= 3; i++) {
 			for (let j = 1; j <= 3; j++) {
 				const playerImage = this.add.image(

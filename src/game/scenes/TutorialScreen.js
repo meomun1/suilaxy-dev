@@ -114,6 +114,7 @@ class TutorialScreen extends Phaser.Scene {
 			`player_texture_${this.selectedPlayerIndex}`,
 			gameSettings.playerMaxHealth,
 		)
+
 		this.player.play('player_anim')
 		this.player.restartToTile()
 		this.player.selectedPlayer = this.selectedPlayerIndex
@@ -127,11 +128,7 @@ class TutorialScreen extends Phaser.Scene {
 
 		this.mobileManager = new MobileManager(this)
 
-		this.PlayerManager = new PlayerManager(
-			this,
-			this.player,
-			this.selectedPlayerIndex,
-		)
+		this.PlayerManager = new PlayerManager(this, this.player)
 
 		this.UtilitiesManager = new UtilitiesManager(this)
 
@@ -191,6 +188,7 @@ class TutorialScreen extends Phaser.Scene {
 		} else if (this.music.musicOn === true && this.music.soundOn === true) {
 			this.musicButton = this.add.image(config.width - 60, 30, 'sound_texture')
 		}
+
 		// Pause the game
 		this.keyboardManager.pauseGame()
 		this.keyboardManager.titleScreen()

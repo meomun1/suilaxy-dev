@@ -2,8 +2,11 @@ import Phaser from 'phaser'
 import config from '../config/config.js'
 import Button from '../objects/Button.js'
 import Music from '../mode/Music.js'
-import { EventBus } from '../EventBus.js'
 import GuiManager from '../manager/GuiManager.js'
+import { EventBus } from '../EventBus.js'
+import io from 'socket.io-client'
+
+const socket = io('http://localhost:8080')
 
 class TitleScreen extends Phaser.Scene {
 	constructor() {
@@ -47,6 +50,18 @@ class TitleScreen extends Phaser.Scene {
 	}
 
 	create() {
+		socket.emit('sceneStart', 'TitleScreen')
+
+		socket.on('connect_error', (err) => {
+			console.error('Connect error:', err.message)
+			console.error('Description:', err.description)
+			console.error('Context:', err.context)
+		})
+
+		socket.on('disconnect', () => {
+			console.log('Socket disconnected')
+		})
+
 		let blackCover = this.add.rectangle(
 			0,
 			0,

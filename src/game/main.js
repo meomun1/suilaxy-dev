@@ -1,5 +1,4 @@
 import Phaser from 'phaser'
-
 import TitleScreen from './scenes/TitleScreen.js'
 import LoadingScreen from './scenes/LoadingScreen.js'
 import PlayingScreen from './scenes/PlayingScreen.js'

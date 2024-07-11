@@ -1,9 +1,8 @@
 class PlayerManager {
-	constructor(scene, player, selectedPlayerIndex) {
+	constructor(scene, player) {
 		this.scene = scene
 		this.player = player
 		this.cursorKeys = scene.input.keyboard.createCursorKeys()
-		this.selectedPlayerIndex = selectedPlayerIndex
 	}
 
 	movePlayer() {

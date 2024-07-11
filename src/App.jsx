@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { PhaserGame } from './game/PhaserGame'
 import { useCurrentAccount, useSuiClientQuery } from '@mysten/dapp-kit'
 import MintNFT from './sui/MintNFT'
@@ -23,10 +23,8 @@ function OwnedObjects(props) {
 }
 
 function App() {
-	//  References to the PhaserGame component (game and scene are exposed)
 	const phaserRef = useRef()
 
-	// Event emitted from the PhaserGame component
 	const onCurrentActiveScene = (scene) => {
 		console.log(scene)
 	}
@@ -34,7 +32,6 @@ function App() {
 	return (
 		<>
 			<div id="app">
-				{/* Game Info */}
 				<div className="child-left">
 					<div className="text-wrapper">
 						<div className="top">
@@ -61,7 +58,6 @@ function App() {
 					</div>
 				</div>
 
-				{/* Game Canvas */}
 				<div className="child-main">
 					<PhaserGame
 						ref={phaserRef}
@@ -69,10 +65,9 @@ function App() {
 					/>
 				</div>
 
-				{/* Connect Wallet + Other */}
 				<div className="child-right">
 					{/* <ConnectButton className="button" />
-					<ConnectedAccount /> */}
+          <ConnectedAccount /> */}
 					<MintNFT />
 				</div>
 			</div>

@@ -113,6 +113,17 @@ class GuiManager {
 		simpleText.setOrigin(origin)
 	}
 
+	createMediumText(x, y, key, font, size, color, align, origin) {
+		const chooseText = this.scene.add.text(x, y, key, {
+			fontFamily: font,
+			fontSize: size,
+			color: color, // Set the color for "SPACE"
+			align: align,
+		})
+		chooseText.setShadow(2, 2, '#F27CA4', 2, false, true)
+		chooseText.setOrigin(origin)
+	}
+
 	createTextWithDelay(key, x, y, font, size, fill, origin, delay) {
 		const simpleText = this.scene.add.text(x, y, key, {
 			fontFamily: font,

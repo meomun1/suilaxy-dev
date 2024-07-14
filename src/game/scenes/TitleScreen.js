@@ -6,8 +6,6 @@ import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
 import io from 'socket.io-client'
 
-const socket = io('http://localhost:8080')
-
 class TitleScreen extends Phaser.Scene {
 	constructor() {
 		super('bootGame')
@@ -16,6 +14,7 @@ class TitleScreen extends Phaser.Scene {
 		this.walletConnected = false
 		this.connectWalletText = null
 		this.button_play = null
+		this.button_pvp = null
 		this.guiManager = new GuiManager(this)
 	}
 
@@ -47,21 +46,26 @@ class TitleScreen extends Phaser.Scene {
 			2,
 			2,
 		)
+
+		this.guiManager.loadSpriteSheet(
+			'button_pvp',
+			'assets/gui/button.png',
+			93,
+			28,
+			2,
+			2,
+		)
+		this.guiManager.loadSpriteSheet(
+			'button_pvp_hover',
+			'assets/gui/button_hover.png',
+			93,
+			28,
+			2,
+			2,
+		)
 	}
 
 	create() {
-		socket.emit('sceneStart', 'TitleScreen')
-
-		socket.on('connect_error', (err) => {
-			console.error('Connect error:', err.message)
-			console.error('Description:', err.description)
-			console.error('Context:', err.context)
-		})
-
-		socket.on('disconnect', () => {
-			console.log('Socket disconnected')
-		})
-
 		let blackCover = this.add.rectangle(
 			0,
 			0,
@@ -103,7 +107,7 @@ class TitleScreen extends Phaser.Scene {
 			{
 				fontFamily: 'Pixelify Sans',
 				color: '#F3F8FF',
-				fontSize: '20px',
+				fontSize: '30px',
 				align: 'center',
 			},
 		)
@@ -118,12 +122,15 @@ class TitleScreen extends Phaser.Scene {
 			this.connectWalletText.setVisible(false)
 			if (!this.button_play) {
 				this.createPlayButton()
+				this.createPVPButton()
 			}
 		} else {
 			this.connectWalletText.setVisible(true)
-			if (this.button_play) {
+			if (this.button_play && this.button_pvp) {
 				this.button_play.destroy()
 				this.button_play = null
+				this.button_pvp.destroy()
+				this.button_pvp = null
 			}
 		}
 	}
@@ -140,6 +147,20 @@ class TitleScreen extends Phaser.Scene {
 		this.button_play.setSize(93, 28)
 		this.button_play.setInteractive()
 		this.button_play.setScale(1.5)
+	}
+
+	createPVPButton() {
+		this.button_pvp = new Button(
+			this,
+			config.width / 2,
+			config.height / 2 + 140,
+			'button_pvp',
+			'button_pvp_hover',
+			'pvpScreen',
+		)
+		this.button_pvp.setSize(93, 28)
+		this.button_pvp.setInteractive()
+		this.button_pvp.setScale(1.5)
 	}
 
 	shutdown() {

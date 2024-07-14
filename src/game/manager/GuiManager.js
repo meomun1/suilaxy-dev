@@ -167,6 +167,56 @@ class GuiManager {
 		})
 	}
 
+	createAnimatedTextSize(text, yOffset, size) {
+		const textObject = this.scene.add.text(
+			config.width / 2,
+			config.height / 2 + yOffset,
+			text,
+			{
+				fontFamily: 'Pixelify Sans',
+				fontSize: size,
+				color: '#F3F8FF',
+				align: 'center',
+			},
+		)
+		textObject.setOrigin(0.5)
+		textObject.setShadow(3, 3, '#F27CA4', 2, false, true)
+
+		this.scene.tweens.add({
+			targets: textObject,
+			duration: 1000,
+			ease: 'Sine.easeInOut',
+			repeat: -1,
+			yoyo: true,
+			alpha: 0.2,
+		})
+	}
+
+	createAnimatedTextSizeColor(text, yOffset, size, color) {
+		const textObject = this.scene.add.text(
+			config.width / 2,
+			config.height / 2 + yOffset,
+			text,
+			{
+				fontFamily: 'Pixelify Sans',
+				fontSize: size,
+				color: color,
+				align: 'center',
+			},
+		)
+		textObject.setOrigin(0.5)
+		textObject.setShadow(3, 3, '#F27CA4', 2, false, true)
+
+		this.scene.tweens.add({
+			targets: textObject,
+			duration: 1000,
+			ease: 'Sine.easeInOut',
+			repeat: -1,
+			yoyo: true,
+			alpha: 0.2,
+		})
+	}
+
 	createBackground(key) {
 		this.scene.background = this.scene.add.tileSprite(
 			0,

@@ -1,10 +1,14 @@
 import Phaser from 'phaser'
 import TitleScreen from './scenes/TitleScreen.js'
 import LoadingScreen from './scenes/LoadingScreen.js'
+import LoadingPvPScreen from './scenes/LoadingPVPScreen.js'
 import PlayingScreen from './scenes/PlayingScreen.js'
+import ChooseRoomScreen from './scenes/ChooseRoomScreen.js'
 import GameOver from './scenes/GameOver.js'
 import PauseScreen from './scenes/PauseScreen.js'
 import ChoosePlayer from './scenes/ChoosePlayer.js'
+import ChoosePlayerPVP from './scenes/ChoosePlayerPVP.js'
+import RoomPVPScreen from './scenes/RoomPVPScreen.js'
 import UpgradeScreen from './scenes/UpgradeScreen.js'
 import TutorialScreen from './scenes/TutorialScreen.js'
 import LevelTwoScreen from './scenes/LevelTwoScreen.js'
@@ -17,6 +21,7 @@ import NftScreen from './scenes/NftScreen.js'
 // Temporary Disable
 import VictoryScreen from './scenes/VictoryScreen.js'
 import Leaderboard from './scenes/Leaderboard.js'
+import PVPScreen from './scenes/PVPScreen.js'
 
 const config = {
 	type: Phaser.AUTO,
@@ -27,8 +32,13 @@ const config = {
 	scene: [
 		TitleScreen,
 		LoadingScreen,
+		LoadingPvPScreen,
 		PlayingScreen,
+		ChooseRoomScreen,
 		ChoosePlayer,
+		ChoosePlayerPVP,
+		RoomPVPScreen,
+		PVPScreen,
 		TutorialScreen,
 		LevelTwoScreen,
 		NewShipScreen,

@@ -27,8 +27,8 @@ io.on('connection', (socket) => {
 		players[socket.id] = {
 			playerId: socket.id,
 			playerNumber: playerNumber,
-			y: playerNumber === 1 ? (config.height * 4) / 5 : config.height / 5,
-			x: config.width / 2,
+			// y: config.height / 5,
+			// x: config.width / 2,
 		}
 
 		// Send current players to new player
@@ -40,13 +40,19 @@ io.on('connection', (socket) => {
 		socket.emit('gameFull')
 	}
 
-	//
 	socket.on('playerMovement', (movementData) => {
 		if (players[socket.id]) {
 			players[socket.id].x = movementData.x
 			players[socket.id].y = movementData.y
+			// Broadcast to other players
 			socket.broadcast.emit('playerMoved', players[socket.id])
 		}
+	})
+
+	socket.on('playerAnimation', (data) => {
+		// Broadcast the animation change to all other clients
+		socket.broadcast.emit('playerAnimation', data)
+		console.log('playerAnimation', data.animationKey)
 	})
 
 	socket.on('disconnect', () => {

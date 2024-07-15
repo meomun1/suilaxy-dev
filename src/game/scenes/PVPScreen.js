@@ -1,17 +1,21 @@
 import Phaser from 'phaser'
 import config from '../config/config.js'
-import Button from '../objects/Button.js'
 import Music from '../mode/Music.js'
 import GuiManager from '../manager/GuiManager.js'
-import { EventBus } from '../EventBus.js'
 import io from 'socket.io-client'
 import Player from '../objects/players/Player'
 import gameSettings from '../config/gameSettings.js'
 import PlayerManager from '../manager/PlayerManager.js'
+import SoundManager from '../manager/SoundManager.js'
+import ProjectileManager from '../manager/ProjectileManager.js'
+import KeyboardManager from '../manager/KeyboardManager.js'
+import PVPManager from '../manager/PVPManager.js'
 
 let playerManager
+let opponentManager
 let player
 let opponent
+const BACKGROUND_SCROLL_SPEED = 0.5
 
 class PVPScreen extends Phaser.Scene {
 	constructor() {
@@ -30,6 +34,10 @@ class PVPScreen extends Phaser.Scene {
 	}
 
 	preload() {
+		this.load.image('pause', 'assets/spritesheets/vfx/pause.png')
+		this.load.audio('desertMusic', 'assets/audio/playingMusic.mp3')
+		this.load.audio('explosionSound', 'assets/audio/DestroyEnemySmall.wav')
+		this.load.audio('shootSound', 'assets/audio/bullet.wav')
 		this.load.audio('main_menu_music', 'assets/audio/backgroundMusic.mp3')
 
 		this.load.image(
@@ -69,6 +77,19 @@ class PVPScreen extends Phaser.Scene {
 		this.createPlayer(this.selectedPlayerIndex2)
 
 		this.players = this.add.group()
+
+		this.SoundManager = new SoundManager(this)
+		this.keyboardManager = new KeyboardManager(this, this.music)
+		this.projectileManager = new ProjectileManager(this)
+		this.projectileManager.createPlayerBullet()
+		this.projectileManager.createPlayerBullet2()
+
+		this.spacebar = this.input.keyboard.addKey(
+			Phaser.Input.Keyboard.KeyCodes.SPACE,
+		)
+		this.enter = this.input.keyboard.addKey(
+			Phaser.Input.Keyboard.KeyCodes.ENTER,
+		)
 
 		this.createLobbyUI()
 		this.setupSocketListeners()
@@ -143,15 +164,6 @@ class PVPScreen extends Phaser.Scene {
 
 	createMusic() {
 		this.music = this.sys.game.globals.music
-		if (this.music.musicOn === true) {
-			this.bgMusic = this.sound.add('main_menu_music', {
-				volume: 0.5,
-				loop: true,
-			})
-			this.bgMusic.play()
-			this.music.bgMusicPlaying = true
-			this.sys.game.globals.bgMusic = this.bgMusic
-		}
 	}
 
 	createBlackCover() {
@@ -207,11 +219,12 @@ class PVPScreen extends Phaser.Scene {
 		})
 
 		this.socket.on('playerMoved', (playerInfo) => {
-			this.players.getChildren().forEach((player) => {
-				if (playerInfo.playerId === player.playerId) {
-					player.setPosition(playerInfo.x, playerInfo.y)
-				}
-			})
+			opponent.setPosition(playerInfo.x, playerInfo.y)
+		})
+
+		this.socket.on('playerAnimation', (data) => {
+			console.log('playerAnimation', data.animationKey)
+			opponent.play(data.animationKey)
 		})
 
 		this.socket.on('gameFull', () => {
@@ -230,8 +243,8 @@ class PVPScreen extends Phaser.Scene {
 
 		player = new Player(
 			self,
-			playerInfo.x,
-			playerInfo.y,
+			config.width / 2,
+			(config.height * 4) / 5,
 			`player_texture_${spriteKey}`,
 			gameSettings.playerMaxHealth,
 		)
@@ -242,6 +255,7 @@ class PVPScreen extends Phaser.Scene {
 		player.playerId = playerInfo.playerId
 		self.players.add(player)
 		playerManager = new PlayerManager(self, player, spriteKey)
+		this.initializePVPManager()
 	}
 
 	addOtherPlayers(self, playerInfo) {
@@ -255,24 +269,29 @@ class PVPScreen extends Phaser.Scene {
 
 		opponent = new Player(
 			this,
-			playerInfo.x,
-			playerInfo.y,
+			config.width / 2,
+			config.height / 5,
 			`player_texture_${spriteKey}`,
 			gameSettings.playerMaxHealth,
 		)
 
 		opponent.play(`player_anim_${spriteKey}`)
 		opponent.restartToTile()
+
+		opponent.flipY = true
+
 		opponent.playerId = playerInfo.playerId
 		self.players.add(opponent)
+		this.initializePVPManager()
 	}
 
 	update() {
 		if (player) {
-			playerManager.movePlayerPVP()
+			playerManager.movePlayerPVP(this.socket)
 
-			const x = player.x
-			const y = player.y
+			const x = config.width - player.x
+			const y = config.height - player.y // Transform the y-coordinate
+
 			if (
 				player.oldPosition &&
 				(x !== player.oldPosition.x || y !== player.oldPosition.y)
@@ -283,9 +302,26 @@ class PVPScreen extends Phaser.Scene {
 			if (!player.oldPosition) {
 				player.oldPosition = {}
 			}
-			// Only update properties instead of creating a new object
+
 			player.oldPosition.x = x
 			player.oldPosition.y = y
+		}
+
+		this.background.tilePositionY -= BACKGROUND_SCROLL_SPEED
+
+		// if (this.spacebar.isDown) {
+		// 	player.shootBullet(this.selectedPlayerIndex1)
+		// }
+
+		// this.projectiles.children.iterate((bullet) => {
+		// 	bullet.update()
+		// })
+	}
+
+	initializePVPManager() {
+		if (player && opponent) {
+			// Step 3: Check if both player and opponent are defined
+			this.collidePVPManager = new PVPManager(this, player, opponent)
 		}
 	}
 }

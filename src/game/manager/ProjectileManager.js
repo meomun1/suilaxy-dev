@@ -15,6 +15,13 @@ class ProjectileManager {
 		})
 	}
 
+	createPlayerBullet2() {
+		this.scene.projectiles2 = this.scene.physics.add.group({
+			classType: Bullet,
+			runChildUpdate: true,
+		})
+	}
+
 	createEnemyBullet() {
 		this.scene.enemyProjectiles = this.scene.physics.add.group({
 			classType: EnemyBullet,

@@ -67,12 +67,13 @@ class PlayerManager {
 		}
 	}
 
-	movePlayerPVP() {
+	movePlayerPVP(socket) {
 		const currentTime = this.scene.time.now
 
 		let xVelocity = 0
 		let yVelocity = 0
 		let animationKey = `player_anim_${this.selectedPlayerIndex}`
+		let opponentAnimationKey = `player_anim_${this.selectedPlayerIndex}`
 
 		if (this.cursorKeys.up.isDown) {
 			yVelocity = -this.player.speed
@@ -83,9 +84,11 @@ class PlayerManager {
 		if (this.cursorKeys.left.isDown) {
 			xVelocity = -this.player.speed
 			animationKey = `player_anim_left_${this.selectedPlayerIndex}`
+			opponentAnimationKey = `player_anim_right_${this.selectedPlayerIndex}`
 		} else if (this.cursorKeys.right.isDown) {
 			xVelocity = this.player.speed
 			animationKey = `player_anim_right_${this.selectedPlayerIndex}`
+			opponentAnimationKey = `player_anim_left_${this.selectedPlayerIndex}`
 		}
 
 		// Diagonal movement
@@ -95,11 +98,13 @@ class PlayerManager {
 				xVelocity = -this.player.speed * 0.7071
 				yVelocity = -this.player.speed * 0.7071
 				animationKey = `player_anim_left_diagonal_${this.selectedPlayerIndex}`
+				opponentAnimationKey = `player_anim_right_diagonal_${this.selectedPlayerIndex}`
 			} else if (this.cursorKeys.right.isDown) {
 				// Diagonal movement: up + right
 				xVelocity = this.player.speed * 0.7071
 				yVelocity = -this.player.speed * 0.7071
 				animationKey = `player_anim_right_diagonal_${this.selectedPlayerIndex}`
+				opponentAnimationKey = `player_anim_left_diagonal_${this.selectedPlayerIndex}`
 			}
 		}
 
@@ -110,11 +115,13 @@ class PlayerManager {
 				xVelocity = -this.player.speed * 0.7071
 				yVelocity = this.player.speed * 0.7071
 				animationKey = `player_anim_left_diagonal_${this.selectedPlayerIndex}`
+				opponentAnimationKey = `player_anim_right_diagonal_${this.selectedPlayerIndex}`
 			} else if (this.cursorKeys.right.isDown) {
 				// Diagonal movement: down + right
 				xVelocity = this.player.speed * 0.7071
 				yVelocity = this.player.speed * 0.7071
 				animationKey = `player_anim_right_diagonal_${this.selectedPlayerIndex}`
+				opponentAnimationKey = `player_anim_left_diagonal_${this.selectedPlayerIndex}`
 			}
 		}
 
@@ -125,6 +132,11 @@ class PlayerManager {
 		// Play animation based on the velocities
 		if (this.player.anims.currentAnim.key !== animationKey) {
 			this.player.play(animationKey)
+			// Emit the current animation key to the server
+			socket.emit('playerAnimation', {
+				playerIndex: this.selectedPlayerIndex,
+				animationKey: opponentAnimationKey,
+			})
 		}
 	}
 }

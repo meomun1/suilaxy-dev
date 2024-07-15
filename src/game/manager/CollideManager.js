@@ -27,22 +27,26 @@ class CollideManager {
 		)
 
 		// Add collision between player having shield and enemies
-		this.scene.physics.add.overlap(
-			this.shield,
-			this.enemies,
-			this.shieldCollideEnemy,
-			null,
-			this,
-		)
+		if (this.shield && this.enemies) {
+			this.scene.physics.add.overlap(
+				this.shield,
+				this.enemies,
+				this.shieldCollideEnemy,
+				null,
+				this,
+			)
+		}
 
 		// Add collision between player having shield and bullet
-		this.scene.physics.add.overlap(
-			this.scene.enemyProjectiles,
-			this.shield,
-			this.shieldCollideBullet,
-			null,
-			this,
-		)
+		if (this.shield && this.scene.enemyProjectiles) {
+			this.scene.physics.add.overlap(
+				this.scene.enemyProjectiles,
+				this.shield,
+				this.shieldCollideBullet,
+				null,
+				this,
+			)
+		}
 
 		// Add collision between enemy bullets and player
 		this.scene.physics.add.overlap(
@@ -63,26 +67,30 @@ class CollideManager {
 		)
 
 		// Add collision between player and health packs
-		this.healthPacks.forEach((healthPack) => {
-			this.scene.physics.add.overlap(
-				this.player,
-				healthPack,
-				this.playerCollideHealthPack,
-				null,
-				this,
-			)
-		})
+		if (this.healthPacks) {
+			this.healthPacks.forEach((healthPack) => {
+				this.scene.physics.add.overlap(
+					this.player,
+					healthPack,
+					this.playerCollideHealthPack,
+					null,
+					this,
+				)
+			})
+		}
 
-		// Add collision between player and shield packs
-		this.shieldPacks.forEach((shieldPack) => {
-			this.scene.physics.add.overlap(
-				this.player,
-				shieldPack,
-				this.playerCollideShieldPack,
-				null,
-				this,
-			)
-		})
+		if (this.shieldPacks) {
+			// Add collision between player and shield packs
+			this.shieldPacks.forEach((shieldPack) => {
+				this.scene.physics.add.overlap(
+					this.player,
+					shieldPack,
+					this.playerCollideShieldPack,
+					null,
+					this,
+				)
+			})
+		}
 	}
 
 	shieldCollideEnemy(shield, enemy) {
@@ -129,7 +137,6 @@ class CollideManager {
 		this.shield.show()
 		this.shieldActive = true
 	}
-
 }
 
 export default CollideManager

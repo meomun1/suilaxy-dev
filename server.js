@@ -21,7 +21,8 @@ io.on('connection', (socket) => {
 	// Check if there are already 2 players connected
 	if (playerCount < 2) {
 		playerCount++
-		let playerNumber = playerCount + 1
+		let playerNumber = playerCount
+		console.log('playerNumber:', playerNumber)
 
 		players[socket.id] = {
 			playerId: socket.id,
@@ -39,6 +40,7 @@ io.on('connection', (socket) => {
 		socket.emit('gameFull')
 	}
 
+	//
 	socket.on('playerMovement', (movementData) => {
 		if (players[socket.id]) {
 			players[socket.id].x = movementData.x

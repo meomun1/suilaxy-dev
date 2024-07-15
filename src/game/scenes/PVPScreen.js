@@ -9,9 +9,9 @@ import Player from '../objects/players/Player'
 import gameSettings from '../config/gameSettings.js'
 import PlayerManager from '../manager/PlayerManager.js'
 
-let cursors
-let playerManager1
-let playerManager2
+let playerManager
+let player
+let opponent
 
 class PVPScreen extends Phaser.Scene {
 	constructor() {
@@ -21,8 +21,6 @@ class PVPScreen extends Phaser.Scene {
 		this.guiManager = new GuiManager(this)
 		this.selectedPlayerIndex1 = 1
 		this.selectedPlayerIndex2 = 2
-		this.players = []
-		this.inforPlayer = []
 	}
 
 	init(data) {
@@ -66,6 +64,7 @@ class PVPScreen extends Phaser.Scene {
 	create() {
 		this.socket = io('http://localhost:3000')
 
+		// Create player animations
 		this.createPlayer(this.selectedPlayerIndex1)
 		this.createPlayer(this.selectedPlayerIndex2)
 
@@ -189,17 +188,14 @@ class PVPScreen extends Phaser.Scene {
 			Object.keys(players).forEach((id) => {
 				if (players[id].playerId === this.socket.id) {
 					this.addPlayer(this, players[id])
-					this.inforPlayer.push(players[id])
 				} else {
 					this.addOtherPlayers(this, players[id])
-					this.inforPlayer.push(players[id])
 				}
 			})
 		})
 
 		this.socket.on('newPlayer', (playerInfo) => {
 			this.addOtherPlayers(this, playerInfo)
-			this.inforPlayer.push(playerInfo)
 		})
 
 		this.socket.on('playerDisconnected', (playerId) => {
@@ -221,8 +217,6 @@ class PVPScreen extends Phaser.Scene {
 		this.socket.on('gameFull', () => {
 			alert('Game is full')
 		})
-
-		cursors = this.input.keyboard.createCursorKeys()
 	}
 
 	addPlayer(self, playerInfo) {
@@ -234,8 +228,8 @@ class PVPScreen extends Phaser.Scene {
 			spriteKey = this.selectedPlayerIndex2
 		}
 
-		let player = new Player(
-			this,
+		player = new Player(
+			self,
 			playerInfo.x,
 			playerInfo.y,
 			`player_texture_${spriteKey}`,
@@ -244,14 +238,10 @@ class PVPScreen extends Phaser.Scene {
 
 		player.play(`player_anim_${spriteKey}`)
 		player.restartToTile()
+
 		player.playerId = playerInfo.playerId
 		self.players.add(player)
-
-		if (playerInfo.playerNumber === 1) {
-			playerManager1 = new PlayerManager(this, player)
-		} else {
-			playerManager2 = new PlayerManager(this, player)
-		}
+		playerManager = new PlayerManager(self, player, spriteKey)
 	}
 
 	addOtherPlayers(self, playerInfo) {
@@ -263,7 +253,7 @@ class PVPScreen extends Phaser.Scene {
 			spriteKey = this.selectedPlayerIndex2
 		}
 
-		let opponent = new Player(
+		opponent = new Player(
 			this,
 			playerInfo.x,
 			playerInfo.y,
@@ -275,28 +265,28 @@ class PVPScreen extends Phaser.Scene {
 		opponent.restartToTile()
 		opponent.playerId = playerInfo.playerId
 		self.players.add(opponent)
-
-		if (playerInfo.playerNumber === 1) {
-			playerManager1 = new PlayerManager(this, opponent)
-		} else {
-			playerManager2 = new PlayerManager(this, opponent)
-		}
 	}
 
 	update() {
-		// console.log(this.inforPlayer)
-		// console.log(this.socket.id)
-		// const playerInfor = this.inforPlayer.find(
-		// 	(player) => player.playerId === this.socket.id,
-		// )
-		// console.log(playerInfor)
-		// if (playerInfor.playerNumber === 1) {
-		// 	playerManager1.movePlayer()
-		// } else {
-		// 	playerManager2.movePlayer()
-		// }
-		// playerManager1.movePlayer()
-		// playerManager2.movePlayer()
+		if (player) {
+			playerManager.movePlayerPVP()
+
+			const x = player.x
+			const y = player.y
+			if (
+				player.oldPosition &&
+				(x !== player.oldPosition.x || y !== player.oldPosition.y)
+			) {
+				this.socket.emit('playerMovement', { x, y })
+			}
+
+			if (!player.oldPosition) {
+				player.oldPosition = {}
+			}
+			// Only update properties instead of creating a new object
+			player.oldPosition.x = x
+			player.oldPosition.y = y
+		}
 	}
 }
 

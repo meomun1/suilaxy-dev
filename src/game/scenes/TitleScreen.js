@@ -52,16 +52,16 @@ class TitleScreen extends Phaser.Scene {
 			'assets/gui/button.png',
 			93,
 			28,
-			2,
-			2,
+			9,
+			9,
 		)
 		this.guiManager.loadSpriteSheet(
 			'button_pvp_hover',
 			'assets/gui/button_hover.png',
 			93,
 			28,
-			2,
-			2,
+			9,
+			9,
 		)
 	}
 

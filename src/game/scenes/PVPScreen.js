@@ -98,7 +98,7 @@ class PVPScreen extends Phaser.Scene {
 	}
 
 	create() {
-		this.socket = io('http://localhost:3000')
+		this.socket = io('https://render-socket-t2rl7mbmfa-as.a.run.app/')
 
 		this.anims.create({
 			key: 'explosion_anim',

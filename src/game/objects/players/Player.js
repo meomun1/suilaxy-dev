@@ -1,8 +1,10 @@
 import Entity from '../Entity'
 import Bullet from '../projectiles/Bullet'
+import PVPBulletPlayer from '../projectiles/PVPBulletPlayer'
 import gameSettings from '../../config/gameSettings'
 import HPBar2 from '../ui/HPBar2'
 import SoundManager from '../../manager/SoundManager'
+import PVPBulletOpponent from '../projectiles/PVPBulletOpponent'
 
 class Player extends Entity {
 	constructor(scene, x, y, key, health) {
@@ -46,10 +48,6 @@ class Player extends Entity {
 		this.setDepth(1)
 	}
 
-	// preload(){
-	//   this.load.audio('shootSound', 'assets/audio/missile.ogg');
-
-	// }
 	setVelocityY(velocity) {
 		super.setVelocityY(velocity)
 	}
@@ -91,7 +89,7 @@ class Player extends Entity {
 		)
 	}
 
-	shootBullet(number) {
+	shootBullet(number, player, check) {
 		const currentTime = this.scene.time.now
 		const elapsedTime = currentTime - this.lastShootTime
 
@@ -134,12 +132,28 @@ class Player extends Entity {
 				const offsetX = (patternsX[totalBullets][i] || 0) * bulletSizeScale
 				const offsetY = (patternsY[totalBullets][i] || 0) * bulletSizeScale
 
-				const bullet = new Bullet(this.scene, number)
-				bullet.damage = this.bulletDamage
-				bullet.body.velocity.y = -this.bulletSpeed
-				bullet.setPosition(this.x + offsetX, this.y + offsetY)
+				let bullet = null
 
-				bullet.play(`bullet${number}_anim`)
+				if (player && check) {
+					bullet = new PVPBulletPlayer(this.scene, number, player)
+					bullet.body.velocity.y = -this.bulletSpeed
+				} else if (player && !check) {
+					bullet = new PVPBulletOpponent(this.scene, number, player)
+					bullet.body.velocity.y = this.bulletSpeed
+				} else {
+					bullet = new Bullet(this.scene, number)
+					bullet.body.velocity.y = -this.bulletSpeed
+				}
+
+				if (bullet) {
+					bullet.damage = this.bulletDamage
+					bullet.setPosition(this.x + offsetX, this.y + offsetY)
+					bullet.play(`bullet${number}_anim`)
+				}
+
+				if (check === 0) {
+					bullet.flipY = true
+				}
 			}
 			this.SoundManager.playBulletSound()
 		}
@@ -156,6 +170,10 @@ class Player extends Entity {
 			this.health += heal
 		}
 		this.updateHealthBarValue()
+	}
+
+	getCurrentHealth() {
+		return this.health
 	}
 
 	savePlayer() {

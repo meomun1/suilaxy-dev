@@ -12,9 +12,10 @@ import KeyboardManager from '../manager/KeyboardManager.js'
 import PVPManager from '../manager/PVPManager.js'
 
 let playerManager
-let opponentManager
 let player
 let opponent
+let mainSprite
+let opponentSprite
 const BACKGROUND_SCROLL_SPEED = 0.5
 
 class PVPScreen extends Phaser.Scene {
@@ -67,22 +68,59 @@ class PVPScreen extends Phaser.Scene {
 				endFrame: 19,
 			},
 		})
+
+		this.guiManager.loadSpriteSheet(
+			'bullet1_texture',
+			'assets/spritesheets/vfx/bullet1.png',
+			32,
+			11,
+			0,
+			1,
+		)
+
+		this.guiManager.loadSpriteSheet(
+			'bullet2_texture',
+			'assets/spritesheets/vfx/bullet2.png',
+			25,
+			33,
+			0,
+			5,
+		)
+
+		this.guiManager.loadSpriteSheet(
+			'explosion_texture',
+			'assets/spritesheets/vfx/explosion.png',
+			100,
+			100,
+			0,
+			11,
+		)
 	}
 
 	create() {
 		this.socket = io('http://localhost:3000')
 
+		this.anims.create({
+			key: 'explosion_anim',
+			frames: this.anims.generateFrameNumbers('explosion_texture', {
+				start: 0,
+				end: 10,
+			}),
+			frameRate: 30,
+			repeat: 0,
+			hideOnComplete: true,
+		})
+
 		// Create player animations
-		this.createPlayer(this.selectedPlayerIndex1)
-		this.createPlayer(this.selectedPlayerIndex2)
+		this.createPlayerAnimations(this.selectedPlayerIndex1)
+		this.createPlayerAnimations(this.selectedPlayerIndex2)
+		this.createBulletAnimations(this.selectedPlayerIndex1)
+		this.createBulletAnimations(this.selectedPlayerIndex2)
 
 		this.players = this.add.group()
 
-		this.SoundManager = new SoundManager(this)
-		this.keyboardManager = new KeyboardManager(this, this.music)
-		this.projectileManager = new ProjectileManager(this)
-		this.projectileManager.createPlayerBullet()
-		this.projectileManager.createPlayerBullet2()
+		this.createLobbyUI()
+		this.setupSocketListeners()
 
 		this.spacebar = this.input.keyboard.addKey(
 			Phaser.Input.Keyboard.KeyCodes.SPACE,
@@ -90,12 +128,15 @@ class PVPScreen extends Phaser.Scene {
 		this.enter = this.input.keyboard.addKey(
 			Phaser.Input.Keyboard.KeyCodes.ENTER,
 		)
+		this.SoundManager = new SoundManager(this)
+		this.keyboardManager = new KeyboardManager(this, this.music)
+		this.projectileManager = new ProjectileManager(this)
 
-		this.createLobbyUI()
-		this.setupSocketListeners()
+		this.projectileManager.createPVPBulletPlayer()
+		this.projectileManager.createPVPBulletOpponent()
 	}
 
-	createPlayer(selectedPlayerIndex) {
+	createPlayerAnimations(selectedPlayerIndex) {
 		this.anims.create({
 			key: `player_anim_${selectedPlayerIndex}`,
 			frames: this.anims.generateFrameNumbers(
@@ -162,6 +203,21 @@ class PVPScreen extends Phaser.Scene {
 		})
 	}
 
+	createBulletAnimations(selectedPlayerIndex) {
+		this.anims.create({
+			key: `bullet${selectedPlayerIndex}_anim`,
+			frames: this.anims.generateFrameNumbers(
+				`bullet${selectedPlayerIndex}_texture`,
+				{
+					start: 0,
+					end: 1,
+				},
+			),
+			frameRate: 12,
+			repeat: -1,
+		})
+	}
+
 	createMusic() {
 		this.music = this.sys.game.globals.music
 	}
@@ -223,8 +279,11 @@ class PVPScreen extends Phaser.Scene {
 		})
 
 		this.socket.on('playerAnimation', (data) => {
-			console.log('playerAnimation', data.animationKey)
 			opponent.play(data.animationKey)
+		})
+
+		this.socket.on('opponentShootBullet', (bulletData) => {
+			this.createOpponentBullet(bulletData)
 		})
 
 		this.socket.on('gameFull', () => {
@@ -237,9 +296,13 @@ class PVPScreen extends Phaser.Scene {
 
 		if (playerInfo.playerNumber === 1) {
 			spriteKey = this.selectedPlayerIndex1
+			opponentSprite = this.selectedPlayerIndex2
 		} else {
 			spriteKey = this.selectedPlayerIndex2
+			opponentSprite = this.selectedPlayerIndex1
 		}
+
+		mainSprite = spriteKey
 
 		player = new Player(
 			self,
@@ -285,6 +348,10 @@ class PVPScreen extends Phaser.Scene {
 		this.initializePVPManager()
 	}
 
+	createOpponentBullet(bulletData) {
+		opponent.shootBullet(opponentSprite, opponent, 0)
+	}
+
 	update() {
 		if (player) {
 			playerManager.movePlayerPVP(this.socket)
@@ -309,13 +376,32 @@ class PVPScreen extends Phaser.Scene {
 
 		this.background.tilePositionY -= BACKGROUND_SCROLL_SPEED
 
-		// if (this.spacebar.isDown) {
-		// 	player.shootBullet(this.selectedPlayerIndex1)
-		// }
+		if (this.spacebar.isDown) {
+			player.shootBullet(mainSprite, player, 1)
 
-		// this.projectiles.children.iterate((bullet) => {
-		// 	bullet.update()
-		// })
+			this.socket.emit('shootBullet', {
+				x: config.width - player.x,
+				y: config.height - (player.y - 10),
+				anims: `bullet${mainSprite}_anim`,
+				// Add any other relevant bullet information
+			})
+		}
+
+		this.pvpProjectiles1.children.iterate((bullet) => {
+			bullet.update()
+		})
+
+		this.pvpProjectiles2.children.iterate((bullet) => {
+			bullet.update()
+		})
+
+		if (player && player.health <= 0) {
+			this.gameOver()
+		}
+
+		if (opponent && opponent.health <= 0) {
+			this.gameOver()
+		}
 	}
 
 	initializePVPManager() {
@@ -323,6 +409,11 @@ class PVPScreen extends Phaser.Scene {
 			// Step 3: Check if both player and opponent are defined
 			this.collidePVPManager = new PVPManager(this, player, opponent)
 		}
+	}
+
+	gameOver() {
+		this.scene.stop()
+		this.scene.start('bootGame', { key: this.callingScene })
 	}
 }
 

@@ -6,7 +6,7 @@ class PVPManager {
 
 		// Add collision between bullets and enemies
 		this.scene.physics.add.overlap(
-			this.scene.projectiles,
+			this.scene.pvpProjectiles1,
 			this.player2,
 			this.bulletHitEnemy,
 			null,
@@ -15,7 +15,7 @@ class PVPManager {
 
 		// Add collision between enemy bullets and player
 		this.scene.physics.add.overlap(
-			this.scene.projectiles2,
+			this.scene.pvpProjectiles2,
 			this.player1,
 			this.bulletHitPlayer,
 			null,

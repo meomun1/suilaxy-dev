@@ -15,7 +15,6 @@ class Entity extends Phaser.GameObjects.Sprite {
 		this.speed = 0
 		this.SoundManager = new SoundManager(scene)
 
-
 		this.scene.physics.world.enableBody(this, 0)
 		this.scene.add.existing(this)
 	}
@@ -82,11 +81,11 @@ class Entity extends Phaser.GameObjects.Sprite {
 	}
 
 	setVelocityY(velocity) {
-		this.body.setVelocityY(velocity)
+		this.body.velocity.y = velocity
 	}
 
 	setVelocityX(velocity) {
-		this.body.setVelocityX(velocity)
+		this.body.velocity.x = velocity
 	}
 
 	setPhysics(scene) {

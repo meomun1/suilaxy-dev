@@ -55,6 +55,11 @@ io.on('connection', (socket) => {
 		console.log('playerAnimation', data.animationKey)
 	})
 
+	// Server-side code
+	socket.on('shootBullet', (bulletData) => {
+		socket.broadcast.emit('opponentShootBullet', bulletData)
+	})
+
 	socket.on('disconnect', () => {
 		console.log('user disconnected:', socket.id)
 		if (players[socket.id]) {

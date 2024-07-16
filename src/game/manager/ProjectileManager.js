@@ -1,6 +1,7 @@
 import Bullet from '../objects/projectiles/Bullet.js'
 import EnemyBullet from '../objects/projectiles/EnemyBullet.js'
 import ChasingBullet from '../objects/projectiles/ChasingBullet.js'
+import PVPBullet from '../objects/projectiles/PVPBulletPlayer.js'
 import config from '../config/config.js'
 
 class ProjectileManager {
@@ -15,9 +16,16 @@ class ProjectileManager {
 		})
 	}
 
-	createPlayerBullet2() {
-		this.scene.projectiles2 = this.scene.physics.add.group({
-			classType: Bullet,
+	createPVPBulletPlayer(player) {
+		this.scene.pvpProjectiles1 = this.scene.physics.add.group({
+			classType: PVPBullet,
+			runChildUpdate: true,
+		})
+	}
+
+	createPVPBulletOpponent(opponent) {
+		this.scene.pvpProjectiles2 = this.scene.physics.add.group({
+			classType: PVPBullet,
 			runChildUpdate: true,
 		})
 	}

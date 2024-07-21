@@ -23,6 +23,7 @@ import VictoryScreen from './scenes/VictoryScreen.js'
 import Leaderboard from './scenes/Leaderboard.js'
 import PVPScreen from './scenes/PVPScreen.js'
 
+// test
 const config = {
 	type: Phaser.AUTO,
 	width: 633,

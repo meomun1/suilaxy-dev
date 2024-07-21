@@ -156,7 +156,7 @@ class TitleScreen extends Phaser.Scene {
 			config.height / 2 + 140,
 			'button_pvp',
 			'button_pvp_hover',
-			'pvpScreen',
+			'chooseRoom',
 		)
 		this.button_pvp.setSize(93, 28)
 		this.button_pvp.setInteractive()

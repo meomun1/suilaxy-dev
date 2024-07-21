@@ -10,6 +10,7 @@ import SoundManager from '../manager/SoundManager.js'
 import ProjectileManager from '../manager/ProjectileManager.js'
 import KeyboardManager from '../manager/KeyboardManager.js'
 import PVPManager from '../manager/PVPManager.js'
+import socket from '../objects/Socket.js'
 
 let playerManager
 let player
@@ -32,6 +33,8 @@ class PVPScreen extends Phaser.Scene {
 		const music = new Music()
 		this.sys.game.globals = { music, bgMusic: null }
 		this.selectedPlayerIndex = data.number
+		this.roomNumber = data.room
+		this.playerPosition = data.playerPosition
 	}
 
 	preload() {
@@ -98,7 +101,7 @@ class PVPScreen extends Phaser.Scene {
 	}
 
 	create() {
-		this.socket = io('https://render-socket-t2rl7mbmfa-as.a.run.app/')
+		this.socket = socket
 
 		this.anims.create({
 			key: 'explosion_anim',
@@ -252,18 +255,15 @@ class PVPScreen extends Phaser.Scene {
 	}
 
 	setupSocketListeners() {
-		this.socket.on('currentPlayers', (players) => {
-			Object.keys(players).forEach((id) => {
-				if (players[id].playerId === this.socket.id) {
-					this.addPlayer(this, players[id])
-				} else {
-					this.addOtherPlayers(this, players[id])
-				}
-			})
-		})
+		this.socket.emit('playerInGame', { roomNumber: this.roomNumber })
 
-		this.socket.on('newPlayer', (playerInfo) => {
-			this.addOtherPlayers(this, playerInfo)
+		this.socket.on('currentPlayers', (data) => {
+			Object.values(data).forEach((player) => {
+				console.log(player)
+				if (player.playerId === this.socket.id) {
+					this.addPlayer(this, player)
+				} else [this.addOtherPlayers(this, player)]
+			})
 		})
 
 		this.socket.on('playerDisconnected', (playerId) => {

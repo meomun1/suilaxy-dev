@@ -4,7 +4,7 @@ import Button from '../objects/Button.js'
 import Music from '../mode/Music.js'
 import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
-import io from 'socket.io-client'
+import socket from '../objects/Socket.js'
 
 class RoomPVPScreen extends Phaser.Scene {
 	constructor() {
@@ -14,12 +14,15 @@ class RoomPVPScreen extends Phaser.Scene {
 		this.guiManager = new GuiManager(this)
 		this.selectedPlayerIndex1 = 1
 		this.selectedPlayerIndex2 = 2
+		this.statePlayer = false
+		this.stateOpponent = false
 	}
 
 	init(data) {
 		const music = new Music()
 		this.sys.game.globals = { music, bgMusic: null }
-		this.selectedPlayerIndex = data.number
+		this.roomNumber = data.room
+		this.playerPosition = data.number
 	}
 
 	preload() {
@@ -58,6 +61,14 @@ class RoomPVPScreen extends Phaser.Scene {
 	}
 
 	create() {
+		this.socket = socket
+
+		this.createUI()
+
+		this.socketListeners()
+	}
+
+	createUI() {
 		let blackCover = this.add.rectangle(
 			0,
 			0,
@@ -105,48 +116,98 @@ class RoomPVPScreen extends Phaser.Scene {
 			'#F27CA4',
 		)
 
-		this.guiManager.createAnimatedTextSizeColor('ROOM 123', 450, 60, '#F27CA4')
-
-		this.guiManager.createSimpleText(
-			(config.width * 3) / 4,
-			310,
-			'MAX LUONG',
-			40,
-			'#FFFFFF',
-			0.5,
+		this.guiManager.createAnimatedTextSizeColor(
+			`ROOM ${this.roomNumber}`,
+			450,
+			60,
+			'#F27CA4',
 		)
-		this.guiManager.createSimpleText(
-			config.width / 4,
-			(config.height * 3) / 4 + 120,
-			'MAX LUONG',
-			40,
-			'#FFFFFF',
-			0.5,
-		)
+	}
 
-		// Correctly adding sprites to the scene
-		// Correctly adding sprites to the scene and resizing them
-		let sprite1 = this.add.sprite(config.width / 4, 430, 'player_texture_1', 0)
-		sprite1.displayWidth = 250 // Set the desired width
-		sprite1.displayHeight = 250 // Set the desired height
-		sprite1.angle = 135
+	socketListeners() {
+		if (this.playerPosition) {
+			this.socket.emit('playerLoadInRoom', { roomNumber: this.roomNumber })
+		}
 
-		let sprite2 = this.add.sprite(
-			(config.width * 3) / 4,
-			(config.height * 3) / 4,
-			'player_texture_2',
-			0,
-		)
-		sprite2.displayWidth = 250 // Set the desired width
-		sprite2.displayHeight = 250 // Set the desired height
-		sprite2.angle = 315
+		this.socket.on('roomState', (data) => {
+			Object.values(data).forEach((player) => {
+				this.loadPlayers(player.playerNumber, player.playerId)
+			})
+		})
 
-		let avatar1 = this.add.image((config.width * 3) / 4, 400, 'avatar1')
-		let avatar2 = this.add.image(
-			config.width / 4,
-			(config.height * 3) / 4,
-			'avatar2',
-		)
+		this.socket.on('opponentLoadInRoom', (data) => {
+			this.loadPlayers(data.playerNumber, data.playerId)
+		})
+	}
+
+	loadPlayers(playerNumber, playerId) {
+		if (playerNumber === 1) {
+			this.guiManager.createSimpleText(
+				(config.width * 3) / 4,
+				310,
+				`${playerId}`,
+				40,
+				'#FFFFFF',
+				0.5,
+			)
+
+			this.sprite1 = this.add.sprite(
+				config.width / 4,
+				430,
+				'player_texture_1',
+				0,
+			)
+			this.sprite1.displayWidth = 250 // Set the desired width
+			this.sprite1.displayHeight = 250 // Set the desired height
+			this.sprite1.angle = 135
+
+			this.avatar1 = this.add.image((config.width * 3) / 4, 400, 'avatar1')
+
+			this.statePlayer = true
+		}
+
+		if (playerNumber === 2) {
+			this.guiManager.createSimpleText(
+				config.width / 4,
+				(config.height * 3) / 4 + 120,
+				`${playerId}`,
+				40,
+				'#FFFFFF',
+				0.5,
+			)
+
+			// Correctly adding sprites to the scene
+			// Correctly adding sprites to the scene and resizing them
+
+			this.sprite2 = this.add.sprite(
+				(config.width * 3) / 4,
+				(config.height * 3) / 4,
+				'player_texture_2',
+				0,
+			)
+			this.sprite2.displayWidth = 250 // Set the desired width
+			this.sprite2.displayHeight = 250 // Set the desired height
+			this.sprite2.angle = 315
+
+			this.avatar2 = this.add.image(
+				config.width / 4,
+				(config.height * 3) / 4,
+				'avatar2',
+			)
+
+			this.stateOpponent = true
+		}
+	}
+
+	update() {
+		if (this.statePlayer && this.stateOpponent) {
+			setTimeout(() => {
+				this.scene.start('pvpScreen', {
+					room: this.roomNumber,
+					playerPosition: this.playerPosition,
+				})
+			}, 3000)
+		}
 	}
 }
 

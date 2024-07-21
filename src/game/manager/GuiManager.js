@@ -192,6 +192,24 @@ class GuiManager {
 		})
 	}
 
+	createDelayDeleteSimpleText(x, y, key, font, color, origin, time) {
+		const simpleText = this.scene.add.text(x, y, key, {
+			fontFamily: 'Pixelify Sans',
+			fontSize: font,
+			fill: color,
+		})
+		simpleText.setOrigin(origin)
+
+		this.scene.time.delayedCall(
+			time,
+			() => {
+				simpleText.destroy()
+			},
+			null,
+			this,
+		)
+	}
+
 	createAnimatedTextSizeColor(text, yOffset, size, color) {
 		const textObject = this.scene.add.text(
 			config.width / 2,

@@ -72,6 +72,9 @@ const config = {
 			},
 		],
 	},
+	dom: {
+		createContainer: true,
+	},
 }
 
 const StartGame = (parent) => {

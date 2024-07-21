@@ -4,7 +4,13 @@ import Button from '../objects/Button.js'
 import Music from '../mode/Music.js'
 import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
-import io from 'socket.io-client'
+import socket from '../objects/Socket.js'
+
+let PORT =
+	'http://localhost:3000/' || 'https://render-socket-t2rl7mbmfa-as.a.run.app/'
+
+let input
+let playerPosition
 
 class ChooseRoomScreen extends Phaser.Scene {
 	constructor() {
@@ -23,40 +29,32 @@ class ChooseRoomScreen extends Phaser.Scene {
 	}
 
 	preload() {
+		this.load.html('nameform', 'public/assets/text/nameForm.html')
+
 		this.load.audio('main_menu_music', 'assets/audio/backgroundMusic.mp3')
 
 		this.guiManager.loadImage(
 			'background',
 			'assets/images/backgrounds/background_title.png',
 		)
-
-		// Correctly loading spritesheets
-		this.load.spritesheet(
-			'player_texture_1',
-			'assets/spritesheets/players/planes_01A.png',
-			{
-				frameWidth: 96,
-				frameHeight: 96,
-				startFrame: 0,
-				endFrame: 19,
-			},
-		)
-
-		this.load.spritesheet(
-			'player_texture_2',
-			'assets/spritesheets/players/planes_02A.png',
-			{
-				frameWidth: 96,
-				frameHeight: 96,
-				startFrame: 0,
-				endFrame: 19,
-			},
-		)
 	}
 
 	create() {
-		this.setupSocketListeners()
+		this.socket = socket
+
+		this.socket.on('connect_error', (err) => {
+			// the reason of the error, for example "xhr poll error"
+			console.log(err.message)
+
+			// some additional description, for example the status code of the initial HTTP response
+			console.log(err.description)
+
+			// some additional context, for example the XMLHttpRequest object
+			console.log(err.context)
+		})
+
 		this.createLobbyUI()
+		this.setupSocketListeners()
 	}
 
 	createMusic() {
@@ -99,9 +97,114 @@ class ChooseRoomScreen extends Phaser.Scene {
 		this.guiManager.createBackground('background')
 
 		this.createBlackCover()
+
+		this.guiManager.createSimpleText(
+			config.width / 2,
+			config.height / 5,
+			'Enter the room number',
+			50,
+			'#FFFFFF',
+			0.5,
+		)
+
+		this.createInputText()
 	}
 
-	setupSocketListeners() {}
-}
+	createInputText() {
+		const element = this.add
+			.dom(config.width / 2, (config.height * 2) / 5)
+			.createFromCache('nameform')
 
+		let isClicked = false
+
+		element.addListener('click')
+
+		element.on('click', (event) => {
+			if (!isClicked && event.target.name === 'playButton') {
+				isClicked = true
+
+				const inputText = document.querySelector('input[name="nameField"]')
+
+				if (inputText && inputText.value !== '') {
+					input = inputText.value
+					this.socket.emit('joinRoom', { room: inputText.value })
+				}
+
+				// Reset isClicked after 1 second
+				setTimeout(() => {
+					isClicked = false
+				}, 1000)
+			}
+		})
+	}
+
+	setupSocketListeners() {
+		this.socket.emit('getRooms')
+
+		this.socket.on('rooms', (rooms) => {
+			this.listOfRooms(rooms)
+		})
+
+		this.socket.on('joinedRoom', (room) => {
+			this.goToRoom(room)
+		})
+
+		this.socket.on('roomFull', () => {
+			this.roomFull()
+		})
+	}
+
+	listOfRooms(rooms) {
+		let y = 0
+		let x = 0
+
+		Object.keys(rooms).forEach((roomNumber) => {
+			const room = rooms[roomNumber]
+			this.guiManager.createSimpleText(
+				config.width / 2,
+				config.height / 2 + y,
+				`Room : ${roomNumber} - ${room.playerCount} / 2 players`,
+				30,
+				'#FFFFFF',
+				0.5,
+			)
+			y += 50
+		})
+
+		let roomKeys = Object.keys(rooms)
+		console.log(roomKeys)
+	}
+
+	goToRoom(room) {
+		this.guiManager.createSimpleText(
+			config.width / 2,
+			(config.height * 2) / 5 - 50,
+			'Your room is ready',
+			50,
+			'#FFFFFF',
+			0.5,
+		)
+
+		console.log(this.socket.id)
+		// Set a timeout for 2 seconds (2000 milliseconds) before starting the scene
+		setTimeout(() => {
+			this.scene.start('roomScreen', {
+				room: input,
+				number: room.playerInfo.playerNumber,
+			})
+		}, 2000)
+	}
+
+	roomFull() {
+		this.guiManager.createDelayDeleteSimpleText(
+			config.width / 2,
+			(config.height * 2) / 5 - 50,
+			'This room is full',
+			50,
+			'#FFFFFF',
+			0.5,
+			2000,
+		)
+	}
+}
 export default ChooseRoomScreen

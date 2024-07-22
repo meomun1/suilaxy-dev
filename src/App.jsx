@@ -3,6 +3,7 @@ import { PhaserGame } from './game/PhaserGame'
 import { useCurrentAccount, useSuiClientQuery } from '@mysten/dapp-kit'
 import MintNFT from './sui/MintNFT'
 
+// test
 function ConnectedAccount() {
 	const account = useCurrentAccount()
 

@@ -20,11 +20,17 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Clear npm cache
+        run: npm cache clean --force
+
       - name: Install Dependencies
         run: npm install
 
       - name: Install Vite
         run: npm install vite
+
+      - name: Install firebase-tools
+        run: npm install -g firebase-tools@13.13.3
 
       - name: Build Project
         run: npm run build

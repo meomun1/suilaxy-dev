@@ -6,9 +6,6 @@ import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
 import socket from '../objects/Socket.js'
 
-let PORT =
-	'http://localhost:3000/' || 'https://render-socket-t2rl7mbmfa-as.a.run.app/'
-
 let input
 let playerPosition
 
@@ -29,7 +26,7 @@ class ChooseRoomScreen extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.html('nameform', 'public/assets/text/nameForm.html')
+		this.load.html('nameform', '/assets/text/nameForm.html')
 
 		this.load.audio('main_menu_music', 'assets/audio/backgroundMusic.mp3')
 

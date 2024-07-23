@@ -17,11 +17,11 @@ import BossScreen from './scenes/BossScreen.js'
 import CreditScreen from './scenes/CreditScreen.js'
 import NewShipScreen from './scenes/NewShipScreen.js'
 import NftScreen from './scenes/NftScreen.js'
+import PVPScreen from './scenes/PVPScreen.js'
 
 // Temporary Disable
-import VictoryScreen from './scenes/VictoryScreen.js'
-import Leaderboard from './scenes/Leaderboard.js'
-import PVPScreen from './scenes/PVPScreen.js'
+// import VictoryScreen from './scenes/VictoryScreen.js'
+// import Leaderboard from './scenes/Leaderboard.js'
 
 // test
 const config = {

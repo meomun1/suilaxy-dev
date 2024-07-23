@@ -1,9 +1,9 @@
-import React, { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import { PhaserGame } from './game/PhaserGame'
 import { useCurrentAccount, useSuiClientQuery } from '@mysten/dapp-kit'
 import MintNFT from './sui/MintNFT'
 
-// test
+// eslint-disable-next-line no-unused-vars
 function ConnectedAccount() {
 	const account = useCurrentAccount()
 
@@ -14,6 +14,8 @@ function ConnectedAccount() {
 	return <OwnedObjects address={account.address} />
 }
 
+import PropTypes from 'prop-types'
+
 function OwnedObjects(props) {
 	const { data } = useSuiClientQuery('getOwnedObjects', {
 		owner: props.address,
@@ -21,6 +23,10 @@ function OwnedObjects(props) {
 	if (!data) {
 		return null
 	}
+}
+
+OwnedObjects.propTypes = {
+	address: PropTypes.string.isRequired,
 }
 
 function App() {
@@ -68,7 +74,7 @@ function App() {
 
 				<div className="child-right">
 					{/* <ConnectButton className="button" />
-          <ConnectedAccount /> */}
+					<ConnectedAccount /> */}
 					<MintNFT />
 				</div>
 			</div>

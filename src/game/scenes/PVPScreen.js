@@ -4,6 +4,7 @@ import Music from '../mode/Music.js'
 import GuiManager from '../manager/GuiManager.js'
 import io from 'socket.io-client'
 import Player from '../objects/players/Player'
+import PVPPlayer from '../objects/players/PVPPlayer'
 import gameSettings from '../config/gameSettings.js'
 import PlayerManager from '../manager/PlayerManager.js'
 import SoundManager from '../manager/SoundManager.js'
@@ -50,27 +51,27 @@ class PVPScreen extends Phaser.Scene {
 		)
 
 		// Correctly loading spritesheets
-		this.load.spritesheet({
-			key: `player_texture_${this.selectedPlayerIndex1}`,
-			url: `assets/spritesheets/players/planes_0${this.selectedPlayerIndex1}A.png`,
-			frameConfig: {
-				frameWidth: 96,
-				frameHeight: 96,
-				startFrame: 0,
-				endFrame: 19,
-			},
-		})
+		// this.load.spritesheet({
+		// 	key: `player_texture_${this.selectedPlayerIndex1}`,
+		// 	url: `assets/spritesheets/players/planes_0${this.selectedPlayerIndex1}A.png`,
+		// 	frameConfig: {
+		// 		frameWidth: 96,
+		// 		frameHeight: 96,
+		// 		startFrame: 0,
+		// 		endFrame: 19,
+		// 	},
+		// })
 
-		this.load.spritesheet({
-			key: `player_texture_${this.selectedPlayerIndex2}`,
-			url: `assets/spritesheets/players/planes_0${this.selectedPlayerIndex2}A.png`,
-			frameConfig: {
-				frameWidth: 96,
-				frameHeight: 96,
-				startFrame: 0,
-				endFrame: 19,
-			},
-		})
+		// this.load.spritesheet({
+		// 	key: `player_texture_${this.selectedPlayerIndex2}`,
+		// 	url: `assets/spritesheets/players/planes_0${this.selectedPlayerIndex2}A.png`,
+		// 	frameConfig: {
+		// 		frameWidth: 96,
+		// 		frameHeight: 96,
+		// 		startFrame: 0,
+		// 		endFrame: 19,
+		// 	},
+		// })
 
 		this.guiManager.loadSpriteSheet(
 			'bullet1_texture',
@@ -115,6 +116,7 @@ class PVPScreen extends Phaser.Scene {
 		})
 
 		// Create player animations
+
 		this.createPlayerAnimations(this.selectedPlayerIndex1)
 		this.createPlayerAnimations(this.selectedPlayerIndex2)
 		this.createBulletAnimations(this.selectedPlayerIndex1)
@@ -258,8 +260,8 @@ class PVPScreen extends Phaser.Scene {
 		this.socket.emit('playerInGame', { roomNumber: this.roomNumber })
 
 		this.socket.on('currentPlayers', (data) => {
+			console.log('hehe', data)
 			Object.values(data).forEach((player) => {
-				console.log(player)
 				if (player.playerId === this.socket.id) {
 					this.addPlayer(this, player)
 				} else [this.addOtherPlayers(this, player)]
@@ -284,10 +286,6 @@ class PVPScreen extends Phaser.Scene {
 
 		this.socket.on('opponentShootBullet', (bulletData) => {
 			this.createOpponentBullet(bulletData)
-		})
-
-		this.socket.on('gameFull', () => {
-			alert('Game is full')
 		})
 	}
 
@@ -317,7 +315,7 @@ class PVPScreen extends Phaser.Scene {
 
 		player.playerId = playerInfo.playerId
 		self.players.add(player)
-		playerManager = new PlayerManager(self, player, spriteKey)
+		playerManager = new PlayerManager(self, player, spriteKey, this.roomNumber)
 		this.initializePVPManager()
 	}
 
@@ -330,7 +328,7 @@ class PVPScreen extends Phaser.Scene {
 			spriteKey = this.selectedPlayerIndex2
 		}
 
-		opponent = new Player(
+		opponent = new PVPPlayer(
 			this,
 			config.width / 2,
 			config.height / 5,
@@ -355,21 +353,21 @@ class PVPScreen extends Phaser.Scene {
 	update() {
 		if (player) {
 			playerManager.movePlayerPVP(this.socket)
-
 			const x = config.width - player.x
 			const y = config.height - player.y // Transform the y-coordinate
-
 			if (
 				player.oldPosition &&
 				(x !== player.oldPosition.x || y !== player.oldPosition.y)
 			) {
-				this.socket.emit('playerMovement', { x, y })
+				this.socket.emit('playerMovement', {
+					x,
+					y,
+					roomNumber: this.roomNumber,
+				})
 			}
-
 			if (!player.oldPosition) {
 				player.oldPosition = {}
 			}
-
 			player.oldPosition.x = x
 			player.oldPosition.y = y
 		}
@@ -383,6 +381,7 @@ class PVPScreen extends Phaser.Scene {
 				x: config.width - player.x,
 				y: config.height - (player.y - 10),
 				anims: `bullet${mainSprite}_anim`,
+				roomNumber: this.roomNumber,
 				// Add any other relevant bullet information
 			})
 		}
@@ -407,7 +406,12 @@ class PVPScreen extends Phaser.Scene {
 	initializePVPManager() {
 		if (player && opponent) {
 			// Step 3: Check if both player and opponent are defined
-			this.collidePVPManager = new PVPManager(this, player, opponent)
+			this.collidePVPManager = new PVPManager(
+				this,
+				player,
+				opponent,
+				this.roomNumber,
+			)
 		}
 	}
 

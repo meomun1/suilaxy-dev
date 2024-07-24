@@ -81,11 +81,15 @@ class Entity extends Phaser.GameObjects.Sprite {
 	}
 
 	setVelocityY(velocity) {
-		this.body.velocity.y = velocity
+		if (velocity || velocity === 0) {
+			this.body.velocity.y = velocity
+		}
 	}
 
 	setVelocityX(velocity) {
-		this.body.velocity.x = velocity
+		if (velocity || velocity === 0) {
+			this.body.velocity.x = velocity
+		}
 	}
 
 	setPhysics(scene) {

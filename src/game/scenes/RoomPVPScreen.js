@@ -207,6 +207,9 @@ class RoomPVPScreen extends Phaser.Scene {
 					playerPosition: this.playerPosition,
 				})
 			}, 3000)
+
+			this.statePlayer = false
+			this.stateOpponent = false
 		}
 	}
 }

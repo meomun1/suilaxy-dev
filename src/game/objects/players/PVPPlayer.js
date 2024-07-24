@@ -6,11 +6,10 @@ import HPBar2 from '../ui/HPBar2'
 import SoundManager from '../../manager/SoundManager'
 import PVPBulletOpponent from '../projectiles/PVPBulletOpponent'
 
-class Player extends Entity {
+class PVPPlayer extends Entity {
 	constructor(scene, x, y, key, health) {
 		super(scene, x, y, key, health)
-		this.body.velocity.x = 0
-		this.body.velocity.y = gameSettings.savePlayerSpeed
+		this.body.velocity.y = 0
 		this.health = health
 		this.maxHealth = health
 		this.damage = 300
@@ -22,7 +21,7 @@ class Player extends Entity {
 		this.setPhysics(scene)
 		this.body.setSize(48, 48)
 		this.setDepth(3)
-		this.body.velocity.y = this.speed
+		this.body.velocity.y = 0
 		this.bulletSize = gameSettings.savePlayerBulletSize
 
 		this.fireRate = gameSettings.savePlayerFireRate
@@ -223,4 +222,4 @@ class Player extends Entity {
 	}
 }
 
-export default Player
+export default PVPPlayer

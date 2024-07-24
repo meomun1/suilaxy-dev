@@ -1,8 +1,9 @@
 class PVPManager {
-	constructor(scene, player1, player2, soundManager) {
+	constructor(scene, player1, player2, roomNumber) {
 		this.scene = scene
 		this.player1 = player1
 		this.player2 = player2
+		this.roomNumber = roomNumber
 
 		// Add collision between bullets and enemies
 		this.scene.physics.add.overlap(

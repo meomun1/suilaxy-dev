@@ -23,11 +23,11 @@ const MintNFT = () => {
 	const phaserRef = useRef()
 	const currentAccount = useCurrentAccount()
 
-	// My changes 
+	// My changes
 	const { data } = useSuiClientQuery('getOwnedObjects', {
 		owner: currentAccount?.address,
-	});
-	if(data){
+	})
+	if (data) {
 		console.log(data)
 	}
 
@@ -140,7 +140,5 @@ const MintNFT = () => {
 		</div>
 	)
 }
-
-
 
 export default MintNFT

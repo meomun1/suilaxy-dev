@@ -1,4 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap");
+:root {
+  --glowing-yellow: 0px 0px 20px 0px rgba(232, 170, 65, 1);
+}
+
 * {
   -webkit-font-smoothing: antialiased;
   font-family: "Pixelify Sans", sans-serif;
@@ -26,115 +30,178 @@ a {
   text-decoration: none;
 }
 
-#app {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
+@media (min-width: 1400px) {
+  #app {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+  #app .child-left, #app .child-main, #app .child-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #app .child-left {
+    margin-left: 40px;
+    margin-right: 40px;
+    flex-direction: column;
+    gap: 20px;
+  }
+  #app .child-left .text-wrapper {
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid;
+    border-color: rgba(255, 255, 255, 0.1019607843);
+    border-radius: 15px;
+  }
+  #app .child-left .text-wrapper h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    color: white;
+  }
+  #app .child-left .text-wrapper .top {
+    padding: 20px 20px;
+  }
+  #app .child-left .text-wrapper .top .special-text {
+    -webkit-text-stroke: 1px #ec7cc4;
+    color: #ffffff;
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: 64px;
+    font-weight: 800;
+    left: 76px;
+    letter-spacing: 5.76px;
+    line-height: normal;
+    text-shadow: 0px 0px 10px #f68fde, 0px 0px 20px #f68fde;
+  }
+  #app .child-left .text-wrapper .bottom {
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+  #app .child-left .text-wrapper .bottom .h1-two {
+    padding-top: 20px;
+  }
+  #app .child-left .text-wrapper .bottom a {
+    color: #f68fde;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding-top: 20px;
+  }
+  #app .child-left .text-wrapper .bottom a:hover {
+    color: #ec7cc4;
+  }
+  #app .child-main {
+    -webkit-backdrop-filter: blur(18px) brightness(100%);
+    backdrop-filter: blur(18px) brightness(100%);
+    background-color: rgba(240, 213, 249, 0.0117647059);
+    box-shadow: 0px 0px 21.5px 4px #f4b3dd;
+  }
+  #app .child-right {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  #app .child-right .button {
+    background-color: #5ba0f1;
+    color: white;
+    border: none;
+    padding: 20px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+  #app .child-right .button:hover {
+    background-color: #fff;
+    color: black;
+  }
+  #app .child-right button {
+    background-color: #6ec531;
+    color: white;
+    border: none;
+    padding: 20px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+  #app .child-right button:hover {
+    background-color: #fff;
+    color: black;
+  }
 }
-#app .child-left, #app .child-main, #app .child-right {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-#app .child-left {
-  margin-left: 40px;
-  margin-right: 40px;
-  flex-direction: column;
-  gap: 20px;
-}
-#app .child-left .text-wrapper {
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  background-color: rgba(255, 255, 255, 0.03);
-  border: 1px solid;
-  border-color: rgba(255, 255, 255, 0.1019607843);
-  border-radius: 15px;
-}
-#app .child-left .text-wrapper h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: center;
-  color: white;
-}
-#app .child-left .text-wrapper .top {
-  padding: 20px 20px;
-}
-#app .child-left .text-wrapper .top .special-text {
-  -webkit-text-stroke: 1px #ec7cc4;
-  color: #ffffff;
-  font-family: "Pixelify Sans", sans-serif;
-  font-size: 64px;
-  font-weight: 800;
-  left: 76px;
-  letter-spacing: 5.76px;
-  line-height: normal;
-  text-shadow: 0px 0px 10px #f68fde, 0px 0px 20px #f68fde;
-}
-#app .child-left .text-wrapper .bottom {
-  padding: 20px 10px;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-}
-#app .child-left .text-wrapper .bottom .h1-two {
-  padding-top: 20px;
-}
-#app .child-left .text-wrapper .bottom a {
-  color: #f68fde;
-  font-size: 1.2rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding-top: 20px;
-}
-#app .child-left .text-wrapper .bottom a:hover {
-  color: #ec7cc4;
-}
-#app .child-main {
-  -webkit-backdrop-filter: blur(18px) brightness(100%);
-  backdrop-filter: blur(18px) brightness(100%);
-  background-color: rgba(240, 213, 249, 0.0117647059);
-  box-shadow: 0px 0px 21.5px 4px #f4b3dd;
-}
-#app .child-right {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-#app .child-right .button {
-  background-color: #5ba0f1;
-  color: white;
-  border: none;
-  padding: 20px 20px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-}
-#app .child-right .button:hover {
-  background-color: #fff;
-  color: black;
-}
-#app .child-right button {
-  background-color: #6ec531;
-  color: white;
-  border: none;
-  padding: 20px 20px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-}
-#app .child-right button:hover {
-  background-color: #fff;
-  color: black;
+@media (max-width: 1400px) {
+  #app {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  #app .child-left {
+    display: none;
+  }
+  #app .child-main {
+    -webkit-backdrop-filter: blur(18px) brightness(100%);
+    backdrop-filter: blur(18px) brightness(100%);
+    background-color: rgba(240, 213, 249, 0.0117647059);
+    box-shadow: 0px 0px 21.5px 4px #f4b3dd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #app .child-right {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  #app .child-right .button {
+    background-color: #5ba0f1;
+    color: white;
+    border: none;
+    padding: 20px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+  #app .child-right .button:hover {
+    background-color: #fff;
+    color: black;
+  }
+  #app .child-right button {
+    background-color: #6ec531;
+    color: white;
+    border: none;
+    padding: 20px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+  #app .child-right button:hover {
+    background-color: #fff;
+    color: black;
+  }
 }
 
 /*# sourceMappingURL=output.css.map */

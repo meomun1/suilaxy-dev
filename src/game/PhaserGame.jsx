@@ -40,7 +40,12 @@ export const PhaserGame = forwardRef(function PhaserGame(
 		}
 	}, [currentActiveScene, ref])
 
-	return <div id="game-container" style={{ backgroundColor: 'black' }}></div>
+	return (
+		<div
+			id="game-container"
+			style={{ backgroundColor: 'black', width: '520px', height: '760px' }}
+		></div>
+	)
 })
 
 // Props definitions

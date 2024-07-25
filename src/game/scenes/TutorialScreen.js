@@ -12,6 +12,8 @@ import ProjectileManager from '../manager/ProjectileManager.js'
 import UpgradeManager from '../manager/UpgradeManager.js'
 import MobileManager from '../manager/MobileManager.js'
 import gameSettings from '../config/gameSettings.js'
+import { EventBus } from '../EventBus.js'
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 
 const BACKGROUND_SCROLL_SPEED = 0.5
 class TutorialScreen extends Phaser.Scene {
@@ -179,6 +181,8 @@ class TutorialScreen extends Phaser.Scene {
 			},
 			this,
 		)
+
+		EventBus.on('wallet-connected', handleWalletConnected, this)
 	}
 
 	update() {

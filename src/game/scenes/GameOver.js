@@ -4,6 +4,8 @@ import GuiManager from '../manager/GuiManager.js'
 import KeyboardManager from '../manager/KeyboardManager.js'
 import InterfaceManager from './InterfaceScene.js'
 import gameSettings from '../config/gameSettings.js'
+import { EventBus } from '../EventBus.js'
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 
 class GameOver extends Phaser.Scene {
 	constructor() {
@@ -39,6 +41,8 @@ class GameOver extends Phaser.Scene {
 	}
 
 	create() {
+		EventBus.on('wallet-connected', handleWalletConnected, this)
+
 		gameSettings.isBossDead = true
 		// Add a game over message
 		this.keyboardManager = new KeyboardManager(this)

@@ -16,6 +16,8 @@ import UpgradeManager from '../manager/UpgradeManager.js'
 import SoundManager from '../manager/SoundManager.js'
 import MobileManager from '../manager/MobileManager.js'
 import gameSettings from '../config/gameSettings.js'
+import { EventBus } from '../EventBus.js'
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 
 const BACKGROUND_SCROLL_SPEED = 0.5
 class PlayingScreen extends Phaser.Scene {
@@ -47,6 +49,8 @@ class PlayingScreen extends Phaser.Scene {
 	}
 
 	create() {
+		EventBus.on('wallet-connected', handleWalletConnected, this)
+
 		this.cameras.main.fadeIn(500, 0, 0, 0)
 
 		if (

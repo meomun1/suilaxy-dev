@@ -5,6 +5,7 @@ import Music from '../mode/Music.js'
 import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
 import io from 'socket.io-client'
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 
 class TitleScreen extends Phaser.Scene {
 	constructor() {

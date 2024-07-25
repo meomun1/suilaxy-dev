@@ -103,7 +103,7 @@ class TitleScreen extends Phaser.Scene {
 		this.connectWalletText = this.add.text(
 			config.width / 2,
 			config.height / 2 + 60,
-			'Connect wallet, begin the Suilaxy journey!',
+			'Add wallet, begin Suilaxy journey!',
 			{
 				fontFamily: 'Pixelify Sans',
 				color: '#F3F8FF',

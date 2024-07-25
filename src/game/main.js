@@ -19,17 +19,16 @@ import NewShipScreen from './scenes/NewShipScreen.js'
 import NftScreen from './scenes/NftScreen.js'
 import PVPScreen from './scenes/PVPScreen.js'
 
-// Temporary Disable
-// import VictoryScreen from './scenes/VictoryScreen.js'
-// import Leaderboard from './scenes/Leaderboard.js'
-
-// test
 const config = {
 	type: Phaser.AUTO,
-	width: 633,
-	height: 950,
 	parent: 'game-container',
+	width: window.innerWidth,
+	height: window.innerHeight,
 	backgroundColor: 'rgba(0, 0, 0)',
+	scale: {
+		mode: Phaser.Scale.RESIZE,
+		autoCenter: Phaser.Scale.CENTER_BOTH,
+	},
 	scene: [
 		TitleScreen,
 		LoadingScreen,

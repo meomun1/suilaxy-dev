@@ -8,6 +8,7 @@ export const PhaserGame = forwardRef(function PhaserGame(
 	ref,
 ) {
 	const game = useRef()
+	const containerRef = useRef()
 
 	// Create the game inside a useLayoutEffect hook to avoid the game being created outside the DOM
 	useLayoutEffect(() => {
@@ -17,12 +18,12 @@ export const PhaserGame = forwardRef(function PhaserGame(
 			if (ref !== null) {
 				ref.current = { game: game.current, scene: null }
 			}
-		}
 
-		return () => {
-			if (game.current) {
-				game.current.destroy(true)
-				game.current = undefined
+			return () => {
+				if (game.current) {
+					game.current.destroy(true)
+					game.current = undefined
+				}
 			}
 		}
 	}, [ref])
@@ -43,7 +44,12 @@ export const PhaserGame = forwardRef(function PhaserGame(
 	return (
 		<div
 			id="game-container"
-			style={{ backgroundColor: 'black', width: '520px', height: '760px' }}
+			ref={containerRef}
+			style={{
+				backgroundColor: 'black',
+				width: '700px',
+				height: '780px',
+			}}
 		></div>
 	)
 })

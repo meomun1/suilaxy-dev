@@ -77,8 +77,9 @@ const config = {
 	},
 }
 
-const StartGame = (parent) => {
-	return new Phaser.Game({ ...config, parent })
+const StartGame = (containerId) => {
+	const gameConfig = { ...config, parent: containerId }
+	return new Phaser.Game(gameConfig)
 }
 
 export default StartGame

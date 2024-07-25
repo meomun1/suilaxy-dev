@@ -33,7 +33,7 @@ OwnedObjects.propTypes = {
 
 function App() {
 	const phaserRef = useRef()
-	const isMobile = useMediaQuery({ query: '(max-width: 1000px)' })
+	const isMobile = useMediaQuery({ query: '(max-width: 1200px)' })
 
 	const onCurrentActiveScene = (scene) => {
 		console.log(scene)
@@ -53,13 +53,8 @@ function App() {
 						</div>
 						<div className="text-wrapper">
 							<div className="bottom">
-								<h1>
-									Currently Suilaxy is running with Beta version on Sui
-									Blockchain testnet.
-								</h1>
-								<h1 className="h1-two">
-									For more information, please visit our Gitbook page.
-								</h1>
+								<h1>Suilaxy, Beta version on Sui testnet.</h1>
+								<h1 className="h1-two">Visit our Gitbook page for info.</h1>
 								<a
 									href="https://suilaxy.gitbook.io/suilaxy"
 									target="_blank"

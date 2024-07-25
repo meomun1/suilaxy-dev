@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Libre+Barcode+128&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@100..900&display=swap');
 
 :root {
 	--glowing-yellow: 0px 0px 20px 0px rgba(232, 170, 65, 1);
@@ -6,20 +8,20 @@
 
 * {
 	-webkit-font-smoothing: antialiased;
-	font-family: 'Pixelify Sans', sans-serif;
+	font-family: 'Bungee', cursive;
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 }
 
 html {
-	background-image: url('/public/background.png');
+	background-image: url('/background.png');
 	z-index: -1;
 	opacity: 1;
 }
 
 button:focus-visible {
-	outline: 2px solid #f68fde !important;
+	outline: 2px solid #e8aa41 !important;
 	outline: -webkit-focus-ring-color auto 5px !important;
 }
 
@@ -31,206 +33,141 @@ a {
 	text-decoration: none;
 }
 
-// App Container, Background Image Dimmed
-// Responsive adjustments for desktop
-@media (min-width: 1400px) {
-	#app {
-		width: 100%;
-		height: 100vh;
-		overflow: hidden;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		position: relative;
+#app {
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
 
-		.child {
-			&-left,
-			&-main,
-			&-right {
-				flex: 1;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-			}
+	.child {
+		&-left,
+		&-main,
+		&-right {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 
-			&-left {
-				margin-left: 40px;
-				margin-right: 40px;
-				flex-direction: column;
-				gap: 20px;
+		&-left {
+			width: 20rem;
+			margin-left: 40px;
+			margin-right: 40px;
+			flex-direction: column;
+			gap: 20px;
 
-				.text-wrapper {
-					-webkit-backdrop-filter: blur(20px);
-					backdrop-filter: blur(20px);
-					background-color: rgba(255, 255, 255, 0.03);
-					border: 1px solid;
-					border-color: #ffffff1a;
-					border-radius: 15px;
+			.text-wrapper {
+				-webkit-backdrop-filter: blur(20px);
+				backdrop-filter: blur(20px);
+				background-color: rgba(255, 255, 255, 0.03);
+				border: 1px solid;
+				border-color: #ffffff1a;
+				border-radius: 15px;
 
-					h1 {
-						font-size: 1.5rem;
+				h1 {
+					font-size: 0.8rem;
+					font-weight: 400;
+					text-align: center;
+					color: white;
+				}
+
+				.top {
+					padding: 20px 20px;
+
+					.special-text {
+						-webkit-text-stroke: 1px #e8aa41;
+						color: #ffffff;
+						font-family: 'Big Shoulders Stencil Display', sans-serif;
+						font-size: 64px;
+						font-weight: 800;
+						letter-spacing: 5.76px;
+						line-height: normal;
+						text-shadow: 0px 0px 10px #e8aa41, 0px 0px 20px #e8aa41;
+					}
+				}
+
+				.bottom {
+					padding: 20px 10px;
+					display: flex;
+					flex-direction: column;
+					text-align: center;
+
+					.h1-two {
+						padding-top: 20px;
+					}
+
+					a {
+						color: #e8aa41;
+						font-size: 0.8rem;
 						font-weight: 600;
-						text-align: center;
-						color: white;
-					}
+						cursor: pointer;
+						transition: all 0.3s ease;
+						padding-top: 20px;
 
-					.top {
-						padding: 20px 20px;
-
-						.special-text {
-							-webkit-text-stroke: 1px #ec7cc4;
-							color: #ffffff;
-							font-family: 'Pixelify Sans', sans-serif;
-							font-size: 64px;
-							font-weight: 800;
-							left: 76px;
-							letter-spacing: 5.76px;
-							line-height: normal;
-							text-shadow: 0px 0px 10px #f68fde, 0px 0px 20px #f68fde;
-						}
-					}
-
-					.bottom {
-						padding: 20px 10px;
-						display: flex;
-						flex-direction: column;
-						text-align: center;
-
-						.h1-two {
-							padding-top: 20px;
-						}
-
-						a {
-							color: #f68fde;
-							font-size: 1.2rem;
-							font-weight: 600;
-							cursor: pointer;
-							transition: all 0.3s ease;
-							padding-top: 20px;
-
-							&:hover {
-								color: #ec7cc4;
-							}
+						&:hover {
+							text-decoration: underline;
+							color: #e8aa41;
 						}
 					}
 				}
 			}
+		}
 
-			&-main {
-				-webkit-backdrop-filter: blur(18px) brightness(100%);
-				backdrop-filter: blur(18px) brightness(100%);
-				background-color: #f0d5f903;
-				box-shadow: 0px 0px 21.5px 4px #f4b3dd;
+		&-main {
+			-webkit-backdrop-filter: blur(18px) brightness(100%);
+			backdrop-filter: blur(18px) brightness(100%);
+			background-color: #f0d5f903;
+			border-radius: 15px;
+			overflow: hidden;
+			box-shadow: 0px 0px 21.5px 4px #fff;
+		}
+
+		&-right {
+			width: 20rem;
+			display: flex;
+			flex-direction: column;
+			position: relative;
+
+			.button {
+				background-color: #5ba0f1;
+				color: white;
+				border: none;
+				padding: 20px 20px;
+				font-size: 1rem;
+				font-weight: 600;
+				cursor: pointer;
+				border-radius: 10px;
+				transition: all 0.3s ease;
+
+				&:hover {
+					background-color: #fff;
+					color: black;
+				}
 			}
 
-			&-right {
-				display: flex;
-				flex-direction: column;
-				position: relative;
+			button {
+				background-color: #6ec531;
+				color: white;
+				border: none;
+				padding: 20px 20px;
+				font-size: 1rem;
+				font-weight: 600;
+				cursor: pointer;
+				border-radius: 10px;
+				transition: all 0.3s ease;
 
-				.button {
-					background-color: #5ba0f1;
-					color: white;
-					border: none;
-					padding: 20px 20px;
-					font-size: 1rem;
-					font-weight: 600;
-					cursor: pointer;
-					border-radius: 10px;
-					transition: all 0.3s ease;
-					&:hover {
-						background-color: #fff;
-						color: black;
-					}
-				}
-
-				button {
-					background-color: #6ec531;
-					color: white;
-					border: none;
-					padding: 20px 20px;
-					font-size: 1rem;
-					font-weight: 600;
-					cursor: pointer;
-					border-radius: 10px;
-					transition: all 0.3s ease;
-					&:hover {
-						background-color: #fff;
-						color: black;
-					}
+				&:hover {
+					background-color: #fff;
+					color: black;
 				}
 			}
 		}
 	}
 }
 
-// Responsive adjustments for mobile
-
-@media (max-width: 1400px) {
-	#app {
-		width: 100%;
-		height: 100vh;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		position: relative;
-
-		.child {
-			&-left {
-				display: none;
-			}
-
-			&-main {
-				-webkit-backdrop-filter: blur(18px) brightness(100%);
-				backdrop-filter: blur(18px) brightness(100%);
-				background-color: #f0d5f903;
-				box-shadow: 0px 0px 21.5px 4px #f4b3dd;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-			}
-
-			&-right {
-				display: flex;
-				flex-direction: column;
-				position: absolute;
-				top: 70%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-
-				.button {
-					background-color: #5ba0f1;
-					color: white;
-					border: none;
-					padding: 20px 20px;
-					font-size: 1rem;
-					font-weight: 600;
-					cursor: pointer;
-					border-radius: 10px;
-					transition: all 0.3s ease;
-					&:hover {
-						background-color: #fff;
-						color: black;
-					}
-				}
-
-				button {
-					background-color: #6ec531;
-					color: white;
-					border: none;
-					padding: 20px 20px;
-					font-size: 1rem;
-					font-weight: 600;
-					cursor: pointer;
-					border-radius: 10px;
-					transition: all 0.3s ease;
-					&:hover {
-						background-color: #fff;
-						color: black;
-					}
-				}
-			}
-		}
-	}
+#game-container {
+	background-color: black;
+	width: 700px;
+	height: 780px;
 }

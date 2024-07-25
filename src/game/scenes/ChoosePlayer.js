@@ -3,6 +3,8 @@ import config from '../config/config.js'
 import gameSettings from '../config/gameSettings.js'
 import GuiManager from '../manager/GuiManager.js'
 import { v4 as uuidv4 } from 'uuid'
+import { EventBus } from '../EventBus.js'
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 
 class ChoosePlayer extends Phaser.Scene {
 	constructor() {
@@ -137,6 +139,8 @@ class ChoosePlayer extends Phaser.Scene {
 		this.randomNFT()
 
 		this.hideTextInput()
+
+		EventBus.on('wallet-connected', handleWalletConnected, this)
 	}
 
 	update() {

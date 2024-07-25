@@ -1,6 +1,8 @@
 import Phaser from 'phaser'
 import config from '../config/config.js'
 import GuiManager from '../manager/GuiManager.js'
+import { EventBus } from '../EventBus.js'
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 class LoadingPvPScreen extends Phaser.Scene {
 	constructor() {
 		super('loadingPvPScreen')
@@ -269,6 +271,7 @@ class LoadingPvPScreen extends Phaser.Scene {
 	}
 
 	create() {
+		EventBus.on('wallet-connected', handleWalletConnected, this)
 		this.cameras.main.fadeIn(500, 0, 0, 0)
 
 		// Create first bullet animations

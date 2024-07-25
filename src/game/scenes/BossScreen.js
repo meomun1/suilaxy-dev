@@ -17,6 +17,8 @@ import MiniBot from '../objects/enemies/Minibot.js'
 import SoundManager from '../manager/SoundManager.js'
 import MobileManager from '../manager/MobileManager.js'
 import gameSettings from '../config/gameSettings.js'
+import { EventBus } from '../EventBus.js'
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 
 const BACKGROUND_SCROLL_SPEED = 0.5
 class BossScreen extends Phaser.Scene {
@@ -45,6 +47,7 @@ class BossScreen extends Phaser.Scene {
 
 	create() {
 		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
+		EventBus.on('wallet-connected', handleWalletConnected, this)
 
 		this.guiManager = new GuiManager(this)
 		this.guiManager.createBackground('background_texture_04')
@@ -118,11 +121,11 @@ class BossScreen extends Phaser.Scene {
 		})
 		// }
 
-		this.boss = new Boss(this, config.width / 2, 0, 50000);
-		this.boss.play("boss_move_anim");
-	
-		this.firstMini = new MiniBot(this, config.width / 5, -96, 10000);
-		this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 10000);
+		this.boss = new Boss(this, config.width / 2, 0, 50000)
+		this.boss.play('boss_move_anim')
+
+		this.firstMini = new MiniBot(this, config.width / 5, -96, 10000)
+		this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 10000)
 
 		this.player = new Player(
 			this,
@@ -137,20 +140,20 @@ class BossScreen extends Phaser.Scene {
 		this.player.selectedPlayer = this.selectedPlayerIndex
 
 		// Spawn the Enemies
-		this.bug3_1 = new Bug3(this, 50, 0, 2000);
-		this.bug3_1.play("bug3_anim");
-		this.bug3_1.setScale(2);
-		this.bug3_2 = new Bug3(this, config.width - 50, 0, 2000);
-		this.bug3_2.play("bug3_anim");
-		this.bug3_2.setScale(2);
-	
-		this.bug5 = new Bug5(this, 100, 0, 1000);
-		this.bug5.play("bug5_anim");
-		this.bug5.setScale(0.6);
-	
-		this.bug5_2 = new Bug5(this, 500, 0, 1000);
-		this.bug5_2.play("bug5_anim");
-		this.bug5_2.setScale(0.6);
+		this.bug3_1 = new Bug3(this, 50, 0, 2000)
+		this.bug3_1.play('bug3_anim')
+		this.bug3_1.setScale(2)
+		this.bug3_2 = new Bug3(this, config.width - 50, 0, 2000)
+		this.bug3_2.play('bug3_anim')
+		this.bug3_2.setScale(2)
+
+		this.bug5 = new Bug5(this, 100, 0, 1000)
+		this.bug5.play('bug5_anim')
+		this.bug5.setScale(0.6)
+
+		this.bug5_2 = new Bug5(this, 500, 0, 1000)
+		this.bug5_2.play('bug5_anim')
+		this.bug5_2.setScale(0.6)
 
 		// Create text for level 1
 		this.createText()

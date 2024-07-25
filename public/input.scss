@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap');
 
+:root {
+	--glowing-yellow: 0px 0px 20px 0px rgba(232, 170, 65, 1);
+}
+
 * {
 	-webkit-font-smoothing: antialiased;
 	font-family: 'Pixelify Sans', sans-serif;
@@ -102,10 +106,11 @@ a {
 							font-weight: 600;
 							cursor: pointer;
 							transition: all 0.3s ease;
+							padding-top: 20px;
+
 							&:hover {
 								color: #ec7cc4;
 							}
-							padding-top: 20px;
 						}
 					}
 				}

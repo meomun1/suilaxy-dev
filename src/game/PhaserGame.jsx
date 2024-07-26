@@ -47,8 +47,8 @@ export const PhaserGame = forwardRef(function PhaserGame(
 			ref={containerRef}
 			style={{
 				backgroundColor: 'black',
-				width: '1400px',
-				height: '800px',
+				width: '1100px',
+				height: '600px',
 			}}
 		></div>
 	)

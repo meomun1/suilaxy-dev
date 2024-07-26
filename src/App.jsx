@@ -45,38 +45,40 @@ function App() {
 				<MobileSite />
 			) : (
 				<div id="app">
-					<div className="child-left">
-						<div className="text-wrapper">
-							<div className="top">
-								<h1 className="special-text">SUILAXY</h1>
+					<div className="child-top">
+						<div className="child-left">
+							<div className="text-wrapper">
+								<div className="top">
+									<h1 className="special-text">SUILAXY</h1>
+								</div>
 							</div>
+							{/* <div className="text-wrapper">
+								<div className="bottom">
+									<h1>Suilaxy, Beta version on Sui testnet.</h1>
+									<h1 className="h1-two">Visit our Gitbook page for info.</h1>
+									<a
+										href="https://suilaxy.gitbook.io/suilaxy"
+										target="_blank"
+										rel="noreferrer"
+									>
+										https://suilaxy.gitbook.io/suilaxy
+									</a>
+								</div>
+							</div> */}
 						</div>
-						<div className="text-wrapper">
-							<div className="bottom">
-								<h1>Suilaxy, Beta version on Sui testnet.</h1>
-								<h1 className="h1-two">Visit our Gitbook page for info.</h1>
-								<a
-									href="https://suilaxy.gitbook.io/suilaxy"
-									target="_blank"
-									rel="noreferrer"
-								>
-									https://suilaxy.gitbook.io/suilaxy
-								</a>
-							</div>
+
+						<div className="child-right">
+							{/* <ConnectButton className="button" />
+							<ConnectedAccount /> */}
+							<MintNFT />
 						</div>
 					</div>
 
-					<div className="child-main">
+					<div className="child-bottom">
 						<PhaserGame
 							ref={phaserRef}
 							currentActiveScene={onCurrentActiveScene}
 						/>
-					</div>
-
-					<div className="child-right">
-						{/* <ConnectButton className="button" />
-					<ConnectedAccount /> */}
-						<MintNFT />
 					</div>
 				</div>
 			)}

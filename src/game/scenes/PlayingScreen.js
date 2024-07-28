@@ -24,7 +24,6 @@ class PlayingScreen extends Phaser.Scene {
 	constructor() {
 		super('playGame')
 		this.callingScene = 'playGame'
-		this.pic
 	}
 
 	init(data) {
@@ -48,11 +47,12 @@ class PlayingScreen extends Phaser.Scene {
 		})
 	}
 
-	create() {
-		EventBus.on('wallet-connected', handleWalletConnected, this)
+	createLevel1Text() {
+		// Create text for level 1
+		this.createText('LEVEL 1', config.width / 2, config.height / 2 - 60, 2000)
+	}
 
-		this.cameras.main.fadeIn(500, 0, 0, 0)
-
+	createShipAnims() {
 		if (
 			!(this.anims && this.anims.exists && this.anims.exists('player_anim'))
 		) {
@@ -121,53 +121,51 @@ class PlayingScreen extends Phaser.Scene {
 				repeat: -1,
 			})
 		}
+	}
 
-		// Create GUI for PlayingScreen ( Changes in BG except Player and Enemy )
-		this.guiManager = new GuiManager(this)
-		this.guiManager.createBackground('background_texture_01')
-		// Add sound for playing screen
-		this.music = this.sys.game.globals.music
-
+	createObject() {
+		// PLAYER
 		this.player = new Player(
 			this,
 			config.width / 2,
-			config.height - 100,
+			config.height - config.height / 4,
 			`player_texture_${this.selectedPlayerIndex}`,
 			gameSettings.playerMaxHealth,
 		)
-
 		this.player.play('player_anim')
-		this.player.restartGameSettings()
-		this.player.selectedPlayer = this.selectedPlayerIndex
+		this.player.restartToTile()
+		this.player.selectedPlayer = this.selectedPlayerIndexs
 
-		// Spawn the Enemies
-		this.time.delayedCall(
-			21000,
-			() => {
-				// shoot straight bullet
-				this.bug3_1 = new Bug3(this, config.width - 20, -20, 300, 1)
-				this.bug3_2 = new Bug3(this, 20, -20, 300, 1)
-
-				// shoot following bullet
-				this.bug3_3 = new Bug3(this, 70, -20, 500, 1)
-				this.bug3_4 = new Bug3(this, config.width - 70, -20, 500, 1)
-
-				// chasing enemies
-				this.bug5_1 = new Bug5(this, config.width / 2, -20, 200)
-				this.bug5_2 = new Bug5(this, config.width / 2 - 50, -20, 200)
-				this.bug5_3 = new Bug5(this, config.width / 2 + 50, -20, 200)
-			},
-			null,
-			this,
-		)
-
-		// Create text for level 1
-		this.createText('LEVEL 1', config.width / 2, config.height / 2 - 60, 2000)
-
-		// Spawn the Shield
+		//SHIELD
 		this.shield = new Shield(this, this.player)
 		this.shield.play('shield_anim')
+	}
 
+	createMechanic() {
+		// Create keyboard inputs
+		this.spacebar = this.input.keyboard.addKey(
+			Phaser.Input.Keyboard.KeyCodes.SPACE,
+		)
+		this.enter = this.input.keyboard.addKey(
+			Phaser.Input.Keyboard.KeyCodes.ENTER,
+		)
+
+		// Create a group to manage bullets
+		this.projectileManager = new ProjectileManager(this)
+		this.projectileManager.createPlayerBullet()
+		this.projectileManager.createEnemyBullet()
+		this.projectileManager.createChaseBullet()
+		this.time.addEvent({
+			delay: 21000,
+			callback: () => {
+				this.projectileManager.callEnemyBulletLv1()
+				this.projectileManager.callChaseBulletLv1()
+			},
+			callbackScope: this,
+		})
+	}
+
+	createManager() {
 		// Create managers
 		this.keyboardManager = new KeyboardManager(this, this.music)
 		this.mobileManager = new MobileManager(this)
@@ -181,7 +179,41 @@ class PlayingScreen extends Phaser.Scene {
 		)
 
 		this.EnemyManager = new EnemyManager(this)
+		this.UtilitiesManager = new UtilitiesManager(this)
+		this.SoundManager = new SoundManager(this)
+	}
 
+	createMusic() {
+		// create pause button
+		this.pic = this.add.image(config.width - 20, 30, 'pause')
+		// this.button = this.scene.add.sprite(60, 30, 'pause');
+		this.pic.setInteractive()
+
+		this.pic.on(
+			'pointerdown',
+			function () {
+				this.scene.pause()
+				this.scene.launch('pauseScreen', { key: 'playGame' })
+			},
+			this,
+		)
+
+		this.musicButton = this.add.image(config.width - 60, 30, 'sound_texture')
+		this.musicButton.setInteractive()
+
+		this.musicButton.on(
+			'pointerdown',
+			function () {
+				this.music.soundOn = !this.music.soundOn
+				this.music.musicOn = !this.music.musicOn
+
+				this.updateAudio()
+			},
+			this,
+		)
+	}
+
+	addEnemyLevelOne() {
 		this.time.delayedCall(
 			3000,
 			() => {
@@ -201,6 +233,27 @@ class PlayingScreen extends Phaser.Scene {
 		this.time.delayedCall(
 			12000,
 			() => this.EnemyManager.spawnEnemyRowWithDelay(this, 0),
+			null,
+			this,
+		)
+
+		// Spawn the Enemies
+		this.time.delayedCall(
+			21000,
+			() => {
+				// shoot straight bullet
+				this.bug3_1 = new Bug3(this, config.width - 20, -20, 300, 1)
+				this.bug3_2 = new Bug3(this, 20, -20, 300, 1)
+
+				// shoot following bullet
+				this.bug3_3 = new Bug3(this, 70, -20, 500, 1)
+				this.bug3_4 = new Bug3(this, config.width - 70, -20, 500, 1)
+
+				// chasing enemies
+				this.bug5_1 = new Bug5(this, config.width / 2, -20, 200)
+				this.bug5_2 = new Bug5(this, config.width / 2 - 50, -20, 200)
+				this.bug5_3 = new Bug5(this, config.width / 2 + 50, -20, 200)
+			},
 			null,
 			this,
 		)
@@ -238,9 +291,32 @@ class PlayingScreen extends Phaser.Scene {
 			null,
 			this,
 		)
+	}
 
-		this.UtilitiesManager = new UtilitiesManager(this)
-		this.SoundManager = new SoundManager(this)
+	create() {
+		this.guiManager = new GuiManager(this)
+
+		EventBus.on('wallet-connected', handleWalletConnected, this)
+
+		this.cameras.main.fadeIn(500, 0, 0, 0)
+
+		this.music = this.sys.game.globals.music
+
+		this.guiManager.createBackground('background_texture_01')
+
+		this.createLevel1Text()
+
+		this.createShipAnims()
+
+		this.createObject()
+
+		this.createMechanic()
+
+		this.createManager()
+
+		this.createMusic()
+
+		this.addEnemyLevelOne()
 
 		// Spawn the Health Packs and Shield Packs
 		this.time.addEvent({
@@ -294,27 +370,6 @@ class PlayingScreen extends Phaser.Scene {
 			callbackScope: this,
 		})
 
-		this.projectileManager = new ProjectileManager(this)
-		this.projectileManager.createPlayerBullet()
-		this.projectileManager.createEnemyBullet()
-		this.projectileManager.createChaseBullet()
-		this.time.addEvent({
-			delay: 21000,
-			callback: () => {
-				this.projectileManager.callEnemyBulletLv1()
-				this.projectileManager.callChaseBulletLv1()
-			},
-			callbackScope: this,
-		})
-
-		// Create keyboard inputs
-		this.spacebar = this.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.SPACE,
-		)
-		this.enter = this.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.ENTER,
-		)
-
 		this.CollideManager = new CollideManager(
 			this,
 			this.player,
@@ -323,34 +378,6 @@ class PlayingScreen extends Phaser.Scene {
 			this.UtilitiesManager.shieldPacks,
 			this.shield,
 			this.SoundManager,
-		)
-
-		// create pause button
-		this.pic = this.add.image(config.width - 20, 30, 'pause')
-		// this.button = this.scene.add.sprite(60, 30, 'pause');
-		this.pic.setInteractive()
-
-		this.pic.on(
-			'pointerdown',
-			function () {
-				this.scene.pause()
-				this.scene.launch('pauseScreen', { key: 'playGame' })
-			},
-			this,
-		)
-
-		this.musicButton = this.add.image(config.width - 60, 30, 'sound_texture')
-		this.musicButton.setInteractive()
-
-		this.musicButton.on(
-			'pointerdown',
-			function () {
-				this.music.soundOn = !this.music.soundOn
-				this.music.musicOn = !this.music.musicOn
-
-				this.updateAudio()
-			},
-			this,
 		)
 	}
 
@@ -367,15 +394,8 @@ class PlayingScreen extends Phaser.Scene {
 		// Move the background
 		this.background.tilePositionY -= BACKGROUND_SCROLL_SPEED
 
-		// Move the player and enemies
+		//PLAYER
 		this.PlayerManager.movePlayer()
-
-		// this.EnemyManager.moveEnemies(); Dont need
-		this.EnemyManager.enemies.forEach((enemy) => {
-			enemy.updateHealthBarPosition()
-		})
-
-		this.EnemyManager.destroyEnemyMoveOutOfScreen()
 
 		if (this.spacebar.isDown) {
 			this.player.shootBullet(this.selectedPlayerIndex)
@@ -391,6 +411,13 @@ class PlayingScreen extends Phaser.Scene {
 		}
 
 		this.shield.updatePosition(this.player)
+
+		// ENEMY
+		this.EnemyManager.enemies.forEach((enemy) => {
+			enemy.updateHealthBarPosition()
+		})
+
+		this.EnemyManager.destroyEnemyMoveOutOfScreen()
 
 		if (this.EnemyManager.checkToFinishLevel()) {
 			this.goToNextLevel()

@@ -42,11 +42,17 @@ class LevelTwoScreen extends Phaser.Scene {
 		})
 	}
 
-	create() {
-		EventBus.on('wallet-connected', handleWalletConnected, this)
+	createLevelTwoText() {
+		// Create text for level 2
+		this.createText(
+			'LEVEL 2',
+			config.width / 2,
+			config.height / 2 - config.height / 8,
+			2000,
+		)
+	}
 
-		this.cameras.main.fadeIn(1000, 0, 0, 0)
-
+	createShipAnims() {
 		if (
 			!(this.anims && this.anims.exists && this.anims.exists('player_anim'))
 		) {
@@ -115,150 +121,36 @@ class LevelTwoScreen extends Phaser.Scene {
 				repeat: -1,
 			})
 		}
+	}
 
-		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
-		this.guiManager = new GuiManager(this)
-		this.guiManager.createBackground('background_texture')
-
-		this.music = this.sys.game.globals.music
-
+	createObject() {
+		// PLAYER
 		this.player = new Player(
 			this,
 			config.width / 2,
-			config.height - 100,
+			config.height - config.height / 4,
 			`player_texture_${this.selectedPlayerIndex}`,
 			gameSettings.playerMaxHealth,
 		)
-
 		this.player.play('player_anim')
-		this.player.restartGameSettings()
-		this.player.selectedPlayer = this.selectedPlayerIndex
+		this.player.restartToTile()
+		this.player.selectedPlayer = this.selectedPlayerIndexs
 
-		// Spawn the Enemies
-		this.time.delayedCall(
-			13000,
-			() => {
-				// chasing enemies
-				this.bug5_1 = new Bug5(this, 30, -20, 500)
-				this.bug5_2 = new Bug5(this, 120, -20, 500)
-				this.bug5_3 = new Bug5(this, 210, -20, 500)
-				this.bug5_4 = new Bug5(this, 300, -20, 500)
-				this.bug5_5 = new Bug5(this, 390, -20, 500)
-				this.bug5_6 = new Bug5(this, 480, -20, 500)
-				this.bug5_7 = new Bug5(this, 570, -20, 500)
-				this.bug5_1.play('bug5_anim')
-				this.bug5_2.play('bug5_anim')
-				this.bug5_3.play('bug5_anim')
-				this.bug5_4.play('bug5_anim')
-				this.bug5_5.play('bug5_anim')
-				this.bug5_6.play('bug5_anim')
-				this.bug5_7.play('bug5_anim')
-			},
-			null,
-			this,
-		)
-
-		// Create text for level 2
-		this.createText('LEVEL 2', config.width / 2, config.height / 2 - 60, 2000)
-
-		// Spawn the Shield
+		//SHIELD
 		this.shield = new Shield(this, this.player)
 		this.shield.play('shield_anim')
+	}
 
-		// Create managers
-		this.keyboardManager = new KeyboardManager(this, this.music)
-		this.mobileManager = new MobileManager(this)
-		this.keyboardManager.MuteGame()
-
-		this.PlayerManager = new PlayerManager(
-			this,
-			this.player,
-			this.selectedPlayerIndex,
+	createMechanic() {
+		// Create keyboard inputs
+		this.spacebar = this.input.keyboard.addKey(
+			Phaser.Input.Keyboard.KeyCodes.SPACE,
+		)
+		this.enter = this.input.keyboard.addKey(
+			Phaser.Input.Keyboard.KeyCodes.ENTER,
 		)
 
-		this.EnemyManager = new EnemyManager(this)
-		this.time.delayedCall(
-			3000,
-			() => this.EnemyManager.spawnEnemyRowWithDelay(this, 0, 800),
-			null,
-			this,
-		)
-		this.time.delayedCall(
-			5000,
-			() => this.EnemyManager.spawnEnemyRowWithDelay(this, 0, 800),
-			null,
-			this,
-		)
-		this.time.delayedCall(
-			7000,
-			() => this.EnemyManager.spawnEnemyRowWithDelay(this, 0, 800),
-			null,
-			this,
-		)
-
-		this.time.delayedCall(
-			13000,
-			() => {
-				this.CollideManager2 = new CollideManager(
-					this,
-					this.player,
-					this.EnemyManager.enemies,
-					this.UtilitiesManager.HealthPacks,
-					this.UtilitiesManager.shieldPacks,
-					this.shield,
-					this.SoundManager,
-				)
-				this.EnemyManager.addEnemyForOnce(this.bug5_1)
-				this.EnemyManager.addEnemyForOnce(this.bug5_2)
-				this.EnemyManager.addEnemyForOnce(this.bug5_3)
-				this.EnemyManager.addEnemyForOnce(this.bug5_4)
-				this.EnemyManager.addEnemyForOnce(this.bug5_5)
-				this.EnemyManager.addEnemyForOnce(this.bug5_6)
-				this.EnemyManager.addEnemyForOnce(this.bug5_7)
-			},
-			null,
-			this,
-		)
-
-		// FINAL WAVE
-		this.time.delayedCall(
-			22000,
-			() => {
-				this.startFinalWave()
-			},
-			null,
-			this,
-		)
-
-		this.time.delayedCall(
-			32000,
-			() => {
-				this.EnemyManager.gameStarted = true
-			},
-			null,
-			this,
-		)
-
-		this.UtilitiesManager = new UtilitiesManager(this)
-		this.SoundManager = new SoundManager(this)
-		// Add a delayed event to spawn utilities after a delay
-		this.time.addEvent({
-			delay: 15000,
-			callback: () => {
-				this.UtilitiesManager.addUtilitiesForPlayingScreen(2, 2)
-				this.CollideManager1 = new CollideManager(
-					this,
-					this.player,
-					this.EnemyManager.enemies,
-					this.UtilitiesManager.HealthPacks,
-					this.UtilitiesManager.shieldPacks,
-					this.shield,
-					this.SoundManager,
-				)
-			},
-			callbackScope: this,
-		})
-
+		// Create a group to manage bullets
 		this.projectileManager = new ProjectileManager(this)
 		this.projectileManager.createPlayerBullet()
 		this.projectileManager.createEnemyBullet()
@@ -270,25 +162,27 @@ class LevelTwoScreen extends Phaser.Scene {
 			},
 			callbackScope: this,
 		})
+	}
 
-		// Create keyboard inputs
-		this.spacebar = this.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.SPACE,
-		)
-		this.enter = this.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.ENTER,
-		)
-
-		this.CollideManager = new CollideManager(
+	createManager() {
+		// Create managers
+		this.keyboardManager = new KeyboardManager(this, this.music)
+		this.mobileManager = new MobileManager(this)
+		this.keyboardManager.MuteGame()
+		// Score System
+		this.UpgradeManager = new UpgradeManager(this, this.callingScene)
+		this.PlayerManager = new PlayerManager(
 			this,
 			this.player,
-			this.EnemyManager.enemies,
-			this.UtilitiesManager.HealthPacks,
-			this.UtilitiesManager.shieldPacks,
-			this.shield,
-			this.SoundManager,
+			this.selectedPlayerIndex,
 		)
 
+		this.EnemyManager = new EnemyManager(this)
+		this.UtilitiesManager = new UtilitiesManager(this)
+		this.SoundManager = new SoundManager(this)
+	}
+
+	createMusic() {
 		// create pause button
 		this.pic = this.add.image(config.width - 20, 30, 'pause')
 		this.pic.setInteractive()
@@ -315,9 +209,150 @@ class LevelTwoScreen extends Phaser.Scene {
 			},
 			this,
 		)
+	}
 
-		// Score System
-		this.UpgradeManager = new UpgradeManager(this, this.callingScene)
+	addEnemyLevelTwo() {
+		this.time.delayedCall(
+			3000,
+			() => this.EnemyManager.spawnEnemyRowWithDelay(this, 0, 800),
+			null,
+			this,
+		)
+
+		this.time.delayedCall(
+			5000,
+			() => this.EnemyManager.spawnEnemyRowWithDelay(this, 0, 800),
+			null,
+			this,
+		)
+
+		this.time.delayedCall(
+			7000,
+			() => this.EnemyManager.spawnEnemyRowWithDelay(this, 0, 800),
+			null,
+			this,
+		)
+
+		// Spawn the Enemies
+		this.time.delayedCall(
+			13000,
+			() => {
+				// chasing enemies
+				this.bug5_1 = new Bug5(this, 30, -20, 500)
+				this.bug5_2 = new Bug5(this, 120, -20, 500)
+				this.bug5_3 = new Bug5(this, 210, -20, 500)
+				this.bug5_4 = new Bug5(this, 300, -20, 500)
+				this.bug5_5 = new Bug5(this, 390, -20, 500)
+				this.bug5_6 = new Bug5(this, 480, -20, 500)
+				this.bug5_7 = new Bug5(this, 570, -20, 500)
+				this.bug5_1.play('bug5_anim')
+				this.bug5_2.play('bug5_anim')
+				this.bug5_3.play('bug5_anim')
+				this.bug5_4.play('bug5_anim')
+				this.bug5_5.play('bug5_anim')
+				this.bug5_6.play('bug5_anim')
+				this.bug5_7.play('bug5_anim')
+			},
+			null,
+			this,
+		)
+
+		// FINAL WAVE
+		this.time.delayedCall(
+			22000,
+			() => {
+				this.startFinalWave()
+			},
+			null,
+			this,
+		)
+
+		this.time.delayedCall(
+			32000,
+			() => {
+				this.EnemyManager.gameStarted = true
+			},
+			null,
+			this,
+		)
+	}
+
+	create() {
+		EventBus.on('wallet-connected', handleWalletConnected, this)
+
+		this.cameras.main.fadeIn(1000, 0, 0, 0)
+
+		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
+		this.guiManager = new GuiManager(this)
+		this.guiManager.createBackground('background_texture')
+
+		this.music = this.sys.game.globals.music
+
+		this.createLevelTwoText()
+
+		this.createShipAnims()
+
+		this.createObject()
+
+		this.createMechanic()
+
+		this.createManager()
+
+		this.createMusic()
+
+		this.addEnemyLevelTwo()
+
+		this.time.delayedCall(
+			13000,
+			() => {
+				this.CollideManager2 = new CollideManager(
+					this,
+					this.player,
+					this.EnemyManager.enemies,
+					this.UtilitiesManager.HealthPacks,
+					this.UtilitiesManager.shieldPacks,
+					this.shield,
+					this.SoundManager,
+				)
+				this.EnemyManager.addEnemyForOnce(this.bug5_1)
+				this.EnemyManager.addEnemyForOnce(this.bug5_2)
+				this.EnemyManager.addEnemyForOnce(this.bug5_3)
+				this.EnemyManager.addEnemyForOnce(this.bug5_4)
+				this.EnemyManager.addEnemyForOnce(this.bug5_5)
+				this.EnemyManager.addEnemyForOnce(this.bug5_6)
+				this.EnemyManager.addEnemyForOnce(this.bug5_7)
+			},
+			null,
+			this,
+		)
+
+		// Add a delayed event to spawn utilities after a delay
+		this.time.addEvent({
+			delay: 15000,
+			callback: () => {
+				this.UtilitiesManager.addUtilitiesForPlayingScreen(2, 2)
+				this.CollideManager1 = new CollideManager(
+					this,
+					this.player,
+					this.EnemyManager.enemies,
+					this.UtilitiesManager.HealthPacks,
+					this.UtilitiesManager.shieldPacks,
+					this.shield,
+					this.SoundManager,
+				)
+			},
+			callbackScope: this,
+		})
+
+		this.CollideManager = new CollideManager(
+			this,
+			this.player,
+			this.EnemyManager.enemies,
+			this.UtilitiesManager.HealthPacks,
+			this.UtilitiesManager.shieldPacks,
+			this.shield,
+			this.SoundManager,
+		)
 	}
 
 	update() {

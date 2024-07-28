@@ -25,6 +25,7 @@ class BossScreen extends Phaser.Scene {
 	constructor() {
 		super('bossGame')
 		this.callingScene = 'bossGame'
+		this.guiManager = new GuiManager(this)
 		this.spawnedEnemies = []
 	}
 
@@ -45,88 +46,79 @@ class BossScreen extends Phaser.Scene {
 		})
 	}
 
-	create() {
-		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
-		EventBus.on('wallet-connected', handleWalletConnected, this)
+	createShipAnims() {
+		if (
+			!(this.anims && this.anims.exists && this.anims.exists('player_anim'))
+		) {
+			this.anims.create({
+				key: 'player_anim',
+				frames: this.anims.generateFrameNumbers(
+					`player_texture_${this.selectedPlayerIndex}`,
+					{
+						start: 0,
+						end: 3,
+					},
+				),
+				frameRate: 30,
+				repeat: -1,
+			})
 
-		this.guiManager = new GuiManager(this)
-		this.guiManager.createBackground('background_texture_04')
+			this.anims.create({
+				key: 'player_anim_left',
+				frames: this.anims.generateFrameNumbers(
+					`player_texture_${this.selectedPlayerIndex}`,
+					{
+						start: 4,
+						end: 7,
+					},
+				),
+				frameRate: 30,
+				repeat: -1,
+			})
 
-		this.music = this.sys.game.globals.music
+			this.anims.create({
+				key: 'player_anim_left_diagonal',
+				frames: this.anims.generateFrameNumbers(
+					`player_texture_${this.selectedPlayerIndex}`,
+					{
+						start: 8,
+						end: 11,
+					},
+				),
+				frameRate: 30,
+				repeat: -1,
+			})
 
-		// if (!(this.anims && this.anims.exists && this.anims.exists("player_anim"))) {
-		this.anims.create({
-			key: 'player_anim',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 0,
-					end: 3,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
+			this.anims.create({
+				key: 'player_anim_right',
+				frames: this.anims.generateFrameNumbers(
+					`player_texture_${this.selectedPlayerIndex}`,
+					{
+						start: 12,
+						end: 15,
+					},
+				),
+				frameRate: 30,
+				repeat: -1,
+			})
 
-		this.anims.create({
-			key: 'player_anim_left',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 4,
-					end: 7,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
+			this.anims.create({
+				key: 'player_anim_right_diagonal',
+				frames: this.anims.generateFrameNumbers(
+					`player_texture_${this.selectedPlayerIndex}`,
+					{
+						start: 16,
+						end: 19,
+					},
+				),
+				frameRate: 30,
+				repeat: -1,
+			})
+		}
+	}
 
-		this.anims.create({
-			key: 'player_anim_left_diagonal',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 8,
-					end: 11,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
-
-		this.anims.create({
-			key: 'player_anim_right',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 12,
-					end: 15,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
-
-		this.anims.create({
-			key: 'player_anim_right_diagonal',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 16,
-					end: 19,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
-		// }
-
-		this.boss = new Boss(this, config.width / 2, 0, 50000)
-		this.boss.play('boss_move_anim')
-
-		this.firstMini = new MiniBot(this, config.width / 5, -96, 10000)
-		this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 10000)
-
+	createObject() {
+		// PLAYER
 		this.player = new Player(
 			this,
 			config.width / 2,
@@ -139,29 +131,29 @@ class BossScreen extends Phaser.Scene {
 		this.player.restartGameSettings()
 		this.player.selectedPlayer = this.selectedPlayerIndex
 
-		// Spawn the Enemies
-		this.bug3_1 = new Bug3(this, 50, 0, 2000)
-		this.bug3_1.play('bug3_anim')
-		this.bug3_1.setScale(2)
-		this.bug3_2 = new Bug3(this, config.width - 50, 0, 2000)
-		this.bug3_2.play('bug3_anim')
-		this.bug3_2.setScale(2)
-
-		this.bug5 = new Bug5(this, 100, 0, 1000)
-		this.bug5.play('bug5_anim')
-		this.bug5.setScale(0.6)
-
-		this.bug5_2 = new Bug5(this, 500, 0, 1000)
-		this.bug5_2.play('bug5_anim')
-		this.bug5_2.setScale(0.6)
-
-		// Create text for level 1
-		this.createText()
-
 		// Spawn the Shield
 		this.shield = new Shield(this, this.player)
 		this.shield.play('shield_anim')
+	}
 
+	createMechanic() {
+		// Create keyboard inputs
+		this.spacebar = this.input.keyboard.addKey(
+			Phaser.Input.Keyboard.KeyCodes.SPACE,
+		)
+		this.enter = this.input.keyboard.addKey(
+			Phaser.Input.Keyboard.KeyCodes.ENTER,
+		)
+
+		this.projectileManager = new ProjectileManager(this)
+		this.projectileManager.createPlayerBullet()
+		this.projectileManager.createEnemyBullet()
+		this.projectileManager.createChaseBullet()
+		this.projectileManager.callEnemyBulletBoss()
+		this.projectileManager.callChaseBulletBoss()
+	}
+
+	createManager() {
 		// Create managers
 		this.keyboardManager = new KeyboardManager(this, this.music)
 		this.mobileManager = new MobileManager(this)
@@ -175,73 +167,11 @@ class BossScreen extends Phaser.Scene {
 		)
 
 		this.EnemyManager = new EnemyManager(this)
-		this.EnemyManager.addEnemy(this.bug3_1)
-		this.EnemyManager.addEnemy(this.bug3_2)
-		this.EnemyManager.addEnemy(this.bug5)
-		this.EnemyManager.addEnemy(this.bug5_2)
-		this.EnemyManager.addEnemy(this.boss)
-		this.EnemyManager.addEnemy(this.firstMini)
-		this.EnemyManager.addEnemy(this.secondMini)
-
-		// spawn the enemies
-		if (this.boss.health < 800) {
-			this.time.delayedCall(
-				100,
-				() => {
-					this.bossBelow80HP()
-				},
-				null,
-				this,
-			)
-		}
-
 		this.UtilitiesManager = new UtilitiesManager(this)
 		this.SoundManager = new SoundManager(this)
-		// Add a delayed event to spawn utilities after a delay
-		this.time.addEvent({
-			delay: 5000,
-			callback: () => {
-				this.UtilitiesManager.addUtilitiesForPlayingScreen(3, 4)
+	}
 
-				this.CollideManager1 = new CollideManager(
-					this,
-					this.player,
-					this.EnemyManager.enemies,
-					this.UtilitiesManager.HealthPacks,
-					this.UtilitiesManager.shieldPacks,
-					this.shield,
-					this.SoundManager,
-				)
-			},
-			callbackScope: this,
-		})
-
-		this.projectileManager = new ProjectileManager(this)
-		this.projectileManager.createPlayerBullet()
-		this.projectileManager.createEnemyBullet()
-		this.projectileManager.createChaseBullet()
-		this.projectileManager.callEnemyBulletBoss()
-		this.projectileManager.callChaseBulletBoss()
-
-		// Create keyboard inputs
-		this.spacebar = this.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.SPACE,
-		)
-
-		this.CollideManager = new CollideManager(
-			this,
-			this.player,
-			this.EnemyManager.enemies,
-			this.UtilitiesManager.HealthPacks,
-			this.UtilitiesManager.shieldPacks,
-			this.shield,
-			this.SoundManager,
-		)
-
-		this.bossDefeated = false
-		this.checkBossHeal = false
-		this.timeHealth = 1
-
+	createMusic() {
 		// create pause button
 		this.pic = this.add.image(config.width - 20, 30, 'pause')
 		this.pic.setInteractive()
@@ -250,7 +180,7 @@ class BossScreen extends Phaser.Scene {
 			'pointerdown',
 			function () {
 				this.scene.pause()
-				this.scene.launch('pauseScreen', { key: 'bossGame' })
+				this.scene.launch('pauseScreen', { key: 'playLevelTwo' })
 			},
 			this,
 		)
@@ -270,6 +200,105 @@ class BossScreen extends Phaser.Scene {
 		)
 	}
 
+	addEnemyLevelBoss() {
+		this.boss = new Boss(this, config.width / 2, 0, 50000)
+		this.boss.play('boss_move_anim')
+
+		this.firstMini = new MiniBot(this, config.width / 5, -96, 10000)
+		this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 10000)
+
+		// Spawn the Enemies
+		this.bug3_1 = new Bug3(this, 50, 0, 2000)
+		this.bug3_1.play('bug3_anim')
+		this.bug3_1.setScale(2)
+		this.bug3_2 = new Bug3(this, config.width - 50, 0, 2000)
+		this.bug3_2.play('bug3_anim')
+		this.bug3_2.setScale(2)
+
+		this.bug5 = new Bug5(this, 100, 0, 1000)
+		this.bug5.play('bug5_anim')
+		this.bug5.setScale(0.6)
+
+		this.bug5_2 = new Bug5(this, 500, 0, 1000)
+		this.bug5_2.play('bug5_anim')
+		this.bug5_2.setScale(0.6)
+	}
+
+	create() {
+		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
+		EventBus.on('wallet-connected', handleWalletConnected, this)
+
+		this.guiManager.createBackground('background_texture_04')
+
+		this.music = this.sys.game.globals.music
+
+		this.createText()
+
+		this.createShipAnims()
+
+		this.createObject()
+
+		this.createMechanic()
+
+		this.addEnemyLevelBoss()
+
+		this.createManager()
+
+		this.createMusic()
+
+		this.EnemyManager.addEnemy(this.bug3_1)
+		this.EnemyManager.addEnemy(this.bug3_2)
+		this.EnemyManager.addEnemy(this.bug5)
+		this.EnemyManager.addEnemy(this.bug5_2)
+		this.EnemyManager.addEnemy(this.boss)
+		this.EnemyManager.addEnemy(this.firstMini)
+		this.EnemyManager.addEnemy(this.secondMini)
+
+		// spawn the enemies
+		if (this.boss.health < 800) {
+			this.time.delayedCall(
+				100,
+				() => {
+					this.bossBelow80HP()
+				},
+				null,
+				this,
+			)
+		}
+		// Add a delayed event to spawn utilities after a delay
+		this.time.addEvent({
+			delay: 5000,
+			callback: () => {
+				this.UtilitiesManager.addUtilitiesForPlayingScreen(3, 4)
+
+				this.CollideManager1 = new CollideManager(
+					this,
+					this.player,
+					this.EnemyManager.enemies,
+					this.UtilitiesManager.HealthPacks,
+					this.UtilitiesManager.shieldPacks,
+					this.shield,
+					this.SoundManager,
+				)
+			},
+			callbackScope: this,
+		})
+
+		this.CollideManager = new CollideManager(
+			this,
+			this.player,
+			this.EnemyManager.enemies,
+			this.UtilitiesManager.HealthPacks,
+			this.UtilitiesManager.shieldPacks,
+			this.shield,
+			this.SoundManager,
+		)
+
+		this.bossDefeated = false
+		this.checkBossHeal = false
+		this.timeHealth = 1
+	}
+
 	update() {
 		// update for mute and sound button
 		if (this.music.musicOn === false && this.music.soundOn === false) {
@@ -286,7 +315,8 @@ class BossScreen extends Phaser.Scene {
 		// Move the player and enemies
 		this.playerManager.movePlayer()
 
-		this.EnemyManager.moveEnemies()
+		// this.EnemyManager.moveEnemies()
+
 		this.EnemyManager.enemies.forEach((enemy) => {
 			enemy.updateHealthBarPosition()
 		})

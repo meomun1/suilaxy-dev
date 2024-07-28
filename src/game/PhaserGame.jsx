@@ -18,12 +18,12 @@ export const PhaserGame = forwardRef(function PhaserGame(
 			if (ref !== null) {
 				ref.current = { game: game.current, scene: null }
 			}
+		}
 
-			return () => {
-				if (game.current) {
-					game.current.destroy(true)
-					game.current = undefined
-				}
+		return () => {
+			if (game.current) {
+				game.current.destroy(true)
+				game.current = undefined
 			}
 		}
 	}, [ref])
@@ -47,8 +47,8 @@ export const PhaserGame = forwardRef(function PhaserGame(
 			ref={containerRef}
 			style={{
 				backgroundColor: 'black',
-				width: '1100px',
-				height: '600px',
+				width: '700px',
+				height: '780px',
 			}}
 		></div>
 	)

@@ -35,35 +35,24 @@ a {
 #app {
   width: 100%;
   height: 100vh;
-  overflow: hidden;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   position: relative;
 }
-#app .child-top {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-}
-#app .child-top .child-left,
-#app .child-top .child-right {
-  flex: 1;
+#app .child-left, #app .child-main, #app .child-right {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-#app .child-top .child-left {
+#app .child-left {
+  width: 20rem;
   margin-left: 40px;
-  margin-right: 20px;
+  margin-right: 40px;
   flex-direction: column;
   gap: 20px;
 }
-#app .child-top .child-left .text-wrapper {
+#app .child-left .text-wrapper {
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   background-color: rgba(255, 255, 255, 0.03);
@@ -71,51 +60,61 @@ a {
   border-color: rgba(255, 255, 255, 0.1019607843);
   border-radius: 15px;
 }
-#app .child-top .child-left .text-wrapper h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
+#app .child-left .text-wrapper h1 {
+  font-size: 0.8rem;
+  font-weight: 400;
   text-align: center;
   color: white;
 }
-#app .child-top .child-left .text-wrapper .top {
+#app .child-left .text-wrapper .top {
   padding: 20px 20px;
 }
-#app .child-top .child-left .text-wrapper .top .special-text {
-  -webkit-text-stroke: 1px #ec7cc4;
+#app .child-left .text-wrapper .top .special-text {
+  -webkit-text-stroke: 1px #e8aa41;
   color: #ffffff;
-  font-family: "Pixelify Sans", sans-serif;
-  font-size: 32px;
+  font-family: "Big Shoulders Stencil Display", sans-serif;
+  font-size: 64px;
   font-weight: 800;
   letter-spacing: 5.76px;
   line-height: normal;
-  text-shadow: 0px 0px 10px #f68fde, 0px 0px 20px #f68fde;
+  text-shadow: 0px 0px 10px #e8aa41, 0px 0px 20px #e8aa41;
 }
-#app .child-top .child-left .text-wrapper .bottom {
+#app .child-left .text-wrapper .bottom {
   padding: 20px 10px;
   display: flex;
   flex-direction: column;
   text-align: center;
 }
-#app .child-top .child-left .text-wrapper .bottom .h1-two {
+#app .child-left .text-wrapper .bottom .h1-two {
   padding-top: 20px;
 }
-#app .child-top .child-left .text-wrapper .bottom a {
-  color: #f68fde;
-  font-size: 1.2rem;
+#app .child-left .text-wrapper .bottom a {
+  color: #e8aa41;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   padding-top: 20px;
 }
-#app .child-top .child-left .text-wrapper .bottom a:hover {
-  color: #ec7cc4;
+#app .child-left .text-wrapper .bottom a:hover {
+  text-decoration: underline;
+  color: #e8aa41;
 }
-#app .child-top .child-right {
-  margin-left: 20px;
+#app .child-main {
+  -webkit-backdrop-filter: blur(18px) brightness(100%);
+  backdrop-filter: blur(18px) brightness(100%);
+  background-color: rgba(240, 213, 249, 0.0117647059);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0px 0px 21.5px 4px #fff;
+}
+#app .child-right {
+  width: 20rem;
+  display: flex;
   flex-direction: column;
   position: relative;
 }
-#app .child-top .child-right .button {
+#app .child-right .button {
   background-color: #5ba0f1;
   color: white;
   border: none;
@@ -126,11 +125,11 @@ a {
   border-radius: 10px;
   transition: all 0.3s ease;
 }
-#app .child-top .child-right .button:hover {
+#app .child-right .button:hover {
   background-color: #fff;
   color: black;
 }
-#app .child-top .child-right button {
+#app .child-right button {
   background-color: #6ec531;
   color: white;
   border: none;
@@ -141,23 +140,9 @@ a {
   border-radius: 10px;
   transition: all 0.3s ease;
 }
-#app .child-top .child-right button:hover {
+#app .child-right button:hover {
   background-color: #fff;
   color: black;
-}
-#app .child-bottom {
-  -webkit-backdrop-filter: blur(18px) brightness(100%);
-  backdrop-filter: blur(18px) brightness(100%);
-  background-color: rgba(240, 213, 249, 0.0117647059);
-  box-shadow: 0px 0px 21.5px 4px #f4b3dd;
-  width: 80%; /* Reduced width */
-  max-width: 1200; /* Optional: Max width for larger screens */
-  padding: 20px; /* Padding inside the container */
-  border-radius: 15px; /* Optional: Rounded corners */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0; /* Margin to add space around child-bottom */
 }
 
 #game-container {

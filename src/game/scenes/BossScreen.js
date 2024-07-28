@@ -286,7 +286,6 @@ class BossScreen extends Phaser.Scene {
 		// Move the player and enemies
 		this.playerManager.movePlayer()
 
-		this.EnemyManager.moveEnemies()
 		this.EnemyManager.enemies.forEach((enemy) => {
 			enemy.updateHealthBarPosition()
 		})

@@ -37,137 +37,88 @@ a {
 	width: 100%;
 	height: 100vh;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	position: relative;
+}
 
-	.child {
-		&-left,
-		&-main,
-		&-right {
-			display: flex;
-			justify-content: center;
-			align-items: center;
+.top {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+
+	&-logo {
+		gap: 20px;
+		-webkit-backdrop-filter: blur(20px);
+		backdrop-filter: blur(20px);
+		background-color: rgba(255, 255, 255, 0.03);
+		border: 1px solid;
+		border-color: #ffffff1a;
+		border-radius: 15px;
+
+		h1 {
+			font-weight: 400;
+			text-align: center;
+			color: white;
+			-webkit-text-stroke: 1px #e8aa41;
+			color: #ffffff;
+			font-family: 'Big Shoulders Stencil Display', sans-serif;
+			font-size: 64px;
+			font-weight: 800;
+			text-shadow: 0px 0px 10px #e8aa41, 0px 0px 20px #e8aa41;
+			padding: 0px 10px;
 		}
+	}
 
-		&-left {
-			width: 20rem;
-			margin-left: 40px;
-			margin-right: 40px;
-			flex-direction: column;
-			gap: 20px;
-
-			.text-wrapper {
-				-webkit-backdrop-filter: blur(20px);
-				backdrop-filter: blur(20px);
-				background-color: rgba(255, 255, 255, 0.03);
-				border: 1px solid;
-				border-color: #ffffff1a;
-				border-radius: 15px;
-
-				h1 {
-					font-size: 0.8rem;
-					font-weight: 400;
-					text-align: center;
-					color: white;
-				}
-
-				.top {
-					padding: 20px 20px;
-
-					.special-text {
-						-webkit-text-stroke: 1px #e8aa41;
-						color: #ffffff;
-						font-family: 'Big Shoulders Stencil Display', sans-serif;
-						font-size: 64px;
-						font-weight: 800;
-						letter-spacing: 5.76px;
-						line-height: normal;
-						text-shadow: 0px 0px 10px #e8aa41, 0px 0px 20px #e8aa41;
-					}
-				}
-
-				.bottom {
-					padding: 20px 10px;
-					display: flex;
-					flex-direction: column;
-					text-align: center;
-
-					.h1-two {
-						padding-top: 20px;
-					}
-
-					a {
-						color: #e8aa41;
-						font-size: 0.8rem;
-						font-weight: 600;
-						cursor: pointer;
-						transition: all 0.3s ease;
-						padding-top: 20px;
-
-						&:hover {
-							text-decoration: underline;
-							color: #e8aa41;
-						}
-					}
-				}
-			}
-		}
-
-		&-main {
-			-webkit-backdrop-filter: blur(18px) brightness(100%);
-			backdrop-filter: blur(18px) brightness(100%);
-			background-color: #f0d5f903;
+	&-connect {
+		.Button_buttonVariants__x1s81q0 {
+			color: #000;
+			font-size: 24px;
 			border-radius: 15px;
-			overflow: hidden;
-			box-shadow: 0px 0px 21.5px 4px #fff;
+			cursor: pointer;
+			transition: 0.3s;
+
+			&:hover {
+				transform: scale(1.1);
+			}
 		}
+	}
 
-		&-right {
-			width: 20rem;
-			display: flex;
-			flex-direction: column;
-			position: relative;
+	&-desc {
+		-webkit-backdrop-filter: blur(20px);
+		backdrop-filter: blur(20px);
+		background-color: rgba(255, 255, 255, 0.03);
+		border: 1px solid;
+		border-color: #ffffff1a;
+		border-radius: 15px;
+		font-size: 8px;
+		color: #ffffff;
+		font-family: 'Big Shoulders Stencil Display', sans-serif;
+		padding: 5px 100px;
 
-			.button {
-				background-color: #5ba0f1;
-				color: white;
-				border: none;
-				padding: 20px 20px;
-				font-size: 1rem;
-				font-weight: 600;
-				cursor: pointer;
-				border-radius: 10px;
-				transition: all 0.3s ease;
-
-				&:hover {
-					background-color: #fff;
-					color: black;
-				}
-			}
-
-			button {
-				background-color: #6ec531;
-				color: white;
-				border: none;
-				padding: 20px 20px;
-				font-size: 1rem;
-				font-weight: 600;
-				cursor: pointer;
-				border-radius: 10px;
-				transition: all 0.3s ease;
-
-				&:hover {
-					background-color: #fff;
-					color: black;
-				}
-			}
+		a {
+			color: #e8aa41;
+			font-size: 16px;
 		}
 	}
 }
 
+.game-canvas {
+	width: 1100px;
+	height: 600px;
+	min-width: 1100px;
+	min-height: 600px;
+	-webkit-backdrop-filter: blur(18px) brightness(100%);
+	backdrop-filter: blur(18px) brightness(100%);
+	background-color: #f0d5f903;
+	border-radius: 15px;
+	overflow: hidden;
+	box-shadow: 0px 0px 21.5px 4px #fff;
+}
+
 #game-container {
 	background-color: black;
-	width: 700px;
-	height: 780px;
 }

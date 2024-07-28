@@ -134,11 +134,7 @@ const MintNFT = () => {
 		}
 	}
 
-	return (
-		<div>
-			<ConnectButton />
-		</div>
-	)
+	return <ConnectButton />
 }
 
 export default MintNFT

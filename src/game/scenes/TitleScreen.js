@@ -1,11 +1,10 @@
 import Phaser from 'phaser'
+import WebFont from 'webfontloader'
 import config from '../config/config.js'
 import Button from '../objects/Button.js'
 import Music from '../mode/Music.js'
 import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
-import io from 'socket.io-client'
-import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 
 class TitleScreen extends Phaser.Scene {
 	constructor() {
@@ -67,55 +66,68 @@ class TitleScreen extends Phaser.Scene {
 	}
 
 	create() {
-		let blackCover = this.add.rectangle(
-			0,
-			0,
-			config.width,
-			config.height,
-			0x00000010,
-		)
-		blackCover.setOrigin(0, 0)
-		blackCover.setDepth(100)
+		this.loadWebFonts().then(() => {
+			let blackCover = this.add.rectangle(
+				0,
+				0,
+				config.width,
+				config.height,
+				0x00000010,
+			)
+			blackCover.setOrigin(0, 0)
+			blackCover.setDepth(100)
 
-		this.tweens.add({
-			targets: blackCover,
-			alpha: 0,
-			duration: 2500,
-			onComplete: () => {
-				blackCover.destroy()
-			},
-		})
-
-		this.music = this.sys.game.globals.music
-		if (this.music.musicOn === true) {
-			this.bgMusic = this.sound.add('main_menu_music', {
-				volume: 0.5,
-				loop: true,
+			this.tweens.add({
+				targets: blackCover,
+				alpha: 0,
+				duration: 2500,
+				onComplete: () => {
+					blackCover.destroy()
+				},
 			})
-			this.bgMusic.play()
-			this.music.bgMusicPlaying = true
-			this.sys.game.globals.bgMusic = this.bgMusic
-		}
 
-		this.guiManager.createBackground('background')
-		this.guiManager.createAnimatedText('GUARDIAN', -30)
-		this.guiManager.createAnimatedText('SPACE', -130)
+			this.music = this.sys.game.globals.music
+			if (this.music.musicOn === true) {
+				this.bgMusic = this.sound.add('main_menu_music', {
+					volume: 0.5,
+					loop: true,
+				})
+				this.bgMusic.play()
+				this.music.bgMusicPlaying = true
+				this.sys.game.globals.bgMusic = this.bgMusic
+			}
 
-		this.connectWalletText = this.add.text(
-			config.width / 2,
-			config.height / 2 + 60,
-			'Add wallet, begin Suilaxy journey!',
-			{
-				fontFamily: 'Pixelify Sans',
-				color: '#F3F8FF',
-				fontSize: '30px',
-				align: 'center',
-			},
-		)
-		this.connectWalletText.setOrigin(0.5)
-		this.connectWalletText.setShadow(3, 3, '#F27CA4', 2, false, true)
+			this.guiManager.createBackground('background')
+			this.guiManager.createAnimatedText('GUARDIAN', -30)
+			this.guiManager.createAnimatedText('SPACE', -130)
 
-		EventBus.on('wallet-connected', this.handleWalletConnected, this)
+			this.connectWalletText = this.add.text(
+				config.width / 2,
+				config.height / 2 + 60,
+				'Add wallet, begin Suilaxy journey!',
+				{
+					fontFamily: 'Pixelify Sans',
+					color: '#F3F8FF',
+					fontSize: '30px',
+					align: 'center',
+				},
+			)
+			this.connectWalletText.setOrigin(0.5)
+			this.connectWalletText.setShadow(3, 3, '#F27CA4', 2, false, true)
+
+			EventBus.on('wallet-connected', this.handleWalletConnected, this)
+		})
+	}
+
+	loadWebFonts() {
+		return new Promise((resolve) => {
+			WebFont.load({
+				google: {
+					families: ['Pixelify Sans', 'Big Shoulders Stencil Display'],
+				},
+				active: resolve,
+			})
+		})
 	}
 
 	handleWalletConnected(data) {

@@ -1,9 +1,5 @@
 import Phaser from 'phaser'
 import config from '../config/config'
-import gameSettings from '../config/gameSettings'
-import Firework from '../objects/Firework'
-
-const BACKGROUND_SCROLL_SPEED = 0.5
 
 class VictoryScreen extends Phaser.Scene {
 	constructor() {

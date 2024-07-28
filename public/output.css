@@ -36,23 +36,21 @@ a {
   width: 100%;
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
 }
-#app .child-left, #app .child-main, #app .child-right {
+
+.top {
+  width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
 }
-#app .child-left {
-  width: 20rem;
-  margin-left: 40px;
-  margin-right: 40px;
-  flex-direction: column;
+.top-logo {
   gap: 20px;
-}
-#app .child-left .text-wrapper {
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   background-color: rgba(255, 255, 255, 0.03);
@@ -60,47 +58,50 @@ a {
   border-color: rgba(255, 255, 255, 0.1019607843);
   border-radius: 15px;
 }
-#app .child-left .text-wrapper h1 {
-  font-size: 0.8rem;
+.top-logo h1 {
   font-weight: 400;
   text-align: center;
   color: white;
-}
-#app .child-left .text-wrapper .top {
-  padding: 20px 20px;
-}
-#app .child-left .text-wrapper .top .special-text {
   -webkit-text-stroke: 1px #e8aa41;
   color: #ffffff;
   font-family: "Big Shoulders Stencil Display", sans-serif;
   font-size: 64px;
   font-weight: 800;
-  letter-spacing: 5.76px;
-  line-height: normal;
   text-shadow: 0px 0px 10px #e8aa41, 0px 0px 20px #e8aa41;
+  padding: 0px 10px;
 }
-#app .child-left .text-wrapper .bottom {
-  padding: 20px 10px;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-}
-#app .child-left .text-wrapper .bottom .h1-two {
-  padding-top: 20px;
-}
-#app .child-left .text-wrapper .bottom a {
-  color: #e8aa41;
-  font-size: 0.8rem;
-  font-weight: 600;
+.top-connect .Button_buttonVariants__x1s81q0 {
+  color: #000;
+  font-size: 24px;
+  border-radius: 15px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  padding-top: 20px;
+  transition: 0.3s;
 }
-#app .child-left .text-wrapper .bottom a:hover {
-  text-decoration: underline;
+.top-connect .Button_buttonVariants__x1s81q0:hover {
+  transform: scale(1.1);
+}
+.top-desc {
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid;
+  border-color: rgba(255, 255, 255, 0.1019607843);
+  border-radius: 15px;
+  font-size: 8px;
+  color: #ffffff;
+  font-family: "Big Shoulders Stencil Display", sans-serif;
+  padding: 5px 100px;
+}
+.top-desc a {
   color: #e8aa41;
+  font-size: 16px;
 }
-#app .child-main {
+
+.game-canvas {
+  width: 1100px;
+  height: 600px;
+  min-width: 1100px;
+  min-height: 600px;
   -webkit-backdrop-filter: blur(18px) brightness(100%);
   backdrop-filter: blur(18px) brightness(100%);
   background-color: rgba(240, 213, 249, 0.0117647059);
@@ -108,47 +109,9 @@ a {
   overflow: hidden;
   box-shadow: 0px 0px 21.5px 4px #fff;
 }
-#app .child-right {
-  width: 20rem;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-#app .child-right .button {
-  background-color: #5ba0f1;
-  color: white;
-  border: none;
-  padding: 20px 20px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-}
-#app .child-right .button:hover {
-  background-color: #fff;
-  color: black;
-}
-#app .child-right button {
-  background-color: #6ec531;
-  color: white;
-  border: none;
-  padding: 20px 20px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-}
-#app .child-right button:hover {
-  background-color: #fff;
-  color: black;
-}
 
 #game-container {
   background-color: black;
-  width: 700px;
-  height: 780px;
 }
 
 /*# sourceMappingURL=output.css.map */

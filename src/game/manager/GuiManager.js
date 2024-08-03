@@ -4,6 +4,21 @@ import GameOver from '../scenes/GameOver'
 import Phaser from 'phaser'
 import config from '../config/config.js'
 
+let thirtySecondHeight = config.height / 32 // 18.75
+let thirtySecondWidth = config.width / 32 // 34.375
+
+let sixteenthHeight = config.height / 16 // 37.5
+let sixteenthWidth = config.width / 16 // 68.75
+
+let eighthHeight = config.height / 8 // 75
+let eighthWidth = config.width / 8 // 137.5
+
+let quarterHeight = config.height / 4 // 150
+let quarterWidth = config.width / 4 // 275
+
+let middleHeight = config.height / 2 // 300
+let middleWidth = config.width / 2 // 550
+
 class GuiManager {
 	constructor(scene) {
 		this.scene = scene
@@ -142,14 +157,14 @@ class GuiManager {
 		)
 	}
 
-	createAnimatedText(text, yOffset) {
+	createAnimatedTextMiddle(text, yOffset) {
 		const textObject = this.scene.add.text(
 			config.width / 2,
 			config.height / 2 + yOffset,
 			text,
 			{
 				fontFamily: 'Pixelify Sans',
-				fontSize: '100px',
+				fontSize: `${middleWidth / 5}px`,
 				color: '#F3F8FF',
 				align: 'center',
 			},
@@ -244,6 +259,8 @@ class GuiManager {
 			key,
 		)
 		this.scene.background.setOrigin(0, 0)
+
+		this.scene.background.setDepth(-1)
 	}
 
 	// SPRITE SESSION

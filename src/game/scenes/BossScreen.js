@@ -25,6 +25,7 @@ class BossScreen extends Phaser.Scene {
 	constructor() {
 		super('bossGame')
 		this.callingScene = 'bossGame'
+		this.guiManager = new GuiManager(this)
 		this.spawnedEnemies = []
 	}
 
@@ -32,101 +33,100 @@ class BossScreen extends Phaser.Scene {
 		this.selectedPlayerIndex = data.number
 	}
 
-	preload() {
-		this.load.spritesheet({
-			key: `player_texture_${this.selectedPlayerIndex}`,
-			url: `assets/spritesheets/players/planes_0${this.selectedPlayerIndex}B.png`,
-			frameConfig: {
-				frameWidth: 96,
-				frameHeight: 96,
-				startFrame: 0,
-				endFrame: 19,
+	preload() {}
+
+	createText() {
+		const bossText = this.add
+			.text(config.width / 2, config.height / 2, 'Boss', {
+				fontFamily: 'Pixelify Sans',
+				fontSize: '64px',
+				fill: '#FFFB73',
+			})
+			.setOrigin(0.5)
+
+		this.time.delayedCall(
+			2000,
+			() => {
+				bossText.destroy()
 			},
-		})
+			null,
+			this,
+		)
 	}
 
-	create() {
-		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
-		EventBus.on('wallet-connected', handleWalletConnected, this)
+	createShipAnims() {
+		if (
+			!(this.anims && this.anims.exists && this.anims.exists('player_anim'))
+		) {
+			this.anims.create({
+				key: 'player_anim',
+				frames: this.anims.generateFrameNumbers(
+					`player_texture_${this.selectedPlayerIndex}`,
+					{
+						start: 0,
+						end: 3,
+					},
+				),
+				frameRate: 30,
+				repeat: -1,
+			})
 
-		this.guiManager = new GuiManager(this)
-		this.guiManager.createBackground('background_texture_04')
+			this.anims.create({
+				key: 'player_anim_left',
+				frames: this.anims.generateFrameNumbers(
+					`player_texture_${this.selectedPlayerIndex}`,
+					{
+						start: 4,
+						end: 7,
+					},
+				),
+				frameRate: 30,
+				repeat: -1,
+			})
 
-		this.music = this.sys.game.globals.music
+			this.anims.create({
+				key: 'player_anim_left_diagonal',
+				frames: this.anims.generateFrameNumbers(
+					`player_texture_${this.selectedPlayerIndex}`,
+					{
+						start: 8,
+						end: 11,
+					},
+				),
+				frameRate: 30,
+				repeat: -1,
+			})
 
-		// if (!(this.anims && this.anims.exists && this.anims.exists("player_anim"))) {
-		this.anims.create({
-			key: 'player_anim',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 0,
-					end: 3,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
+			this.anims.create({
+				key: 'player_anim_right',
+				frames: this.anims.generateFrameNumbers(
+					`player_texture_${this.selectedPlayerIndex}`,
+					{
+						start: 12,
+						end: 15,
+					},
+				),
+				frameRate: 30,
+				repeat: -1,
+			})
 
-		this.anims.create({
-			key: 'player_anim_left',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 4,
-					end: 7,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
+			this.anims.create({
+				key: 'player_anim_right_diagonal',
+				frames: this.anims.generateFrameNumbers(
+					`player_texture_${this.selectedPlayerIndex}`,
+					{
+						start: 16,
+						end: 19,
+					},
+				),
+				frameRate: 30,
+				repeat: -1,
+			})
+		}
+	}
 
-		this.anims.create({
-			key: 'player_anim_left_diagonal',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 8,
-					end: 11,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
-
-		this.anims.create({
-			key: 'player_anim_right',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 12,
-					end: 15,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
-
-		this.anims.create({
-			key: 'player_anim_right_diagonal',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 16,
-					end: 19,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
-		// }
-
-		this.boss = new Boss(this, config.width / 2, 0, 50000)
-		this.boss.play('boss_move_anim')
-
-		this.firstMini = new MiniBot(this, config.width / 5, -96, 10000)
-		this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 10000)
-
+	createObject() {
+		// PLAYER
 		this.player = new Player(
 			this,
 			config.width / 2,
@@ -139,29 +139,29 @@ class BossScreen extends Phaser.Scene {
 		this.player.restartGameSettings()
 		this.player.selectedPlayer = this.selectedPlayerIndex
 
-		// Spawn the Enemies
-		this.bug3_1 = new Bug3(this, 50, 0, 2000)
-		this.bug3_1.play('bug3_anim')
-		this.bug3_1.setScale(2)
-		this.bug3_2 = new Bug3(this, config.width - 50, 0, 2000)
-		this.bug3_2.play('bug3_anim')
-		this.bug3_2.setScale(2)
-
-		this.bug5 = new Bug5(this, 100, 0, 1000)
-		this.bug5.play('bug5_anim')
-		this.bug5.setScale(0.6)
-
-		this.bug5_2 = new Bug5(this, 500, 0, 1000)
-		this.bug5_2.play('bug5_anim')
-		this.bug5_2.setScale(0.6)
-
-		// Create text for level 1
-		this.createText()
-
 		// Spawn the Shield
 		this.shield = new Shield(this, this.player)
 		this.shield.play('shield_anim')
+	}
 
+	createMechanic() {
+		// Create keyboard inputs
+		this.spacebar = this.input.keyboard.addKey(
+			Phaser.Input.Keyboard.KeyCodes.SPACE,
+		)
+		this.enter = this.input.keyboard.addKey(
+			Phaser.Input.Keyboard.KeyCodes.ENTER,
+		)
+
+		this.projectileManager = new ProjectileManager(this)
+		this.projectileManager.createPlayerBullet()
+		this.projectileManager.createEnemyBullet()
+		this.projectileManager.createChaseBullet()
+		this.projectileManager.callEnemyBulletBoss()
+		this.projectileManager.callChaseBulletBoss()
+	}
+
+	createManager() {
 		// Create managers
 		this.keyboardManager = new KeyboardManager(this, this.music)
 		this.mobileManager = new MobileManager(this)
@@ -175,73 +175,11 @@ class BossScreen extends Phaser.Scene {
 		)
 
 		this.EnemyManager = new EnemyManager(this)
-		this.EnemyManager.addEnemy(this.bug3_1)
-		this.EnemyManager.addEnemy(this.bug3_2)
-		this.EnemyManager.addEnemy(this.bug5)
-		this.EnemyManager.addEnemy(this.bug5_2)
-		this.EnemyManager.addEnemy(this.boss)
-		this.EnemyManager.addEnemy(this.firstMini)
-		this.EnemyManager.addEnemy(this.secondMini)
-
-		// spawn the enemies
-		if (this.boss.health < 800) {
-			this.time.delayedCall(
-				100,
-				() => {
-					this.bossBelow80HP()
-				},
-				null,
-				this,
-			)
-		}
-
 		this.UtilitiesManager = new UtilitiesManager(this)
 		this.SoundManager = new SoundManager(this)
-		// Add a delayed event to spawn utilities after a delay
-		this.time.addEvent({
-			delay: 5000,
-			callback: () => {
-				this.UtilitiesManager.addUtilitiesForPlayingScreen(3, 4)
+	}
 
-				this.CollideManager1 = new CollideManager(
-					this,
-					this.player,
-					this.EnemyManager.enemies,
-					this.UtilitiesManager.HealthPacks,
-					this.UtilitiesManager.shieldPacks,
-					this.shield,
-					this.SoundManager,
-				)
-			},
-			callbackScope: this,
-		})
-
-		this.projectileManager = new ProjectileManager(this)
-		this.projectileManager.createPlayerBullet()
-		this.projectileManager.createEnemyBullet()
-		this.projectileManager.createChaseBullet()
-		this.projectileManager.callEnemyBulletBoss()
-		this.projectileManager.callChaseBulletBoss()
-
-		// Create keyboard inputs
-		this.spacebar = this.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.SPACE,
-		)
-
-		this.CollideManager = new CollideManager(
-			this,
-			this.player,
-			this.EnemyManager.enemies,
-			this.UtilitiesManager.HealthPacks,
-			this.UtilitiesManager.shieldPacks,
-			this.shield,
-			this.SoundManager,
-		)
-
-		this.bossDefeated = false
-		this.checkBossHeal = false
-		this.timeHealth = 1
-
+	createMusic() {
 		// create pause button
 		this.pic = this.add.image(config.width - 20, 30, 'pause')
 		this.pic.setInteractive()
@@ -250,7 +188,7 @@ class BossScreen extends Phaser.Scene {
 			'pointerdown',
 			function () {
 				this.scene.pause()
-				this.scene.launch('pauseScreen', { key: 'bossGame' })
+				this.scene.launch('pauseScreen', { key: 'playLevelTwo' })
 			},
 			this,
 		)
@@ -270,6 +208,103 @@ class BossScreen extends Phaser.Scene {
 		)
 	}
 
+	addEnemyLevelBoss() {
+		this.boss = new Boss(this, config.width / 2, 0, 50000)
+		this.boss.play('boss_move_anim')
+
+		this.firstMini = new MiniBot(this, config.width / 5, -96, 10000)
+		this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 10000)
+
+		// Spawn the Enemies
+		this.bug3_1 = new Bug3(this, 50, 0, 2000)
+		this.bug3_1.play('bug3_anim')
+		this.bug3_1.setScale(2)
+		this.bug3_2 = new Bug3(this, config.width - 50, 0, 2000)
+		this.bug3_2.play('bug3_anim')
+		this.bug3_2.setScale(2)
+
+		this.bug5 = new Bug5(this, config / 4, 0, 1000, 2)
+		this.bug5.play('bug5_anim')
+
+		this.bug5_2 = new Bug5(this, (3 * config) / 4, 0, 1000, 2)
+		this.bug5_2.play('bug5_anim')
+
+		this.EnemyManager.addEnemy(this.bug3_1)
+		this.EnemyManager.addEnemy(this.bug3_2)
+		this.EnemyManager.addEnemy(this.bug5)
+		this.EnemyManager.addEnemy(this.bug5_2)
+		this.EnemyManager.addEnemy(this.boss)
+		this.EnemyManager.addEnemy(this.firstMini)
+		this.EnemyManager.addEnemy(this.secondMini)
+
+		// spawn the enemies
+		if (this.boss.health < 800) {
+			this.time.delayedCall(
+				100,
+				() => {
+					this.bossBelow80HP()
+				},
+				null,
+				this,
+			)
+		}
+		// Add a delayed event to spawn utilities after a delay
+		this.time.addEvent({
+			delay: 5000,
+			callback: () => {
+				this.UtilitiesManager.addUtilitiesForPlayingScreen(3, 4)
+
+				this.CollideManager1 = new CollideManager(
+					this,
+					this.player,
+					this.EnemyManager.enemies,
+					this.UtilitiesManager.HealthPacks,
+					this.UtilitiesManager.shieldPacks,
+					this.shield,
+					this.SoundManager,
+				)
+			},
+			callbackScope: this,
+		})
+	}
+
+	create() {
+		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
+		EventBus.on('wallet-connected', handleWalletConnected, this)
+
+		this.guiManager.createBackground('background_texture_04')
+
+		this.music = this.sys.game.globals.music
+
+		this.createText()
+
+		this.createShipAnims()
+
+		this.createObject()
+
+		this.createMechanic()
+
+		this.createManager()
+
+		this.addEnemyLevelBoss()
+
+		this.CollideManager = new CollideManager(
+			this,
+			this.player,
+			this.EnemyManager.enemies,
+			this.UtilitiesManager.HealthPacks,
+			this.UtilitiesManager.shieldPacks,
+			this.shield,
+			this.SoundManager,
+		)
+
+		this.bossDefeated = false
+		this.checkBossHeal = false
+		this.timeHealth = 1
+
+		this.createMusic()
+	}
+
 	update() {
 		// update for mute and sound button
 		if (this.music.musicOn === false && this.music.soundOn === false) {
@@ -285,6 +320,8 @@ class BossScreen extends Phaser.Scene {
 
 		// Move the player and enemies
 		this.playerManager.movePlayer()
+
+		this.EnemyManager.moveEnemies()
 
 		this.EnemyManager.enemies.forEach((enemy) => {
 			enemy.updateHealthBarPosition()
@@ -305,8 +342,8 @@ class BossScreen extends Phaser.Scene {
 		this.shield.updatePosition(this.player)
 		this.bug3_1.rotateToPlayer(this.player)
 		this.bug3_2.rotateToPlayer(this.player)
-		this.bug5.chasePlayer(this.player)
-		this.bug5_2.chasePlayer(this.player)
+		this.bug5.chasePlayer(this.player, 200)
+		this.bug5_2.chasePlayer(this.player, 200)
 
 		if (this.boss.health <= 0) {
 			// Destroy all spawned enemies
@@ -343,7 +380,9 @@ class BossScreen extends Phaser.Scene {
 			)
 		}
 
-		this.bossProcess()
+		if (this.boss.health > 0) {
+			this.bossProcess()
+		}
 	}
 
 	updateAudio() {
@@ -420,10 +459,6 @@ class BossScreen extends Phaser.Scene {
 		if (this.boss.health < this.boss.maxHealth * 0.15 && this.boss.health > 0) {
 			this.boss.shootBulletCircle(this, this.boss)
 		}
-
-		if (this.boss.health <= 0) {
-			this.EnemyManager.createFirework(this.boss.x, this.boss.y)
-		}
 	}
 
 	callMini() {
@@ -478,25 +513,6 @@ class BossScreen extends Phaser.Scene {
 		) {
 			this.anims.remove('player_anim_right_diagonal')
 		}
-	}
-
-	createText() {
-		const Level1Text = this.add
-			.text(config.width / 2, config.height / 2, 'Boss', {
-				fontFamily: 'Pixelify Sans',
-				fontSize: '64px',
-				fill: '#FFFB73',
-			})
-			.setOrigin(0.5)
-
-		this.time.delayedCall(
-			2000,
-			() => {
-				Level1Text.destroy()
-			},
-			null,
-			this,
-		)
 	}
 }
 export default BossScreen

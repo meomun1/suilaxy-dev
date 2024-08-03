@@ -28,7 +28,8 @@ class TitleScreen extends Phaser.Scene {
 
 		this.guiManager.loadImage(
 			'background',
-			'assets/images/backgrounds/background_title.png',
+			// 'assets/images/backgrounds/background_title.png',
+			'background.png',
 		)
 		this.guiManager.loadSpriteSheet(
 			'button_play',
@@ -152,12 +153,12 @@ class TitleScreen extends Phaser.Scene {
 		this.button_play = new Button(
 			this,
 			config.width / 2,
-			config.height / 2 + 60,
+			config.height / 2 + config.height / 8,
 			'button_play',
 			'button_play_hover',
 			'choosePlayer',
 		)
-		this.button_play.setSize(93, 28)
+		this.button_play.setSize(config.width / 10, config.height / 20)
 		this.button_play.setInteractive()
 		this.button_play.setScale(1.5)
 	}
@@ -166,12 +167,12 @@ class TitleScreen extends Phaser.Scene {
 		this.button_pvp = new Button(
 			this,
 			config.width / 2,
-			config.height / 2 + 140,
+			config.height / 2 + config.height / 4,
 			'button_pvp',
 			'button_pvp_hover',
 			'chooseRoom',
 		)
-		this.button_pvp.setSize(93, 28)
+		this.button_pvp.setSize(config.width / 10, config.height / 20)
 		this.button_pvp.setInteractive()
 		this.button_pvp.setScale(1.5)
 	}

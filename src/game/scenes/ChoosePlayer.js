@@ -40,7 +40,7 @@ class ChoosePlayer extends Phaser.Scene {
 
 		this.guiManager.createMediumText(
 			config.width / 2,
-			config.height / 4 - 130,
+			config.height / 4 - config.height / 8 - config.height / 16,
 			'CHOOSE YOUR SHIP!',
 			'Pixelify Sans',
 			'50px',

@@ -5,10 +5,14 @@ import EnemyBullet from '../projectiles/EnemyBullet'
 import config from '../../config/config'
 import Phaser from 'phaser'
 import ChasingBullet from '../projectiles/ChasingBullet'
+import BoundBullet from '../projectiles/BoundBullet'
 class Bug3 extends Entity {
-	constructor(scene, x, y, health, scale = 1) {
+	constructor(scene, x, y, health, scale) {
 		super(scene, x, y, 'bug3_texture', health)
 
+		if (scale === undefined) {
+			scale = 1
+		}
 		this.setScale(scale)
 
 		this.body.velocity.y = gameSettings.enemySpeed
@@ -58,6 +62,12 @@ class Bug3 extends Entity {
 	shootBullet(scene, enemy) {
 		if (this.health > 0) {
 			const enemyBullet = new EnemyBullet(scene, enemy)
+		}
+	}
+
+	shootBoundBullet(scene, enemy) {
+		if (this.health > 0) {
+			const enemyBullet = new BoundBullet(scene, enemy)
 		}
 	}
 

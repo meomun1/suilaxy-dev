@@ -154,8 +154,10 @@ class UpgradeScreen extends Phaser.Scene {
 				break
 
 			case 'upgrade6':
-				GameSettings.playerNumberOfBullets += 1
-				player.numberOfBullets = GameSettings.playerNumberOfBullets
+				if (GameSettings.playerNumberOfBullets < 10) {
+					GameSettings.playerNumberOfBullets += 1
+					player.numberOfBullets = GameSettings.playerNumberOfBullets
+				}
 				break
 
 			case 'upgrade7':
@@ -179,10 +181,6 @@ class UpgradeScreen extends Phaser.Scene {
 
 	increaseValue(current, base) {
 		return Math.log2(current + base) * 3.5
-	}
-
-	stop() {
-		this.scene.stop()
 	}
 }
 

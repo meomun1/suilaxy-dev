@@ -99,8 +99,8 @@ class TitleScreen extends Phaser.Scene {
 			}
 
 			this.guiManager.createBackground('background')
-			this.guiManager.createAnimatedText('GUARDIAN', -30)
-			this.guiManager.createAnimatedText('SPACE', -130)
+			this.guiManager.createAnimatedTextMiddle('GUARDIAN', -30)
+			this.guiManager.createAnimatedTextMiddle('SPACE', -130)
 
 			this.connectWalletText = this.add.text(
 				config.width / 2,

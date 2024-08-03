@@ -122,9 +122,48 @@ class NftScreen extends Phaser.Scene {
 			alpha: 0.2,
 		})
 
+		this.meshRotation()
+
+		EventBus.emit('current-scene-ready', {
+			key: { callingScene: this.callingScene },
+			nftProperties: {
+				name: gameSettings.nft_weapon,
+				frame: gameSettings.nft_frame,
+				description: gameSettings.nft_description,
+				url: gameSettings.nft_img_url,
+			},
+		})
+
+		// Create a button for minting the NFT
+		this.button_mint = this.add.sprite(
+			config.width / 2,
+			config.height / 2 + 320,
+			'button_mint',
+		)
+		this.button_mint.setSize(93, 28)
+		this.button_mint.setInteractive()
+
+		this.button_mint.on('pointerover', () => {
+			this.button_mint.setTexture('button_mint_hover')
+		})
+
+		this.button_mint.on('pointerout', () => {
+			this.button_mint.setTexture('button_mint')
+		})
+
+		this.button_mint.on('pointerup', () => {
+			EventBus.emit('mint-nft-clicked')
+		})
+
+		this.button_mint.setScale(1.5)
+	}
+
+	pixelTransformation() {
 		// Pixel Transformation
 		const source = this.textures.get('nft_texture').source[0].image
+		console.log('hehe ', source)
 		const canvas = this.textures.createCanvas('pad', 125, 125).source[0].image
+		console.log('canva', canvas)
 		const ctx = canvas.getContext('2d')
 
 		ctx.drawImage(source, 0, 0, 125, 125)
@@ -177,39 +216,55 @@ class NftScreen extends Phaser.Scene {
 				y++
 			}
 		}
+	}
 
-		EventBus.emit('current-scene-ready', {
-			key: { callingScene: this.callingScene },
-			nftProperties: {
-				name: gameSettings.nft_weapon,
-				frame: gameSettings.nft_frame,
-				description: gameSettings.nft_description,
-				url: gameSettings.nft_img_url,
-			},
-		})
-
-		// Create a button for minting the NFT
-		this.button_mint = this.add.sprite(
+	meshRotation() {
+		const mesh = this.add.mesh(
 			config.width / 2,
-			config.height / 2 + 320,
-			'button_mint',
+			(config.height * 3) / 4 - config.height / 8,
+			'nft_texture',
 		)
-		this.button_mint.setSize(93, 28)
-		this.button_mint.setInteractive()
 
-		this.button_mint.on('pointerover', () => {
-			this.button_mint.setTexture('button_mint_hover')
+		this.add.text(
+			config.width / 2 -
+				config.width / 8 -
+				config.width / 16 +
+				config.width / 32 +
+				config.width / 64,
+			(config.height * 15) / 16,
+			'Rotate with mouse (Drag your nft)',
+		)
+
+		Phaser.Geom.Mesh.GenerateGridVerts({
+			mesh,
+			widthSegments: 6,
 		})
 
-		this.button_mint.on('pointerout', () => {
-			this.button_mint.setTexture('button_mint')
+		mesh.hideCCW = false
+
+		mesh.panZ(5.5)
+
+		const rotateRate = 1
+		const panRate = 1
+		const zoomRate = 4
+
+		this.input.on('pointermove', (pointer) => {
+			if (!pointer.isDown) {
+				return
+			}
+
+			if (!pointer.event.shiftKey) {
+				mesh.modelRotation.y += pointer.velocity.x * (rotateRate / 800)
+				mesh.modelRotation.x += pointer.velocity.y * (rotateRate / 600)
+			} else {
+				mesh.panX(pointer.velocity.x * (panRate / 800))
+				mesh.panY(pointer.velocity.y * (panRate / 600))
+			}
 		})
 
-		this.button_mint.on('pointerup', () => {
-			EventBus.emit('mint-nft-clicked')
+		this.input.on('wheel', (pointer, over, deltaX, deltaY, deltaZ) => {
+			mesh.panZ(deltaY * (zoomRate / 600))
 		})
-
-		this.button_mint.setScale(1.5)
 	}
 }
 

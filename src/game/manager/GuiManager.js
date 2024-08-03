@@ -4,6 +4,9 @@ import GameOver from '../scenes/GameOver'
 import Phaser from 'phaser'
 import config from '../config/config.js'
 
+let thirtySecondHeight = config.height / 32 // 18.75
+let thirtySecondWidth = config.width / 32 // 34.375
+
 let sixteenthHeight = config.height / 16 // 37.5
 let sixteenthWidth = config.width / 16 // 68.75
 
@@ -256,6 +259,8 @@ class GuiManager {
 			key,
 		)
 		this.scene.background.setOrigin(0, 0)
+
+		this.scene.background.setDepth(-1)
 	}
 
 	// SPRITE SESSION

@@ -133,7 +133,7 @@ class PlayingScreen extends Phaser.Scene {
 			gameSettings.playerMaxHealth,
 		)
 		this.player.play('player_anim')
-		this.player.restartToTile()
+		this.player.restartGameSettings()
 		this.player.selectedPlayer = this.selectedPlayerIndexs
 
 		//SHIELD
@@ -214,64 +214,74 @@ class PlayingScreen extends Phaser.Scene {
 	}
 
 	addEnemyLevelOne() {
-		this.time.delayedCall(
-			3000,
-			() => {
-				this.EnemyManager.spawnEnemyRowWithDelay(this, 0)
-			},
-			null,
-			this,
-		)
+		this.EnemyManager.spawnEnemyRowWithDelay(this, 3000, config.width / 3, 3)
 
-		this.time.delayedCall(
-			6000,
-			() => this.EnemyManager.spawnEnemyRowWithDelay(this, 0),
-			null,
-			this,
-		)
+		this.EnemyManager.spawnEnemyRowWithDelay(this, 5000, config.width / 4, 6)
 
-		this.time.delayedCall(
+		this.EnemyManager.spawnEnemyRowWithDelay(this, 7000, config.width / 5, 9)
+
+		this.EnemyManager.spawnEnemyRowWithDelay(this, 9000, config.width / 6, 12)
+
+		this.EnemyManager.spawnZigZagEnemyWithDelay(
+			this,
 			12000,
-			() => this.EnemyManager.spawnEnemyRowWithDelay(this, 0),
-			null,
-			this,
+			config.width / 10,
+			4,
+			600,
 		)
 
-		// Spawn the Enemies
-		this.time.delayedCall(
-			21000,
-			() => {
-				// shoot straight bullet
-				this.bug3_1 = new Bug3(this, config.width - 20, -20, 300, 1)
-				this.bug3_2 = new Bug3(this, 20, -20, 300, 1)
+		this.time // Spawn the Enemies
+			.delayedCall(
+				21000,
+				() => {
+					// shoot straight bullet
+					this.bug3_1 = new Bug3(
+						this,
+						config.width - config.width / 16,
+						-20,
+						500,
+						1,
+					)
+					this.bug3_2 = new Bug3(this, config.width / 16, -20, 500, 1)
+					this.bug3_3 = new Bug3(this, config.width / 2, -20, 1000, 2)
 
-				// shoot following bullet
-				this.bug3_3 = new Bug3(this, 70, -20, 500, 1)
-				this.bug3_4 = new Bug3(this, config.width - 70, -20, 500, 1)
+					// chasing enemies
+					this.bug5_1 = new Bug5( // left top
+						this,
+						-config.width / 32,
+						-config.height / 8,
+						200,
+					)
+					this.bug5_2 = new Bug5( // right top
+						this,
+						config.width + config.width / 32,
+						-config.height / 8,
+						200,
+					)
+					this.bug5_3 = new Bug5( // left bottom
+						this,
+						-config.width / 32,
+						config.height + config.height / 32,
+						200,
+					)
+					this.bug5_4 = new Bug5( // right bottom
+						this,
+						config.width + config.width / 32,
+						config.height + config.height / 32,
+						200,
+					)
 
-				// chasing enemies
-				this.bug5_1 = new Bug5(this, config.width / 2, -20, 200)
-				this.bug5_2 = new Bug5(this, config.width / 2 - 50, -20, 200)
-				this.bug5_3 = new Bug5(this, config.width / 2 + 50, -20, 200)
-			},
-			null,
-			this,
-		)
-
-		this.time.delayedCall(
-			21000,
-			() => {
-				this.EnemyManager.addEnemyForOnce(this.bug3_1)
-				this.EnemyManager.addEnemyForOnce(this.bug3_2)
-				this.EnemyManager.addEnemyForOnce(this.bug3_3)
-				this.EnemyManager.addEnemyForOnce(this.bug3_4)
-				this.EnemyManager.addEnemyForOnce(this.bug5_1)
-				this.EnemyManager.addEnemyForOnce(this.bug5_2)
-				this.EnemyManager.addEnemyForOnce(this.bug5_3)
-			},
-			null,
-			this,
-		)
+					this.EnemyManager.addEnemyForOnce(this.bug3_1)
+					this.EnemyManager.addEnemyForOnce(this.bug3_2)
+					this.EnemyManager.addEnemyForOnce(this.bug3_3)
+					this.EnemyManager.addEnemyForOnce(this.bug5_1)
+					this.EnemyManager.addEnemyForOnce(this.bug5_2)
+					this.EnemyManager.addEnemyForOnce(this.bug5_3)
+					this.EnemyManager.addEnemyForOnce(this.bug5_4)
+				},
+				null,
+				this,
+			)
 
 		// FINAL WAVE
 		this.time.delayedCall(
@@ -399,7 +409,6 @@ class PlayingScreen extends Phaser.Scene {
 
 		if (this.spacebar.isDown) {
 			this.player.shootBullet(this.selectedPlayerIndex)
-			// this.scene.sfx.missile.play();
 		}
 
 		this.projectiles.children.iterate((bullet) => {
@@ -430,7 +439,6 @@ class PlayingScreen extends Phaser.Scene {
 				this.bug3_1.rotateToPlayer(this.player)
 				this.bug3_2.rotateToPlayer(this.player)
 				this.bug3_3.rotateToPlayer(this.player)
-				this.bug3_4.rotateToPlayer(this.player)
 			},
 			callbackScope: this,
 		})
@@ -438,9 +446,10 @@ class PlayingScreen extends Phaser.Scene {
 		this.time.addEvent({
 			delay: 21000,
 			callback: () => {
-				this.bug5_1.chasePlayer(this.player)
-				this.bug5_2.chasePlayer(this.player)
-				this.bug5_3.chasePlayer(this.player)
+				this.bug5_1.chasePlayer(this.player, gameSettings.enemySpeed / 2)
+				this.bug5_2.chasePlayer(this.player, gameSettings.enemySpeed / 2)
+				this.bug5_3.chasePlayer(this.player, gameSettings.enemySpeed / 2)
+				this.bug5_4.chasePlayer(this.player, gameSettings.enemySpeed / 2)
 			},
 			callbackScope: this,
 		})
@@ -530,7 +539,7 @@ class PlayingScreen extends Phaser.Scene {
 
 	goToNextLevel() {
 		this.createText(
-			'LEVEL COMPLETED',
+			'LEVEL ONE COMPLETED',
 			config.width / 2,
 			config.height / 2 - 60,
 			5000,
@@ -550,8 +559,9 @@ class PlayingScreen extends Phaser.Scene {
 				Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
 				(cam, effect) => {
 					this.scene.stop()
-					this.scene.start('playLevelTwo', {
+					this.scene.start('powerScreen', {
 						number: this.selectedPlayerIndex,
+						callingScene: this.callingScene,
 					})
 				},
 			)

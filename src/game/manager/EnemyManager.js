@@ -11,6 +11,7 @@ class EnemyManager {
 		this.respawnDelays = []
 		this.lastRespawnTimes = []
 		this.gameStarted = false
+		this.bug5s = []
 
 		// Set initial random delays and times for each enemy
 		for (let i = 0; i < this.enemies.length; i++) {
@@ -32,12 +33,40 @@ class EnemyManager {
 
 	destroyEnemyMoveOutOfScreen() {
 		let offScreenEnemyIndex = this.enemies.findIndex(
-			(enemy) => enemy.y >= config.height + 350 || enemy.y < -350,
+			(enemy) =>
+				enemy.y >= config.height + 350 ||
+				enemy.y < -350 ||
+				enemy.x < -300 ||
+				enemy.x > config.width + 300,
 		)
 		if (offScreenEnemyIndex !== -1) {
 			// this.enemies[offScreenEnemyIndex].hpBar.destroy();
 			this.enemies[offScreenEnemyIndex].destroy() // call destroy directly
 			this.enemies.splice(offScreenEnemyIndex, 1) // remove the enemy from the array
+		}
+	}
+
+	moveEnemies(time) {
+		// Move enemies
+
+		let offScreenEnemy = this.enemies.find((enemy) => enemy.y >= config.height)
+		let offScreenEnemyIndex = this.enemies.findIndex(
+			(enemy) => enemy.y >= config.height,
+		)
+
+		const currentTime = this.scene.time.now
+
+		// Check if enough time has passed for the next respawn for this specific enemy
+		if (
+			currentTime - this.lastRespawnTimes[offScreenEnemyIndex] >=
+			this.respawnDelays[offScreenEnemyIndex]
+		) {
+			offScreenEnemy.y = 0
+			offScreenEnemy.x = Phaser.Math.Between(120, config.width - 120)
+
+			// Set a new random delay for the next respawn for this specific enemy
+			this.respawnDelays[offScreenEnemyIndex] = Phaser.Math.Between(2000, 4000)
+			this.lastRespawnTimes[offScreenEnemyIndex] = currentTime
 		}
 	}
 
@@ -78,21 +107,6 @@ class EnemyManager {
 				break
 		}
 		this.enemies.push(newEnemy)
-		return newEnemy
-	}
-
-	spawnEnemyRow(rowX, numRows, gapSize, health) {
-		const enemies = []
-
-		for (let i = 0; i < numRows; i++) {
-			const x = rowX + i * (50 + gapSize)
-			const y = -20
-
-			const newEnemy = this.spawnSingleEnemy(1, x, y, health)
-			enemies.push(newEnemy)
-		}
-
-		return enemies
 	}
 
 	// FOR TUTORIAL SCREEN
@@ -124,18 +138,107 @@ class EnemyManager {
 		}
 	}
 
-	spawnEnemyRowWithDelay(scene, delay, health) {
+	spawnEnemyRowWithDelay(scene, delay, startX, quantity, health) {
 		if (health === undefined) {
 			health = 300
 		}
-		scene.time.delayedCall(
+
+		this.scene.time.delayedCall(
 			delay,
 			() => {
-				const enemyRow = scene.EnemyManager.spawnEnemyRow(30, 8, 40, health)
+				let distance = (config.width - 2 * startX) / (quantity - 1)
+
+				for (let i = 0; i < quantity; i++) {
+					const x = startX + i * distance
+					const y = -20
+
+					this.spawnSingleEnemy(1, x, y, health)
+				}
 			},
 			null,
 			scene,
 		)
+	}
+
+	spawnZigZagEnemyWithDelay(scene, delay, startX, quantity, health) {
+		if (health === undefined) {
+			health = 300
+		}
+
+		this.scene.time.delayedCall(
+			delay,
+			() => {
+				let distance = (config.width - 2 * startX) / (quantity - 1)
+
+				for (let i = 0; i < quantity; i++) {
+					// Create a new bug
+					const newBug = new Bug1(
+						this.scene,
+						startX + i * distance,
+						-20,
+						health,
+						1.5,
+					)
+					newBug.play('bug1_anim')
+					this.addEnemyForOnce(newBug)
+
+					// Add a tween to move the bug downward
+					this.scene.tweens.add({
+						targets: newBug,
+						props: {
+							x: {
+								value: Math.abs(startX + (quantity - i - 1) * distance),
+								duration: 4000,
+								flipX: true,
+							},
+							y: { value: config.height, duration: 7000, flipY: true },
+						},
+						ease: 'Sine.easeInOut',
+						yoyo: true,
+						repeat: -1,
+					})
+				}
+			},
+			null,
+			scene,
+		)
+	}
+
+	// FOR LEVEL 2
+	spawnHalfCirleEnemeyChasePlayer(scene, health) {
+		const numBugs = 15
+		const radius = -700 // Adjust the radius as needed
+		const centerX = config.width / 2 // Center X position
+		const centerY = -radius // Place out of screen
+		const angleIncrement = Math.PI / (numBugs - 1) // Half circle
+
+		this.bugs5 = []
+
+		for (let i = 0; i < numBugs; i++) {
+			const angle = angleIncrement * i
+			const x = centerX + radius * Math.cos(angle)
+			const y = centerY + radius * Math.sin(angle)
+			const bug = new Bug5(scene, x, y, health, 1.5)
+
+			// Calculate direction vector towards the player
+			const directionX = config.width / 2 - x
+			const directionY = config.height / 2 - y
+			const magnitude = Math.sqrt(
+				directionX * directionX + directionY * directionY,
+			)
+			// Normalize the direction vector
+			const normalizedDirectionX = directionX / magnitude
+			const normalizedDirectionY = directionY / magnitude
+
+			// Set velocity towards the player
+			const speed = 150 // Adjust speed as needed
+			bug.setVelocityX(normalizedDirectionX * speed)
+			bug.setVelocityY(normalizedDirectionY * speed)
+
+			bug.play('bug5_anim')
+			this.bugs5.push(bug)
+			this.enemies.push(bug)
+		}
 	}
 
 	// FOR LEVEL 3

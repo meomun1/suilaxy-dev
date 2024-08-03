@@ -4,10 +4,13 @@ import HPBar from '../ui/HPBar'
 import config from '../../config/config'
 
 class Bug5 extends Entity {
-	constructor(scene, x, y, health, scale = 1) {
+	constructor(scene, x, y, health, scale) {
 		super(scene, x, y, 'bug5_texture', health)
 
 		// Set the scale of the bug sprite
+		if (scale === undefined) {
+			scale = 1
+		}
 		this.setScale(scale)
 
 		this.body.velocity.y = gameSettings.enemySpeed
@@ -50,7 +53,7 @@ class Bug5 extends Entity {
 		this.health = 0
 		this.updateHealthBarValue()
 	}
-	chasePlayer(player, speed = 200) {
+	chasePlayer(player, speed) {
 		if (this.y >= config.height / 2 && this.health > 0) {
 			let dx = player.x - this.x
 			let dy = player.y - this.y

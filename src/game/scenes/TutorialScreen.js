@@ -36,7 +36,15 @@ class TutorialScreen extends Phaser.Scene {
 		// global music
 		this.music = this.sys.game.globals.music
 		// Create player animations
-		this.guiManager.createBackground('background_texture_03')
+
+		this.background = this.add.tileSprite(
+			0,
+			0,
+			config.width,
+			config.height,
+			'background_texture_03',
+		)
+		this.background.setOrigin(0, 0)
 
 		this.createTutorialText()
 
@@ -62,76 +70,7 @@ class TutorialScreen extends Phaser.Scene {
 		)
 	}
 
-	createTutorialText() {
-		this.guiManager.createTextWithDelay(
-			'Press SPACE to shoot',
-			config.width / 2,
-			config.height / 2 - config.height / 4,
-			'Pixelify Sans',
-			`${config.height / 16}px`,
-			'#ffffff',
-			0.5,
-			4000,
-		)
-
-		this.guiManager.createTextWithDelay(
-			'Use Arrow Keys to move',
-			config.width / 2,
-			config.height / 2 - config.height / 8,
-			'Pixelify Sans',
-			`${config.height / 16}px`,
-			'#ffffff',
-			0.5,
-			4000,
-		)
-
-		// CALL TEXT AFTER 6 SECONDS
-		this.time.delayedCall(
-			6000,
-			() => {
-				this.guiManager.createTextWithDelay(
-					'Press P to pause the game',
-					config.width / 2,
-					config.height / 2 - 60,
-					'Pixelify Sans',
-					'28px',
-					'#ffffff',
-					0.5,
-					4000,
-				)
-
-				this.guiManager.createTextWithDelay(
-					'Take down the enemy for upgrade',
-					config.width / 2,
-					config.height / 2 - 100,
-					'Pixelify Sans',
-					'28px',
-					'#ffffff',
-					0.5,
-					4000,
-				)
-			},
-			null,
-			this,
-		)
-
-		// CALL TEXT AFTER 10 SECONDS
-		this.time.delayedCall(
-			10000,
-			() => {
-				this.guiManager.createSimpleText(
-					config.width / 2,
-					config.height / 2 - 60,
-					"Ready? Let's start",
-					'25px',
-					'#ffffff',
-					0.5,
-				)
-			},
-			null,
-			this,
-		)
-	}
+	createTutorialText() {}
 
 	createObject() {
 		// PLAYER
@@ -153,10 +92,6 @@ class TutorialScreen extends Phaser.Scene {
 
 	createMechanic() {
 		// Create keyboard inputs
-		this.spacebar = this.input.keyboard.addKey(
-			Phaser.Input.Keyboard.KeyCodes.SPACE,
-		)
-
 		// Create a group to manage bullets
 		this.projectileManager = new ProjectileManager(this)
 		this.projectileManager.createPlayerBullet()
@@ -166,10 +101,7 @@ class TutorialScreen extends Phaser.Scene {
 
 	createManager() {
 		// Create managers
-		this.keyboardManager = new KeyboardManager(this)
-		this.keyboardManager.MuteGame()
 		this.mobileManager = new MobileManager(this)
-		this.PlayerManager = new PlayerManager(this, this.player)
 		this.UtilitiesManager = new UtilitiesManager(this)
 		this.EnemyManager = new EnemyManager(this)
 		this.UpgradeManager = new UpgradeManager(this, this.callingScene)
@@ -200,6 +132,217 @@ class TutorialScreen extends Phaser.Scene {
 			3000,
 			() => {
 				this.EnemyManager.addEnemyTutorial()
+			},
+			null,
+			this,
+		)
+
+		this.time.delayedCall(
+			4500,
+			() => {
+				this.supportTutorial()
+			},
+			null,
+			this,
+		)
+
+		this.time.delayedCall(10000, () => {}, null, this)
+	}
+
+	supportTutorial() {
+		this.lights.enable().setAmbientColor(0x686f76)
+
+		let enemy
+
+		this.background.setPipeline('Light2D')
+
+		for (let i = 0; i < this.EnemyManager.enemies.length; i++) {
+			if (this.EnemyManager.enemies[i]) {
+				enemy = this.EnemyManager.enemies[i]
+			}
+		}
+
+		enemy.setPipeline('Light2D')
+
+		this.player.setPipeline('Light2D')
+
+		const light = this.lights
+			.addLight(80, 80, 100)
+			.setColor(0xffffff)
+			.setIntensity(0.5)
+		light.x = config.width / 2
+		light.y = config.height - config.height / 4
+
+		enemy.setVelocityY(0)
+
+		this.time.delayedCall(
+			1000,
+			() => {
+				this.guiManager.createTextWithDelay(
+					'Here is your spaceship',
+					config.width / 2 + config.width / 8,
+					config.height - config.height / 4,
+					'Pixelify Sans',
+					`${config.height / 32}px`,
+					'#ffffff',
+					0.5,
+					3000,
+				)
+			},
+			null,
+			this,
+		)
+
+		this.time.delayedCall(
+			1500,
+			() => {
+				this.guiManager.createTextWithDelay(
+					'Press SPACE to shoot',
+					config.width / 2 + config.width / 8,
+					config.height - config.height / 4 + config.height / 16,
+					'Pixelify Sans',
+					`${config.height / 32}px`,
+					'#ffffff',
+					0.5,
+					3000,
+				)
+			},
+			null,
+			this,
+		)
+
+		this.time.delayedCall(
+			2000,
+			() => {
+				this.guiManager.createTextWithDelay(
+					'User arrow keys or WASD to move',
+					config.width / 2 + config.width / 8,
+					config.height - config.height / 4 + config.height / 8,
+					'Pixelify Sans',
+					`${config.height / 32}px`,
+					'#ffffff',
+					0.5,
+					3000,
+				)
+			},
+			null,
+			this,
+		)
+
+		this.time.delayedCall(
+			5500,
+			() => {
+				light.x = enemy.x
+				light.y = enemy.y
+			},
+			null,
+			this,
+		)
+
+		this.time.delayedCall(
+			6000,
+			() => {
+				this.guiManager.createTextWithDelay(
+					'Here is your enemy',
+					enemy.x - config.width / 4 + config.width / 8,
+					enemy.y - config.height / 16,
+					'Pixelify Sans',
+					`${config.height / 32}px`,
+					'#ffffff',
+					0.5,
+					3000,
+				)
+			},
+			null,
+			this,
+		)
+
+		this.time.delayedCall(
+			6500,
+			() => {
+				this.guiManager.createTextWithDelay(
+					'Destroy them will give you points',
+					enemy.x - config.width / 4 + config.width / 16,
+					enemy.y,
+					'Pixelify Sans',
+					`${config.height / 32}px`,
+					'#ffffff',
+					0.5,
+					3000,
+				)
+			},
+			null,
+			this,
+		)
+
+		this.time.delayedCall(
+			7000,
+			() => {
+				this.guiManager.createTextWithDelay(
+					'1000 points will give you an upgrade',
+					enemy.x - config.width / 4 + config.width / 16,
+					enemy.y + config.height / 16,
+					'Pixelify Sans',
+					`${config.height / 32}px`,
+					'#ffffff',
+					0.5,
+					3000,
+				)
+			},
+			null,
+			this,
+		)
+
+		this.time.delayedCall(
+			10500,
+			() => {
+				this.guiManager.createTextWithDelay(
+					'It is time to start the game, good luck',
+					config.width / 2,
+					config.height / 2,
+					'Pixelify Sans',
+					`${config.height / 20}px`,
+					'#ffffff',
+					0.5,
+					3000,
+				)
+				light.x = 0
+				light.y = 0
+			},
+			null,
+			this,
+		)
+		this.time.delayedCall(
+			13500,
+			() => {
+				this.lights.enable().setAmbientColor(0xffffff)
+				enemy.setVelocityY(gameSettings.enemySpeed / 2)
+
+				this.keyboardManager = new KeyboardManager(this)
+				this.keyboardManager.MuteGame()
+				this.PlayerManager = new PlayerManager(this, this.player)
+
+				this.spacebar = this.input.keyboard.addKey(
+					Phaser.Input.Keyboard.KeyCodes.SPACE,
+				)
+			},
+			null,
+			this,
+		)
+
+		this.time.delayedCall(
+			15000,
+			() => {
+				this.guiManager.createTextWithDelay(
+					'Tutorial Completed',
+					config.width / 2,
+					config.height / 2,
+					'Pixelify Sans',
+					`${config.height / 16}px`,
+					'#ffffff',
+					0.5,
+					3000,
+				)
 				this.EnemyManager.gameStarted = true
 			},
 			null,
@@ -224,20 +367,25 @@ class TutorialScreen extends Phaser.Scene {
 		}
 
 		// Pause the game or go to title screen
-		this.keyboardManager.pauseGame()
-		this.keyboardManager.titleScreen()
+		if (this.keyboardManager === undefined) {
+		} else {
+			this.keyboardManager.pauseGame()
+			this.keyboardManager.titleScreen()
+		}
 
 		// Move the background
 		this.background.tilePositionY -= BACKGROUND_SCROLL_SPEED
 
 		// PLAYER
-		this.PlayerManager.movePlayer()
+		if (this.PlayerManager) {
+			this.PlayerManager.movePlayer()
+		}
 
 		if (this.player.health <= 0) {
 			this.gameOver()
 		}
 
-		if (this.spacebar.isDown) {
+		if (this.spacebar && this.spacebar.isDown) {
 			this.player.shootBullet(this.selectedPlayerIndex)
 		}
 
@@ -323,7 +471,8 @@ class TutorialScreen extends Phaser.Scene {
 				Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
 				(cam, effect) => {
 					this.scene.stop()
-					this.scene.start('bossGame', {
+					this.scene.start('playGame', {
+						callingScene: this.callingScene,
 						number: this.selectedPlayerIndex,
 					})
 				},

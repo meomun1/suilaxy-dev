@@ -40,12 +40,17 @@ class LevelTwoScreen extends Phaser.Scene {
 				endFrame: 19,
 			},
 		})
+
+		this.load.image('asteroid_1', 'assets/images/asteroid/asteroid_01.png')
+		this.load.image('asteroid_2', 'assets/images/asteroid/asteroid_02.png')
+		this.load.image('asteroid_3', 'assets/images/asteroid/asteroid_03.png')
+		this.load.image('asteroid_4', 'assets/images/asteroid/asteroid_04.png')
 	}
 
 	createLevelTwoText() {
 		// Create text for level 2
 		this.createText(
-			'LEVEL 2',
+			'LEVEL 2: ACCELERATION - THEY ARE FASTER',
 			config.width / 2,
 			config.height / 2 - config.height / 8,
 			2000,
@@ -133,7 +138,7 @@ class LevelTwoScreen extends Phaser.Scene {
 			gameSettings.playerMaxHealth,
 		)
 		this.player.play('player_anim')
-		this.player.restartToTile()
+		this.player.restartGameSettings()
 		this.player.selectedPlayer = this.selectedPlayerIndexs
 
 		//SHIELD
@@ -156,7 +161,7 @@ class LevelTwoScreen extends Phaser.Scene {
 		this.projectileManager.createEnemyBullet()
 		this.projectileManager.createChaseBullet()
 		this.time.addEvent({
-			delay: 25000,
+			delay: 24500,
 			callback: () => {
 				this.projectileManager.callEnemyBulletLv2()
 			},
@@ -212,95 +217,16 @@ class LevelTwoScreen extends Phaser.Scene {
 	}
 
 	addEnemyLevelTwo() {
-		this.time.delayedCall(
-			3000,
-			() => this.EnemyManager.spawnEnemyRowWithDelay(this, 0, 800),
-			null,
-			this,
-		)
-
-		this.time.delayedCall(
-			5000,
-			() => this.EnemyManager.spawnEnemyRowWithDelay(this, 0, 800),
-			null,
-			this,
-		)
-
-		this.time.delayedCall(
-			7000,
-			() => this.EnemyManager.spawnEnemyRowWithDelay(this, 0, 800),
-			null,
-			this,
-		)
-
 		// Spawn the Enemies
 		this.time.delayedCall(
 			13000,
 			() => {
 				// chasing enemies
-				this.bug5_1 = new Bug5(this, 30, -20, 500)
-				this.bug5_2 = new Bug5(this, 120, -20, 500)
-				this.bug5_3 = new Bug5(this, 210, -20, 500)
-				this.bug5_4 = new Bug5(this, 300, -20, 500)
-				this.bug5_5 = new Bug5(this, 390, -20, 500)
-				this.bug5_6 = new Bug5(this, 480, -20, 500)
-				this.bug5_7 = new Bug5(this, 570, -20, 500)
-				this.bug5_1.play('bug5_anim')
-				this.bug5_2.play('bug5_anim')
-				this.bug5_3.play('bug5_anim')
-				this.bug5_4.play('bug5_anim')
-				this.bug5_5.play('bug5_anim')
-				this.bug5_6.play('bug5_anim')
-				this.bug5_7.play('bug5_anim')
+				this.EnemyManager.spawnHalfCirleEnemeyChasePlayer(this, 1000)
 			},
 			null,
 			this,
 		)
-
-		// FINAL WAVE
-		this.time.delayedCall(
-			22000,
-			() => {
-				this.startFinalWave()
-			},
-			null,
-			this,
-		)
-
-		this.time.delayedCall(
-			32000,
-			() => {
-				this.EnemyManager.gameStarted = true
-			},
-			null,
-			this,
-		)
-	}
-
-	create() {
-		EventBus.on('wallet-connected', handleWalletConnected, this)
-
-		this.cameras.main.fadeIn(1000, 0, 0, 0)
-
-		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
-		this.guiManager = new GuiManager(this)
-		this.guiManager.createBackground('background_texture')
-
-		this.music = this.sys.game.globals.music
-
-		this.createLevelTwoText()
-
-		this.createShipAnims()
-
-		this.createObject()
-
-		this.createMechanic()
-
-		this.createManager()
-
-		this.createMusic()
-
-		this.addEnemyLevelTwo()
 
 		this.time.delayedCall(
 			13000,
@@ -314,13 +240,6 @@ class LevelTwoScreen extends Phaser.Scene {
 					this.shield,
 					this.SoundManager,
 				)
-				this.EnemyManager.addEnemyForOnce(this.bug5_1)
-				this.EnemyManager.addEnemyForOnce(this.bug5_2)
-				this.EnemyManager.addEnemyForOnce(this.bug5_3)
-				this.EnemyManager.addEnemyForOnce(this.bug5_4)
-				this.EnemyManager.addEnemyForOnce(this.bug5_5)
-				this.EnemyManager.addEnemyForOnce(this.bug5_6)
-				this.EnemyManager.addEnemyForOnce(this.bug5_7)
 			},
 			null,
 			this,
@@ -344,6 +263,25 @@ class LevelTwoScreen extends Phaser.Scene {
 			callbackScope: this,
 		})
 
+		// FINAL WAVE
+		this.time.delayedCall(
+			22000,
+			() => {
+				this.startFinalWave()
+			},
+			null,
+			this,
+		)
+
+		this.time.delayedCall(
+			32000,
+			() => {
+				this.EnemyManager.gameStarted = true
+			},
+			null,
+			this,
+		)
+
 		this.CollideManager = new CollideManager(
 			this,
 			this.player,
@@ -352,6 +290,111 @@ class LevelTwoScreen extends Phaser.Scene {
 			this.UtilitiesManager.shieldPacks,
 			this.shield,
 			this.SoundManager,
+		)
+	}
+
+	createAsteroid() {
+		this.asteroids = this.physics.add.group()
+
+		// Create the asteroid spawning event
+		this.asteroidSpawnEvent = this.time.addEvent({
+			delay: 100,
+			callback: this.spawnAsteroid,
+			callbackScope: this,
+			loop: true,
+		})
+
+		// Create a timer event to cancel the asteroid spawning event after 12 seconds
+		this.time.addEvent({
+			delay: 10000,
+			callback: this.cancelAsteroidSpawn,
+			callbackScope: this,
+		})
+	}
+
+	spawnAsteroid() {
+		const spawnEdge = Phaser.Math.Between(0, 3) // 0: top, 1: right, 2: bottom, 3: left
+		let x, y, velocityX, velocityY
+
+		switch (spawnEdge) {
+			case 0: // Top
+				x = Phaser.Math.Between(0, config.width)
+				y = -50 // Spawn above the screen
+				velocityX = Phaser.Math.Between(-200, 200)
+				velocityY = Phaser.Math.Between(50, 200)
+				break
+			case 1: // Right
+				x = config.width + 50 // Spawn to the right of the screen
+				y = Phaser.Math.Between(0, config.height)
+				velocityX = Phaser.Math.Between(-200, -50)
+				velocityY = Phaser.Math.Between(-200, 200)
+				break
+			case 2: // Bottom
+				x = Phaser.Math.Between(0, config.width)
+				y = config.height + 50 // Spawn below the screen
+				velocityX = Phaser.Math.Between(-200, 200)
+				velocityY = Phaser.Math.Between(-200, -50)
+				break
+			case 3: // Left
+				x = -50 // Spawn to the left of the screen
+				y = Phaser.Math.Between(0, config.height)
+				velocityX = Phaser.Math.Between(50, 200)
+				velocityY = Phaser.Math.Between(-200, 200)
+				break
+		}
+
+		const asteroidKey = `asteroid_${Phaser.Math.Between(1, 4)}`
+		const asteroid = this.asteroids.create(x, y, asteroidKey)
+
+		// Set velocity
+		asteroid.setVelocity(velocityX, velocityY)
+	}
+
+	cancelAsteroidSpawn() {
+		// Cancel the asteroid spawning event
+		this.asteroidSpawnEvent.remove()
+	}
+
+	handleCollision(player, asteroid) {
+		asteroid.destroy()
+		player.takeDamage(50)
+	}
+
+	create() {
+		EventBus.on('wallet-connected', handleWalletConnected, this)
+
+		this.cameras.main.fadeIn(1000, 0, 0, 0)
+
+		this.physics.world.setBounds(0, 0, config.width, config.height)
+
+		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
+		this.guiManager = new GuiManager(this)
+		this.guiManager.createBackground('background_texture')
+
+		this.music = this.sys.game.globals.music
+
+		this.createLevelTwoText()
+
+		this.createShipAnims()
+
+		this.createObject()
+
+		this.createMechanic()
+
+		this.createManager()
+
+		this.createMusic()
+
+		this.addEnemyLevelTwo()
+
+		this.createAsteroid()
+
+		this.physics.add.collider(
+			this.player,
+			this.asteroids,
+			this.handleCollision,
+			null,
+			this,
 		)
 	}
 
@@ -399,26 +442,11 @@ class LevelTwoScreen extends Phaser.Scene {
 		}
 
 		this.time.addEvent({
-			delay: 25000,
+			delay: 24500,
 			callback: () => {
 				this.miniBoss.rotateToPlayer(this.player)
 				this.bug3_2.rotateToPlayer(this.player)
-				this.bug3_3.rotateToPlayer(this.player)
 				this.bug3_4.rotateToPlayer(this.player)
-			},
-			callbackScope: this,
-		})
-
-		this.time.addEvent({
-			delay: 13000,
-			callback: () => {
-				this.bug5_1.chasePlayer(this.player)
-				this.bug5_2.chasePlayer(this.player)
-				this.bug5_3.chasePlayer(this.player)
-				this.bug5_4.chasePlayer(this.player)
-				this.bug5_5.chasePlayer(this.player)
-				this.bug5_6.chasePlayer(this.player)
-				this.bug5_7.chasePlayer(this.player)
 			},
 			callbackScope: this,
 		})
@@ -527,8 +555,9 @@ class LevelTwoScreen extends Phaser.Scene {
 				Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
 				(cam, effect) => {
 					this.scene.stop()
-					this.scene.start('NewShipScreen', {
+					this.scene.start('powerScreen', {
 						number: this.selectedPlayerIndex,
+						callingScene: this.callingScene,
 					})
 				},
 			)
@@ -559,30 +588,21 @@ class LevelTwoScreen extends Phaser.Scene {
 
 				this.bug3_2 = new Bug3(
 					this,
-					config.width / 2 + 200 * Math.cos(angles[0]),
+					config.width / 2 + 200 * Math.cos(angles[0]) + config.width / 4,
 					-20 + 200 * Math.sin(angles[0]),
-					3000,
-					1.5,
-				)
-
-				this.bug3_3 = new Bug3(
-					this,
-					config.width / 2 + 200 * Math.cos(angles[1]),
-					-20 + 200 * Math.sin(angles[1]),
 					3000,
 					1.5,
 				)
 
 				this.bug3_4 = new Bug3(
 					this,
-					config.width / 2 + 200 * Math.cos(angles[2]),
+					config.width / 2 + 200 * Math.cos(angles[2]) - config.width / 4,
 					-20 + 200 * Math.sin(angles[2]),
 					3000,
 					1.5,
 				)
 
 				this.EnemyManager.addEnemyForOnce(this.bug3_2)
-				this.EnemyManager.addEnemyForOnce(this.bug3_3)
 				this.EnemyManager.addEnemyForOnce(this.bug3_4)
 			},
 			null,

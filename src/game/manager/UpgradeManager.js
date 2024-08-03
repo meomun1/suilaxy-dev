@@ -25,14 +25,11 @@ class UpgradeManager {
 
 		this.displayScore()
 
-		const playerUpgradeThreshold = this.countScoreByThreshhold(
-			gameSettings.playerUpgradeThreshold,
-		)
+		// const playerUpgradeThreshold = this.countScoreByThreshhold(
+		// 	gameSettings.playerUpgradeThreshold,
+		// )
 
-		if (
-			gameSettings.playerScore ===
-			this.countScoreByThreshhold(gameSettings.playerUpgradeThreshold)
-		) {
+		if (gameSettings.playerScore % 1000 === 0) {
 			if (this.scene.mobileManager.isMobile == true) {
 				this.scene.mobileManager.isMobile = false
 			}
@@ -44,9 +41,9 @@ class UpgradeManager {
 		}
 	}
 
-	countScoreByThreshhold(threshhold) {
-		return threshhold ** 2 / 200 + threshhold / 2 - 300
-	}
+	// countScoreByThreshhold(threshhold) {
+	// 	return threshhold ** 2 / 200 + threshhold / 2 - 300
+	// }
 
 	rewardByScore(callingScene) {
 		this.scene.input.setDragState(this.scene.player, 0)

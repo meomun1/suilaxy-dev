@@ -1,7 +1,9 @@
 var gameSettings = {
 	// game settings
+	// speed / damage / life steal / bullet speed / score
+	// number of bullets / fire rate / bullet size / max health / upgrade threshold
 	playerSpeed: 250,
-	playerBulletDamage: 100,
+	playerBulletDamage: 5000,
 	playerLifesteal: 0,
 	playerBulletSpeed: 400,
 	playerScore: 0,
@@ -9,11 +11,11 @@ var gameSettings = {
 	playerFireRate: 700,
 	playerDefaultBulletSize: 1.2,
 	playerBulletSize: 1.2,
-	playerMaxHealth: 1000,
+	playerMaxHealth: 5000,
 	playerUpgradeThreshold: 300,
-  
+
 	savePlayerSpeed: 250,
-	savePlayerBulletDamage: 100,
+	savePlayerBulletDamage: 5000,
 	savePlayerLifesteal: 0,
 	savePlayerBulletSpeed: 400,
 	savePlayerScore: 0,
@@ -21,10 +23,13 @@ var gameSettings = {
 	savePlayerFireRate: 700,
 	savePlayerDefaultBulletSize: 1.2,
 	savePlayerBulletSize: 1.2,
-	savePlayerMaxHealth: 1000,
+	savePlayerMaxHealth: 5000,
 	savePlayerUpgradeThreshold: 500,
-  
+
+	// enemy settings
+	// speed / bullet speed / health pack speed
 	enemySpeed: 200,
+	enemySize: 1,
 	bulletSpeed: 400,
 	healthPackSpeed: 100,
 

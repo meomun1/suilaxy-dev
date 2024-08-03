@@ -33,17 +33,25 @@ class BossScreen extends Phaser.Scene {
 		this.selectedPlayerIndex = data.number
 	}
 
-	preload() {
-		this.load.spritesheet({
-			key: `player_texture_${this.selectedPlayerIndex}`,
-			url: `assets/spritesheets/players/planes_0${this.selectedPlayerIndex}B.png`,
-			frameConfig: {
-				frameWidth: 96,
-				frameHeight: 96,
-				startFrame: 0,
-				endFrame: 19,
+	preload() {}
+
+	createText() {
+		const bossText = this.add
+			.text(config.width / 2, config.height / 2, 'Boss', {
+				fontFamily: 'Pixelify Sans',
+				fontSize: '64px',
+				fill: '#FFFB73',
+			})
+			.setOrigin(0.5)
+
+		this.time.delayedCall(
+			2000,
+			() => {
+				bossText.destroy()
 			},
-		})
+			null,
+			this,
+		)
 	}
 
 	createShipAnims() {
@@ -215,36 +223,11 @@ class BossScreen extends Phaser.Scene {
 		this.bug3_2.play('bug3_anim')
 		this.bug3_2.setScale(2)
 
-		this.bug5 = new Bug5(this, 100, 0, 1000)
+		this.bug5 = new Bug5(this, config / 4, 0, 1000, 2)
 		this.bug5.play('bug5_anim')
-		this.bug5.setScale(0.6)
 
-		this.bug5_2 = new Bug5(this, 500, 0, 1000)
+		this.bug5_2 = new Bug5(this, (3 * config) / 4, 0, 1000, 2)
 		this.bug5_2.play('bug5_anim')
-		this.bug5_2.setScale(0.6)
-	}
-
-	create() {
-		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
-		EventBus.on('wallet-connected', handleWalletConnected, this)
-
-		this.guiManager.createBackground('background_texture_04')
-
-		this.music = this.sys.game.globals.music
-
-		this.createText()
-
-		this.createShipAnims()
-
-		this.createObject()
-
-		this.createMechanic()
-
-		this.addEnemyLevelBoss()
-
-		this.createManager()
-
-		this.createMusic()
 
 		this.EnemyManager.addEnemy(this.bug3_1)
 		this.EnemyManager.addEnemy(this.bug3_2)
@@ -283,6 +266,27 @@ class BossScreen extends Phaser.Scene {
 			},
 			callbackScope: this,
 		})
+	}
+
+	create() {
+		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
+		EventBus.on('wallet-connected', handleWalletConnected, this)
+
+		this.guiManager.createBackground('background_texture_04')
+
+		this.music = this.sys.game.globals.music
+
+		this.createText()
+
+		this.createShipAnims()
+
+		this.createObject()
+
+		this.createMechanic()
+
+		this.createManager()
+
+		this.addEnemyLevelBoss()
 
 		this.CollideManager = new CollideManager(
 			this,
@@ -297,6 +301,8 @@ class BossScreen extends Phaser.Scene {
 		this.bossDefeated = false
 		this.checkBossHeal = false
 		this.timeHealth = 1
+
+		this.createMusic()
 	}
 
 	update() {
@@ -315,7 +321,7 @@ class BossScreen extends Phaser.Scene {
 		// Move the player and enemies
 		this.playerManager.movePlayer()
 
-		// this.EnemyManager.moveEnemies()
+		this.EnemyManager.moveEnemies()
 
 		this.EnemyManager.enemies.forEach((enemy) => {
 			enemy.updateHealthBarPosition()
@@ -336,8 +342,8 @@ class BossScreen extends Phaser.Scene {
 		this.shield.updatePosition(this.player)
 		this.bug3_1.rotateToPlayer(this.player)
 		this.bug3_2.rotateToPlayer(this.player)
-		this.bug5.chasePlayer(this.player)
-		this.bug5_2.chasePlayer(this.player)
+		this.bug5.chasePlayer(this.player, 200)
+		this.bug5_2.chasePlayer(this.player, 200)
 
 		if (this.boss.health <= 0) {
 			// Destroy all spawned enemies
@@ -374,7 +380,9 @@ class BossScreen extends Phaser.Scene {
 			)
 		}
 
-		this.bossProcess()
+		if (this.boss.health > 0) {
+			this.bossProcess()
+		}
 	}
 
 	updateAudio() {
@@ -451,10 +459,6 @@ class BossScreen extends Phaser.Scene {
 		if (this.boss.health < this.boss.maxHealth * 0.15 && this.boss.health > 0) {
 			this.boss.shootBulletCircle(this, this.boss)
 		}
-
-		if (this.boss.health <= 0) {
-			this.EnemyManager.createFirework(this.boss.x, this.boss.y)
-		}
 	}
 
 	callMini() {
@@ -509,25 +513,6 @@ class BossScreen extends Phaser.Scene {
 		) {
 			this.anims.remove('player_anim_right_diagonal')
 		}
-	}
-
-	createText() {
-		const Level1Text = this.add
-			.text(config.width / 2, config.height / 2, 'Boss', {
-				fontFamily: 'Pixelify Sans',
-				fontSize: '64px',
-				fill: '#FFFB73',
-			})
-			.setOrigin(0.5)
-
-		this.time.delayedCall(
-			2000,
-			() => {
-				Level1Text.destroy()
-			},
-			null,
-			this,
-		)
 	}
 }
 export default BossScreen

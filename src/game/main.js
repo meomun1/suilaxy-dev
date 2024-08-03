@@ -18,6 +18,7 @@ import CreditScreen from './scenes/CreditScreen.js'
 import NewShipScreen from './scenes/NewShipScreen.js'
 import NftScreen from './scenes/NftScreen.js'
 import PVPScreen from './scenes/PVPScreen.js'
+import PowerScreen from './scenes/PowerScreen.js'
 
 const config = {
 	type: Phaser.AUTO,
@@ -46,6 +47,7 @@ const config = {
 		BossScreen,
 		PauseScreen,
 		UpgradeScreen,
+		PowerScreen,
 		GameOver,
 		CreditScreen,
 		NftScreen,

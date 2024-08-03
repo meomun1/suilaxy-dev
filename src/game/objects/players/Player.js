@@ -5,12 +5,13 @@ import gameSettings from '../../config/gameSettings'
 import HPBar2 from '../ui/HPBar2'
 import SoundManager from '../../manager/SoundManager'
 import PVPBulletOpponent from '../projectiles/PVPBulletOpponent'
+import config from '../../config/config'
 
 class Player extends Entity {
 	constructor(scene, x, y, key, health) {
 		super(scene, x, y, key, health)
 		this.body.velocity.x = 0
-		this.body.velocity.y = gameSettings.savePlayerSpeed
+		this.body.velocity.y = 0
 		this.health = health
 		this.maxHealth = health
 		this.damage = 300
@@ -20,9 +21,8 @@ class Player extends Entity {
 		this.shield = null
 		this.setInteractiveEntity()
 		this.setPhysics(scene)
-		this.body.setSize(48, 48)
+		this.body.setSize(72, 72)
 		this.setDepth(3)
-		this.body.velocity.y = this.speed
 		this.bulletSize = gameSettings.savePlayerBulletSize
 
 		this.fireRate = gameSettings.savePlayerFireRate
@@ -36,10 +36,10 @@ class Player extends Entity {
 
 		this.hpBar = new HPBar2(
 			scene,
-			scene.sys.game.config.width - 485,
-			scene.sys.game.config.height - 55,
-			200,
-			41,
+			config.width / 2 - config.width / 4 - config.width / 10,
+			config.height - config.height / 4 + config.height / 8,
+			config.width / 8,
+			config.height / 32,
 			this.health,
 			this.maxHealth,
 		)

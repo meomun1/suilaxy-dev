@@ -27,6 +27,41 @@ class NewShipScreen extends Phaser.Scene {
 	}
 
 	preload() {
+		this.textures.remove(`player_texture_${this.selectedPlayerIndex}`)
+
+		// Check if the animation exists before trying to remove it
+		if (this.anims && this.anims.exists && this.anims.exists('player_anim')) {
+			this.anims.remove('player_anim')
+		}
+		if (
+			this.anims &&
+			this.anims.exists &&
+			this.anims.exists('player_anim_left')
+		) {
+			this.anims.remove('player_anim_left')
+		}
+		if (
+			this.anims &&
+			this.anims.exists &&
+			this.anims.exists('player_anim_left_diagonal')
+		) {
+			this.anims.remove('player_anim_left_diagonal')
+		}
+		if (
+			this.anims &&
+			this.anims.exists &&
+			this.anims.exists('player_anim_right')
+		) {
+			this.anims.remove('player_anim_right')
+		}
+		if (
+			this.anims &&
+			this.anims.exists &&
+			this.anims.exists('player_anim_right_diagonal')
+		) {
+			this.anims.remove('player_anim_right_diagonal')
+		}
+
 		this.load.spritesheet({
 			key: `player_texture_${this.selectedPlayerIndex}`,
 			url: `assets/spritesheets/players/planes_0${this.selectedPlayerIndex}B.png`,
@@ -60,7 +95,7 @@ class NewShipScreen extends Phaser.Scene {
 		this.time.delayedCall(
 			2000,
 			() => {
-				this.scene.start('playLevelThree', {
+				this.scene.start('bossGame', {
 					number: this.selectedPlayerIndex,
 				})
 			},

@@ -4,13 +4,16 @@ import HPBar from '../ui/HPBar'
 import config from '../../config/config'
 
 class Bug1 extends Entity {
-	constructor(scene, x, y, health, scale = 1) {
+	constructor(scene, x, y, health, scale) {
 		super(scene, x, y, 'bug1_texture', health)
 
 		// Set the scale of the bug sprite
+		if (scale === undefined) {
+			scale = 1
+		}
 		this.setScale(scale)
 
-		this.body.velocity.y = gameSettings.enemySpeed
+		this.body.velocity.y = gameSettings.enemySpeed / 2
 		this.health = health
 		this.maxHealth = health
 		this.hpBarWidth = 20

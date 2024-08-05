@@ -2,11 +2,14 @@ import Phaser from 'phaser'
 import config from '../config/config.js'
 import gameSettings from '../config/gameSettings.js'
 import { EventBus } from '../EventBus.js'
+import GuiManager from '../manager/GuiManager.js'
+import Button from '../objects/Button.js'
 
 class NftScreen extends Phaser.Scene {
 	constructor() {
 		super('createNft')
 		this.callingScene = 'createNft'
+		this.guiManager = new GuiManager(this)
 	}
 
 	init() {}
@@ -20,26 +23,23 @@ class NftScreen extends Phaser.Scene {
 		)
 		this.load.image('pixel', 'assets/shaders/16x16.png')
 
-		this.load.spritesheet({
-			key: 'button_mint',
-			url: 'assets/gui/button.png',
-			frameConfig: {
-				frameWidth: 93,
-				frameHeight: 28,
-				startFrame: 4,
-				endFrame: 4,
-			},
-		})
-		this.load.spritesheet({
-			key: 'button_mint_hover',
-			url: 'assets/gui/button_hover.png',
-			frameConfig: {
-				frameWidth: 93,
-				frameHeight: 28,
-				startFrame: 4,
-				endFrame: 4,
-			},
-		})
+		this.guiManager.loadSpriteSheet(
+			'button_mint',
+			'assets/gui/button.png',
+			93,
+			28,
+			4,
+			4,
+		)
+
+		this.guiManager.loadSpriteSheet(
+			'button_mint_hover',
+			'assets/gui/button_hover.png',
+			93,
+			28,
+			4,
+			4,
+		)
 	}
 
 	create() {
@@ -134,27 +134,16 @@ class NftScreen extends Phaser.Scene {
 			},
 		})
 
-		// Create a button for minting the NFT
-		this.button_mint = this.add.sprite(
+		this.button_mint = new Button(
+			this,
 			config.width / 2,
-			config.height / 2 + 320,
+			(config.height * 14) / 16,
 			'button_mint',
+			'button_mint_hover',
 		)
-		this.button_mint.setSize(93, 28)
+
+		this.button_mint.setSize(config.width / 10, config.height / 20)
 		this.button_mint.setInteractive()
-
-		this.button_mint.on('pointerover', () => {
-			this.button_mint.setTexture('button_mint_hover')
-		})
-
-		this.button_mint.on('pointerout', () => {
-			this.button_mint.setTexture('button_mint')
-		})
-
-		this.button_mint.on('pointerup', () => {
-			EventBus.emit('mint-nft-clicked')
-		})
-
 		this.button_mint.setScale(1.5)
 	}
 

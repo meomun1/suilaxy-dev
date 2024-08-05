@@ -45,7 +45,12 @@ class LevelThreeScreen extends Phaser.Scene {
 
 	createLevelThreeText() {
 		// Create text for level 3
-		this.createText('LEVEL 3', config.width / 2, config.height / 2 - 60, 2000)
+		this.createText(
+			'LEVEL 3: FLEXIBILITY',
+			config.width / 2,
+			config.height / 2 - 60,
+			2000,
+		)
 
 		this.time.delayedCall(
 			16000,

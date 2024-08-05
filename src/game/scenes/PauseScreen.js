@@ -13,28 +13,6 @@ class PauseScreen extends Phaser.Scene {
 	}
 	preload() {
 		this.load.image('resume', 'assets/spritesheets/vfx/resume.png')
-
-		this.load.spritesheet({
-			key: 'button_quit_hover',
-			url: 'assets/gui/button_play_hover.png',
-			frameConfig: {
-				frameWidth: 93,
-				frameHeight: 28,
-				startFrame: 5,
-				endFrame: 5,
-			},
-		})
-
-		this.load.spritesheet({
-			key: 'button_quit',
-			url: 'assets/gui/button_play.png',
-			frameConfig: {
-				frameWidth: 93,
-				frameHeight: 28,
-				startFrame: 5,
-				endFrame: 5,
-			},
-		})
 	}
 
 	init(data) {
@@ -47,32 +25,6 @@ class PauseScreen extends Phaser.Scene {
 		this.music = this.sys.game.globals.music
 		this.keyboardManager = new KeyboardManager(this, this.music)
 		this.guiManager = new GuiManager(this)
-
-		// create the resume button
-		// this.pic = this.add.image(config.width - 20, 30, 'resume')
-		// this.pic.setInteractive()
-		// this.pic.on(
-		// 	'pointerdown',
-		// 	function () {
-		// 		this.scene.stop()
-		// 		this.scene.resume(this.callingScene)
-		// 	},
-		// 	this,
-		// )
-
-		// this.musicButton = this.add.image(config.width - 60, 30, 'sound_texture')
-
-		// this.musicButton.setInteractive()
-		// this.musicButton.on(
-		// 	'pointerdown',
-		// 	function () {
-		// 		this.music.soundOn = !this.music.soundOn
-		// 		this.music.musicOn = !this.music.musicOn
-
-		// 		this.updateAudio()
-		// 	},
-		// 	this,
-		// )
 
 		this.keyboardManager.unpauseGame()
 		this.keyboardManager.MuteGame()

@@ -49,7 +49,12 @@ class PlayingScreen extends Phaser.Scene {
 
 	createLevel1Text() {
 		// Create text for level 1
-		this.createText('LEVEL 1', config.width / 2, config.height / 2 - 60, 2000)
+		this.createText(
+			'LEVEL 1: ENEMIES',
+			config.width / 2,
+			config.height / 2 - 60,
+			2000,
+		)
 	}
 
 	createShipAnims() {

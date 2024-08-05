@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { EventBus } from '../EventBus.js'
 
 class Button extends Phaser.GameObjects.Container {
 	constructor(scene, x, y, key1, key2, targetScene) {
@@ -12,7 +13,11 @@ class Button extends Phaser.GameObjects.Container {
 		this.add(this.button)
 
 		this.button.on('pointerdown', () => {
-			this.scene.scene.start(targetScene)
+			if (targetScene) {
+				this.scene.scene.start(targetScene)
+			} else {
+				EventBus.emit('mint-nft-clicked')
+			}
 		})
 
 		this.button.on('pointerover', () => {

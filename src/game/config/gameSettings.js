@@ -41,6 +41,7 @@ var gameSettings = {
 	nft_frame: 'nft_frame',
 	nft_description: 'nft_description',
 	nft_img_url: 'nft_img_url',
+	userActive: false,
 }
 
 export default gameSettings

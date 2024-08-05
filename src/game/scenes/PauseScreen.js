@@ -74,32 +74,6 @@ class PauseScreen extends Phaser.Scene {
 		// 	this,
 		// )
 
-		this.buttonQuit = this.add.sprite(
-			config.width / 2,
-			(2 * config.height) / 3,
-			'button_quit',
-			0,
-		)
-		this.buttonQuit.setInteractive()
-
-		this.buttonQuit.on('pointerdown', () => {
-			this.scene.start('bootGame')
-			let otherScene = this.scene.get(this.callingScene)
-			otherScene.shutdownPlayer()
-			this.scene.stop(this.callingScene)
-			this.scene.stop('pauseScreen')
-			gameSettings.playerScore = 0
-			this.sys.game.globals.bgMusic.stop()
-		})
-
-		this.buttonQuit.on('pointerover', () => {
-			this.buttonQuit.setTexture('button_quit_hover')
-		})
-
-		this.buttonQuit.on('pointerout', () => {
-			this.buttonQuit.setTexture('button_quit')
-		})
-
 		this.keyboardManager.unpauseGame()
 		this.keyboardManager.MuteGame()
 		this.keyboardManager.titleScreen()

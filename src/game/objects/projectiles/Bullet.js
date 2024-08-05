@@ -26,7 +26,7 @@ class Bullet extends Entity {
 	}
 
 	update() {
-		if (this.y < 20 || !this.active) {
+		if (this.y < -100 || !this.active) {
 			this.destroy()
 		}
 	}

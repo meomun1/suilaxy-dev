@@ -5,6 +5,22 @@ class UpgradeManager {
 		this.scene = scene
 		this.callingScene = callingScene
 		this.createScoreText()
+
+		if (this.callingScene === 'playGame') {
+			this.upgradeScore = 1000
+		}
+
+		if (this.callingScene === 'playLevelTwo') {
+			this.upgradeScore = 1500
+		}
+
+		if (this.callingScene === 'playLevelThree') {
+			this.upgradeScore = 2000
+		}
+
+		if (this.callingScene === 'bossGame') {
+			this.upgradeScore = 2000
+		}
 	}
 
 	createScoreText() {
@@ -29,7 +45,7 @@ class UpgradeManager {
 		// 	gameSettings.playerUpgradeThreshold,
 		// )
 
-		if (gameSettings.playerScore % 1000 === 0) {
+		if (gameSettings.playerScore % this.upgradeScore === 0) {
 			if (this.scene.mobileManager.isMobile == true) {
 				this.scene.mobileManager.isMobile = false
 			}

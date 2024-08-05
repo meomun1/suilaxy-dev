@@ -5,6 +5,7 @@ import Button from '../objects/Button.js'
 import Music from '../mode/Music.js'
 import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
+import gameSettings from '../config/gameSettings.js'
 
 class TitleScreen extends Phaser.Scene {
 	constructor() {
@@ -88,7 +89,7 @@ class TitleScreen extends Phaser.Scene {
 			})
 
 			this.music = this.sys.game.globals.music
-			if (this.music.musicOn === true) {
+			if (this.music.musicOn === true && !this.music.bgMusicPlaying) {
 				this.bgMusic = this.sound.add('main_menu_music', {
 					volume: 0.5,
 					loop: true,
@@ -116,7 +117,11 @@ class TitleScreen extends Phaser.Scene {
 			this.connectWalletText.setOrigin(0.5)
 			this.connectWalletText.setShadow(3, 3, '#F27CA4', 2, false, true)
 
-			EventBus.on('wallet-connected', this.handleWalletConnected, this)
+			this.handleWalletConnected()
+
+			if (!gameSettings.userActive) {
+				EventBus.on('wallet-connected', this.handleWalletConnected, this)
+			}
 		})
 	}
 
@@ -131,14 +136,17 @@ class TitleScreen extends Phaser.Scene {
 		})
 	}
 
-	handleWalletConnected(data) {
-		if (data.connected) {
+	handleWalletConnected() {
+		console.log('hehe', gameSettings.userActive)
+		if (gameSettings.userActive) {
+			console.log('one')
 			this.connectWalletText.setVisible(false)
-			if (!this.button_play) {
+			if (!this.button_play || gameSettings.userActive) {
 				this.createPlayButton()
 				this.createPVPButton()
 			}
 		} else {
+			console.log('two')
 			this.connectWalletText.setVisible(true)
 			if (this.button_play && this.button_pvp) {
 				this.button_play.destroy()

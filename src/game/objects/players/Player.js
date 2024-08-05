@@ -195,7 +195,7 @@ class Player extends Entity {
 
 	restartToTile() {
 		gameSettings.savePlayerSpeed = 300
-		gameSettings.savePlayerBulletDamage = 500
+		gameSettings.savePlayerBulletDamage = 5000
 		gameSettings.savePlayerLifesteal = 0
 		gameSettings.savePlayerBulletSpeed = 400
 		gameSettings.savePlayerScore = 0

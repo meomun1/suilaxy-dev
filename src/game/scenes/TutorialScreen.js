@@ -279,8 +279,8 @@ class TutorialScreen extends Phaser.Scene {
 			7000,
 			() => {
 				this.guiManager.createTextWithDelay(
-					'1000 points will give you an upgrade',
-					enemy.x - config.width / 4 + config.width / 16,
+					'1000 / 1500 / 2000 points will give you an upgrade',
+					enemy.x - config.width / 4,
 					enemy.y + config.height / 16,
 					'Pixelify Sans',
 					`${config.height / 32}px`,

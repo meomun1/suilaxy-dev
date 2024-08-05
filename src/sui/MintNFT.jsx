@@ -8,6 +8,7 @@ import {
 } from '@mysten/dapp-kit'
 import { EventBus } from '../game/EventBus'
 import { saveAs } from 'file-saver'
+import gameSettings from '../game/config/gameSettings'
 
 const PACKAGE_ADDRESS =
 	'0xdf295d1b88035db4a8c308ede33088e8c5df24d27f0448e41df2b8175afdae49'
@@ -27,17 +28,19 @@ const MintNFT = () => {
 	const { data } = useSuiClientQuery('getOwnedObjects', {
 		owner: currentAccount?.address,
 	})
-	if (data) {
-		console.log(data)
-	}
+	// if (data) {
+	// 	console.log(data)
+	// }
 
 	const { mutate: signAndExecuteTransactionBlock } =
 		useSignAndExecuteTransactionBlock()
 
 	useEffect(() => {
 		if (currentAccount) {
+			gameSettings.userActive = true
 			EventBus.emit('wallet-connected', { connected: true })
 		} else {
+			gameSettings.userActive = false
 			EventBus.emit('wallet-connected', { connected: false })
 		}
 	}, [currentAccount])
@@ -45,9 +48,15 @@ const MintNFT = () => {
 	useEffect(() => {
 		const handleSceneReady = (eventData) => {
 			if (currentAccount) {
-				EventBus.emit('wallet-connected', { connected: true })
+				gameSettings.userActive = true
+				EventBus.emit('wallet-connected', {
+					connected: true,
+				})
 			} else {
-				EventBus.emit('wallet-connected', { connected: false })
+				gameSettings.userActive = false
+				EventBus.emit('wallet-connected', {
+					connected: false,
+				})
 			}
 
 			if (

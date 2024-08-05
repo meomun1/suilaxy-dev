@@ -14,35 +14,68 @@ class LoadingScreen extends Phaser.Scene {
 	}
 
 	preload() {
+		this.guiManager.loadImage('nft_texture', this.url_img)
 		// Load background
-		this.load.image(
+		// Helper function to load image if it doesn't exist
+		const loadImageIfNotExists = (key, path) => {
+			if (!this.textures.exists(key)) {
+				this.load.image(key, path)
+			}
+		}
+
+		// Usage of the helper function
+		loadImageIfNotExists.call(
+			this,
 			'background_texture',
 			'assets/images/backgrounds/purple/nebula_1.png',
 		)
-
-		this.load.image(
+		loadImageIfNotExists.call(
+			this,
 			'background_texture_01',
 			'assets/images/backgrounds/green/nebula_6.png',
 		)
-
-		this.load.image(
+		loadImageIfNotExists.call(
+			this,
 			'background_texture_02',
 			'assets/images/backgrounds/blue/nebula_2.png',
 		)
-
-		this.load.image(
+		loadImageIfNotExists.call(
+			this,
 			'background_texture_03',
 			'assets/images/backgrounds/purple/nebula_3.png',
 		)
-
-		this.load.image(
+		loadImageIfNotExists.call(
+			this,
 			'background_texture_04',
 			'assets/images/backgrounds/blue/redbula_1.png',
 		)
 
 		// Load boss spritesheets
 
-		this.guiManager.loadSpriteSheet(
+		// Helper function to load spritesheet if it doesn't exist
+		const loadSpriteSheetIfNotExists = (
+			key,
+			path,
+			frameWidth,
+			frameHeight,
+			margin,
+			spacing,
+		) => {
+			if (!this.textures.exists(key)) {
+				this.guiManager.loadSpriteSheet(
+					key,
+					path,
+					frameWidth,
+					frameHeight,
+					margin,
+					spacing,
+				)
+			}
+		}
+
+		// Usage of the helper functions
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'boss_texture',
 			'assets/spritesheets/enemies/boss-01.png',
 			240,
@@ -50,7 +83,8 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			7,
 		)
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'mini_texture',
 			'assets/spritesheets/enemies/support-bot.png',
 			96,
@@ -58,9 +92,8 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			0,
 		)
-
-		// Load Enemy Spritesheets
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'bug1_texture',
 			'assets/spritesheets/enemies/bug_1.png',
 			64,
@@ -68,9 +101,8 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			5,
 		)
-
-		// this.load.spritesheet({
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'bug3_texture',
 			'assets/spritesheets/enemies/bug_3.png',
 			64,
@@ -78,7 +110,8 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			5,
 		)
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'bug5_texture',
 			'assets/spritesheets/enemies/bug_5.png',
 			64,
@@ -87,11 +120,8 @@ class LoadingScreen extends Phaser.Scene {
 			5,
 		)
 
-		this.guiManager.loadImage('nft_texture', this.url_img)
-
-		// Load health pack Spritesheet
-
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'healthPack_texture',
 			'assets/spritesheets/vfx/healthPack.png',
 			32,
@@ -99,10 +129,8 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			4,
 		)
-
-		// Load the HealthBar
-
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'healthBar_texture',
 			'assets/spritesheets/vfx/healthBar_01.png',
 			331,
@@ -110,9 +138,8 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			0,
 		)
-
-		// Load the Pause display button
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'pauseDis_texture',
 			'assets/spritesheets/vfx/pauseDis.png',
 			36,
@@ -120,9 +147,8 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			1,
 		)
-
-		// Load the setting button
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'settingButton_texture',
 			'assets/spritesheets/vfx/settingButton.png',
 			36,
@@ -130,9 +156,8 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			0,
 		)
-
-		// Load the setting hover button
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'mute_texture',
 			'assets/spritesheets/vfx/mute.png',
 			36,
@@ -140,9 +165,8 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			0,
 		)
-
-		// Load the setting button
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'sound_texture',
 			'assets/spritesheets/vfx/sound.png',
 			36,
@@ -150,9 +174,8 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			0,
 		)
-
-		// Load the setting hover button
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'settingHover_texture',
 			'assets/spritesheets/vfx/settingHover.png',
 			36,
@@ -160,9 +183,8 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			0,
 		)
-
-		// Load shield pack Spritesheet
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'shieldPack_texture',
 			'assets/spritesheets/vfx/shieldPack.png',
 			32,
@@ -170,9 +192,8 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			4,
 		)
-
-		// Load shield Spritesheet
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'shield_texture',
 			'assets/spritesheets/vfx/shield.png',
 			96,
@@ -180,9 +201,8 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			5,
 		)
-
-		// Load chase bullet Spritesheet
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'bulletChase_texture',
 			'assets/spritesheets/vfx/chaseBullet_01.png',
 			24,
@@ -190,108 +210,99 @@ class LoadingScreen extends Phaser.Scene {
 			0,
 			5,
 		)
-
-		if (this.selectedPlayerIndex == 1) {
-			this.guiManager.loadSpriteSheet(
-				'bullet1_texture',
-				'assets/spritesheets/vfx/bullet1.png',
-				32,
-				11,
-				0,
-				1,
-			)
+		// Mapping of selectedPlayerIndex to spritesheet details
+		const bulletSprites = {
+			1: {
+				key: 'bullet1_texture',
+				path: 'assets/spritesheets/vfx/bullet1.png',
+				frameWidth: 32,
+				frameHeight: 11,
+				margin: 0,
+				spacing: 1,
+			},
+			2: {
+				key: 'bullet2_texture',
+				path: 'assets/spritesheets/vfx/bullet2.png',
+				frameWidth: 25,
+				frameHeight: 33,
+				margin: 0,
+				spacing: 5,
+			},
+			3: {
+				key: 'bullet3_texture',
+				path: 'assets/spritesheets/vfx/bullet3.png',
+				frameWidth: 20,
+				frameHeight: 32,
+				margin: 0,
+				spacing: 4,
+			},
+			4: {
+				key: `bullet${this.selectedPlayerIndex}_texture`,
+				path: 'assets/spritesheets/vfx/bullet4.png',
+				frameWidth: 22,
+				frameHeight: 22,
+				margin: 0,
+				spacing: 5,
+			},
+			5: {
+				key: 'bullet5_texture',
+				path: 'assets/spritesheets/vfx/bullet5.png',
+				frameWidth: 20,
+				frameHeight: 39,
+				margin: 0,
+				spacing: 3,
+			},
+			6: {
+				key: 'bullet6_texture',
+				path: 'assets/spritesheets/vfx/bullet6.png',
+				frameWidth: 15,
+				frameHeight: 25,
+				margin: 0,
+				spacing: 2,
+			},
+			7: {
+				key: 'bullet7_texture',
+				path: 'assets/spritesheets/vfx/bullet7.png',
+				frameWidth: 20,
+				frameHeight: 30,
+				margin: 0,
+				spacing: 3,
+			},
+			8: {
+				key: 'bullet8_texture',
+				path: 'assets/spritesheets/vfx/bullet8.png',
+				frameWidth: 30,
+				frameHeight: 30,
+				margin: 0,
+				spacing: 5,
+			},
+			9: {
+				key: 'bullet9_texture',
+				path: 'assets/spritesheets/vfx/bullet9.png',
+				frameWidth: 20,
+				frameHeight: 30,
+				margin: 0,
+				spacing: 3,
+			},
 		}
 
-		if (this.selectedPlayerIndex == 2) {
-			this.guiManager.loadSpriteSheet(
-				'bullet2_texture',
-				'assets/spritesheets/vfx/bullet2.png',
-				25,
-				33,
-				0,
-				5,
-			)
-		}
-
-		if (this.selectedPlayerIndex == 3) {
-			this.guiManager.loadSpriteSheet(
-				'bullet3_texture',
-				'assets/spritesheets/vfx/bullet3.png',
-				20,
-				32,
-				0,
-				4,
-			)
-		}
-
-		if (this.selectedPlayerIndex == 4) {
-			this.guiManager.loadSpriteSheet(
-				`bullet${this.selectedPlayerIndex}_texture`,
-				`assets/spritesheets/vfx/bullet4.png`,
-				22,
-				22,
-				0,
-				5,
-			)
-		}
-
-		if (this.selectedPlayerIndex == 5) {
-			this.guiManager.loadSpriteSheet(
-				'bullet5_texture',
-				'assets/spritesheets/vfx/bullet5.png',
-				20,
-				39,
-				0,
-				3,
-			)
-		}
-
-		if (this.selectedPlayerIndex == 6) {
-			this.guiManager.loadSpriteSheet(
-				'bullet6_texture',
-				'assets/spritesheets/vfx/bullet6.png',
-				15,
-				25,
-				0,
-				2,
-			)
-		}
-
-		if (this.selectedPlayerIndex == 7) {
-			this.guiManager.loadSpriteSheet(
-				'bullet7_texture',
-				'assets/spritesheets/vfx/bullet7.png',
-				20,
-				30,
-				0,
-				3,
-			)
-		}
-
-		if (this.selectedPlayerIndex == 8) {
-			this.guiManager.loadSpriteSheet(
-				'bullet8_texture',
-				'assets/spritesheets/vfx/bullet8.png',
-				30,
-				30,
-				0,
-				5,
-			)
-		}
-
-		if (this.selectedPlayerIndex == 9) {
-			this.guiManager.loadSpriteSheet(
-				'bullet9_texture',
-				'assets/spritesheets/vfx/bullet9.png',
-				20,
-				30,
-				0,
-				3,
+		// Load the appropriate spritesheet based on selectedPlayerIndex
+		const bulletSprite = bulletSprites[this.selectedPlayerIndex]
+		if (bulletSprite) {
+			loadSpriteSheetIfNotExists.call(
+				this,
+				bulletSprite.key,
+				bulletSprite.path,
+				bulletSprite.frameWidth,
+				bulletSprite.frameHeight,
+				bulletSprite.margin,
+				bulletSprite.spacing,
 			)
 		}
 
 		// Load enemy Bullet Spritesheet
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'bullet_texture',
 			'assets/spritesheets/vfx/bullet.png',
 			12,
@@ -301,7 +312,8 @@ class LoadingScreen extends Phaser.Scene {
 		)
 
 		// Load Effect Spritesheets
-		this.guiManager.loadSpriteSheet(
+		loadSpriteSheetIfNotExists.call(
+			this,
 			'explosion_texture',
 			'assets/spritesheets/vfx/explosion.png',
 			100,
@@ -321,338 +333,260 @@ class LoadingScreen extends Phaser.Scene {
 	create() {
 		this.cameras.main.fadeIn(500, 0, 0, 0)
 
-		// Create first bullet animations
-		if (this.selectedPlayerIndex == 1) {
-			this.anims.create({
-				key: `bullet${this.selectedPlayerIndex}_anim`,
-				frames: this.anims.generateFrameNumbers(
-					`bullet${this.selectedPlayerIndex}_texture`,
-					{
-						start: 0,
-						end: 1,
-					},
-				),
-				frameRate: 12,
-				repeat: -1,
-			})
-		}
-
-		if (this.selectedPlayerIndex == 2) {
-			this.anims.create({
-				key: `bullet${this.selectedPlayerIndex}_anim`,
-				frames: this.anims.generateFrameNumbers(
-					`bullet${this.selectedPlayerIndex}_texture`,
-					{
-						start: 0,
-						end: 5,
-					},
-				),
-				frameRate: 30,
-				repeat: -1,
-			})
-		}
-
-		if (this.selectedPlayerIndex == 3) {
-			this.anims.create({
-				key: `bullet${this.selectedPlayerIndex}_anim`,
-				frames: this.anims.generateFrameNumbers(
-					`bullet${this.selectedPlayerIndex}_texture`,
-					{
-						start: 0,
-						end: 4,
-					},
-				),
-				frameRate: 30,
-				repeat: -1,
-			})
-		}
-
-		if (this.selectedPlayerIndex == 4) {
-			this.anims.create({
-				key: `bullet${this.selectedPlayerIndex}_anim`,
-				frames: this.anims.generateFrameNumbers(
-					`bullet${this.selectedPlayerIndex}_texture`,
-					{
-						start: 0,
-						end: 5,
-					},
-				),
-				frameRate: 20,
-				repeat: -1,
-			})
-		}
-
-		if (this.selectedPlayerIndex == 5) {
-			this.anims.create({
-				key: `bullet5_anim`,
-				frames: this.anims.generateFrameNumbers(`bullet5_texture`, {
-					start: 0,
-					end: 3,
-				}),
-				frameRate: 30,
-				repeat: -1,
-			})
-		}
-
-		if (this.selectedPlayerIndex == 6) {
-			this.anims.create({
-				key: `bullet${this.selectedPlayerIndex}_anim`,
-				frames: this.anims.generateFrameNumbers(
-					`bullet${this.selectedPlayerIndex}_texture`,
-					{
-						start: 0,
-						end: 2,
-					},
-				),
-				frameRate: 12,
-				repeat: -1,
-			})
-		}
-
-		if (this.selectedPlayerIndex == 7) {
-			this.anims.create({
-				key: `bullet${this.selectedPlayerIndex}_anim`,
-				frames: this.anims.generateFrameNumbers(
-					`bullet${this.selectedPlayerIndex}_texture`,
-					{
-						start: 0,
-						end: 3,
-					},
-				),
-				frameRate: 30,
-				repeat: -1,
-			})
-		}
-
-		if (this.selectedPlayerIndex == 8) {
-			this.anims.create({
-				key: `bullet${this.selectedPlayerIndex}_anim`,
-				frames: this.anims.generateFrameNumbers(
-					`bullet${this.selectedPlayerIndex}_texture`,
-					{
-						start: 0,
-						end: 5,
-					},
-				),
-				frameRate: 30,
-				repeat: -1,
-			})
-		}
-
-		if (this.selectedPlayerIndex == 9) {
-			this.anims.create({
-				key: `bullet${this.selectedPlayerIndex}_anim`,
-				frames: this.anims.generateFrameNumbers(
-					`bullet${this.selectedPlayerIndex}_texture`,
-					{
-						start: 0,
-						end: 3,
-					},
-				),
-				frameRate: 30,
-				repeat: -1,
-			})
-		}
-
-		// Create player animations
-		this.anims.create({
-			key: 'player_anim',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 0,
-					end: 3,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
-
-		this.anims.create({
-			key: 'player_anim_left',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 4,
-					end: 7,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
-
-		this.anims.create({
-			key: 'player_anim_left_diagonal',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 8,
-					end: 11,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
-
-		this.anims.create({
-			key: 'player_anim_right',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 12,
-					end: 15,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
-
-		this.anims.create({
-			key: 'player_anim_right_diagonal',
-			frames: this.anims.generateFrameNumbers(
-				`player_texture_${this.selectedPlayerIndex}`,
-				{
-					start: 16,
-					end: 19,
-				},
-			),
-			frameRate: 30,
-			repeat: -1,
-		})
-
-		// Create bullet animations
-		this.anims.create({
-			key: 'bulletChase_anim',
-			frames: this.anims.generateFrameNumbers('bulletChase_texture', {
-				start: 0,
-				end: 5,
-			}),
-			frameRate: 15,
-			repeat: -1,
-		})
-
-		// Create boss animations
-
-		this.anims.create({
-			key: 'boss_move_anim',
-			frames: this.anims.generateFrameNumbers('boss_texture', {
-				start: 0,
-				end: 3,
-			}),
-			frameRate: 20,
-			repeat: -1,
-		})
-
-		this.anims.create({
-			key: 'boss_shoot_anim',
-			frames: this.anims.generateFrameNumbers('boss_texture', {
-				start: 0,
-				end: 7,
-			}),
-			frameRate: 20,
-			repeat: -1,
-		})
-
-		// Create enemy animations
-		this.anims.create({
-			key: 'bug1_anim',
-			frames: this.anims.generateFrameNumbers('bug1_texture', {
-				start: 0,
-				end: 5,
-			}),
-			frameRate: 20,
-			repeat: -1,
-		})
-
-		this.anims.create({
-			key: 'bug3_anim',
-			frames: this.anims.generateFrameNumbers('bug3_texture', {
-				start: 0,
-				end: 5,
-			}),
-			frameRate: 20,
-			repeat: -1,
-		})
-
-		this.anims.create({
-			key: 'bug5_anim',
-			frames: this.anims.generateFrameNumbers('bug5_texture', {
-				start: 0,
-				end: 5,
-			}),
-			frameRate: 20,
-			repeat: -1,
-		})
-
-		// Create health pack animations
-		this.anims.create({
-			key: 'healthPack_anim',
-			frames: this.anims.generateFrameNumbers('healthPack_texture', {
-				start: 0,
-				end: 4,
-			}),
-			frameRate: 20,
-			repeat: -1,
-		})
-
-		// Create shield pack animations
-		this.anims.create({
-			key: 'shieldPack_anim',
-			frames: this.anims.generateFrameNumbers('shieldPack_texture', {
-				start: 0,
-				end: 4,
-			}),
-			frameRate: 20,
-			repeat: -1,
-		})
-
-		// Create shield animations
-		this.anims.create({
-			key: 'shield_anim',
-			frames: this.anims.generateFrameNumbers('shield_texture', {
-				start: 0,
-				end: 5,
-			}),
-			frameRate: 20,
-			repeat: -1,
-		})
-
-		// Create explosion animations
-		this.anims.create({
-			key: 'explosion_anim',
-			frames: this.anims.generateFrameNumbers('explosion_texture', {
-				start: 0,
-				end: 10,
-			}),
-			frameRate: 30,
-			repeat: 0,
-			hideOnComplete: true,
-		})
-
-		// Create pause display animations
-		this.anims.create({
-			key: 'pauseDis_anim',
-			frames: this.anims.generateFrameNumbers('pauseDis_texture', {
-				start: 0,
-				end: 1,
-			}),
-			frameRate: 60,
-			repeat: 0,
-			hideOnComplete: true,
-		})
-
-		// Create loading text
 		const loadingText = this.add.text(
 			config.width / 2,
 			config.height / 2 - 60,
-			'LOADING',
+			'LOADING : First time may take a while',
 			{ fontFamily: 'Pixelify Sans', fontSize: '50px', fill: '#fff' },
 		)
 		loadingText.setOrigin(0.5)
 
+		// Helper function to create animation if it doesn't exist
+		const createAnimationIfNotExists = (
+			key,
+			textureKey,
+			start,
+			end,
+			frameRate,
+			repeat,
+		) => {
+			if (!this.anims.exists(key)) {
+				this.anims.create({
+					key: key,
+					frames: this.anims.generateFrameNumbers(textureKey, {
+						start: start,
+						end: end,
+					}),
+					frameRate: frameRate,
+					repeat: repeat,
+				})
+			}
+		}
+
+		// Mapping of selectedPlayerIndex to animation details
+		const bulletAnimations = {
+			1: {
+				key: 'bullet1_anim',
+				textureKey: 'bullet1_texture',
+				start: 0,
+				end: 1,
+				frameRate: 12,
+				repeat: -1,
+			},
+			2: {
+				key: 'bullet2_anim',
+				textureKey: 'bullet2_texture',
+				start: 0,
+				end: 5,
+				frameRate: 30,
+				repeat: -1,
+			},
+			3: {
+				key: 'bullet3_anim',
+				textureKey: 'bullet3_texture',
+				start: 0,
+				end: 4,
+				frameRate: 30,
+				repeat: -1,
+			},
+			4: {
+				key: 'bullet4_anim',
+				textureKey: 'bullet4_texture',
+				start: 0,
+				end: 5,
+				frameRate: 20,
+				repeat: -1,
+			},
+			5: {
+				key: 'bullet5_anim',
+				textureKey: 'bullet5_texture',
+				start: 0,
+				end: 3,
+				frameRate: 30,
+				repeat: -1,
+			},
+			6: {
+				key: 'bullet6_anim',
+				textureKey: 'bullet6_texture',
+				start: 0,
+				end: 2,
+				frameRate: 12,
+				repeat: -1,
+			},
+			7: {
+				key: 'bullet7_anim',
+				textureKey: 'bullet7_texture',
+				start: 0,
+				end: 3,
+				frameRate: 30,
+				repeat: -1,
+			},
+			8: {
+				key: 'bullet8_anim',
+				textureKey: 'bullet8_texture',
+				start: 0,
+				end: 5,
+				frameRate: 30,
+				repeat: -1,
+			},
+			9: {
+				key: 'bullet9_anim',
+				textureKey: 'bullet9_texture',
+				start: 0,
+				end: 3,
+				frameRate: 30,
+				repeat: -1,
+			},
+		}
+
+		// Create the appropriate animation based on selectedPlayerIndex
+		const bulletAnimation = bulletAnimations[this.selectedPlayerIndex]
+		if (bulletAnimation) {
+			createAnimationIfNotExists.call(
+				this,
+				bulletAnimation.key,
+				bulletAnimation.textureKey,
+				bulletAnimation.start,
+				bulletAnimation.end,
+				bulletAnimation.frameRate,
+				bulletAnimation.repeat,
+			)
+		}
+
+		// Mapping of animation keys to their details
+		const playerAnimations = [
+			{ key: 'player_anim', start: 0, end: 3 },
+			{ key: 'player_anim_left', start: 4, end: 7 },
+			{ key: 'player_anim_left_diagonal', start: 8, end: 11 },
+			{ key: 'player_anim_right', start: 12, end: 15 },
+			{ key: 'player_anim_right_diagonal', start: 16, end: 19 },
+		]
+
+		// Create player animations
+		playerAnimations.forEach((anim) => {
+			createAnimationIfNotExists.call(
+				this,
+				anim.key,
+				`player_texture_${this.selectedPlayerIndex}`,
+				anim.start,
+				anim.end,
+				30,
+				-1,
+			)
+		})
+
+		// Mapping of animation keys to their details
+		const animations = [
+			{
+				key: 'bulletChase_anim',
+				textureKey: 'bulletChase_texture',
+				start: 0,
+				end: 5,
+				frameRate: 15,
+				repeat: -1,
+			},
+			{
+				key: 'boss_move_anim',
+				textureKey: 'boss_texture',
+				start: 0,
+				end: 3,
+				frameRate: 20,
+				repeat: -1,
+			},
+			{
+				key: 'boss_shoot_anim',
+				textureKey: 'boss_texture',
+				start: 0,
+				end: 7,
+				frameRate: 20,
+				repeat: -1,
+			},
+			{
+				key: 'bug1_anim',
+				textureKey: 'bug1_texture',
+				start: 0,
+				end: 5,
+				frameRate: 20,
+				repeat: -1,
+			},
+			{
+				key: 'bug3_anim',
+				textureKey: 'bug3_texture',
+				start: 0,
+				end: 5,
+				frameRate: 20,
+				repeat: -1,
+			},
+			{
+				key: 'bug5_anim',
+				textureKey: 'bug5_texture',
+				start: 0,
+				end: 5,
+				frameRate: 20,
+				repeat: -1,
+			},
+			{
+				key: 'healthPack_anim',
+				textureKey: 'healthPack_texture',
+				start: 0,
+				end: 4,
+				frameRate: 20,
+				repeat: -1,
+			},
+			{
+				key: 'shieldPack_anim',
+				textureKey: 'shieldPack_texture',
+				start: 0,
+				end: 4,
+				frameRate: 20,
+				repeat: -1,
+			},
+			{
+				key: 'shield_anim',
+				textureKey: 'shield_texture',
+				start: 0,
+				end: 5,
+				frameRate: 20,
+				repeat: -1,
+			},
+			{
+				key: 'explosion_anim',
+				textureKey: 'explosion_texture',
+				start: 0,
+				end: 10,
+				frameRate: 30,
+				repeat: 0,
+				hideOnComplete: true,
+			},
+			{
+				key: 'pauseDis_anim',
+				textureKey: 'pauseDis_texture',
+				start: 0,
+				end: 1,
+				frameRate: 60,
+				repeat: 0,
+				hideOnComplete: true,
+			},
+		]
+
+		// Create animations
+		animations.forEach((anim) => {
+			createAnimationIfNotExists.call(
+				this,
+				anim.key,
+				anim.textureKey,
+				anim.start,
+				anim.end,
+				anim.frameRate,
+				anim.repeat,
+				anim.hideOnComplete,
+			)
+		})
+
+		// Create loading text
 		this.time.delayedCall(1000, () => {
 			let value = this.selectedPlayerIndex
-			this.scene.start('playGame', { number: value })
+			this.scene.start('playTutorial', { number: value })
 		})
 	}
 }

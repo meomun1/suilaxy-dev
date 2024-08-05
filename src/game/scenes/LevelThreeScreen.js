@@ -706,7 +706,9 @@ class LevelThreeScreen extends Phaser.Scene {
 		}
 
 		this.projectiles.children.iterate((bullet) => {
-			bullet.update()
+			if (bullet) {
+				bullet.update()
+			}
 		})
 
 		if (this.player.health <= 0) {

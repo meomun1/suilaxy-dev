@@ -376,10 +376,16 @@ class TutorialScreen extends Phaser.Scene {
 		// Move the background
 		this.background.tilePositionY -= BACKGROUND_SCROLL_SPEED
 
-		// PLAYER
-		if (this.PlayerManager) {
-			this.PlayerManager.movePlayer()
-		}
+		this.time.delayedCall(
+			13500,
+			() => {
+				if (this.PlayerManager) {
+					this.PlayerManager.movePlayer()
+				}
+			},
+			null,
+			this,
+		)
 
 		if (this.player.health <= 0) {
 			this.gameOver()

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { TransactionBlock } from '@mysten/sui.js/transactions'
+// import { TransactionBlock } from '@mysten/sui.js/transactions'
+import { Transaction } from '@mysten/sui/transactions'
 import {
 	ConnectButton,
 	useCurrentAccount,
@@ -9,9 +10,10 @@ import {
 import { EventBus } from '../game/EventBus'
 import { saveAs } from 'file-saver'
 import gameSettings from '../game/config/gameSettings'
+import { MIST_PER_SUI } from '@mysten/sui/utils'
 
 const PACKAGE_ADDRESS =
-	'0xdf295d1b88035db4a8c308ede33088e8c5df24d27f0448e41df2b8175afdae49'
+	'0xd1fdf1270ca89b28a68d02e1b0bf20b8438d72c51ca207ab3d1790ba528d6513'
 
 const MintNFT = () => {
 	const [name, setName] = useState('')
@@ -32,7 +34,7 @@ const MintNFT = () => {
 	// 	console.log(data)
 	// }
 
-	const { mutate: signAndExecuteTransactionBlock } =
+	const { mutate: signAndExecuteTransaction } =
 		useSignAndExecuteTransactionBlock()
 
 	useEffect(() => {
@@ -107,21 +109,37 @@ const MintNFT = () => {
 				)
 			}
 
-			const txb = new TransactionBlock()
+			const txb = new Transaction()
 			const sender = currentAccount.address
 			txb.setSender(sender)
+
+			const betAmountCoin = txb.splitCoins(txb.gas, [200000000])
+
+			// Ensure betAmountCoin is valid
+			if (!betAmountCoin) {
+				throw new Error('Failed to create betAmountCoin')
+			}
 
 			txb.moveCall({
 				target: `${PACKAGE_ADDRESS}::suilaxy_nft::mint_to_sender`,
 				arguments: [
-					txb.pure(name),
-					txb.pure(description),
-					txb.pure(frame),
-					txb.pure(url),
+					txb.pure.string(name),
+					txb.pure.string(description),
+					txb.pure.string(frame),
+					txb.pure.string(url),
+					betAmountCoin,
+					txb.object(
+						'0x0e033f7c3b5509af5e80d7384fc91d5094d8dc3b9457b5ba7ca5b1733f9131c5',
+					),
+					txb.object(
+						'0x8256a34b4dd5d74c0c0d29dab90e1883f463cd4b93cb02a199ba9404376144cb',
+					),
 				],
 			})
 
-			signAndExecuteTransactionBlock(
+			console.log('Transaction:', txb)
+
+			signAndExecuteTransaction(
 				{
 					transactionBlock: txb,
 					chain: 'sui:testnet',

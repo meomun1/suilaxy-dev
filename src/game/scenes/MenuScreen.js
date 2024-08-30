@@ -9,7 +9,6 @@ class MenuScreen extends Phaser.Scene {
 	constructor() {
 		super('mainMenu')
 		this.music = null
-		this.bgMusic = null
 		this.walletConnected = false
 		this.suilaxyText = null
 		this.currentModeIndex = 0
@@ -19,14 +18,7 @@ class MenuScreen extends Phaser.Scene {
 		this.guiManager = new GuiManager(this)
 	}
 
-	init() {
-		const music = new Music()
-		this.sys.game.globals = { music, bgMusic: null }
-	}
-
 	preload() {
-		this.load.audio('main_menu_music', 'assets/audio/backgroundMusic.mp3')
-
 		// Load the background and buttons
 		this.guiManager.loadImage('background', 'assets/main-menu/background.png')
 

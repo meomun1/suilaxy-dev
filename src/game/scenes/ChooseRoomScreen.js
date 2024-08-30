@@ -39,6 +39,10 @@ class ChooseRoomScreen extends Phaser.Scene {
 	create() {
 		this.socket = socket
 
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		this.socket.on('connect_error', (err) => {
 			// the reason of the error, for example "xhr poll error"
 			console.log(err.message)

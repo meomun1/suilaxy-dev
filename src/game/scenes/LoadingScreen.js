@@ -331,6 +331,10 @@ class LoadingScreen extends Phaser.Scene {
 	}
 
 	create() {
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		this.cameras.main.fadeIn(500, 0, 0, 0)
 
 		const loadingText = this.add.text(

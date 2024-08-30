@@ -43,6 +43,10 @@ class GameOver extends Phaser.Scene {
 	create() {
 		EventBus.on('wallet-connected', handleWalletConnected, this)
 
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		gameSettings.isBossDead = true
 		// Add a game over message
 		this.keyboardManager = new KeyboardManager(this)

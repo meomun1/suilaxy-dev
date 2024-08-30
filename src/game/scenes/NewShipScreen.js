@@ -77,6 +77,9 @@ class NewShipScreen extends Phaser.Scene {
 	}
 
 	create() {
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
 		this.cameras.main.fadeIn(1000, 0, 0, 0)
 
 		this.guiManager = new GuiManager(this)

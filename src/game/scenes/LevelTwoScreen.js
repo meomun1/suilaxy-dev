@@ -363,6 +363,10 @@ class LevelTwoScreen extends Phaser.Scene {
 	create() {
 		EventBus.on('wallet-connected', handleWalletConnected, this)
 
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		this.cameras.main.fadeIn(1000, 0, 0, 0)
 
 		this.physics.world.setBounds(0, 0, config.width, config.height)

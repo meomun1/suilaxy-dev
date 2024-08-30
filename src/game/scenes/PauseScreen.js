@@ -20,6 +20,9 @@ class PauseScreen extends Phaser.Scene {
 	}
 
 	create() {
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
 		EventBus.on('wallet-connected', handleWalletConnected, this)
 
 		this.music = this.sys.game.globals.music

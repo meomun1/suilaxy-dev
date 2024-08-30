@@ -102,6 +102,9 @@ class PVPScreen extends Phaser.Scene {
 	}
 
 	create() {
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
 		this.socket = socket
 
 		this.anims.create({

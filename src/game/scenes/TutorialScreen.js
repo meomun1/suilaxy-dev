@@ -32,6 +32,9 @@ class TutorialScreen extends Phaser.Scene {
 	}
 
 	create() {
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
 		gameSettings.isBossDead = true
 		// global music
 		this.music = this.sys.game.globals.music

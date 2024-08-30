@@ -36,6 +36,10 @@ class ChoosePlayerPVP extends Phaser.Scene {
 		this.cameras.main.fadeIn(1500)
 		this.guiManager.createBackground('background')
 
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		this.guiManager.createMediumText(
 			config.width / 2,
 			config.height / 4 - 130,

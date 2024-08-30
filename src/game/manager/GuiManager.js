@@ -170,7 +170,7 @@ class GuiManager {
 			},
 		)
 		textObject.setOrigin(0.5)
-		textObject.setShadow(3, 3, '#F27CA4', 2, false, true)
+		textObject.setShadow(3, 3, '#EFBA0C', 2, false, true)
 
 		this.scene.tweens.add({
 			targets: textObject,
@@ -180,6 +180,22 @@ class GuiManager {
 			yoyo: true,
 			alpha: 0.2,
 		})
+	}
+
+	createAnimatedTextMiddleNoTween(text, yOffset) {
+		const textObject = this.scene.add.text(
+			config.width / 2,
+			config.height / 2 + yOffset,
+			text,
+			{
+				fontFamily: 'Pixelify Sans',
+				fontSize: `${middleWidth / 5}px`,
+				color: '#F3F8FF',
+				align: 'center',
+			},
+		)
+		textObject.setOrigin(0.5)
+		textObject.setShadow(3, 3, '#EFBA0C', 2, false, true)
 	}
 
 	createAnimatedTextSize(text, yOffset, size) {

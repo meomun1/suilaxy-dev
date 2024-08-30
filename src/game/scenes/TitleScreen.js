@@ -15,7 +15,6 @@ class TitleScreen extends Phaser.Scene {
 		this.walletConnected = false
 		this.connectWalletText = null
 		this.button_play = null
-		this.button_pvp = null
 		this.guiManager = new GuiManager(this)
 	}
 
@@ -27,11 +26,8 @@ class TitleScreen extends Phaser.Scene {
 	preload() {
 		this.load.audio('main_menu_music', 'assets/audio/backgroundMusic.mp3')
 
-		this.guiManager.loadImage(
-			'background',
-			// 'assets/images/backgrounds/background_title.png',
-			'background.png',
-		)
+		this.guiManager.loadImage('background', 'assets/main-menu/background.png')
+
 		this.guiManager.loadSpriteSheet(
 			'button_play',
 			'assets/gui/button.png',
@@ -47,23 +43,6 @@ class TitleScreen extends Phaser.Scene {
 			28,
 			2,
 			2,
-		)
-
-		this.guiManager.loadSpriteSheet(
-			'button_pvp',
-			'assets/gui/button.png',
-			93,
-			28,
-			9,
-			9,
-		)
-		this.guiManager.loadSpriteSheet(
-			'button_pvp_hover',
-			'assets/gui/button_hover.png',
-			93,
-			28,
-			9,
-			9,
 		)
 	}
 
@@ -100,8 +79,8 @@ class TitleScreen extends Phaser.Scene {
 			}
 
 			this.guiManager.createBackground('background')
-			this.guiManager.createAnimatedTextMiddle('GUARDIAN', -30)
-			this.guiManager.createAnimatedTextMiddle('SPACE', -130)
+			this.guiManager.createAnimatedTextMiddleNoTween('GUARDIAN', -30)
+			this.guiManager.createAnimatedTextMiddleNoTween('SPACE', -130)
 
 			this.connectWalletText = this.add.text(
 				config.width / 2,
@@ -115,7 +94,15 @@ class TitleScreen extends Phaser.Scene {
 				},
 			)
 			this.connectWalletText.setOrigin(0.5)
-			this.connectWalletText.setShadow(3, 3, '#F27CA4', 2, false, true)
+			this.connectWalletText.setShadow(3, 3, '#EFBA0C', 2, false, true)
+			this.tweens.add({
+				targets: this.connectWalletText,
+				duration: 1000,
+				ease: 'Sine.easeInOut',
+				repeat: -1,
+				yoyo: true,
+				alpha: 0.2,
+			})
 
 			this.handleWalletConnected()
 
@@ -137,22 +124,16 @@ class TitleScreen extends Phaser.Scene {
 	}
 
 	handleWalletConnected() {
-		console.log('hehe', gameSettings.userActive)
 		if (gameSettings.userActive) {
-			console.log('one')
 			this.connectWalletText.setVisible(false)
 			if (!this.button_play || gameSettings.userActive) {
 				this.createPlayButton()
-				this.createPVPButton()
 			}
 		} else {
-			console.log('two')
 			this.connectWalletText.setVisible(true)
-			if (this.button_play && this.button_pvp) {
+			if (this.button_play) {
 				this.button_play.destroy()
 				this.button_play = null
-				this.button_pvp.destroy()
-				this.button_pvp = null
 			}
 		}
 	}
@@ -164,25 +145,11 @@ class TitleScreen extends Phaser.Scene {
 			config.height / 2 + config.height / 8,
 			'button_play',
 			'button_play_hover',
-			'choosePlayer',
+			'mainMenu',
 		)
 		this.button_play.setSize(config.width / 10, config.height / 20)
 		this.button_play.setInteractive()
 		this.button_play.setScale(1.5)
-	}
-
-	createPVPButton() {
-		this.button_pvp = new Button(
-			this,
-			config.width / 2,
-			config.height / 2 + config.height / 4,
-			'button_pvp',
-			'button_pvp_hover',
-			'chooseRoom',
-		)
-		this.button_pvp.setSize(config.width / 10, config.height / 20)
-		this.button_pvp.setInteractive()
-		this.button_pvp.setScale(1.5)
 	}
 
 	shutdown() {

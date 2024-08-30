@@ -1,117 +1,117 @@
-@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Bungee&family=Libre+Barcode+128&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Libre+Barcode+128&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Stencil+Display:wght@100..900&display=swap');
 :root {
-  --glowing-yellow: 0px 0px 20px 0px rgba(232, 170, 65, 1);
+	--glowing-yellow: 0px 0px 20px 0px rgba(232, 170, 65, 1);
 }
 
 * {
-  -webkit-font-smoothing: antialiased;
-  font-family: "Bungee", cursive;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	-webkit-font-smoothing: antialiased;
+	font-family: 'Bungee', cursive;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 html {
-  background-image: url("/background.png");
-  z-index: -1;
-  opacity: 1;
+	background-image: url('/background.png');
+	z-index: -1;
+	opacity: 1;
 }
 
 button:focus-visible {
-  outline: 2px solid #e8aa41 !important;
-  outline: -webkit-focus-ring-color auto 5px !important;
+	outline: 2px solid #e8aa41 !important;
+	outline: -webkit-focus-ring-color auto 5px !important;
 }
 
 ul {
-  list-style-type: none;
+	list-style-type: none;
 }
 
 a {
-  text-decoration: none;
+	text-decoration: none;
 }
 
 #app {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: relative;
 }
 
 .top {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
 }
 .top-logo {
-  gap: 20px;
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  background-color: rgba(255, 255, 255, 0.03);
-  border: 1px solid;
-  border-color: rgba(255, 255, 255, 0.1019607843);
-  border-radius: 15px;
+	gap: 20px;
+	-webkit-backdrop-filter: blur(20px);
+	backdrop-filter: blur(20px);
+	background-color: rgba(255, 255, 255, 0.03);
+	border: 1px solid;
+	border-color: rgba(255, 255, 255, 0.1019607843);
+	border-radius: 15px;
 }
 .top-logo h1 {
-  font-weight: 400;
-  text-align: center;
-  color: white;
-  -webkit-text-stroke: 1px #e8aa41;
-  color: #ffffff;
-  font-family: "Big Shoulders Stencil Display", sans-serif;
-  font-size: 64px;
-  font-weight: 800;
-  text-shadow: 0px 0px 10px #e8aa41, 0px 0px 20px #e8aa41;
-  padding: 0px 10px;
+	font-weight: 400;
+	text-align: center;
+	color: white;
+	-webkit-text-stroke: 1px #e8aa41;
+	color: #ffffff;
+	font-family: 'Big Shoulders Stencil Display', sans-serif;
+	font-size: 64px;
+	font-weight: 800;
+	text-shadow: 0px 0px 10px #e8aa41, 0px 0px 20px #e8aa41;
+	padding: 0px 10px;
 }
 .top-connect .Button_buttonVariants__x1s81q0 {
-  color: #000;
-  font-size: 24px;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: 0.3s;
+	color: #000;
+	font-size: 24px;
+	border-radius: 15px;
+	cursor: pointer;
+	transition: 0.3s;
 }
 .top-connect .Button_buttonVariants__x1s81q0:hover {
-  transform: scale(1.1);
+	transform: scale(1.1);
 }
 .top-desc {
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  background-color: rgba(255, 255, 255, 0.03);
-  border: 1px solid;
-  border-color: rgba(255, 255, 255, 0.1019607843);
-  border-radius: 15px;
-  font-size: 8px;
-  color: #ffffff;
-  font-family: "Big Shoulders Stencil Display", sans-serif;
-  padding: 5px 100px;
+	-webkit-backdrop-filter: blur(20px);
+	backdrop-filter: blur(20px);
+	background-color: rgba(255, 255, 255, 0.03);
+	border: 1px solid;
+	border-color: rgba(255, 255, 255, 0.1019607843);
+	border-radius: 15px;
+	font-size: 8px;
+	color: #ffffff;
+	font-family: 'Big Shoulders Stencil Display', sans-serif;
+	padding: 5px 100px;
 }
 .top-desc a {
-  color: #e8aa41;
-  font-size: 16px;
+	color: #e8aa41;
+	font-size: 16px;
 }
 
 .game-canvas {
-  width: 1100px;
-  height: 600px;
-  min-width: 1100px;
-  min-height: 600px;
-  -webkit-backdrop-filter: blur(18px) brightness(100%);
-  backdrop-filter: blur(18px) brightness(100%);
-  background-color: rgba(240, 213, 249, 0.0117647059);
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0px 0px 21.5px 4px #fff;
+	width: 1100px;
+	height: 600px;
+	min-width: 1100px;
+	min-height: 600px;
+	-webkit-backdrop-filter: blur(18px) brightness(100%);
+	backdrop-filter: blur(18px) brightness(100%);
+	background-color: rgba(240, 213, 249, 0.0117647059);
+	border-radius: 15px;
+	overflow: hidden;
+	box-shadow: 0px 0px 21.5px 4px #fff;
 }
 
 #game-container {
-  background-color: black;
+	background-color: black;
 }
 
 /*# sourceMappingURL=output.css.map */

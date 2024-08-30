@@ -635,6 +635,10 @@ class LevelThreeScreen extends Phaser.Scene {
 	create() {
 		EventBus.on('wallet-connected', handleWalletConnected, this)
 
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		this.cameras.main.fadeIn(1000, 0, 0, 0)
 		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
 		this.guiManager.createBackground('background_texture_02')

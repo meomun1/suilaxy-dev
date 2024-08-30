@@ -47,6 +47,10 @@ class TitleScreen extends Phaser.Scene {
 	}
 
 	create() {
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		this.loadWebFonts().then(() => {
 			let blackCover = this.add.rectangle(
 				0,

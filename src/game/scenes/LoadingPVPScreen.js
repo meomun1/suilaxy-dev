@@ -274,6 +274,10 @@ class LoadingPvPScreen extends Phaser.Scene {
 		EventBus.on('wallet-connected', handleWalletConnected, this)
 		this.cameras.main.fadeIn(500, 0, 0, 0)
 
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		// Create first bullet animations
 		if (this.selectedPlayerIndex == 1) {
 			this.anims.create({

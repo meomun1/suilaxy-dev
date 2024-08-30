@@ -19,6 +19,9 @@ class UpgradeScreen extends Phaser.Scene {
 	}
 
 	create(data) {
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
 		// Get the calling scene name
 		this.callbackSceneName = data.callingScene
 

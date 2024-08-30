@@ -272,6 +272,10 @@ class BossScreen extends Phaser.Scene {
 		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
 		EventBus.on('wallet-connected', handleWalletConnected, this)
 
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		this.guiManager.createBackground('background_texture_04')
 
 		this.music = this.sys.game.globals.music

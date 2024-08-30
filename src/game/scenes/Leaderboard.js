@@ -14,6 +14,10 @@ class Leaderboard extends Phaser.Scene {
 	create() {
 		this.music = this.sys.game.globals.music
 
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		this.add.image(0, 0, 'background').setOrigin(0, 0)
 
 		const theText = this.add.text(

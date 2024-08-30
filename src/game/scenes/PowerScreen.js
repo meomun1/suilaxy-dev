@@ -29,6 +29,9 @@ class PowerScreen extends Phaser.Scene {
 	}
 
 	create() {
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
 		// Get the calling scene name
 		this.guiManager.createBackground('background')
 

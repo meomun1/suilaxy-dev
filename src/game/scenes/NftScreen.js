@@ -43,6 +43,9 @@ class NftScreen extends Phaser.Scene {
 	}
 
 	create() {
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
 		// Create a black rectangle that covers the whole game
 		let blackCover = this.add.rectangle(
 			0,

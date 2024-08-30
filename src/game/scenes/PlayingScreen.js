@@ -309,6 +309,9 @@ class PlayingScreen extends Phaser.Scene {
 	}
 
 	create() {
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
 		this.guiManager = new GuiManager(this)
 
 		EventBus.on('wallet-connected', handleWalletConnected, this)

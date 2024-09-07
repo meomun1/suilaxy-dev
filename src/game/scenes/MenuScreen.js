@@ -1,14 +1,12 @@
 import Phaser from 'phaser'
 import WebFont from 'webfontloader'
 import config from '../config/config.js'
-import Music from '../mode/Music.js'
 import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
 
 class MenuScreen extends Phaser.Scene {
 	constructor() {
 		super('mainMenu')
-		this.music = null
 		this.walletConnected = false
 		this.suilaxyText = null
 		this.currentModeIndex = 0
@@ -24,6 +22,14 @@ class MenuScreen extends Phaser.Scene {
 
 		// Load the logo image
 		this.guiManager.loadImage('logo', 'assets/main-menu/logo.png')
+
+		// Load the NFT drop indicator
+		this.guiManager.loadImage(
+			'drop-indicator',
+			'assets/main-menu/drop-indicator.png',
+		)
+
+		this.guiManager.loadImage('gear-button', 'assets/main-menu/gear-button.png')
 
 		// Load the Mode Cards
 		this.guiManager.loadImage('arcade-card', 'assets/main-menu/arcade-card.png')
@@ -69,19 +75,65 @@ class MenuScreen extends Phaser.Scene {
 				},
 			})
 
-			this.music = this.sys.game.globals.music
-			if (this.music.musicOn === true && !this.music.bgMusicPlaying) {
-				this.bgMusic = this.sound.add('main_menu_music', {
-					volume: 0.5,
-					loop: true,
-				})
-				this.bgMusic.play()
-				this.music.bgMusicPlaying = true
-				this.sys.game.globals.bgMusic = this.bgMusic
-			}
-
 			// Add the background ================================================================
 			this.guiManager.createBackground('background')
+
+			// Add the NFT drop indicator ================================================================
+			this.dropIndicator = this.add.image(
+				0, // x coordinate, for left side of the screen
+				config.height / 3.5, // y coordinate, for vertical center
+				'drop-indicator',
+			)
+			this.dropIndicator.setOrigin(0, 0.5)
+			this.dropIndicator.setInteractive()
+			this.dropIndicator.on('pointerover', () => {
+				this.tweens.add({
+					targets: this.dropIndicator,
+					scaleX: 1.03,
+					scaleY: 1.03,
+					duration: 200,
+					ease: 'Power2',
+				})
+			})
+			this.dropIndicator.on('pointerout', () => {
+				this.tweens.add({
+					targets: this.dropIndicator,
+					scaleX: 1,
+					scaleY: 1,
+					duration: 200,
+					ease: 'Power2',
+				})
+			})
+
+			// Add the Gear Up button ================================================================
+			this.gearButton = this.add.image(
+				config.width, // x coordinate, for right side of the screen
+				config.height / 3.5, // y coordinate, for bottom of the screen
+				'gear-button',
+			)
+			this.gearButton.setOrigin(1, 0.5)
+			this.gearButton.setInteractive()
+			this.gearButton.on('pointerover', () => {
+				this.tweens.add({
+					targets: this.gearButton,
+					scaleX: 1.03,
+					scaleY: 1.03,
+					duration: 200,
+					ease: 'Power2',
+				})
+			})
+			this.gearButton.on('pointerout', () => {
+				this.tweens.add({
+					targets: this.gearButton,
+					scaleX: 1,
+					scaleY: 1,
+					duration: 200,
+					ease: 'Power2',
+				})
+			})
+			this.gearButton.on('pointerdown', () => {
+				this.scene.start('selectUtility')
+			})
 
 			// Add the Suilaxy text ================================================================
 			this.suilaxyText = this.add.text(

@@ -20,6 +20,8 @@ import NftScreen from './scenes/NftScreen.js'
 import PVPScreen from './scenes/PVPScreen.js'
 import PowerScreen from './scenes/PowerScreen.js'
 import MenuScreen from './scenes/MenuScreen.js'
+import SelectUtility from './scenes/SelectUtility.js'
+import TestScene from './scenes/TestScene.js'
 
 const config = {
 	type: Phaser.AUTO,
@@ -32,6 +34,7 @@ const config = {
 		autoCenter: Phaser.Scale.CENTER_BOTH,
 	},
 	scene: [
+		SelectUtility,
 		TitleScreen,
 		MenuScreen,
 		LoadingScreen,

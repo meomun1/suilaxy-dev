@@ -229,13 +229,6 @@ class ChoosePlayer extends Phaser.Scene {
 		}
 	}
 
-	hideTextInput() {
-		const playerNameInput = document.getElementById('playerNameInput')
-		if (playerNameInput) {
-			playerNameInput.style.display = 'none'
-		}
-	}
-
 	randomNFT() {
 		const arrayFrame = [
 			'Bronze',

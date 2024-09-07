@@ -29,11 +29,6 @@ const fighterAssetsMapping = {
 
 const mockSpaceshipNFTs = [
 	{
-		objectId: '0xspaceship01',
-		name: 'Falcon',
-		imageUrl: 'assets/nft-spaceships/plane_01.png',
-	},
-	{
 		objectId: '0xspaceship02',
 		name: 'Eagle',
 		imageUrl: 'assets/nft-spaceships/plane_02.png',
@@ -75,12 +70,60 @@ const mockSpaceshipNFTs = [
 	},
 ]
 
+// const mockSpaceshipNFTs = [
+// 	{
+// 		objectId: '0xspaceship02',
+// 		name: 'Eagle',
+// 		imageUrl: 'assets/nft-spaceships/plane_02.png',
+// 	},
+// 	{
+// 		objectId: '0xspaceship02',
+// 		name: 'Eagle',
+// 		imageUrl: 'assets/nft-spaceships/plane_02.png',
+// 	},
+// 	{
+// 		objectId: '0xspaceship02',
+// 		name: 'Eagle',
+// 		imageUrl: 'assets/nft-spaceships/plane_02.png',
+// 	},
+// 	{
+// 		objectId: '0xspaceship03',
+// 		name: 'Hawk',
+// 		imageUrl: 'assets/nft-spaceships/plane_03.png',
+// 	},
+// 	{
+// 		objectId: '0xspaceship04',
+// 		name: 'Vulture',
+// 		imageUrl: 'assets/nft-spaceships/plane_04.png',
+// 	},
+// 	{
+// 		objectId: '0xspaceship07',
+// 		name: 'Raven',
+// 		imageUrl: 'assets/nft-spaceships/plane_07.png',
+// 	},
+// 	{
+// 		objectId: '0xspaceship07',
+// 		name: 'Raven',
+// 		imageUrl: 'assets/nft-spaceships/plane_07.png',
+// 	},
+// 	{
+// 		objectId: '0xspaceship07',
+// 		name: 'Raven',
+// 		imageUrl: 'assets/nft-spaceships/plane_07.png',
+// 	},
+// 	{
+// 		objectId: '0xspaceship08',
+// 		name: 'Condor',
+// 		imageUrl: 'assets/nft-spaceships/plane_08.png',
+// 	},
+// ]
+
 class ChoosePlayer extends Phaser.Scene {
 	constructor() {
 		super('selectUtility')
 		this.guiManager = new GuiManager(this)
 		this.selectedTab = 'fighter'
-		this.selectedFighterName = 'Falcon'
+		this.selectedFighterName = 'Falcon' // Default fighter
 		this.selectedWeapon = 1
 		this.objectDetails = []
 		this.fighterDetails = []
@@ -117,6 +160,11 @@ class ChoosePlayer extends Phaser.Scene {
 				},
 			})
 		}
+
+		// Preload NFT images from mockSpaceshipNFTs
+		mockSpaceshipNFTs.forEach((nft) => {
+			this.load.image(nft.name, nft.imageUrl)
+		})
 	}
 
 	async create() {
@@ -124,27 +172,13 @@ class ChoosePlayer extends Phaser.Scene {
 			'url(assets/cursors/custom-cursor.cur), pointer',
 		)
 		this.cameras.main.fadeIn(1500)
-
 		this.guiManager.createBackground('background')
 		this.createSuilaxyTextAndLogo()
 
 		// Load saved selection from localStorage
 		this.loadSelection()
 
-		this.createTabs()
-
-		// Create fixed-size panels and set their visibility to false initially
-		this.fighterPanel = this.createFighterSelectionPanel(
-			config.width / 1.35,
-			config.height / 2,
-		).setVisible(false)
-
-		this.weaponPanel = this.createWeaponSelectionPanel(
-			config.width / 1.35,
-			config.height / 2,
-		).setVisible(false)
-
-		// Show a loading panel while fetching the data
+		// Show loading panel
 		this.loadingPanel = this.add.image(
 			config.width / 1.35,
 			config.height / 2,
@@ -152,10 +186,13 @@ class ChoosePlayer extends Phaser.Scene {
 		)
 		this.loadingPanel.setVisible(true)
 
-		// Fake fetching spaceship NFTs
-		console.log('Simulating spaceship NFT fetch...')
-		this.spaceshipDetails = await this.getMockSpaceshipNFTs()
-		console.log('Spaceship NFTs loaded:', this.spaceshipDetails)
+		// Create UI elements
+		this.createTabs()
+		this.createBackButton()
+		this.createSaveButton()
+
+		// Fetch spaceship NFTs (mocked)
+		this.fighterDetails = await this.getMockSpaceshipNFTs()
 
 		// Only fetch weapons if they haven't been fetched before
 		if (this.objectDetails.length === 0) {
@@ -170,21 +207,24 @@ class ChoosePlayer extends Phaser.Scene {
 
 		// Hide the loading panel and show the actual panels after loading completes
 		this.loadingPanel.setVisible(false)
-		this.fighterPanel.setVisible(true)
-		this.weaponPanel.setVisible(true)
+
+		this.fighterPanel = this.createFighterSelectionPanel(
+			config.width / 1.35,
+			config.height / 2,
+		).setVisible(true)
+		this.weaponPanel = this.createWeaponSelectionPanel(
+			config.width / 1.35,
+			config.height / 2,
+		).setVisible(true)
 
 		this.updateWeaponPanel()
 		this.updateTabDisplay()
-		this.createBackButton()
-		this.createSaveButton()
 	}
 
-	// Mock function to return spaceship NFTs (faked for development)
+	// Mock function to simulate fetching spaceship NFTs
 	async getMockSpaceshipNFTs() {
 		return new Promise((resolve) => {
-			setTimeout(() => {
-				resolve(mockSpaceshipNFTs)
-			}, 1000) // Simulate delay for fetching
+			setTimeout(() => resolve(mockSpaceshipNFTs), 1000)
 		})
 	}
 
@@ -332,14 +372,16 @@ class ChoosePlayer extends Phaser.Scene {
 		)
 		fighterTab.setInteractive()
 
+		// Preselect "Falcon" as the default fighter
 		this.fighterTabImage = this.add
 			.image(
 				fighterTab.x,
 				fighterTab.y - 40,
-				`player_texture_${this.selectedSpaceship}`,
+				`fighter_Falcon`, // Default fighter is Falcon
 			)
 			.setScale(2)
 			.setOrigin(0.5)
+			.setVisible(true) // Show the fighter image initially for the default
 
 		fighterTab.on('pointerdown', () => {
 			this.selectedTab = 'fighter'
@@ -382,16 +424,11 @@ class ChoosePlayer extends Phaser.Scene {
 
 	// Update the displayed panel based on selected tab
 	updateTabDisplay() {
-		if (this.selectedTab === 'fighter') {
-			this.fighterPanel.setVisible(true)
-			this.weaponPanel.setVisible(false)
-		} else {
-			this.fighterPanel.setVisible(false)
-			this.weaponPanel.setVisible(true)
-		}
+		this.fighterPanel.setVisible(this.selectedTab === 'fighter')
+		this.weaponPanel.setVisible(this.selectedTab === 'weapon')
 	}
 
-	// Create a fighter selection panel
+	// Create a fighter selection panel (grid)
 	createFighterSelectionPanel(x, y) {
 		const panelWidth = 448
 		const panelHeight = 425
@@ -399,7 +436,6 @@ class ChoosePlayer extends Phaser.Scene {
 			.image(x, y, 'panel_background')
 			.setDisplaySize(panelWidth, panelHeight)
 			.setOrigin(0.5)
-
 		const scrollablePanel = this.rexUI.add
 			.scrollablePanel({
 				x,
@@ -418,13 +454,63 @@ class ChoosePlayer extends Phaser.Scene {
 			.layout()
 
 		scrollablePanel.setChildrenInteractive().on('child.click', (child) => {
-			this.selectedSpaceship = child.getData('index')
-			this.fighterTabImage.setTexture(
-				`player_texture_${this.selectedSpaceship}`,
-			)
+			const fighterName = this.fighterDetails[child.getData('index') - 1].name
+			this.selectedFighterName = fighterName
+			this.fighterTabImage.setTexture(`fighter_${fighterName}`)
 		})
 
 		return scrollablePanel
+	}
+
+	// Create grid for displaying fighters
+	createGridForFighter(scene) {
+		const itemCount = this.fighterDetails.length
+		const itemsPerRow = 3
+		const rows = itemCount > 0 ? Math.ceil(itemCount / itemsPerRow) : 1
+
+		const sizer = scene.rexUI.add.gridSizer({
+			column: itemsPerRow, // Always 3 columns
+			row: rows, // Dynamically calculated or at least 1 row
+			space: {
+				left: 20,
+				right: 20,
+				top: 20,
+				bottom: 20,
+				column: 10, // Space between columns
+				row: 10, // Space between rows
+			},
+		})
+
+		// Loop through and add fighters dynamically to the grid
+		for (let i = 0; i < itemCount; i++) {
+			const fighter = this.fighterDetails[i]
+
+			// Create the frame and center it
+			const frame = scene.add
+				.image(0, 0, 'slot_frame')
+				.setOrigin(0.5) // Center the frame
+				.setScale(1) // Adjust frame scale if needed
+
+			// Create the fighter image, resize it to 96x96, and center it inside the frame
+			const fighterImage = scene.add
+				.image(0, 0, fighter.name)
+				.setDisplaySize(125, 125)
+				.setOrigin(0.5)
+
+			// Add both the frame and the image to a label, so they are grouped together
+			const item = scene.rexUI.add.label({
+				width: 125,
+				height: 125,
+				background: frame,
+				icon: fighterImage, // The image goes into the label's icon slot
+				space: { icon: 10 },
+			})
+
+			item.setData('index', i + 1) // Set fighter index
+			sizer.add(item) // Add the item to the grid
+		}
+
+		return sizer
 	}
 
 	// Create a weapon selection panel
@@ -466,52 +552,6 @@ class ChoosePlayer extends Phaser.Scene {
 		})
 
 		return scrollablePanel
-	}
-
-	// Create grid for displaying fighters
-	createGridForFighter(scene) {
-		const itemCount = 9 // Number of fighters
-		const itemsPerRow = 3 // Number of items per row
-
-		// Calculate the number of rows needed, at least 1 row
-		const rows = itemCount > 0 ? Math.ceil(itemCount / itemsPerRow) : 1
-
-		// Create a grid sizer with the calculated rows and fixed columns
-		const sizer = scene.rexUI.add.gridSizer({
-			column: itemsPerRow, // Fixed number of columns (3)
-			row: rows, // Dynamically calculated number of rows
-			space: {
-				left: 20,
-				right: 20,
-				top: 20,
-				bottom: 20,
-				column: 10, // Space between columns
-				row: 10, // Space between rows
-			},
-		})
-
-		// Loop through and add each fighter to the grid
-		for (let i = 0; i < itemCount; i++) {
-			const itemKey = `player_texture_${i + 1}`
-
-			const frame = scene.add
-				.image(0, 0, 'slot_frame')
-				.setScale(1)
-				.setOrigin(0.5)
-
-			const item = scene.rexUI.add.label({
-				width: 60,
-				height: 60,
-				background: frame,
-				icon: scene.add.image(0, 0, itemKey).setScale(1.3),
-				space: { icon: 10 },
-			})
-
-			item.setData('index', i + 1) // Set fighter index
-			sizer.add(item) // Add item to the grid
-		}
-
-		return sizer // Return the dynamically built grid
 	}
 
 	createGridForWeapon(scene) {
@@ -620,7 +660,8 @@ class ChoosePlayer extends Phaser.Scene {
 	loadSelection() {
 		const savedFighter = localStorage.getItem('selectedFighter')
 		const savedWeapon = localStorage.getItem('selectedWeapon')
-		if (savedFighter) this.selectedSpaceship = parseInt(savedFighter, 10)
+		if (savedFighter)
+			this.selectedSpaceship = savedFighter ? parseInt(savedFighter, 10) : 1
 		if (savedWeapon) this.selectedWeapon = parseInt(savedWeapon, 10)
 	}
 }

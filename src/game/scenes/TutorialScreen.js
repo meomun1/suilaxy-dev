@@ -14,6 +14,8 @@ import MobileManager from '../manager/MobileManager.js'
 import gameSettings from '../config/gameSettings.js'
 import { EventBus } from '../EventBus.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
+import SpecialPlayers from '../objects/players/SpecialPlayers.js'
+import Bullet from '../objects/projectiles/Bullet.js'
 
 const BACKGROUND_SCROLL_SPEED = 0.5
 class TutorialScreen extends Phaser.Scene {
@@ -24,7 +26,7 @@ class TutorialScreen extends Phaser.Scene {
 	}
 
 	init(data) {
-		this.selectedPlayerIndex = data.number
+		this.selectedPlayerIndex = gameSettings.selectedPlayerIndex
 	}
 
 	preload() {
@@ -77,16 +79,16 @@ class TutorialScreen extends Phaser.Scene {
 
 	createObject() {
 		// PLAYER
-		this.player = new Player(
+		this.player = new SpecialPlayers(
 			this,
 			config.width / 2,
 			config.height - config.height / 4,
 			`player_texture_${this.selectedPlayerIndex}`,
 			gameSettings.playerMaxHealth,
+			gameSettings.selectedPlayerIndex,
 		)
 		this.player.play('player_anim')
 		this.player.restartToTile()
-		this.player.selectedPlayer = this.selectedPlayerIndexs
 
 		//SHIELD
 		this.shield = new Shield(this, this.player)
@@ -97,7 +99,18 @@ class TutorialScreen extends Phaser.Scene {
 		// Create keyboard inputs
 		// Create a group to manage bullets
 		this.projectileManager = new ProjectileManager(this)
-		this.projectileManager.createPlayerBullet()
+		if (this.selectedPlayerIndex === 6) {
+			this.projectileManager.createShieldCover()
+		} else if (this.selectedPlayerIndex === 8) {
+			this.projectileManager.createWingCover()
+		} else if (this.selectedPlayerIndex === 1) {
+			this.projectileManager.createRandomBullet()
+		} else {
+			this.projectileManager.createPlayerBullet()
+		}
+
+		this.projectileManager.createEnemyEffect()
+		this.projectileManager.createEffect()
 		this.projectileManager.createEnemyBullet()
 		this.projectileManager.createChaseBullet()
 	}
@@ -351,6 +364,8 @@ class TutorialScreen extends Phaser.Scene {
 			null,
 			this,
 		)
+
+		this.selectedPlayerIndex = Number(gameSettings.selectedPlayerIndex)
 	}
 
 	update() {
@@ -384,6 +399,7 @@ class TutorialScreen extends Phaser.Scene {
 			() => {
 				if (this.PlayerManager) {
 					this.PlayerManager.movePlayer()
+					this.PlayerManager.healthPlayer()
 				}
 			},
 			null,
@@ -393,15 +409,43 @@ class TutorialScreen extends Phaser.Scene {
 		if (this.player.health <= 0) {
 			this.gameOver()
 		}
-
-		if (this.spacebar && this.spacebar.isDown) {
-			this.player.shootBullet(this.selectedPlayerIndex)
+		if (
+			this.spacebar &&
+			this.spacebar.isDown &&
+			this.selectedPlayerIndex !== 1 &&
+			this.selectedPlayerIndex !== 6 &&
+			this.selectedPlayerIndex !== 8
+		) {
+			this.player.shootBullet(this.selectedPlayerIndex) // Use the converted number
+		} else if (
+			this.spacebar &&
+			this.spacebar.isDown &&
+			this.selectedPlayerIndex === 6
+		) {
+			this.player.createShield(this.player)
+		} else if (
+			this.spacebar &&
+			this.spacebar.isDown &&
+			this.selectedPlayerIndex === 8
+		) {
+			this.player.createWing(this.player)
+		} else if (
+			this.spacebar &&
+			this.spacebar.isDown &&
+			this.selectedPlayerIndex === 1
+		) {
+			this.player.createRandomBullet(this.player)
 		}
 
 		this.projectiles.children.iterate((bullet) => {
-			bullet.update()
+			bullet.update(this.player)
 		})
 
+		this.projectilesEnemyEffects.children.iterate((effect) => {
+			if (effect) {
+				effect.update()
+			}
+		})
 		// ENEMY
 		this.EnemyManager.enemies.forEach((enemy) => {
 			enemy.updateHealthBarPosition()
@@ -473,7 +517,7 @@ class TutorialScreen extends Phaser.Scene {
 	startGame() {
 		this.scene.stop('upgradeScreen')
 
-		this.time.delayedCall(3000, () => {
+		this.time.delayedCall(4000, () => {
 			this.cameras.main.fadeOut(1000, 0, 0, 0)
 
 			this.cameras.main.once(

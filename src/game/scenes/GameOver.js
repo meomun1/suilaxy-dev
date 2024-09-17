@@ -17,27 +17,26 @@ class GameOver extends Phaser.Scene {
 	}
 
 	preload() {
-		this.load.spritesheet({
-			key: 'button_continue_hover',
-			url: 'assets/gui/button_play_hover.png',
-			frameConfig: {
-				frameWidth: 93,
-				frameHeight: 28,
-				startFrame: 3,
-				endFrame: 3,
-			},
-		})
-
-		this.load.spritesheet({
-			key: 'button_continue',
-			url: 'assets/gui/button_play.png',
-			frameConfig: {
-				frameWidth: 93,
-				frameHeight: 28,
-				startFrame: 3,
-				endFrame: 3,
-			},
-		})
+		// this.load.spritesheet({
+		// 	key: 'button_continue_hover',
+		// 	url: 'assets/gui/button_play_hover.png',
+		// 	frameConfig: {
+		// 		frameWidth: 93,
+		// 		frameHeight: 28,
+		// 		startFrame: 3,
+		// 		endFrame: 3,
+		// 	},
+		// })
+		// this.load.spritesheet({
+		// 	key: 'button_continue',
+		// 	url: 'assets/gui/button_play.png',
+		// 	frameConfig: {
+		// 		frameWidth: 93,
+		// 		frameHeight: 28,
+		// 		startFrame: 3,
+		// 		endFrame: 3,
+		// 	},
+		// })
 	}
 
 	create() {
@@ -62,26 +61,26 @@ class GameOver extends Phaser.Scene {
 		// Define the "L" key to show the leaderboard
 		this.keyboardManager.showLeaderboard()
 
-		this.buttonContinue = this.add.sprite(
-			config.width / 2,
-			(2 * config.height) / 3 - 30,
-			'button_continue',
-			0,
-		)
-		this.buttonContinue.setInteractive()
+		// this.buttonContinue = this.add.sprite(
+		// 	config.width / 2,
+		// 	(2 * config.height) / 3 - 30,
+		// 	'button_continue',
+		// 	0,
+		// )
+		// this.buttonContinue.setInteractive()
 
-		this.buttonContinue.on('pointerdown', () => {
-			this.scene.start(this.callingScene)
-			this.scene.stop('gameOver')
-		})
+		// this.buttonContinue.on('pointerdown', () => {
+		// 	this.scene.start(this.callingScene)
+		// 	this.scene.stop('gameOver')
+		// })
 
-		this.buttonContinue.on('pointerover', () => {
-			this.buttonContinue.setTexture('button_continue_hover')
-		})
+		// this.buttonContinue.on('pointerover', () => {
+		// 	this.buttonContinue.setTexture('button_continue_hover')
+		// })
 
-		this.buttonContinue.on('pointerout', () => {
-			this.buttonContinue.setTexture('button_continue')
-		})
+		// this.buttonContinue.on('pointerout', () => {
+		// 	this.buttonContinue.setTexture('button_continue')
+		// })
 
 		// Automatically transition to leaderboard after 5 seconds with countdown
 		this.countdownTimer = this.time.addEvent({
@@ -132,7 +131,7 @@ class GameOver extends Phaser.Scene {
 	transitionToLeaderboard() {
 		// Stop the current scene and start the leaderboard scene
 		this.scene.stop(this.callingScene)
-		this.scene.start('leaderboard')
+		this.scene.start('mainMenu')
 	}
 }
 

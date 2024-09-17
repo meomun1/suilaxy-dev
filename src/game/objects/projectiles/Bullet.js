@@ -2,14 +2,7 @@ import Entity from '../Entity.js'
 import gameSettings from '../../config/gameSettings.js'
 class Bullet extends Entity {
 	constructor(scene, number) {
-		super(
-			scene,
-			scene.player.x,
-			scene.player.y - 10,
-			`bullet${number}_texture`,
-			`bullet${number}`,
-			1,
-		)
+		super(scene, scene.player.x, scene.player.y - 10)
 		scene.add.existing(this)
 		scene.physics.world.enableBody(this)
 		scene.projectiles.add(this)
@@ -23,16 +16,17 @@ class Bullet extends Entity {
 		this.setScale(this.bulletSize)
 
 		this.setDepth(0)
+
+		this.destroying = false
 	}
 
 	update() {
-		if (this.y < -100 || !this.active) {
-			this.destroy()
+		if (this.y < 0 || !this.active) {
+			super.destroy()
 		}
 	}
 
 	destroy() {
-		// Call the parent destroy method if needed
 		super.destroy()
 	}
 }

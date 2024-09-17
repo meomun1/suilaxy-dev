@@ -2,8 +2,9 @@ import Entity from '../Entity'
 import gameSettings from '../../config/gameSettings'
 import HPBar from '../ui/HPBar'
 import EnemyBullet from '../projectiles/EnemyBullet'
+import EnemyEntity from './EnemyEntity'
 
-class MiniBot extends Entity {
+class MiniBot extends EnemyEntity {
 	constructor(scene, x, y, health) {
 		super(scene, x, y, 'mini_texture', health)
 		this.body.velocity.y = 0
@@ -15,6 +16,7 @@ class MiniBot extends Entity {
 		this.shootDamage = 50
 		this.setInteractiveEntity()
 		this.setDepth(1)
+		this.setScale(gameSettings.enemySize)
 
 		this.isDestroyed = false
 

@@ -1,3 +1,8 @@
+import Effect from '../objects/projectiles/Effect'
+import gameSettings from '../config/gameSettings.js'
+import Bug1 from '../objects/enemies/Bug1.js'
+import Boss from '../objects/enemies/Boss.js'
+
 class CollideManager {
 	constructor(
 		scene,
@@ -16,6 +21,15 @@ class CollideManager {
 		this.shield = shield
 		this.shieldActive = false
 		this.soundManager = soundManager
+
+		// add collision between effects and enemies
+		this.scene.physics.add.overlap(
+			this.scene.projectilesEffects,
+			this.enemies,
+			this.effectHitEnemy,
+			null,
+			this,
+		)
 
 		// Add collision between bullets and enemies
 		this.scene.physics.add.overlap(
@@ -110,17 +124,66 @@ class CollideManager {
 	}
 
 	bulletHitEnemy(enemy, bullet) {
-		bullet.destroy()
 		enemy.takeDamage(bullet.damage)
+		if (
+			gameSettings.selectedPlayerIndex === 1 ||
+			gameSettings.selectedPlayerIndex === 6 ||
+			gameSettings.selectedPlayerIndex === 8
+		) {
+			return
+		} else if (enemy instanceof Boss) {
+			bullet.destroy()
+			let effect = new Effect(this.scene, bullet.x, bullet.y, 1)
+			effect.setTexture(`effect${gameSettings.selectedPlayerIndex}_texture`)
+			effect.play(`effect${gameSettings.selectedPlayerIndex}_anim`)
+
+			effect.on('animationcomplete', () => {
+				effect.destroy()
+			})
+
+			return
+		} else {
+			bullet.destroy()
+			let effect = new Effect(this.scene, bullet.x, bullet.y, 1)
+			effect.setTexture(`effect${gameSettings.selectedPlayerIndex}_texture`)
+			effect.play(`effect${gameSettings.selectedPlayerIndex}_anim`)
+
+			// Pass the effect to the effectHitEnemy method
+			this.effectHitEnemy(enemy, effect)
+
+			effect.on('animationcomplete', () => {
+				effect.destroy()
+				// Remove the effect from the enemy when the animation completes
+				enemy.setNotAffected()
+				// Reset the enemy's velocity
+			})
+		}
+	}
+
+	effectHitEnemy(enemy, effect) {
+		if (
+			!(enemy instanceof Boss) &&
+			enemy &&
+			effect &&
+			!enemy.affectedStatus()
+		) {
+			// Check if the enemy is already affected by the effect
+			enemy.setIsAffected()
+			enemy.applyEffects(effect, gameSettings.selectedPlayerIndex)
+		}
 	}
 
 	bulletHitPlayer(player, enemyBullet) {
 		enemyBullet.destroy()
-		player.takeDamage(enemyBullet.damage)
+		const damageReduction = enemyBullet.damage * player.playerArmor * 0.1
+		const finalDamage = enemyBullet.damage - damageReduction
+		player.takeDamage(finalDamage)
 	}
 
 	playerHitEnemy(player, enemy) {
-		player.takeDamage(enemy.damage)
+		const damageReduction = enemy.damage * player.playerArmor * 0.1
+		const finalDamage = enemy.damage - damageReduction
+		player.takeDamage(finalDamage)
 		enemy.takeDamage(player.damage)
 	}
 

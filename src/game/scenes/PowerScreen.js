@@ -159,31 +159,56 @@ class PowerScreen extends Phaser.Scene {
 	handleUpgradeChoice(choice) {
 		switch (choice) {
 			case 'all':
-				gameSettings.savePlayerSpeed = gameSettings.savePlayerSpeed * 1.25
+				gameSettings.savePlayerSpeed =
+					gameSettings.savePlayerSpeed * 1.25 * gameSettings.savePlayerBuffRate
+
 				gameSettings.savePlayerBulletDamage =
-					gameSettings.savePlayerBulletDamage * 1.25
+					gameSettings.savePlayerBulletDamage *
+					1.25 *
+					gameSettings.savePlayerBuffRate
+
 				gameSettings.savePlayerLifesteal =
-					gameSettings.savePlayerLifesteal * 1.25
+					gameSettings.savePlayerLifesteal *
+					1.25 *
+					gameSettings.savePlayerBuffRate
+
 				gameSettings.savePlayerBulletSpeed =
-					gameSettings.savePlayerBulletSpeed * 1.25
+					gameSettings.savePlayerBulletSpeed *
+					1.25 *
+					gameSettings.savePlayerBuffRate
 				gameSettings.savePlayerMaxHealth =
-					gameSettings.savePlayerMaxHealth * 1.25
+					gameSettings.savePlayerMaxHealth *
+					1.25 *
+					gameSettings.savePlayerBuffRate
+
 				gameSettings.savePlayerBulletSize =
-					gameSettings.savePlayerBulletSize * 1.25
-				gameSettings.savePlayerFireRate = gameSettings.savePlayerFireRate * 1.25
+					gameSettings.savePlayerBulletSize *
+					1.25 *
+					gameSettings.savePlayerBuffRate
+
+				gameSettings.savePlayerFireRate =
+					gameSettings.savePlayerFireRate *
+					1.25 *
+					gameSettings.savePlayerBuffRate
+
 				gameSettings.savePlayerNumberOfBullets =
 					gameSettings.savePlayerNumberOfBullets + 1
 				break
 
 			case 'dark':
 				gameSettings.savePlayerMaxHealth =
-					gameSettings.savePlayerMaxHealth * 0.5
+					gameSettings.savePlayerMaxHealth *
+					0.5 *
+					gameSettings.savePlayerBuffRate
 				gameSettings.savePlayerBulletDamage =
-					gameSettings.savePlayerBulletDamage * 2
+					gameSettings.savePlayerBulletDamage *
+					2 *
+					gameSettings.savePlayerBuffRate
 				break
 
 			case 'earth':
-				gameSettings.savePlayerMaxHealth = gameSettings.savePlayerMaxHealth * 2
+				gameSettings.savePlayerMaxHealth =
+					gameSettings.savePlayerMaxHealth * 2 * gameSettings.savePlayerBuffRate
 				break
 
 			case 'moon':
@@ -198,20 +223,27 @@ class PowerScreen extends Phaser.Scene {
 
 			case 'ocean':
 				gameSettings.savePlayerBulletSize =
-					gameSettings.savePlayerBulletSize * 2
+					gameSettings.savePlayerBulletSize *
+					2 *
+					gameSettings.savePlayerBuffRate
 				break
 
 			case 'sky':
-				gameSettings.savePlayerSpeed = gameSettings.savePlayerSpeed * 2
+				gameSettings.savePlayerSpeed =
+					gameSettings.savePlayerSpeed * 2 * gameSettings.savePlayerBuffRate
 				break
 
 			case 'star':
-				gameSettings.savePlayerFireRate = gameSettings.savePlayerFireRate / 2
+				gameSettings.savePlayerFireRate =
+					gameSettings.savePlayerFireRate /
+					(2 * gameSettings.savePlayerBuffRate)
 				break
 
 			case 'sun':
 				gameSettings.savePlayerBulletDamage =
-					gameSettings.savePlayerBulletDamage * 1.5
+					gameSettings.savePlayerBulletDamage *
+					1.5 *
+					gameSettings.savePlayerBuffRate
 				break
 
 			default:

@@ -8,7 +8,7 @@ import Phaser from 'phaser'
 class Boss extends Entity {
 	constructor(scene, x, y, health) {
 		super(scene, x, y, 'boss_texture', health)
-		this.body.velocity.y = 2 * gameSettings.enemySpeed
+		this.body.velocity.y = gameSettings.enemySpeed
 		this.health = health
 		this.maxHealth = health
 		this.hpBarWidth = 200

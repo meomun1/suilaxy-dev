@@ -12,6 +12,16 @@ class PlayerManager {
 		})
 		this.selectedPlayerIndex = selectedPlayerIndex
 		this.roomNumber = roomNumber
+		this.frameCounter = 0
+	}
+
+	healthPlayer() {
+		this.frameCounter++
+		// Check if one second has passed (60 frames)
+		if (this.frameCounter >= 60) {
+			this.player.health += this.player.healthGeneration * this.player.maxHealth
+			this.frameCounter = 0 // Reset the counter
+		}
 	}
 
 	movePlayer() {

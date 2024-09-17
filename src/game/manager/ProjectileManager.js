@@ -3,15 +3,55 @@ import EnemyBullet from '../objects/projectiles/EnemyBullet.js'
 import ChasingBullet from '../objects/projectiles/ChasingBullet.js'
 import PVPBullet from '../objects/projectiles/PVPBulletPlayer.js'
 import config from '../config/config.js'
+import ShieldCover from '../objects/projectiles/ShieldCover.js'
+import WingCover from '../objects/projectiles/WingCover.js'
+import RandomBullet from '../objects/projectiles/RandomBullet.js'
+import Effect from '../objects/projectiles/Effect.js'
+import EnemyEffect from '../objects/projectiles/EnemyEffects.js'
 
 class ProjectileManager {
 	constructor(scene) {
 		this.scene = scene
 	}
 
+	createEnemyEffect() {
+		this.scene.projectilesEnemyEffects = this.scene.physics.add.group({
+			classType: EnemyEffect,
+			runChildUpdate: true,
+		})
+	}
+
+	createRandomBullet() {
+		this.scene.projectiles = this.scene.physics.add.group({
+			classType: RandomBullet,
+			runChildUpdate: true,
+		})
+	}
+
+	createShieldCover() {
+		this.scene.projectiles = this.scene.physics.add.group({
+			classType: ShieldCover,
+			runChildUpdate: true,
+		})
+	}
+
+	createWingCover() {
+		this.scene.projectiles = this.scene.physics.add.group({
+			classType: WingCover,
+			runChildUpdate: true,
+		})
+	}
+
 	createPlayerBullet() {
 		this.scene.projectiles = this.scene.physics.add.group({
 			classType: Bullet,
+			runChildUpdate: true,
+		})
+	}
+
+	createEffect() {
+		this.scene.projectilesEffects = this.scene.physics.add.group({
+			classType: Effect,
 			runChildUpdate: true,
 		})
 	}

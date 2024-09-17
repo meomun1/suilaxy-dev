@@ -6,7 +6,6 @@ import PlayingScreen from './scenes/PlayingScreen.js'
 import ChooseRoomScreen from './scenes/ChooseRoomScreen.js'
 import GameOver from './scenes/GameOver.js'
 import PauseScreen from './scenes/PauseScreen.js'
-import ChoosePlayer from './scenes/ChoosePlayer.js'
 import ChoosePlayerPVP from './scenes/ChoosePlayerPVP.js'
 import RoomPVPScreen from './scenes/RoomPVPScreen.js'
 import UpgradeScreen from './scenes/UpgradeScreen.js'
@@ -34,14 +33,13 @@ const config = {
 		autoCenter: Phaser.Scale.CENTER_BOTH,
 	},
 	scene: [
-		SelectUtility,
 		TitleScreen,
+		SelectUtility,
 		MenuScreen,
 		LoadingScreen,
 		LoadingPvPScreen,
 		PlayingScreen,
 		ChooseRoomScreen,
-		ChoosePlayer,
 		ChoosePlayerPVP,
 		RoomPVPScreen,
 		PVPScreen,
@@ -67,7 +65,7 @@ const config = {
 	physics: {
 		default: 'arcade',
 		arcade: {
-			debug: false,
+			debug: true,
 		},
 	},
 	plugins: {

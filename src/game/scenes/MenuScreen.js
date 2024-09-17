@@ -48,6 +48,20 @@ class MenuScreen extends Phaser.Scene {
 			'next-mode-left',
 			'assets/main-menu/next-mode-left.png',
 		)
+
+		// init the player sprites in menu
+		for (let i = 1; i <= 9; i++) {
+			this.load.spritesheet({
+				key: `player_texture_${i}`,
+				url: `assets/spritesheets/players/planes_0${i}A.png`,
+				frameConfig: {
+					frameWidth: 96,
+					frameHeight: 96,
+					startFrame: 0,
+					endFrame: 19,
+				},
+			})
+		}
 	}
 
 	create() {
@@ -347,7 +361,7 @@ class MenuScreen extends Phaser.Scene {
 
 	startArcadeMode() {
 		// Start the Arcade mode scene
-		this.scene.start('choosePlayer')
+		this.scene.start('loadingScreen')
 	}
 
 	startPVPMode() {

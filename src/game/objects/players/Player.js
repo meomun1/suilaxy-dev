@@ -6,31 +6,39 @@ import HPBar2 from '../ui/HPBar2'
 import SoundManager from '../../manager/SoundManager'
 import PVPBulletOpponent from '../projectiles/PVPBulletOpponent'
 import config from '../../config/config'
+import ShieldCover from '../projectiles/ShieldCover'
+import WingCover from '../projectiles/WingCover'
+import RandomBullet from '../projectiles/RandomBullet'
 
 class Player extends Entity {
 	constructor(scene, x, y, key, health) {
 		super(scene, x, y, key, health)
+
 		this.body.velocity.x = 0
 		this.body.velocity.y = 0
 		this.health = health
 		this.maxHealth = health
 		this.damage = 300
-		this.bulletDamage = gameSettings.savePlayerBulletDamage
-		this.speed = gameSettings.savePlayerSpeed
-
+		this.lastShootTime = 0
+		this.lastWingTime = 0
+		this.lastShieldTime = 0
 		this.shield = null
 		this.setInteractiveEntity()
 		this.setPhysics(scene)
-		this.body.setSize(72, 72)
+		this.setScale(1)
 		this.setDepth(3)
-		this.bulletSize = gameSettings.savePlayerBulletSize
 
-		this.fireRate = gameSettings.savePlayerFireRate
-		this.lastShootTime = 0
+		this.speed = gameSettings.savePlayerSpeed
+		this.bulletDamage = gameSettings.savePlayerBulletDamage
 		this.lifestealRate = gameSettings.savePlayerLifesteal
-		this.numberOfBullets = gameSettings.savePlayerNumberOfBullets
 		this.bulletSpeed = gameSettings.savePlayerBulletSpeed
-		this.selectedPlayer = 0
+		this.numberOfBullets = gameSettings.savePlayerNumberOfBullets
+		this.fireRate = gameSettings.savePlayerFireRate
+		this.bulletSize = gameSettings.savePlayerBulletSize
+		this.playerSize = gameSettings.savePlayerSize
+		this.playerArmor = gameSettings.savePlayerArmor
+		this.healthGeneration = gameSettings.savePlayerHealthGeneration
+		this.playerBuffRate = gameSettings.savePlayerBuffRate
 
 		this.SoundManager = new SoundManager(scene)
 
@@ -59,35 +67,6 @@ class Player extends Entity {
 
 	explode(canDestroy) {
 		super.explode(canDestroy)
-	}
-
-	setInteractiveEntity() {
-		if (this.scene.sys.game.device.os.desktop) {
-			this.setInteractive({ draggable: false })
-			return
-		}
-
-		this.setInteractive({ draggable: true })
-		this.scene.input.setDraggable(this)
-
-		this.on('drag', function (pointer, dragX, dragY) {
-			this.x = dragX
-			this.y = dragY
-
-			this.shootBullet(this.selectedPlayer)
-		})
-
-		this.on('dragend', function (pointer) {
-			// You can add code here to execute when the drag ends.
-		})
-
-		this.scene.input.on(
-			'pointerup',
-			function (pointer) {
-				this.scene.input.setDragState(this, 0)
-			},
-			this,
-		)
 	}
 
 	shootBullet(number, player, check) {
@@ -160,6 +139,67 @@ class Player extends Entity {
 		}
 	}
 
+	createShield(player) {
+		const currentTime = this.scene.time.now
+		const elapsedTime = currentTime - this.lastShieldTime
+
+		if (elapsedTime > this.fireRate * 1.5) {
+			this.lastShieldTime = currentTime
+
+			if (player) {
+				let shield = new ShieldCover(this.scene, 1)
+				shield.setTexture(`effect${gameSettings.selectedPlayerIndex}_texture`)
+				shield.play(`effect${gameSettings.selectedPlayerIndex}_anim`)
+				shield.damage = gameSettings.savePlayerBulletDamage
+
+				// Listen for the animation complete event to destroy the shield
+				shield.on('animationcomplete', () => {
+					shield.destroy()
+				})
+			}
+		}
+	}
+
+	createWing(player) {
+		const currentTime = this.scene.time.now
+		const elapsedTime = currentTime - this.lastWingTime
+
+		if (elapsedTime > this.fireRate) {
+			this.lastWingTime = currentTime
+
+			if (player) {
+				let wing = new WingCover(this.scene, 1)
+				wing.setTexture(`effect${gameSettings.selectedPlayerIndex}_texture`)
+				wing.play(`effect${gameSettings.selectedPlayerIndex}_anim`)
+				wing.damage = gameSettings.savePlayerBulletDamage
+
+				wing.on('animationcomplete', () => {
+					wing.destroy()
+				})
+			}
+		}
+	}
+
+	createRandomBullet(player) {
+		const currentTime = this.scene.time.now
+		const elapsedTime = currentTime - this.lastShootTime
+
+		if (elapsedTime > this.fireRate / 1.25) {
+			this.lastShootTime = currentTime
+
+			if (player) {
+				let bullet = new RandomBullet(this.scene, 1)
+				bullet.setTexture(`effect${gameSettings.selectedPlayerIndex}_texture`)
+				bullet.play(`effect${gameSettings.selectedPlayerIndex}_anim`)
+				bullet.damage = gameSettings.savePlayerBulletDamage
+
+				bullet.on('animationcomplete', () => {
+					bullet.destroy()
+				})
+			}
+		}
+	}
+
 	setPhysics(scene) {
 		super.setPhysics(scene)
 	}
@@ -191,6 +231,10 @@ class Player extends Entity {
 		gameSettings.savePlayerMaxHealth = gameSettings.playerMaxHealth
 		gameSettings.savePlayerUpgradeThreshold =
 			gameSettings.playerUpgradeThreshold
+		gameSettings.savePlayerSize = this.playerSize
+		gameSettings.savePlayerArmor = this.playerArmor
+		gameSettings.savePlayerHealthGeneration = this.healthGeneration
+		gameSettings.savePlayerBuffRate = this.playerBuffRate
 	}
 
 	restartToTile() {
@@ -204,6 +248,10 @@ class Player extends Entity {
 		gameSettings.savePlayerDefaultBulletSize = 1.2
 		gameSettings.savePlayerBulletSize = 1.2
 		gameSettings.savePlayerUpgradeThreshold = 300
+		gameSettings.savePlayerSize = 1
+		gameSettings.savePlayerArmor = 0
+		gameSettings.savePlayerHealthGeneration = 0
+		gameSettings.savePlayerBuffRate = 1
 		this.restartGameSettings()
 	}
 
@@ -220,6 +268,11 @@ class Player extends Entity {
 		gameSettings.playerBulletSize = gameSettings.savePlayerBulletSize
 		gameSettings.playerUpgradeThreshold =
 			gameSettings.savePlayerUpgradeThreshold
+		gameSettings.playerSize = gameSettings.savePlayerSize
+		gameSettings.playerArmor = gameSettings.savePlayerArmor
+		gameSettings.playerHealthGeneration =
+			gameSettings.savePlayerHealthGeneration
+		gameSettings.playerBuffRate = gameSettings.savePlayerBuffRate
 	}
 }
 

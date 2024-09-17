@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import axios from 'axios'
 import config from '../config/config.js'
 import GuiManager from '../manager/GuiManager.js'
+import gameSettings from '../config/gameSettings.js'
 
 // Sui full node endpoint
 const SUI_RPC_URL = 'https://fullnode.testnet.sui.io:443'
@@ -16,114 +17,80 @@ const weaponCollectionIdentifiers = [
 ]
 
 const fighterAssetsMapping = {
-	Falcon: 'assets/spritesheets/players/planes_01A.png',
-	Eagle: 'assets/spritesheets/players/planes_02A.png',
-	Hawk: 'assets/spritesheets/players/planes_03A.png',
-	Vulture: 'assets/spritesheets/players/planes_04A.png',
-	Phoenix: 'assets/spritesheets/players/planes_05A.png',
-	Mockingbird: 'assets/spritesheets/players/planes_06A.png',
-	Raven: 'assets/spritesheets/players/planes_07A.png',
-	Condor: 'assets/spritesheets/players/planes_08A.png',
-	Albatross: 'assets/spritesheets/players/planes_09A.png',
+	1: 'Falcon',
+	2: 'Eagle',
+	3: 'Hawk',
+	4: 'Vulture',
+	5: 'Phoenix',
+	6: 'Mockingbird',
+	7: 'Raven',
+	8: 'Condor',
+	9: 'Albatross',
 }
 
 const mockSpaceshipNFTs = [
 	{
+		selectedPlayerIndex: 1,
+		objectId: '0xspaceship01',
+		name: 'Falcon',
+		imageUrl: 'assets/nft-spaceships/plane_01.png',
+	},
+	{
+		selectedPlayerIndex: 2,
 		objectId: '0xspaceship02',
 		name: 'Eagle',
 		imageUrl: 'assets/nft-spaceships/plane_02.png',
 	},
 	{
+		selectedPlayerIndex: 3,
 		objectId: '0xspaceship03',
 		name: 'Hawk',
 		imageUrl: 'assets/nft-spaceships/plane_03.png',
 	},
 	{
+		selectedPlayerIndex: 4,
 		objectId: '0xspaceship04',
 		name: 'Vulture',
 		imageUrl: 'assets/nft-spaceships/plane_04.png',
 	},
 	{
+		selectedPlayerIndex: 5,
 		objectId: '0xspaceship05',
 		name: 'Phoenix',
 		imageUrl: 'assets/nft-spaceships/plane_05.png',
 	},
 	{
+		selectedPlayerIndex: 6,
 		objectId: '0xspaceship06',
 		name: 'Mockingbird',
 		imageUrl: 'assets/nft-spaceships/plane_06.png',
 	},
 	{
+		selectedPlayerIndex: 7,
 		objectId: '0xspaceship07',
 		name: 'Raven',
 		imageUrl: 'assets/nft-spaceships/plane_07.png',
 	},
 	{
+		selectedPlayerIndex: 8,
 		objectId: '0xspaceship08',
 		name: 'Condor',
 		imageUrl: 'assets/nft-spaceships/plane_08.png',
 	},
 	{
+		selectedPlayerIndex: 9,
 		objectId: '0xspaceship09',
 		name: 'Albatross',
 		imageUrl: 'assets/nft-spaceships/plane_09.png',
 	},
 ]
 
-// const mockSpaceshipNFTs = [
-// 	{
-// 		objectId: '0xspaceship02',
-// 		name: 'Eagle',
-// 		imageUrl: 'assets/nft-spaceships/plane_02.png',
-// 	},
-// 	{
-// 		objectId: '0xspaceship02',
-// 		name: 'Eagle',
-// 		imageUrl: 'assets/nft-spaceships/plane_02.png',
-// 	},
-// 	{
-// 		objectId: '0xspaceship02',
-// 		name: 'Eagle',
-// 		imageUrl: 'assets/nft-spaceships/plane_02.png',
-// 	},
-// 	{
-// 		objectId: '0xspaceship03',
-// 		name: 'Hawk',
-// 		imageUrl: 'assets/nft-spaceships/plane_03.png',
-// 	},
-// 	{
-// 		objectId: '0xspaceship04',
-// 		name: 'Vulture',
-// 		imageUrl: 'assets/nft-spaceships/plane_04.png',
-// 	},
-// 	{
-// 		objectId: '0xspaceship07',
-// 		name: 'Raven',
-// 		imageUrl: 'assets/nft-spaceships/plane_07.png',
-// 	},
-// 	{
-// 		objectId: '0xspaceship07',
-// 		name: 'Raven',
-// 		imageUrl: 'assets/nft-spaceships/plane_07.png',
-// 	},
-// 	{
-// 		objectId: '0xspaceship07',
-// 		name: 'Raven',
-// 		imageUrl: 'assets/nft-spaceships/plane_07.png',
-// 	},
-// 	{
-// 		objectId: '0xspaceship08',
-// 		name: 'Condor',
-// 		imageUrl: 'assets/nft-spaceships/plane_08.png',
-// 	},
-// ]
-
 class ChoosePlayer extends Phaser.Scene {
 	constructor() {
 		super('selectUtility')
 		this.guiManager = new GuiManager(this)
-		this.selectedTab = 'fighter'
-		this.selectedFighterName = 'Falcon' // Default fighter
+		this.selectedTab = 'player_texture'
+		this.selectedFighterName = '1' // Default fighter
 		this.selectedWeapon = 1
 		this.objectDetails = []
 		this.fighterDetails = []
@@ -148,18 +115,6 @@ class ChoosePlayer extends Phaser.Scene {
 		this.load.image('loading_panel', 'assets/gui/loading-panel.png')
 
 		// Preload fighter assets from mapping
-		for (let fighterName in fighterAssetsMapping) {
-			this.load.spritesheet({
-				key: `fighter_${fighterName}`,
-				url: fighterAssetsMapping[fighterName],
-				frameConfig: {
-					frameWidth: 96,
-					frameHeight: 96,
-					startFrame: 0,
-					endFrame: 19,
-				},
-			})
-		}
 
 		// Preload NFT images from mockSpaceshipNFTs
 		mockSpaceshipNFTs.forEach((nft) => {
@@ -377,14 +332,14 @@ class ChoosePlayer extends Phaser.Scene {
 			.image(
 				fighterTab.x,
 				fighterTab.y - 40,
-				`fighter_Falcon`, // Default fighter is Falcon
+				`player_texture_1`, // Default fighter is Falcon
 			)
 			.setScale(2)
 			.setOrigin(0.5)
 			.setVisible(true) // Show the fighter image initially for the default
 
 		fighterTab.on('pointerdown', () => {
-			this.selectedTab = 'fighter'
+			this.selectedTab = 'player_texture'
 			this.updateTabDisplay()
 		})
 
@@ -424,7 +379,7 @@ class ChoosePlayer extends Phaser.Scene {
 
 	// Update the displayed panel based on selected tab
 	updateTabDisplay() {
-		this.fighterPanel.setVisible(this.selectedTab === 'fighter')
+		this.fighterPanel.setVisible(this.selectedTab === 'player_texture')
 		this.weaponPanel.setVisible(this.selectedTab === 'weapon')
 	}
 
@@ -454,9 +409,11 @@ class ChoosePlayer extends Phaser.Scene {
 			.layout()
 
 		scrollablePanel.setChildrenInteractive().on('child.click', (child) => {
-			const fighterName = this.fighterDetails[child.getData('index') - 1].name
+			const fighterName =
+				this.fighterDetails[child.getData('index') - 1].selectedPlayerIndex
 			this.selectedFighterName = fighterName
-			this.fighterTabImage.setTexture(`fighter_${fighterName}`)
+			this.fighterTabImage.setTexture(`player_texture_${fighterName}`)
+			console.log('Fighter selected: ', fighterName)
 		})
 
 		return scrollablePanel
@@ -633,13 +590,13 @@ class ChoosePlayer extends Phaser.Scene {
 		saveButton.on('pointerdown', () => {
 			console.log(
 				'Spaceship (Fighter) selected:',
-				this.selectedSpaceship,
+				this.selectedFighterName,
 				'Weapon selected:',
 				this.selectedWeapon,
 			)
 
 			// Save selections to localStorage
-			this.saveSelection(this.selectedSpaceship, this.selectedWeapon)
+			this.saveSelection(this.selectedFighterName, this.selectedWeapon)
 		})
 
 		saveButton.on('pointerover', () => {
@@ -654,6 +611,8 @@ class ChoosePlayer extends Phaser.Scene {
 	saveSelection(fighter, weapon) {
 		localStorage.setItem('selectedFighter', fighter)
 		localStorage.setItem('selectedWeapon', weapon)
+		gameSettings.selectedPlayerIndex = fighter
+		gameSettings.selectedWeaponIndex = fighter // For tempo, use the same index for both
 		console.log('Selections saved:', { fighter, weapon })
 	}
 

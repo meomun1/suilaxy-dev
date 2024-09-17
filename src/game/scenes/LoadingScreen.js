@@ -1,6 +1,8 @@
 import Phaser from 'phaser'
 import config from '../config/config.js'
 import GuiManager from '../manager/GuiManager.js'
+import gameSettings from '../config/gameSettings.js'
+import { v4 as uuidv4 } from 'uuid'
 class LoadingScreen extends Phaser.Scene {
 	constructor() {
 		super('loadingScreen')
@@ -9,12 +11,10 @@ class LoadingScreen extends Phaser.Scene {
 	}
 
 	init(data) {
-		this.selectedPlayerIndex = data.number
-		this.url_img = data.string
+		this.selectedPlayerIndex = gameSettings.selectedPlayerIndex
 	}
 
 	preload() {
-		this.guiManager.loadImage('nft_texture', this.url_img)
 		// Load background
 		// Helper function to load image if it doesn't exist
 		const loadImageIfNotExists = (key, path) => {
@@ -205,10 +205,10 @@ class LoadingScreen extends Phaser.Scene {
 			this,
 			'bulletChase_texture',
 			'assets/spritesheets/vfx/chaseBullet_01.png',
-			24,
-			24,
+			64,
+			64,
 			0,
-			5,
+			16,
 		)
 		// Mapping of selectedPlayerIndex to spritesheet details
 		const bulletSprites = {
@@ -237,7 +237,7 @@ class LoadingScreen extends Phaser.Scene {
 				spacing: 4,
 			},
 			4: {
-				key: `bullet${this.selectedPlayerIndex}_texture`,
+				key: `bullet4_texture`,
 				path: 'assets/spritesheets/vfx/bullet4.png',
 				frameWidth: 22,
 				frameHeight: 22,
@@ -287,7 +287,7 @@ class LoadingScreen extends Phaser.Scene {
 		}
 
 		// Load the appropriate spritesheet based on selectedPlayerIndex
-		const bulletSprite = bulletSprites[this.selectedPlayerIndex]
+		const bulletSprite = bulletSprites[gameSettings.selectedWeaponIndex] // temporary to default bullet
 		if (bulletSprite) {
 			loadSpriteSheetIfNotExists.call(
 				this,
@@ -322,6 +322,137 @@ class LoadingScreen extends Phaser.Scene {
 			11,
 		)
 
+		// Bullet Effect Spritesheet
+
+		const effectSprites = {
+			1: {
+				key: 'effect1_texture',
+				path: 'assets/spritesheets/effects/effect_10.png',
+				frameWidth: 64,
+				frameHeight: 64,
+				margin: 0,
+				spacing: 59,
+			},
+			2: {
+				key: 'effect2_texture',
+				path: 'assets/spritesheets/effects/effect_2.png',
+				frameWidth: 64,
+				frameHeight: 64,
+				margin: 0,
+				spacing: 27,
+			},
+			3: {
+				key: 'effect3_texture',
+				path: 'assets/spritesheets/effects/effect_3.png',
+				frameWidth: 100,
+				frameHeight: 100,
+				margin: 0,
+				spacing: 19,
+			},
+			4: {
+				key: 'effect4_texture',
+				path: 'assets/spritesheets/effects/effect_4.png',
+				frameWidth: 64,
+				frameHeight: 64,
+				margin: 0,
+				spacing: 12,
+			},
+			5: {
+				key: 'effect5_texture',
+				path: 'assets/spritesheets/effects/effect_5.png',
+				frameWidth: 72,
+				frameHeight: 72,
+				margin: 0,
+				spacing: 15,
+			},
+			6: {
+				key: 'effect6_texture',
+				path: 'assets/spritesheets/effects/effect_6.png',
+				frameWidth: 265,
+				frameHeight: 265,
+				margin: 0,
+				spacing: 29,
+			},
+			7: {
+				key: 'effect7_texture',
+				path: 'assets/spritesheets/effects/effect_7.png',
+				frameWidth: 64,
+				frameHeight: 64,
+				margin: 0,
+				spacing: 65,
+			},
+			8: {
+				key: 'effect8_texture',
+				path: 'assets/spritesheets/effects/effect_8.png',
+				frameWidth: 413,
+				frameHeight: 369,
+				margin: 0,
+				spacing: 29,
+			},
+			9: {
+				key: 'effect9_texture',
+				path: 'assets/spritesheets/effects/effect_9.png',
+				frameWidth: 299,
+				frameHeight: 313,
+				margin: 0,
+				spacing: 29,
+			},
+		}
+
+		const effectSprite = effectSprites[gameSettings.selectedPlayerIndex] // temporary to default effect
+		if (effectSprite) {
+			loadSpriteSheetIfNotExists.call(
+				this,
+				effectSprite.key,
+				effectSprite.path,
+				effectSprite.frameWidth,
+				effectSprite.frameHeight,
+				effectSprite.margin,
+				effectSprite.spacing,
+			)
+		}
+
+		// enemy effect spritesheet
+		loadSpriteSheetIfNotExists.call(
+			this,
+			'bounce_effect_texture',
+			'assets/spritesheets/effects/bounce_effect.png',
+			64,
+			64,
+			0,
+			41,
+		)
+
+		loadSpriteSheetIfNotExists.call(
+			this,
+			'electric_effect_texture',
+			'assets/spritesheets/effects/electric_effect.png',
+			64,
+			64,
+			0,
+			41,
+		)
+
+		loadSpriteSheetIfNotExists.call(
+			this,
+			'time_effect_texture',
+			'assets/spritesheets/effects/time_effect.png',
+			64,
+			64,
+			0,
+			45,
+		)
+
+		loadSpriteSheetIfNotExists.call(
+			this,
+			'poison_effect_texture',
+			'assets/spritesheets/effects/poison_effect.png',
+			64,
+			64,
+			0,
+			41,
+		)
+
 		this.load.audio('explosionSound', 'assets/audio/DestroyEnemySmall.wav')
 		this.load.audio('shootSound', 'assets/audio/bullet.wav')
 		this.load.audio('main_menu_music', 'assets/audio/backgroundMusic.mp3')
@@ -353,6 +484,7 @@ class LoadingScreen extends Phaser.Scene {
 			end,
 			frameRate,
 			repeat,
+			hideOnComplete,
 		) => {
 			if (!this.anims.exists(key)) {
 				this.anims.create({
@@ -363,6 +495,7 @@ class LoadingScreen extends Phaser.Scene {
 					}),
 					frameRate: frameRate,
 					repeat: repeat,
+					hideOnComplete: hideOnComplete,
 				})
 			}
 		}
@@ -444,7 +577,7 @@ class LoadingScreen extends Phaser.Scene {
 		}
 
 		// Create the appropriate animation based on selectedPlayerIndex
-		const bulletAnimation = bulletAnimations[this.selectedPlayerIndex]
+		const bulletAnimation = bulletAnimations[gameSettings.selectedPlayerIndex] // temporary to default bullet
 		if (bulletAnimation) {
 			createAnimationIfNotExists.call(
 				this,
@@ -479,14 +612,157 @@ class LoadingScreen extends Phaser.Scene {
 			)
 		})
 
+		const effectAnimations = {
+			1: {
+				key: 'effect1_anim',
+				textureKey: 'effect1_texture',
+				start: 45,
+				end: 59,
+				frameRate: 14,
+				repeat: 0,
+				hideOnComplete: true,
+			},
+			2: {
+				key: 'effect2_anim',
+				textureKey: 'effect2_texture',
+				start: 14,
+				end: 27,
+				frameRate: 20,
+				repeat: 1,
+				hideOnComplete: true,
+			},
+			3: {
+				key: 'effect3_anim',
+				textureKey: 'effect3_texture',
+				start: 0,
+				end: 19,
+				frameRate: 20,
+				repeat: 0,
+				hideOnComplete: true,
+			},
+			4: {
+				key: 'effect4_anim',
+				textureKey: 'effect4_texture',
+				start: 0,
+				end: 12,
+				frameRate: 13,
+				repeat: 0,
+				hideOnComplete: true,
+			},
+			5: {
+				key: 'effect5_anim',
+				textureKey: 'effect5_texture',
+				start: 0,
+				end: 15,
+				frameRate: 16,
+				repeat: 0,
+				hideOnComplete: true,
+			},
+			6: {
+				key: 'effect6_anim',
+				textureKey: 'effect6_texture',
+				start: 0,
+				end: 29,
+				frameRate: 30,
+				repeat: 0,
+				hideOnComplete: true,
+			},
+			7: {
+				key: 'effect7_anim',
+				textureKey: 'effect7_texture',
+				start: 55,
+				end: 65,
+				frameRate: 10,
+				repeat: 0,
+				hideOnComplete: true,
+			},
+			8: {
+				key: 'effect8_anim',
+				textureKey: 'effect8_texture',
+				start: 0,
+				end: 29,
+				frameRate: 30,
+				repeat: 0,
+				hideOnComplete: true,
+			},
+			9: {
+				key: 'effect9_anim',
+				textureKey: 'effect9_texture',
+				start: 0,
+				end: 29,
+				frameRate: 30,
+				repeat: 0,
+				hideOnComplete: true,
+			},
+		}
+
+		const effectAnimation = effectAnimations[gameSettings.selectedPlayerIndex] // temporary to default effect
+		if (effectAnimation) {
+			createAnimationIfNotExists.call(
+				this,
+				effectAnimation.key,
+				effectAnimation.textureKey,
+				effectAnimation.start,
+				effectAnimation.end,
+				effectAnimation.frameRate,
+				effectAnimation.repeat,
+				effectAnimation.hideOnComplete,
+			)
+		}
+
+		// Load enemy effects
+		createAnimationIfNotExists.call(
+			this,
+			'bounce_effect_anim',
+			'bounce_effect_texture',
+			0,
+			41,
+			60,
+			0,
+			true,
+		)
+
+		createAnimationIfNotExists.call(
+			this,
+			'electric_effect_anim',
+			'electric_effect_texture',
+			0,
+			41,
+			20,
+			0,
+			true,
+		)
+
+		createAnimationIfNotExists.call(
+			this,
+			'time_effect_anim',
+			'time_effect_texture',
+			0,
+			45,
+			45,
+			0,
+			true,
+		)
+
+		createAnimationIfNotExists.call(
+			this,
+			'poison_effect_anim',
+			'poison_effect_texture',
+			0,
+			41,
+			20,
+			0,
+			true,
+		)
+
 		// Mapping of animation keys to their details
 		const animations = [
 			{
 				key: 'bulletChase_anim',
 				textureKey: 'bulletChase_texture',
 				start: 0,
-				end: 5,
-				frameRate: 15,
+				end: 16,
+				frameRate: 32,
 				repeat: -1,
 			},
 			{
@@ -573,7 +849,7 @@ class LoadingScreen extends Phaser.Scene {
 			},
 		]
 
-		// Create animations
+		// Create animations for various entities
 		animations.forEach((anim) => {
 			createAnimationIfNotExists.call(
 				this,
@@ -590,8 +866,102 @@ class LoadingScreen extends Phaser.Scene {
 		// Create loading text
 		this.time.delayedCall(1000, () => {
 			let value = this.selectedPlayerIndex
-			this.scene.start('playTutorial', { number: value })
+			this.scene.start('playGame', { number: value })
 		})
+
+		this.randomNFT()
+	}
+
+	randomNFT() {
+		const arrayFrame = [
+			'Bronze',
+			'Silver',
+			'Gold',
+			'Emerald',
+			'Diamond',
+			'Master',
+			'Grandmaster',
+			'Challenger',
+			'Legendary',
+		]
+
+		const randomNum = Math.random() * 100
+
+		let item
+		let hashTag
+		let url_img
+		let description
+
+		if (randomNum < 0.01) {
+			url_img =
+				'https://bafkreicelixacf7np74iu6rbdikstlr4x6rot73ilsuvrfk55crvmwkgre.ipfs.nftstorage.link/'
+			item = arrayFrame[8] // 'legendary'
+			hashTag = 9
+			description =
+				"Woven with the essence of legend, this Legendary Frame imbues the gun with an aura of myth and power. A coveted symbol of triumph, it signifies the collector's place among the NFT greats."
+		} else if (randomNum < 0.1) {
+			url_img =
+				'https://bafkreickfhx57ajogrrixyvjwjmu6rzfhnllok7fexnlmb3gttcaxfhoxi.ipfs.nftstorage.link/'
+			item = arrayFrame[7] // 'challenger'
+			hashTag = 8
+			description =
+				"Forged in a Challenger Frame, this gun ignites the spirit of competition. Its dynamic design signifies the collector's unwavering pursuit of victory, a weapon for those who rise to the challenge."
+		} else if (randomNum < 1) {
+			url_img =
+				'https://bafkreiecvcao5uukbc436dmghejpf2tepixwz6gfh46o2wblrhzyhlluqa.ipfs.nftstorage.link/'
+			item = arrayFrame[6] // 'grandmaster'
+			hashTag = 7
+			description =
+				"Crafted with a Grandmaster Frame, this weapon embodies unparalleled achievement. Its imposing presence reflects the collector's dominance in the NFT arena, a trophy for the elite."
+		} else if (randomNum < 5) {
+			url_img =
+				'https://bafkreihi2dcwezvhjpp5omdja45nyo5d7wvbuyephar5owcifjemoy37bi.ipfs.nftstorage.link/'
+			item = arrayFrame[5] // 'master'
+			hashTag = 6
+			description =
+				"Enshrined in a Master Frame, this gun signifies superior skill and mastery. It’s a testament to the collector's dedication and expertise in the NFT realm."
+		} else if (randomNum < 10) {
+			url_img =
+				'https://bafkreih6bgdgundl42sgnpdu3cgyzpeb5azqxzejfsw7rsfvsnmkc6dgqu.ipfs.nftstorage.link/'
+			item = arrayFrame[4] // 'diamond'
+			hashTag = 5
+			description =
+				'Framed with dazzling Diamonds, this gun is the epitome of elegance and excellence. Its unmatched brilliance makes it a coveted piece for discerning collectors.'
+		} else if (randomNum < 20) {
+			url_img =
+				'https://bafkreid4t3haxbpqcya7nqybt2l64rkk4iterqgdkx4waa62nwmsobbjpm.ipfs.nftstorage.link/'
+			item = arrayFrame[3] // 'emerald'
+			hashTag = 4
+			description =
+				'Enveloped in a radiant Emerald Frame, this gun is a rare treasure. Its vibrant green hue signifies growth and vitality, making it a standout addition to any collection.'
+		} else if (randomNum < 30) {
+			url_img =
+				'https://bafkreid5dhduya5ufjmgcgct7432wlluq7ew73o2colaazx2nsgdjyxi3i.ipfs.nftstorage.link/'
+			item = arrayFrame[2] // 'gold'
+			hashTag = 3
+			description =
+				'This magnificent gun is framed in Gold, representing wealth and prestige. A prized piece for any collector seeking to showcase their status and refined taste.'
+		} else if (randomNum < 50) {
+			url_img =
+				'https://bafkreihi2dcwezvhjpp5omdja45nyo5d7wvbuyephar5owcifjemoy37bi.ipfs.nftstorage.link/'
+			item = arrayFrame[1] // 'silver'
+			hashTag = 2
+			description =
+				'Encased in a sleek Silver Frame, this gun exudes sophistication and precision. A step up from bronze, it’s perfect for collectors aiming to enhance their digital armory.'
+		} else {
+			url_img =
+				'https://bafkreif7gnjzl6nfggk534zvkn6bkihr3zkf77p74cwic4ktnnb763uogu.ipfs.nftstorage.link/'
+			item = arrayFrame[0] // 'bronze'
+			hashTag = 1
+			description =
+				'This gun is encased in a Bronze Frame, a symbol of strength and resilience. A great starting point for collectors, it’s the foundation for building a powerful NFT arsenal.'
+		}
+
+		gameSettings.nft_id = uuidv4()
+		gameSettings.nft_frame = item
+		gameSettings.nft_weapon = 'Conqueror Blaster' + ' #' + hashTag
+		gameSettings.nft_img_url = url_img
+		gameSettings.nft_description = description
 	}
 }
 

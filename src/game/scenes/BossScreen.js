@@ -234,8 +234,8 @@ class BossScreen extends Phaser.Scene {
 		this.boss = new Boss(this, config.width / 2, 0, 50000)
 		this.boss.play('boss_move_anim')
 
-		this.firstMini = new MiniBot(this, config.width / 5, -96, 10000)
-		this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 10000)
+		// this.firstMini = new MiniBot(this, config.width / 5, -96, 10000)
+		// this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 10000)
 
 		// Spawn the Enemies
 		this.bug3_1 = new Bug3(this, 50, 0, 2000)
@@ -256,8 +256,8 @@ class BossScreen extends Phaser.Scene {
 		this.EnemyManager.addEnemy(this.bug5)
 		this.EnemyManager.addEnemy(this.bug5_2)
 		this.EnemyManager.addEnemy(this.boss)
-		this.EnemyManager.addEnemy(this.firstMini)
-		this.EnemyManager.addEnemy(this.secondMini)
+		// this.EnemyManager.addEnemy(this.firstMini)
+		// this.EnemyManager.addEnemy(this.secondMini)
 
 		// spawn the enemies
 		if (this.boss.health < 800) {
@@ -473,13 +473,13 @@ class BossScreen extends Phaser.Scene {
 		) {
 			this.boss.bossBound()
 			if (this.timeHealth === 0) {
-				this.callMini()
+				// this.callMini()
 			}
 		}
 
 		if (this.boss.health < this.boss.maxHealth * 0.35 && this.boss.health > 0) {
 			this.boss.moveToCenter()
-			this.callMini()
+			// this.callMini()
 		}
 
 		if (
@@ -507,15 +507,15 @@ class BossScreen extends Phaser.Scene {
 		}
 	}
 
-	callMini() {
-		if (this.firstMini.health > 0) {
-			this.firstMini.followPlayer(this.player, -100, -100)
-		}
+	// callMini() {
+	// 	if (this.firstMini.health > 0) {
+	// 		this.firstMini.followPlayer(this.player, -100, -100)
+	// 	}
 
-		if (this.secondMini.health > 0) {
-			this.secondMini.followPlayer(this.player, 100, -100)
-		}
-	}
+	// 	if (this.secondMini.health > 0) {
+	// 		this.secondMini.followPlayer(this.player, 100, -100)
+	// 	}
+	// }
 
 	healthBoss() {
 		if (this.boss.health < this.boss.maxHealth * 0.35) {

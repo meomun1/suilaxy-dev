@@ -18,6 +18,8 @@ class Effect extends Entity {
 
 		if (gameSettings.selectedPlayerIndex === 9) {
 			this.setScale(0.5)
+		} else if (gameSettings.selectedPlayerIndex === 4) {
+			this.setScale(4)
 		} else {
 			this.setScale(1.5)
 		}

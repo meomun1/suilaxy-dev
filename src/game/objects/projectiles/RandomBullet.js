@@ -21,6 +21,7 @@ class RandomBullet extends Entity {
 
 		this.damage = gameSettings.savePlayerBulletDamage
 
+		this.setDisplaySize(128, 128)
 		this.setScale(2)
 		this.setDepth(0)
 		this.destroying = false

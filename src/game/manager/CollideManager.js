@@ -124,7 +124,19 @@ class CollideManager {
 	}
 
 	bulletHitEnemy(enemy, bullet) {
-		enemy.takeDamage(bullet.damage)
+		const currentTime = Date.now()
+
+		// Initialize lastDamageTime if it doesn't exist
+		if (!enemy.lastDamageTime) {
+			enemy.lastDamageTime = 0
+		}
+
+		// Check if 0.5 seconds have passed since the last damage
+		if (currentTime - enemy.lastDamageTime >= 500) {
+			enemy.takeDamage(bullet.damage)
+			enemy.lastDamageTime = currentTime
+		}
+
 		if (
 			gameSettings.selectedPlayerIndex === 1 ||
 			gameSettings.selectedPlayerIndex === 6 ||
@@ -158,6 +170,13 @@ class CollideManager {
 				// Reset the enemy's velocity
 			})
 		}
+
+		// Check for continued collision after 0.5 seconds
+		setTimeout(() => {
+			if (this.scene.physics.overlap(bullet, enemy)) {
+				this.bulletHitEnemy(enemy, bullet)
+			}
+		}, 1000)
 	}
 
 	effectHitEnemy(enemy, effect) {

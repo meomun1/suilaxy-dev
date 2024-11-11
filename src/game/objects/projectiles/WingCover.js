@@ -17,6 +17,7 @@ class WingCover extends Entity {
 		this.damage = gameSettings.savePlayerBulletDamage
 
 		this.setScale(0.4)
+		this.setDisplaySize(165, 148)
 
 		this.setDepth(0)
 

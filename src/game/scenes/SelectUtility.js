@@ -115,7 +115,6 @@ class ChoosePlayer extends Phaser.Scene {
 		this.load.image('loading_panel', 'assets/gui/loading-panel.png')
 
 		// Preload fighter assets from mapping
-
 		// Preload NFT images from mockSpaceshipNFTs
 		mockSpaceshipNFTs.forEach((nft) => {
 			this.load.image(nft.name, nft.imageUrl)

@@ -80,7 +80,7 @@ class NftScreen extends Phaser.Scene {
 		const spaceText = this.add.text(
 			config.width / 2,
 			config.height / 2 - 200,
-			'SUPER WARRIOR',
+			'Found an Artifact',
 			{
 				fontFamily: 'Pixelify Sans',
 				fontSize: '80px',
@@ -94,7 +94,7 @@ class NftScreen extends Phaser.Scene {
 		const guardianText = this.add.text(
 			config.width / 2,
 			config.height / 2 - 100,
-			'Claim your stellar prize',
+			'Claim it or leave it',
 			{
 				fontFamily: 'Pixelify Sans',
 				color: '#F3F8FF',

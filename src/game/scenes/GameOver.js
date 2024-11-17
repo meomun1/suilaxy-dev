@@ -1,11 +1,11 @@
 import Phaser from 'phaser'
-import config from '../config/config.js'
 import GuiManager from '../manager/GuiManager.js'
 import KeyboardManager from '../manager/KeyboardManager.js'
 import InterfaceManager from './InterfaceScene.js'
 import gameSettings from '../config/gameSettings.js'
 import { EventBus } from '../EventBus.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
+import axios from 'axios'
 
 class GameOver extends Phaser.Scene {
 	constructor() {
@@ -17,6 +17,8 @@ class GameOver extends Phaser.Scene {
 	}
 
 	preload() {
+		this.load.json('nftMapping', '../src/data/nft_mapping.json')
+
 		// this.load.spritesheet({
 		// 	key: 'button_continue_hover',
 		// 	url: 'assets/gui/button_play_hover.png',
@@ -40,96 +42,84 @@ class GameOver extends Phaser.Scene {
 	}
 
 	create() {
-		EventBus.on('wallet-connected', handleWalletConnected, this)
-
+		// ===============================================================
+		// Default Set up Code
 		this.input.setDefaultCursor(
 			'url(assets/cursors/custom-cursor.cur), pointer',
 		)
+		EventBus.on('wallet-connected', handleWalletConnected, this)
 
+		// ===============================================================
+		// Post the score to the mockapi
+		this.postScore()
+		// Generate the NFT properties
+		const nftProperties = this.generateNFTProperties()
+		console.log('NFT properties:', nftProperties)
+
+		// ===============================================================
+		// Check if the boss is dead
 		gameSettings.isBossDead = true
 		// Add a game over message
 		this.keyboardManager = new KeyboardManager(this)
 		this.guiManager = new GuiManager(this)
 		this.interfaceManager = new InterfaceManager(this)
-
-		// Define the "R" key to restart the game
+		// Define the "R", "T", "L" key
 		this.keyboardManager.restartGame()
-
-		// Define the "T" key to back to the title screen
 		this.keyboardManager.titleScreen()
-
-		// Define the "L" key to show the leaderboard
 		this.keyboardManager.showLeaderboard()
-
-		// this.buttonContinue = this.add.sprite(
-		// 	config.width / 2,
-		// 	(2 * config.height) / 3 - 30,
-		// 	'button_continue',
-		// 	0,
-		// )
-		// this.buttonContinue.setInteractive()
-
-		// this.buttonContinue.on('pointerdown', () => {
-		// 	this.scene.start(this.callingScene)
-		// 	this.scene.stop('gameOver')
-		// })
-
-		// this.buttonContinue.on('pointerover', () => {
-		// 	this.buttonContinue.setTexture('button_continue_hover')
-		// })
-
-		// this.buttonContinue.on('pointerout', () => {
-		// 	this.buttonContinue.setTexture('button_continue')
-		// })
-
-		// Automatically transition to leaderboard after 5 seconds with countdown
-		this.countdownTimer = this.time.addEvent({
-			delay: 1000, // 1 second interval
-			callback: this.updateCountdown,
-			callbackScope: this,
-			repeat: 5, // 5 times for a total of 5 seconds
-		})
-
-		this.countdownNumber = this.add.text(
-			config.width / 2,
-			(config.height / 4) * 3,
-			'',
-			{
-				fontFamily: 'Pixelify Sans',
-				fontSize: '40px',
-				fill: '#FFFB73',
-			},
-		)
-		this.countdownNumber.setOrigin(0.5)
-
-		this.countdownText = this.add.text(
-			config.width / 2,
-			(config.height / 4) * 3 + 50,
-			'seconds to leaderboard',
-			{
-				fontFamily: 'Pixelify Sans',
-				fontSize: '32px',
-				fill: '#fff',
-			},
-		)
-		this.countdownText.setOrigin(0.5)
-
-		// Start the countdown
-		this.updateCountdown()
 	}
 
-	updateCountdown() {
-		const remainingTime = this.countdownTimer.repeatCount
-		this.countdownNumber.text = remainingTime > 0 ? remainingTime : 'GO!'
+	postScore() {
+		try {
+			axios.post('https://66f3fc9a77b5e8897097cb44.mockapi.io/api/scores', {
+				score: gameSettings.playerScore,
+				walletAddress: gameSettings.userWalletAdress,
+			})
+		} catch (error) {
+			console.error('Error posting score:', error)
+		}
+	}
 
-		if (remainingTime === 0) {
-			// Transition to leaderboard after countdown
-			this.transitionToLeaderboard()
+	randomNFTFrameIndex(score) {
+		if (score < 1000) {
+			return 0
+		} else if (score >= 4000 && score < 8000) {
+			return Phaser.Math.Between(0, 2)
+		} else if (score >= 8000 && score < 10000) {
+			return Phaser.Math.Between(1, 3)
+		} else if (score >= 10000 && score < 12000) {
+			return Phaser.Math.Between(1, 4)
+		} else if (score >= 12000 && score < 14000) {
+			return Phaser.Math.Between(3, 5)
+		} else if (score >= 14000 && score < 15000) {
+			return Phaser.Math.Between(3, 6)
+		} else if (score >= 15000 && score < 16000) {
+			return Phaser.Math.Between(5, 7)
+		} else if (score >= 16000) {
+			return Phaser.Math.Between(5, 8)
+		}
+		return 0
+	}
+
+	generateNFTProperties() {
+		const nftMapping = this.cache.json.get('nftMapping')
+		gameSettings.nft_weapon_index = Phaser.Math.Between(0, 9)
+		gameSettings.nft_frame_index = this.randomNFTFrameIndex(
+			gameSettings.playerScore,
+		)
+
+		const selectedNFT = nftMapping[gameSettings.nft_weapon_index]
+		const selectedFrame = selectedNFT.url[gameSettings.nft_frame_index]
+
+		return {
+			name: selectedNFT.name,
+			frame: selectedFrame.frame,
+			description: selectedNFT.description,
+			url: selectedFrame.image,
 		}
 	}
 
 	transitionToLeaderboard() {
-		// Stop the current scene and start the leaderboard scene
 		this.scene.stop(this.callingScene)
 		this.scene.start('mainMenu')
 	}

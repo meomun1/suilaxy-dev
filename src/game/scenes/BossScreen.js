@@ -400,15 +400,12 @@ class BossScreen extends Phaser.Scene {
 			})
 
 			if (gameSettings.isBossDead === true) {
-				this.UtilitiesManager.addNftForPlayer()
-
 				this.CollideManager1 = new CollideManager(
 					this,
 					this.player,
 					this.EnemyManager.enemies,
 					this.UtilitiesManager.HealthPacks,
 					this.UtilitiesManager.shieldPacks,
-
 					this.shield,
 					this.SoundManager,
 				)

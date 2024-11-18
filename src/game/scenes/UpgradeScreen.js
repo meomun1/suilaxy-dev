@@ -1,9 +1,11 @@
 import Phaser from 'phaser'
 import config from '../config/config'
 import GameSettings from '../config/gameSettings'
+
 class UpgradeScreen extends Phaser.Scene {
 	constructor() {
 		super('upgradeScreen')
+		this.upgradeKeys = [] // Array to store the keys
 	}
 
 	preload() {
@@ -29,7 +31,6 @@ class UpgradeScreen extends Phaser.Scene {
 
 		const middleX = config.width / 2
 		const middleY = (config.height - 100) / 2
-
 		const rowGap = 150
 
 		// Create an array of available upgrades
@@ -47,27 +48,35 @@ class UpgradeScreen extends Phaser.Scene {
 		// Shuffle the array to randomize the upgrades
 		Phaser.Math.RND.shuffle(availableUpgrades)
 
+		// Store the three upgrades being displayed
+		this.currentUpgrades = availableUpgrades.slice(0, 3)
+
 		for (let i = 0; i < 3; i++) {
+			const yPosition = middleY - 120 + i * rowGap
+
+			// Add the rectangle for the upgrade
 			const upgradeRect = this.add.rectangle(
 				middleX,
-				middleY - 150 + i * rowGap,
+				yPosition,
 				400,
 				80,
 				0x000000,
 			)
 			upgradeRect.setInteractive()
 
+			// Add the upgrade image
 			const upgradeImage = this.add.sprite(
 				middleX - 150,
-				middleY - 150 + i * rowGap,
-				availableUpgrades[i],
+				yPosition,
+				this.currentUpgrades[i],
 			)
 			upgradeImage.setOrigin(0.5, 0.5)
 
+			// Add the upgrade text
 			const upgradeText = this.add.text(
 				middleX - 70,
-				middleY - 150 + i * rowGap,
-				this.getUpgradeText(availableUpgrades[i]),
+				yPosition,
+				this.getUpgradeText(this.currentUpgrades[i]),
 				{
 					fontSize: '16px',
 					fontFamily: 'Pixelify Sans',
@@ -76,6 +85,29 @@ class UpgradeScreen extends Phaser.Scene {
 				},
 			)
 			upgradeText.setOrigin(0, 0.5)
+
+			// Add the rectangle with the hotkey number
+			const hotkeyBox = this.add.rectangle(
+				middleX - 220, // Position to the left of the upgrade
+				yPosition,
+				50,
+				50,
+				0x444444,
+			)
+			hotkeyBox.setStrokeStyle(2, 0xffffff)
+
+			// Add the hotkey text
+			const hotkeyText = this.add.text(
+				middleX - 220,
+				yPosition,
+				`${i + 1}`, // Display 1, 2, or 3
+				{
+					fontSize: '24px',
+					fontFamily: 'Pixelify Sans',
+					fill: '#fff',
+				},
+			)
+			hotkeyText.setOrigin(0.5)
 
 			// Event listener for upgrades
 			upgradeRect.on('pointerover', () => {
@@ -86,14 +118,43 @@ class UpgradeScreen extends Phaser.Scene {
 			})
 
 			upgradeRect.on('pointerdown', () =>
-				this.handleUpgradeChoice(availableUpgrades[i], this.callbackSceneName),
+				this.handleUpgradeChoice(
+					this.currentUpgrades[i],
+					this.callbackSceneName,
+				),
 			)
 
 			// Set depth
 			upgradeRect.setDepth(3)
 			upgradeImage.setDepth(4)
 			upgradeText.setDepth(4)
+			hotkeyBox.setDepth(4)
+			hotkeyText.setDepth(5)
 		}
+
+		// Enable hotkeys
+		this.enableHotKeys()
+	}
+
+	enableHotKeys() {
+		// Add keyboard input for keys 1, 2, 3
+		this.upgradeKeys = [
+			this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE),
+			this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO),
+			this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE),
+		]
+
+		// Add event listeners for key presses
+		this.upgradeKeys.forEach((key, index) => {
+			key.on('down', () => {
+				if (this.currentUpgrades[index]) {
+					this.handleUpgradeChoice(
+						this.currentUpgrades[index],
+						this.callbackSceneName,
+					)
+				}
+			})
+		})
 	}
 
 	getUpgradeText(upgradeType) {

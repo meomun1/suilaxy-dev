@@ -76,17 +76,17 @@ class NFTGenerate extends Phaser.Scene {
 		} else if (score >= 4000 && score < 8000) {
 			return Phaser.Math.Between(0, 2)
 		} else if (score >= 8000 && score < 10000) {
-			return Phaser.Math.Between(1, 3)
+			return Phaser.Math.Between(0, 3)
 		} else if (score >= 10000 && score < 12000) {
-			return Phaser.Math.Between(1, 4)
+			return Phaser.Math.Between(0, 4)
 		} else if (score >= 12000 && score < 14000) {
-			return Phaser.Math.Between(3, 5)
+			return Phaser.Math.Between(1, 5)
 		} else if (score >= 14000 && score < 15000) {
-			return Phaser.Math.Between(3, 6)
+			return Phaser.Math.Between(2, 6)
 		} else if (score >= 15000 && score < 16000) {
-			return Phaser.Math.Between(5, 7)
+			return Phaser.Math.Between(3, 7)
 		} else if (score >= 16000) {
-			return Phaser.Math.Between(5, 8)
+			return Phaser.Math.Between(4, 8)
 		}
 		return 0
 	}

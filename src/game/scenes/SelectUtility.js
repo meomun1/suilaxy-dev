@@ -3,6 +3,7 @@ import axios from 'axios'
 import config from '../config/config.js'
 import GuiManager from '../manager/GuiManager.js'
 import gameSettings from '../config/gameSettings.js'
+import InterfaceManager from './InterfaceScene.js'
 
 // Sui full node endpoint
 const SUI_RPC_URL = 'https://fullnode.testnet.sui.io:443'
@@ -114,6 +115,10 @@ class ChoosePlayer extends Phaser.Scene {
 		this.load.image('slot_frame', 'assets/gui/slot-frame.png')
 		this.load.image('loading_panel', 'assets/gui/loading-panel.png')
 
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		// Preload fighter assets from mapping
 		// Preload NFT images from mockSpaceshipNFTs
 		mockSpaceshipNFTs.forEach((nft) => {
@@ -122,12 +127,12 @@ class ChoosePlayer extends Phaser.Scene {
 	}
 
 	async create() {
-		this.input.setDefaultCursor(
-			'url(assets/cursors/custom-cursor.cur), pointer',
-		)
 		this.cameras.main.fadeIn(1500)
 		this.guiManager.createBackground('background')
 		this.createSuilaxyTextAndLogo()
+
+		// Initialize InterfaceManager
+		this.interfaceManager = new InterfaceManager(this)
 
 		// Load saved selection from localStorage
 		this.loadSelection()
@@ -596,6 +601,7 @@ class ChoosePlayer extends Phaser.Scene {
 
 			// Save selections to localStorage
 			this.saveSelection(this.selectedFighterName, this.selectedWeapon)
+			this.interfaceManager.goToMainMenu(0)
 		})
 
 		saveButton.on('pointerover', () => {

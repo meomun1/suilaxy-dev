@@ -12,7 +12,7 @@ var gameSettings = {
 	playerFireRate: 1500,
 	playerDefaultBulletSize: 1.2,
 	playerBulletSize: 1.2,
-	playerMaxHealth: 1, // adjusted 1 for testing
+	playerMaxHealth: 5000, // TESTING
 	playerUpgradeThreshold: 300,
 	playerSize: 1,
 	playerArmor: 0,

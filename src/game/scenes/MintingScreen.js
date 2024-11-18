@@ -5,10 +5,10 @@ import { EventBus } from '../EventBus.js'
 import GuiManager from '../manager/GuiManager.js'
 import Button from '../objects/Button.js'
 
-class NftScreen extends Phaser.Scene {
+class MintingScreen extends Phaser.Scene {
 	constructor() {
-		super('createNft')
-		this.callingScene = 'createNft'
+		super('mintingScreen')
+		this.callingScene = 'mintingScreen'
 		this.guiManager = new GuiManager(this)
 	}
 
@@ -40,12 +40,32 @@ class NftScreen extends Phaser.Scene {
 			4,
 			4,
 		)
-	}
 
-	create() {
 		this.input.setDefaultCursor(
 			'url(assets/cursors/custom-cursor.cur), pointer',
 		)
+
+		// "Searching for any artifact..."
+		this.searchText = this.add.text(
+			this.cameras.main.centerX,
+			this.cameras.main.centerY - 50,
+			'<Searching for any artifact...>',
+			{
+				fontFamily: 'Pixelify Sans',
+				fontSize: '32px',
+				fill: '#FFFFFF',
+			},
+		)
+		this.searchText.setOrigin(0.5)
+
+		// Dynamically load the NFT image from the URL
+		const nftImageUrl = gameSettings.nft_img_url
+		if (nftImageUrl) {
+			this.load.image('nft_texture', nftImageUrl)
+		}
+	}
+
+	create() {
 		// Create a black rectangle that covers the whole game
 		let blackCover = this.add.rectangle(
 			0,
@@ -76,7 +96,7 @@ class NftScreen extends Phaser.Scene {
 		)
 		this.background.setOrigin(0, 0)
 
-		// Create "SPACE" text
+		// Create texts
 		const spaceText = this.add.text(
 			config.width / 2,
 			config.height / 2 - 200,
@@ -105,7 +125,7 @@ class NftScreen extends Phaser.Scene {
 		guardianText.setOrigin(0.5)
 		guardianText.setShadow(3, 3, '#F27CA4', 2, false, true)
 
-		// Tween animation for the rainbow effect on "GUARDIAN"
+		// Tween animation
 		this.tweens.add({
 			targets: guardianText,
 			duration: 1000,
@@ -114,8 +134,6 @@ class NftScreen extends Phaser.Scene {
 			yoyo: true,
 			alpha: 0.2,
 		})
-
-		// Tween animation for the rainbow effect on "SPACE"
 		this.tweens.add({
 			targets: spaceText,
 			duration: 1000,
@@ -125,35 +143,50 @@ class NftScreen extends Phaser.Scene {
 			alpha: 0.2,
 		})
 
-		this.meshRotation()
-
-		EventBus.emit('current-scene-ready', {
-			key: { callingScene: this.callingScene },
-			nftProperties: {
-				name: gameSettings.nft_weapon,
-				frame: gameSettings.nft_frame,
-				description: gameSettings.nft_description,
-				url: gameSettings.nft_img_url,
-			},
-		})
-
 		this.button_mint = new Button(
 			this,
 			config.width / 2,
-			(config.height * 14) / 16,
+			(config.height * 14) / 15,
 			'button_mint',
 			'button_mint_hover',
 		)
 
 		this.button_mint.setSize(config.width / 10, config.height / 20)
 		this.button_mint.setInteractive()
-		this.button_mint.setScale(1.5)
+		this.button_mint.setScale(1.3)
+
+		// Listen for when the loader completes, then apply the texture
+		this.load.on(Phaser.Loader.Events.COMPLETE, () => {
+			if (this.textures.exists('nft_texture')) {
+				this.meshRotation()
+			} else {
+				console.error('NFT texture not found!')
+			}
+		})
+		this.load.start()
+
+		console.log('Game Settings at Minting:', {
+			name: gameSettings.nft_weapon,
+			description: gameSettings.nft_description,
+			url: gameSettings.nft_img_url,
+			frame: gameSettings.nft_frame,
+		})
+
+		EventBus.emit('current-scene-ready', {
+			key: { callingScene: this.callingScene },
+			nftProperties: {
+				name: gameSettings.nft_weapon,
+				description: gameSettings.nft_description,
+				url: gameSettings.nft_img_url,
+				frame: gameSettings.nft_frame,
+			},
+		})
 	}
 
 	pixelTransformation() {
 		// Pixel Transformation
 		const source = this.textures.get('nft_texture').source[0].image
-		console.log('hehe ', source)
+		console.log('hehe', source)
 		const canvas = this.textures.createCanvas('pad', 125, 125).source[0].image
 		console.log('canva', canvas)
 		const ctx = canvas.getContext('2d')
@@ -217,16 +250,6 @@ class NftScreen extends Phaser.Scene {
 			'nft_texture',
 		)
 
-		this.add.text(
-			config.width / 2 -
-				config.width / 8 -
-				config.width / 16 +
-				config.width / 32 +
-				config.width / 64,
-			(config.height * 15) / 16,
-			'Rotate with mouse (Drag your nft)',
-		)
-
 		Phaser.Geom.Mesh.GenerateGridVerts({
 			mesh,
 			widthSegments: 6,
@@ -254,10 +277,10 @@ class NftScreen extends Phaser.Scene {
 			}
 		})
 
-		this.input.on('wheel', (pointer, over, deltaX, deltaY, deltaZ) => {
+		this.input.on('wheel', (pointer, over, deltaX, deltaY) => {
 			mesh.panZ(deltaY * (zoomRate / 600))
 		})
 	}
 }
 
-export default NftScreen
+export default MintingScreen

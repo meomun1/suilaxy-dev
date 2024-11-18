@@ -71,9 +71,21 @@ class KeyboardManager {
 		})
 	}
 
-	titleScreen() {
+	// titleScreen() {
+	// 	this.keys.T.on('down', () => {
+	// 		this.scene.scene.start('bootGame')
+	// 		let otherScene = this.scene.scene.get(this.scene.callingScene)
+	// 		otherScene.shutdownPlayer()
+	// 		this.scene.scene.stop(this.scene.callingScene)
+	// 		this.scene.scene.stop('pauseScreen')
+	// 		gameSettings.playerScore = 0
+	// 		this.scene.sys.game.globals.bgMusic.stop()
+	// 	})
+	// }
+
+	menuScreen() {
 		this.keys.T.on('down', () => {
-			this.scene.scene.start('bootGame')
+			this.scene.scene.start('mainMenu')
 			let otherScene = this.scene.scene.get(this.scene.callingScene)
 			otherScene.shutdownPlayer()
 			this.scene.scene.stop(this.scene.callingScene)

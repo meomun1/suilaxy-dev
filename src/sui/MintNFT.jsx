@@ -50,6 +50,8 @@ const MintNFT = () => {
 
 	useEffect(() => {
 		const handleSceneReady = (eventData) => {
+			console.log('Event data:', eventData)
+
 			if (currentAccount) {
 				gameSettings.userActive = true
 				gameSettings.userWalletAdress = currentAccount.address
@@ -67,7 +69,7 @@ const MintNFT = () => {
 			if (
 				eventData &&
 				eventData.key &&
-				eventData.key.callingScene === 'createNft'
+				eventData.key.callingScene === 'mintingScreen'
 			) {
 				phaserRef.current = eventData.key.callingScene
 				const { name, frame, description, url } = eventData.nftProperties

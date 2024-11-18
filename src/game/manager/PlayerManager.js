@@ -25,8 +25,6 @@ class PlayerManager {
 	}
 
 	movePlayer() {
-		const currentTime = this.scene.time.now
-
 		let xVelocity = 0
 		let yVelocity = 0
 		let animationKey = 'player_anim'
@@ -86,8 +84,6 @@ class PlayerManager {
 	}
 
 	movePlayerPVP(socket) {
-		const currentTime = this.scene.time.now
-
 		let xVelocity = 0
 		let yVelocity = 0
 		let animationKey = `player_anim_${this.selectedPlayerIndex}`

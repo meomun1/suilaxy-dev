@@ -1,17 +1,16 @@
 import Entity from '../Entity.js'
-import gameSettings from '../../config/gameSettings.js'
 import Phaser from 'phaser'
 
 class NftCollection extends Entity {
 	constructor(scene, x, y) {
-		super(scene, x, y, 'nft_texture') // Replace with your health pack texture key
+		super(scene, x, y, 'nft_texture')
 		scene.add.existing(this)
 		scene.physics.add.existing(this)
 
 		// Randomly set initial velocity for movement
 		this.setRandomVelocity()
 		this.setInteractiveEntity()
-		this.body.setCollideWorldBounds(true) // Semicolon here instead of dot
+		this.body.setCollideWorldBounds(true)
 		this.body.setBounce(1)
 	}
 
@@ -28,7 +27,6 @@ class NftCollection extends Entity {
 	setInteractiveEntity() {
 		super.setInteractiveEntity()
 	}
-
 }
 
 export default NftCollection

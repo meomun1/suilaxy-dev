@@ -20,6 +20,18 @@ class InterfaceScene {
 	goToTitleScreen(delay = 0) {
 		this.transitionToScene('bootGame', delay)
 	}
+
+	goToNFTGenerate(delay = 0) {
+		this.transitionToScene('nftGenerate', delay)
+	}
+
+	goToNFTMint(delay = 0) {
+		this.transitionToScene('mintingScreen', delay)
+	}
+
+	goToMainMenu(delay = 0) {
+		this.transitionToScene('mainMenu', delay)
+	}
 }
 
 export default InterfaceScene

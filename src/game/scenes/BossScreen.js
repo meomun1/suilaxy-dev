@@ -1,6 +1,5 @@
 import Phaser from 'phaser'
 import config from '../config/config.js'
-import Player from '../objects/players/Player.js'
 import Shield from '../objects/utilities/Shield.js'
 import EnemyManager from '../manager/EnemyManager.js'
 import KeyboardManager from '../manager/KeyboardManager.js'
@@ -13,7 +12,7 @@ import UtilitiesManager from '../manager/UtilitiesManager.js'
 import ProjectileManager from '../manager/ProjectileManager.js'
 import UpgradeManager from '../manager/UpgradeManager.js'
 import Boss from '../objects/enemies/Boss.js'
-import MiniBot from '../objects/enemies/Minibot.js'
+// import MiniBot from '../objects/enemies/Minibot.js'
 import SoundManager from '../manager/SoundManager.js'
 import MobileManager from '../manager/MobileManager.js'
 import gameSettings from '../config/gameSettings.js'
@@ -31,6 +30,7 @@ class BossScreen extends Phaser.Scene {
 	}
 
 	init(data) {
+		this.callingScene = data.key
 		this.selectedPlayerIndex = gameSettings.selectedPlayerIndex
 	}
 
@@ -419,7 +419,7 @@ class BossScreen extends Phaser.Scene {
 			this.time.delayedCall(
 				5000,
 				() => {
-					this.scene.start('createNft')
+					this.scene.start('nftGenerate')
 				},
 				null,
 				this,

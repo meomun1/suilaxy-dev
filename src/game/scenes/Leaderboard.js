@@ -116,18 +116,13 @@ class Leaderboard extends Phaser.Scene {
 			this.button_exit.setTexture('button_exit')
 		})
 
-		const playerName =
-			document.getElementById('playerNameInput').value || 'Player'
-		this.submitScore({
-			name: playerName,
-			score: gameSettings.playerScore,
-		})
-
-		this.hideTextInput()
+		this.fetchSuilaxyEntries()
 	}
 
-	fetchLeaderboard() {
-		fetch('https://6585ac26022766bcb8c9202c.mockapi.io/leaderboard')
+	fetchSuilaxyEntries() {
+		fetch(
+			'https://suilaxy-backend-616316054601.asia-southeast1.run.app/fetch-all',
+		)
 			.then((response) => {
 				if (!response.ok) {
 					throw new Error(
@@ -137,8 +132,13 @@ class Leaderboard extends Phaser.Scene {
 				return response.json()
 			})
 			.then((data) => {
+				// Access the documents property
+				console.log('Leaderboard data:', data)
+				const documents = data.documents
+				console.log('Leaderboard data:', documents)
+
 				// Sort the data by score in descending order
-				const sortedData = this.sortLeaderboard(data)
+				const sortedData = this.sortLeaderboard(documents)
 
 				// Display only the top 10 scores
 				const top10Data = sortedData.slice(0, 10)
@@ -151,39 +151,38 @@ class Leaderboard extends Phaser.Scene {
 			})
 	}
 
-	submitScore(newScore) {
-		// Submit a new score
-		fetch('https://6585ac26022766bcb8c9202c.mockapi.io/leaderboard', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(newScore),
-		})
-			.then((response) => {
-				if (!response.ok) {
-					throw new Error(
-						`Network response was not ok, status: ${response.status}`,
-					)
-				}
-				return response.json()
-			})
-			.then((data) => {
-				// Log the response to the console
-				console.log('Score submitted successfully:', data)
-				this.fetchLeaderboard()
-			})
-			.catch((error) => {
-				console.error('Error submitting score:', error)
-			})
-	}
+	// createSuilaxy(newScore) {
+	// 	// Submit a new score
+	// 	fetch('http://localhost:3000/api/suilaxy', {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 		body: JSON.stringify(newScore),
+	// 	})
+	// 		.then((response) => {
+	// 			if (!response.ok) {
+	// 				throw new Error(
+	// 					`Network response was not ok, status: ${response.status}`,
+	// 				)
+	// 			}
+	// 			return response.json()
+	// 		})
+	// 		.then((data) => {
+	// 			// Log the response to the console
+	// 			console.log('Score submitted successfully:', data)
+	// 			this.fetchSuilaxyEntries()
+	// 		})
+	// 		.catch((error) => {
+	// 			console.error('Error submitting score:', error)
+	// 		})
+	// }
 
 	displayLeaderboard(data) {
-		// Assuming data is an array of objects with id, name, and score fields
+		// Assuming data is an array of objects with id, user_address, and score fields
 		let previousScore = null // To track the previous score
 		let currentRank = 0 // To track the current rank
 
-		// Assuming data is an array of objects with id, name, and score fields
 		data.forEach((entry, index) => {
 			// Check if the current score is different from the previous one
 			if (entry.score !== previousScore) {
@@ -194,7 +193,7 @@ class Leaderboard extends Phaser.Scene {
 			const rankText = this.add.text(
 				config.width / 4 - 70,
 				config.height / 4 + index * 50,
-				`${index + 1}`,
+				`${currentRank}`,
 				{
 					fontFamily: 'Pixelify Sans',
 					fontSize: '32px',
@@ -205,10 +204,12 @@ class Leaderboard extends Phaser.Scene {
 			rankText.setShadow(2, 2, '#000', 2, true, true)
 
 			// Display Name
+			const truncatedAddress = this.truncateAddress(entry.id)
+
 			const nameText = this.add.text(
 				config.width / 2,
 				config.height / 4 + index * 50,
-				entry.name,
+				truncatedAddress,
 				{
 					fontFamily: 'Pixelify Sans',
 					fontSize: '32px',
@@ -231,6 +232,7 @@ class Leaderboard extends Phaser.Scene {
 			)
 			scoreText.setOrigin(0.5)
 			scoreText.setShadow(2, 2, '#000', 2, true, true)
+
 			// Update the previous score for the next iteration
 			previousScore = entry.score
 		})
@@ -241,9 +243,11 @@ class Leaderboard extends Phaser.Scene {
 		return data.sort((a, b) => b.score - a.score)
 	}
 
-	hideTextInput() {
-		const playerNameInput = document.getElementById('playerNameInput')
-		playerNameInput.style.display = 'none'
+	truncateAddress(address) {
+		if (address.length > 10) {
+			return address.slice(0, 6) + '...' + address.slice(-4)
+		}
+		return address
 	}
 }
 

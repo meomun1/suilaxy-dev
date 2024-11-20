@@ -15,12 +15,13 @@ import LevelThreeScreen from './scenes/LevelThreeScreen.js'
 import BossScreen from './scenes/BossScreen.js'
 import CreditScreen from './scenes/CreditScreen.js'
 import NewShipScreen from './scenes/NewShipScreen.js'
-import NftScreen from './scenes/NftScreen.js'
+import MintingScreen from './scenes/MintingScreen.js'
 import PVPScreen from './scenes/PVPScreen.js'
 import PowerScreen from './scenes/PowerScreen.js'
 import MenuScreen from './scenes/MenuScreen.js'
 import SelectUtility from './scenes/SelectUtility.js'
-import TestScene from './scenes/TestScene.js'
+import NFTGenerate from './scenes/NFTGenerate.js'
+// import TestScene from './scenes/TestScene.js'
 
 const config = {
 	type: Phaser.AUTO,
@@ -53,7 +54,8 @@ const config = {
 		PowerScreen,
 		GameOver,
 		CreditScreen,
-		NftScreen,
+		NFTGenerate,
+		MintingScreen,
 	],
 	pixelArt: true,
 	input: {

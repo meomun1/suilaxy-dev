@@ -25,7 +25,7 @@ class Player extends Entity {
 		this.shield = null
 		this.setInteractiveEntity()
 		this.setPhysics(scene)
-		this.setScale(1)
+		this.setScale(gameSettings.savePlayerSize)
 		this.setDepth(3)
 
 		this.speed = gameSettings.savePlayerSpeed

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-// import { TransactionBlock } from '@mysten/sui.js/transactions'
 import { Transaction } from '@mysten/sui/transactions'
 import {
 	ConnectButton,
@@ -40,22 +39,28 @@ const MintNFT = () => {
 	useEffect(() => {
 		if (currentAccount) {
 			gameSettings.userActive = true
+			gameSettings.userWalletAdress = currentAccount.address
 			EventBus.emit('wallet-connected', { connected: true })
 		} else {
 			gameSettings.userActive = false
+			gameSettings.userWalletAdress = ''
 			EventBus.emit('wallet-connected', { connected: false })
 		}
 	}, [currentAccount])
 
 	useEffect(() => {
 		const handleSceneReady = (eventData) => {
+			console.log('Event data:', eventData)
+
 			if (currentAccount) {
 				gameSettings.userActive = true
+				gameSettings.userWalletAdress = currentAccount.address
 				EventBus.emit('wallet-connected', {
 					connected: true,
 				})
 			} else {
 				gameSettings.userActive = false
+				gameSettings.userWalletAdress = ''
 				EventBus.emit('wallet-connected', {
 					connected: false,
 				})
@@ -64,7 +69,7 @@ const MintNFT = () => {
 			if (
 				eventData &&
 				eventData.key &&
-				eventData.key.callingScene === 'createNft'
+				eventData.key.callingScene === 'mintingScreen'
 			) {
 				phaserRef.current = eventData.key.callingScene
 				const { name, frame, description, url } = eventData.nftProperties

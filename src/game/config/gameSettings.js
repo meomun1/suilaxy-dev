@@ -12,7 +12,7 @@ var gameSettings = {
 	playerFireRate: 1500,
 	playerDefaultBulletSize: 1.2,
 	playerBulletSize: 1.2,
-	playerMaxHealth: 5000,
+	playerMaxHealth: 5000, // TESTING
 	playerUpgradeThreshold: 300,
 	playerSize: 1,
 	playerArmor: 0,
@@ -35,7 +35,7 @@ var gameSettings = {
 	savePlayerArmor: 0,
 	savePlayerHealthGeneration: 0,
 	savePlayerBuffRate: 1,
-	playerHardMode: false,
+	saveplayerHardMode: false,
 
 	// enemy settings
 	// speed / bullet speed / health pack speed
@@ -49,7 +49,9 @@ var gameSettings = {
 	nft_id: 0,
 	nft_hastag: 0,
 	nft_weapon: 'nft_weapon',
+	nft_weapon_index: 0,
 	nft_frame: 'nft_frame',
+	nft_frame_index: 0,
 	nft_description: 'nft_description',
 	nft_img_url: 'nft_img_url',
 
@@ -57,6 +59,7 @@ var gameSettings = {
 	selectedPlayerIndex: 1,
 	selectedWeaponIndex: 1,
 	userActive: false,
+	userWalletAdress: '',
 }
 
 export default gameSettings

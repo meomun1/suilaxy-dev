@@ -46,7 +46,7 @@ class GuiManager {
 		this.createSimpleText(
 			config.width / 2,
 			config.height / 2 - 50,
-			'Pause',
+			'PAUSED',
 			'32px',
 			'#fff',
 			0.5,
@@ -64,7 +64,7 @@ class GuiManager {
 		this.createSimpleText(
 			config.width / 2,
 			config.height / 2 + 30,
-			'Press T to TitleScreen',
+			'Press T to Menu',
 			'24px',
 			'#fff',
 			0.5,
@@ -84,38 +84,38 @@ class GuiManager {
 		this.createSimpleText(
 			config.width / 2,
 			config.height / 2 - 60,
-			'Game Over',
+			'GAME OVER',
 			'32px',
 			'#fff',
 			0.5,
 		)
 
-		this.createSimpleText(
-			config.width / 2,
-			config.height / 2,
-			'Press R to Restart',
-			'24px',
-			'#fff',
-			0.5,
-		)
+		// this.createSimpleText(
+		// 	config.width / 2,
+		// 	config.height / 2,
+		// 	'Press R to Restart',
+		// 	'24px',
+		// 	'#fff',
+		// 	0.5,
+		// )
 
 		this.createSimpleText(
 			config.width / 2,
 			config.height / 2 + 30,
-			'Press T back to title',
+			'Press T to Menu',
 			'24px',
 			'#fff',
 			0.5,
 		)
 
-		this.createSimpleText(
-			config.width / 2,
-			config.height / 2 + 60,
-			'Press L to Leaderboard',
-			'24px',
-			'#fff',
-			0.5,
-		)
+		// this.createSimpleText(
+		// 	config.width / 2,
+		// 	config.height / 2 + 60,
+		// 	'Press L to Leaderboard',
+		// 	'24px',
+		// 	'#fff',
+		// 	0.5,
+		// )
 	}
 
 	// TEXT SESSION

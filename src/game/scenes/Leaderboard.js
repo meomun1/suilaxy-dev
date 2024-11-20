@@ -7,8 +7,6 @@ class Leaderboard extends Phaser.Scene {
 		super('leaderboard')
 	}
 
-	// Preload another image for the background
-
 	preload() {}
 
 	create() {

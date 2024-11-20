@@ -91,7 +91,7 @@ class ChoosePlayer extends Phaser.Scene {
 		super('selectUtility')
 		this.guiManager = new GuiManager(this)
 		this.selectedTab = 'player_texture'
-		this.selectedFighterName = '1' // Default fighter
+		this.selectedFighterName = '1'
 		this.selectedWeapon = 1
 		this.objectDetails = []
 		this.fighterDetails = []
@@ -617,7 +617,7 @@ class ChoosePlayer extends Phaser.Scene {
 		localStorage.setItem('selectedFighter', fighter)
 		localStorage.setItem('selectedWeapon', weapon)
 		gameSettings.selectedPlayerIndex = fighter
-		gameSettings.selectedWeaponIndex = fighter // For tempo, use the same index for both
+		gameSettings.selectedWeaponIndex = fighter
 		console.log('Selections saved:', { fighter, weapon })
 	}
 

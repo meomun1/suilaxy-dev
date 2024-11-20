@@ -45,11 +45,10 @@ class NFTGenerate extends Phaser.Scene {
 
 		// ===============================================================
 		// Post the score to the mockapi
-		postScore(gameSettings.playerScore, gameSettings.userWalletAdress)
+		postScore(gameSettings.userWalletAdress, gameSettings.playerScore)
 
 		// Generate the NFT properties
 		const nftProperties = this.generateNFTProperties()
-		// console.log('NFT properties at generate:', nftProperties)
 
 		// Set the NFT properties to the game settings
 		gameSettings.nft_weapon = nftProperties.name

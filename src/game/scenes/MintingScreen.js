@@ -159,18 +159,9 @@ class MintingScreen extends Phaser.Scene {
 		this.load.on(Phaser.Loader.Events.COMPLETE, () => {
 			if (this.textures.exists('nft_texture')) {
 				this.meshRotation()
-			} else {
-				console.error('NFT texture not found!')
 			}
 		})
 		this.load.start()
-
-		console.log('Game Settings at Minting:', {
-			name: gameSettings.nft_weapon,
-			description: gameSettings.nft_description,
-			url: gameSettings.nft_img_url,
-			frame: gameSettings.nft_frame,
-		})
 
 		EventBus.emit('current-scene-ready', {
 			key: { callingScene: this.callingScene },
@@ -186,9 +177,7 @@ class MintingScreen extends Phaser.Scene {
 	pixelTransformation() {
 		// Pixel Transformation
 		const source = this.textures.get('nft_texture').source[0].image
-		console.log('hehe', source)
 		const canvas = this.textures.createCanvas('pad', 125, 125).source[0].image
-		console.log('canva', canvas)
 		const ctx = canvas.getContext('2d')
 
 		ctx.drawImage(source, 0, 0, 125, 125)

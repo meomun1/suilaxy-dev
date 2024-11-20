@@ -12,7 +12,7 @@ import gameSettings from '../game/config/gameSettings'
 import { MIST_PER_SUI } from '@mysten/sui/utils'
 
 const PACKAGE_ADDRESS =
-	'0xd1fdf1270ca89b28a68d02e1b0bf20b8438d72c51ca207ab3d1790ba528d6513'
+	'0xfae5d009427d16e6e8d36d62feaa4818ac1fc428eacf007d4ba6c0e43a0edb76'
 
 const MintNFT = () => {
 	const [name, setName] = useState('')
@@ -126,18 +126,21 @@ const MintNFT = () => {
 			}
 
 			txb.moveCall({
-				target: `${PACKAGE_ADDRESS}::suilaxy_nft::mint_to_sender`,
+				target: `${PACKAGE_ADDRESS}::suilaxy_nft::send_nft_to_sender`,
 				arguments: [
 					txb.pure.string(name),
 					txb.pure.string(description),
-					txb.pure.string(frame),
-					txb.pure.string(url),
+					txb.pure.string(
+						'https://bafybeidjrifa7it76rqmcdgv5ojai3q36kminls6qbeik2joeb6m2ogmia.ipfs.w3s.link/0/0.png',
+					),
+					txb.pure.string('Legendary'),
+					txb.object('0x8'),
 					betAmountCoin,
 					txb.object(
-						'0x0e033f7c3b5509af5e80d7384fc91d5094d8dc3b9457b5ba7ca5b1733f9131c5',
+						'0xd1fdd055f11781f08338cfa04ea7318197b46a8ae4f689a58a7a132b75d75f9b',
 					),
 					txb.object(
-						'0x8256a34b4dd5d74c0c0d29dab90e1883f463cd4b93cb02a199ba9404376144cb',
+						'0xc9a0efe52748a12d355103b33456e3c1dbc0a7a44dba07d760d05673e60d29f2',
 					),
 				],
 			})

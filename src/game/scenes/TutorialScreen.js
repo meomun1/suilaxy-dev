@@ -387,8 +387,8 @@ class TutorialScreen extends Phaser.Scene {
 		// Pause the game or go to title screen
 		if (this.keyboardManager === undefined) {
 		} else {
-			this.keyboardManager.pauseGame()
-			this.keyboardManager.titleScreen()
+			// this.keyboardManager.pauseGame()
+			// this.keyboardManager.titleScreen()
 		}
 
 		// Move the background
@@ -524,7 +524,7 @@ class TutorialScreen extends Phaser.Scene {
 				Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
 				(cam, effect) => {
 					this.scene.stop()
-					this.scene.start('playGame', {
+					this.scene.start('nftGenerate', {
 						callingScene: this.callingScene,
 						number: this.selectedPlayerIndex,
 					})

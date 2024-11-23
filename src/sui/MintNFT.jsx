@@ -12,7 +12,7 @@ import gameSettings from '../game/config/gameSettings'
 import { MIST_PER_SUI } from '@mysten/sui/utils'
 
 const PACKAGE_ADDRESS =
-	'0xfae5d009427d16e6e8d36d62feaa4818ac1fc428eacf007d4ba6c0e43a0edb76'
+	'0x771586ae895c74c50472c39c36f135c47137bb6b18b8a6f951c5fb4aa2afa646'
 
 const MintNFT = () => {
 	const [name, setName] = useState('')
@@ -137,10 +137,10 @@ const MintNFT = () => {
 					txb.object('0x8'),
 					betAmountCoin,
 					txb.object(
-						'0xd1fdd055f11781f08338cfa04ea7318197b46a8ae4f689a58a7a132b75d75f9b',
+						'0xe18b19b95ac2fc70767596e2fa482761c15744cb3581954b48cf98206426c243', // NFT Shop address
 					),
 					txb.object(
-						'0xc9a0efe52748a12d355103b33456e3c1dbc0a7a44dba07d760d05673e60d29f2',
+						'0xc4b87e20d5360b5386004d9bb0e2edc38bfa3d55519ab6bf2d3374bf562d2ada', // NFT Counter address
 					),
 				],
 			})

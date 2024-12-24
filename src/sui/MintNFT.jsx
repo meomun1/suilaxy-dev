@@ -12,7 +12,7 @@ import gameSettings from '../game/config/gameSettings'
 import { MIST_PER_SUI } from '@mysten/sui/utils'
 
 const PACKAGE_ADDRESS =
-	'0x771586ae895c74c50472c39c36f135c47137bb6b18b8a6f951c5fb4aa2afa646'
+	'0x4e3c52b995cc807025ee73b884d808c08c4f68533c9b1a37af62725a3feb2146'
 
 const MintNFT = () => {
 	const [name, setName] = useState('')
@@ -130,17 +130,15 @@ const MintNFT = () => {
 				arguments: [
 					txb.pure.string(name),
 					txb.pure.string(description),
-					txb.pure.string(
-						'https://bafybeidjrifa7it76rqmcdgv5ojai3q36kminls6qbeik2joeb6m2ogmia.ipfs.w3s.link/0/0.png',
-					),
-					txb.pure.string('Legendary'),
+					txb.pure.string(url),
+					txb.pure.string(frame),
 					txb.object('0x8'),
 					betAmountCoin,
 					txb.object(
-						'0xe18b19b95ac2fc70767596e2fa482761c15744cb3581954b48cf98206426c243', // NFT Shop address
+						'0xd624c06612c96e33827a15ae361b0e224e1015cd83d3ed5875b15ef9ac690247', // NFT Shop address
 					),
 					txb.object(
-						'0xc4b87e20d5360b5386004d9bb0e2edc38bfa3d55519ab6bf2d3374bf562d2ada', // NFT Counter address
+						'0x69e362bd7b8a566cdba86da661c040d47663db28df773c43cc97c8158173b3c6', // NFT Counter address
 					),
 				],
 			})

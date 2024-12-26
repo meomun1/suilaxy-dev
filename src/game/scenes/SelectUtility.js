@@ -4,11 +4,14 @@ import config from '../config/config.js'
 import GuiManager from '../manager/GuiManager.js'
 import gameSettings from '../config/gameSettings.js'
 import InterfaceManager from './InterfaceScene.js'
+import artifactSettings, {
+	ATTRIBUTE_SHORTHANDS,
+} from '../config/artifactSettings.js'
 
 // Sui full node endpoint
 const SUI_RPC_URL = 'https://fullnode.testnet.sui.io:443'
 const weaponCollectionIdentifiers = [
-	'0x771586ae895c74c50472c39c36f135c47137bb6b18b8a6f951c5fb4aa2afa646::create_nft_with_random_attributes::NFT',
+	'0x4e3c52b995cc807025ee73b884d808c08c4f68533c9b1a37af62725a3feb2146::create_nft_with_random_attributes::NFT',
 ]
 // const spaceshipCollectionIdentifiers = [
 // 	'0xd1fdf1270ca89b28a68d02e1b0bf20b8438d72c51ca207ab3d1790ba528d6513::suilaxy_nft::TheFirstFighter',
@@ -88,18 +91,6 @@ const mockSpaceshipNFTs = [
 			'An experimental quantum ship, the Albatross can briefly phase through space-time. Its advanced propulsion system enables short-range teleportation.',
 	},
 ]
-
-const ATTRIBUTE_SHORTHANDS = {
-	speed: 'SPD',
-	'max health': 'HP',
-	armor: 'ARM',
-	'bullet dmg': 'BDMG',
-	'fire rate': 'FRAT',
-	'bullet size': 'BSIZ',
-	'buff rate': 'BUFF',
-	lifesteal: 'LST',
-	'health generation': 'GEN',
-}
 
 const ATTRIBUTE_TIERS = {
 	'buff rate': 3,
@@ -236,9 +227,6 @@ class SelectUtility extends Phaser.Scene {
 			'assets/main-menu/select-utility/button-artifact-hover.png',
 		)
 
-		this.load.image('panel_background', 'assets/gui/panel-background.png')
-		this.load.image('loading_panel', 'assets/gui/loading-panel.png')
-
 		this.input.setDefaultCursor(
 			'url(assets/cursors/custom-cursor.cur), pointer',
 		)
@@ -254,6 +242,9 @@ class SelectUtility extends Phaser.Scene {
 		/* ----------------------------INIT---------------------------- */
 		this.cameras.main.fadeIn(1500)
 		this.interfaceManager = new InterfaceManager(this)
+
+		// Load saved selection from localStorage
+		this.loadSelection()
 		/* ----------------------------INIT---------------------------- */
 
 		/* ----------------------------DATA LOADING/FETCHING---------------------------- */
@@ -268,9 +259,6 @@ class SelectUtility extends Phaser.Scene {
 		} else {
 			console.log('Weapons are already loaded.')
 		}
-
-		// Load saved selection from localStorage
-		this.loadSelection()
 
 		// Fetch spaceship NFTs (mocked)
 		this.fighterDetails = await this.getMockSpaceshipNFTs()
@@ -1024,6 +1012,24 @@ class SelectUtility extends Phaser.Scene {
 	selectArtifact(index) {
 		this.selectedArtifact = index
 		this.infoCardVisible = true
+
+		// Get the selected artifact details
+		const selectedArtifact = this.artifactDetails[index - 1]
+
+		if (selectedArtifact) {
+			// Reset to saved values first
+			const resetSettings =
+				artifactSettings.resetArtifactAttributes(gameSettings)
+			gameSettings.updateWithModifiedSettings(resetSettings)
+
+			// Apply new artifact attributes
+			const modifiedSettings = artifactSettings.applyArtifactAttributes(
+				gameSettings,
+				selectedArtifact,
+			)
+			gameSettings.updateWithModifiedSettings(modifiedSettings)
+		}
+
 		this.updateInfoCard()
 	}
 
@@ -1193,7 +1199,7 @@ class SelectUtility extends Phaser.Scene {
 		this.attributeContainers = []
 
 		const GRID_CONFIG = {
-			startX: this.infoImage.x - 160,
+			startX: this.infoImage.x - 163,
 			startY: this.infoImage.y + 70,
 			columnWidth: 102, // Width of tier background
 			rowHeight: 40, // Height between rows

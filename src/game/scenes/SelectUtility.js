@@ -244,6 +244,22 @@ class SelectUtility extends Phaser.Scene {
 			'url(assets/cursors/custom-cursor.cur), pointer',
 		)
 
+		const width = this.cameras.main.width
+		const height = this.cameras.main.height
+
+		// Add loading text
+		const loadingText = this.add
+			.text(width / 2, height / 2 - 50, 'Loading...', {
+				fontFamily: 'Pixelify Sans',
+				fontSize: '32px',
+				color: '#ffffff',
+			})
+			.setOrigin(0.5)
+
+		this.load.on('complete', () => {
+			loadingText.destroy()
+		})
+
 		// Preload fighter assets from mapping
 		// Preload NFT images from mockSpaceshipNFTs
 		mockSpaceshipNFTs.forEach((nft) => {
@@ -253,7 +269,7 @@ class SelectUtility extends Phaser.Scene {
 
 	async create() {
 		/* ----------------------------INIT---------------------------- */
-		this.cameras.main.fadeIn(3000)
+		this.cameras.main.fadeIn(3000, 0, 0, 0)
 		this.interfaceManager = new InterfaceManager(this)
 
 		// Load saved selection from localStorage
@@ -626,7 +642,7 @@ class SelectUtility extends Phaser.Scene {
 	createFighterCard(x, y) {
 		const cardBackground = this.add.image(x, y, 'card_fighter')
 		this.fighterGrids = []
-		const itemsPerPage = 3
+		const itemsPerPage = 9
 		const itemsPerRow = 3
 		const gridSpacing = 100
 
@@ -838,7 +854,7 @@ class SelectUtility extends Phaser.Scene {
 
 		// Container for grid items that we can show/hide per page
 		this.artifactGrids = []
-		const itemsPerPage = 3
+		const itemsPerPage = 9
 		const itemsPerRow = 3
 		const gridSpacing = 100
 

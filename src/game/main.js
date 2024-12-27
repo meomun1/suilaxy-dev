@@ -35,10 +35,10 @@ const config = {
 	},
 	scene: [
 		TitleScreen,
-		SelectUtility,
 		MenuScreen,
 		LoadingScreen,
 		LoadingPvPScreen,
+		SelectUtility,
 		PlayingScreen,
 		ChooseRoomScreen,
 		ChoosePlayerPVP,

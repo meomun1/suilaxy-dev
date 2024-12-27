@@ -1,7 +1,6 @@
 import Phaser from 'phaser'
 import WebFont from 'webfontloader'
 import config from '../config/config.js'
-import Button from '../objects/Button.js'
 import Music from '../mode/Music.js'
 import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
@@ -28,22 +27,9 @@ class TitleScreen extends Phaser.Scene {
 
 		this.guiManager.loadImage('background', 'assets/main-menu/background.png')
 
-		this.guiManager.loadSpriteSheet(
-			'button_play',
-			'assets/gui/button.png',
-			93,
-			28,
-			2,
-			2,
-		)
-		this.guiManager.loadSpriteSheet(
-			'button_play_hover',
-			'assets/gui/button_hover.png',
-			93,
-			28,
-			2,
-			2,
-		)
+		// Load BUTTONS
+		this.load.image('button_play', 'assets/gui/button-play.png')
+		this.load.image('button_play_hover', 'assets/gui/button-play-hover.png')
 	}
 
 	create() {
@@ -142,18 +128,63 @@ class TitleScreen extends Phaser.Scene {
 		}
 	}
 
+	// createPlayButton() {
+	// 	this.button_play = new Button(
+	// 		this,
+	// 		config.width / 2,
+	// 		config.height / 2 + config.height / 8,
+	// 		'button_play',
+	// 		'button_play_hover',
+	// 		'mainMenu',
+	// 	)
+	// 	this.button_play.setSize(config.width / 10, config.height / 20)
+	// 	this.button_play.setInteractive()
+	// 	this.button_play.setScale(1.5)
+	// }
+
 	createPlayButton() {
-		this.button_play = new Button(
-			this,
+		const playButton = this.add.image(
 			config.width / 2,
 			config.height / 2 + config.height / 8,
 			'button_play',
-			'button_play_hover',
-			'mainMenu',
 		)
-		this.button_play.setSize(config.width / 10, config.height / 20)
-		this.button_play.setInteractive()
-		this.button_play.setScale(1.5)
+		playButton.setInteractive()
+
+		const hoverTween = {
+			scale: 1.05,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		const normalTween = {
+			scale: 1,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		playButton.on('pointerdown', () => {
+			this.scene.start('mainMenu')
+		})
+
+		playButton.on('pointerover', () => {
+			this.tweens.killTweensOf(playButton)
+
+			this.tweens.add({
+				targets: playButton,
+				...hoverTween,
+			})
+			playButton.setTexture('button_play_hover')
+		})
+
+		playButton.on('pointerout', () => {
+			this.tweens.killTweensOf(playButton)
+
+			this.tweens.add({
+				targets: playButton,
+				...normalTween,
+			})
+			playButton.setTexture('button_play')
+		})
 	}
 
 	shutdown() {

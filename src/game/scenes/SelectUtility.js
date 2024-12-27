@@ -4,30 +4,18 @@ import config from '../config/config.js'
 import GuiManager from '../manager/GuiManager.js'
 import gameSettings from '../config/gameSettings.js'
 import InterfaceManager from './InterfaceScene.js'
+import artifactSettings, {
+	ATTRIBUTE_SHORTHANDS,
+} from '../config/artifactSettings.js'
 
 // Sui full node endpoint
 const SUI_RPC_URL = 'https://fullnode.testnet.sui.io:443'
-
-// Collection identifiers for filtering
+const weaponCollectionIdentifiers = [
+	'0x4e3c52b995cc807025ee73b884d808c08c4f68533c9b1a37af62725a3feb2146::create_nft_with_random_attributes::NFT',
+]
 // const spaceshipCollectionIdentifiers = [
 // 	'0xd1fdf1270ca89b28a68d02e1b0bf20b8438d72c51ca207ab3d1790ba528d6513::suilaxy_nft::TheFirstFighter',
 // ]
-
-const weaponCollectionIdentifiers = [
-	'0xd1fdf1270ca89b28a68d02e1b0bf20b8438d72c51ca207ab3d1790ba528d6513::suilaxy_nft::TheFirstGun',
-]
-
-const fighterAssetsMapping = {
-	1: 'Falcon',
-	2: 'Eagle',
-	3: 'Hawk',
-	4: 'Vulture',
-	5: 'Phoenix',
-	6: 'Mockingbird',
-	7: 'Raven',
-	8: 'Condor',
-	9: 'Albatross',
-}
 
 const mockSpaceshipNFTs = [
 	{
@@ -35,69 +23,110 @@ const mockSpaceshipNFTs = [
 		objectId: '0xspaceship01',
 		name: 'Falcon',
 		imageUrl: 'assets/nft-spaceships/plane_01.png',
+		description:
+			'A swift and agile fighter, the Falcon excels in hit-and-run tactics. Its advanced propulsion system allows for quick maneuvers in tight spaces.',
 	},
 	{
 		selectedPlayerIndex: 2,
 		objectId: '0xspaceship02',
 		name: 'Eagle',
 		imageUrl: 'assets/nft-spaceships/plane_02.png',
+		description:
+			'The Eagle is a versatile combat vessel with balanced offensive and defensive capabilities. Its enhanced sensor suite provides superior tactical awareness.',
 	},
 	{
 		selectedPlayerIndex: 3,
 		objectId: '0xspaceship03',
 		name: 'Hawk',
 		imageUrl: 'assets/nft-spaceships/plane_03.png',
+		description:
+			'A lightweight scout ship, the Hawk specializes in reconnaissance missions. Its stealth systems make it nearly invisible to enemy radar.',
 	},
 	{
 		selectedPlayerIndex: 4,
 		objectId: '0xspaceship04',
 		name: 'Vulture',
 		imageUrl: 'assets/nft-spaceships/plane_04.png',
+		description:
+			'The Vulture is a heavy assault craft built for extended combat. Its reinforced hull and powerful shields can withstand significant damage.',
 	},
 	{
 		selectedPlayerIndex: 5,
 		objectId: '0xspaceship05',
 		name: 'Phoenix',
 		imageUrl: 'assets/nft-spaceships/plane_05.png',
+		description:
+			'Rising from advanced alien technology, the Phoenix can regenerate its shields over time. Its unique design incorporates self-repairing nanomaterials.',
 	},
 	{
 		selectedPlayerIndex: 6,
 		objectId: '0xspaceship06',
 		name: 'Mockingbird',
 		imageUrl: 'assets/nft-spaceships/plane_06.png',
+		description:
+			'The Mockingbird is a support vessel equipped with electronic warfare systems. It can disrupt enemy communications and weapons systems.',
 	},
 	{
 		selectedPlayerIndex: 7,
 		objectId: '0xspaceship07',
 		name: 'Raven',
 		imageUrl: 'assets/nft-spaceships/plane_07.png',
+		description:
+			'A stealth bomber class ship, the Raven carries heavy ordnance while maintaining a low profile. Perfect for surgical strikes behind enemy lines.',
 	},
 	{
 		selectedPlayerIndex: 8,
 		objectId: '0xspaceship08',
 		name: 'Condor',
 		imageUrl: 'assets/nft-spaceships/plane_08.png',
+		description:
+			'The Condor is a massive carrier vessel with extensive cargo capacity. It can deploy autonomous combat drones to support allies in battle.',
 	},
 	{
 		selectedPlayerIndex: 9,
 		objectId: '0xspaceship09',
 		name: 'Albatross',
 		imageUrl: 'assets/nft-spaceships/plane_09.png',
+		description:
+			'An experimental quantum ship, the Albatross can briefly phase through space-time. Its advanced propulsion system enables short-range teleportation.',
 	},
 ]
 
-class ChoosePlayer extends Phaser.Scene {
+const ATTRIBUTE_TIERS = {
+	'buff rate': 3,
+	lifesteal: 2,
+	'health generation': 2,
+	speed: 1,
+	'max health': 1,
+	armor: 1,
+	'bullet dmg': 1,
+	'fire rate': 1,
+	'bullet size': 1,
+}
+
+class SelectUtility extends Phaser.Scene {
 	constructor() {
 		super('selectUtility')
 		this.guiManager = new GuiManager(this)
-		this.selectedTab = 'player_texture'
+		this.selectedTab = 'fighter'
 		this.selectedFighterName = '1'
-		this.selectedWeapon = 1
-		this.objectDetails = []
+		this.selectedArtifact = 1
+		this.infoCardVisible = false
+		this.artifactDetails = []
 		this.fighterDetails = []
+		this.infoCard = null
+
+		// Pagination State
+		this.currentFighterPage = 0
+		this.currentArtifactPage = 0
+		this.fighterPageIndicators = []
+		this.artifactPageIndicators = []
+		this.fighterPaginationContainer = null
+		this.artifactPaginationContainer = null
 	}
 
 	async preload() {
+		// Load UI plugin
 		this.load.scenePlugin(
 			'rexuiplugin',
 			'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
@@ -105,15 +134,98 @@ class ChoosePlayer extends Phaser.Scene {
 			'rexUI',
 		)
 
+		// Load Logo and Background
 		this.guiManager.loadImage('logo', 'assets/main-menu/logo.png')
 		this.load.image('background', 'assets/main-menu/background.png')
-		this.load.image('back_button', 'assets/gui/back-button.png')
-		this.load.image('save_button', 'assets/gui/save-button.png')
-		this.load.image('fighter_tab', 'assets/gui/fighter-tab.png')
-		this.load.image('weapon_tab', 'assets/gui/weapon-tab.png')
-		this.load.image('panel_background', 'assets/gui/panel-background.png')
-		this.load.image('slot_frame', 'assets/gui/slot-frame.png')
-		this.load.image('loading_panel', 'assets/gui/loading-panel.png')
+
+		// Load CARDS
+		this.load.image(
+			'card_fighter',
+			'assets/main-menu/select-utility/card-fighter.png',
+		)
+		this.load.image(
+			'card_artifact',
+			'assets/main-menu/select-utility/card-artifact.png',
+		)
+		this.load.image(
+			'card_info',
+			'assets/main-menu/select-utility/card-info.png',
+		)
+		this.load.image(
+			'card_qslot',
+			'assets/main-menu/select-utility/card-qslot.png',
+		)
+		this.load.image(
+			'card_selected',
+			'assets/main-menu/select-utility/card-selected.png',
+		)
+		this.load.image(
+			'card_desc',
+			'assets/main-menu/select-utility/card-desc.png',
+		)
+
+		// Load item frames
+		this.load.image(
+			'item_frame',
+			'assets/main-menu/select-utility/item-frame.png',
+		)
+		this.load.image(
+			'item_frame_selected',
+			'assets/main-menu/select-utility/item-frame-selected.png',
+		)
+
+		// Load attributes tier icons
+		this.load.image('tier1', 'assets/main-menu/select-utility/tier1.png')
+		this.load.image(
+			'tier1_hover',
+			'assets/main-menu/select-utility/tier1-hover.png',
+		)
+
+		this.load.image('tier2', 'assets/main-menu/select-utility/tier2.png')
+		this.load.image(
+			'tier2_hover',
+			'assets/main-menu/select-utility/tier2-hover.png',
+		)
+
+		this.load.image('tier3', 'assets/main-menu/select-utility/tier3.png')
+		this.load.image(
+			'tier3_hover',
+			'assets/main-menu/select-utility/tier3-hover.png',
+		)
+
+		// Load BUTTONS
+		this.load.image(
+			'button_save',
+			'assets/main-menu/select-utility/button-save.png',
+		)
+		this.load.image(
+			'button_save_hover',
+			'assets/main-menu/select-utility/button-save-hover.png',
+		)
+		this.load.image(
+			'button_pick',
+			'assets/main-menu/select-utility/button-pick.png',
+		)
+		this.load.image(
+			'button_pick_hover',
+			'assets/main-menu/select-utility/button-pick-hover.png',
+		)
+		this.load.image(
+			'button_fighter',
+			'assets/main-menu/select-utility/button-fighter.png',
+		)
+		this.load.image(
+			'button_fighter_hover',
+			'assets/main-menu/select-utility/button-fighter-hover.png',
+		)
+		this.load.image(
+			'button_artifact',
+			'assets/main-menu/select-utility/button-artifact.png',
+		)
+		this.load.image(
+			'button_artifact_hover',
+			'assets/main-menu/select-utility/button-artifact-hover.png',
+		)
 
 		this.input.setDefaultCursor(
 			'url(assets/cursors/custom-cursor.cur), pointer',
@@ -127,36 +239,21 @@ class ChoosePlayer extends Phaser.Scene {
 	}
 
 	async create() {
-		this.cameras.main.fadeIn(1500)
-		this.guiManager.createBackground('background')
-		this.createSuilaxyTextAndLogo()
-
-		// Initialize InterfaceManager
+		/* ----------------------------INIT---------------------------- */
+		this.cameras.main.fadeIn(3000)
 		this.interfaceManager = new InterfaceManager(this)
 
 		// Load saved selection from localStorage
 		this.loadSelection()
+		/* ----------------------------INIT---------------------------- */
 
-		// Show loading panel
-		this.loadingPanel = this.add.image(
-			config.width / 1.35,
-			config.height / 2,
-			'loading_panel',
-		)
-		this.loadingPanel.setVisible(true)
-
-		// Create UI elements
-		this.createTabs()
-		this.createBackButton()
-		this.createSaveButton()
-
-		// Fetch spaceship NFTs (mocked)
-		this.fighterDetails = await this.getMockSpaceshipNFTs()
-
+		/* ----------------------------DATA LOADING/FETCHING---------------------------- */
 		// Only fetch weapons if they haven't been fetched before
-		if (this.objectDetails.length === 0) {
+		if (this.artifactDetails.length === 0) {
 			try {
 				await this.getOwnedWeaponsAndDetails()
+				// Wait for all images to load before creating the artifact card
+				await this.preloadAllArtifactImages()
 			} catch (error) {
 				console.error('Error loading weapons from IPFS:', error)
 			}
@@ -164,33 +261,1083 @@ class ChoosePlayer extends Phaser.Scene {
 			console.log('Weapons are already loaded.')
 		}
 
-		// Hide the loading panel and show the actual panels after loading completes
-		this.loadingPanel.setVisible(false)
+		// Fetch spaceship NFTs (mocked)
+		this.fighterDetails = await this.getMockSpaceshipNFTs()
+		/* ----------------------------DATA LOADING/FETCHING---------------------------- */
 
-		this.fighterPanel = this.createFighterSelectionPanel(
-			config.width / 1.35,
-			config.height / 2,
-		).setVisible(true)
-		this.weaponPanel = this.createWeaponSelectionPanel(
-			config.width / 1.35,
-			config.height / 2,
-		).setVisible(true)
+		/* ----------------------------UI SECTION---------------------------- */
+		// Create UI elements
+		this.guiManager.createBackground('background')
+		this.createSuilaxyTextAndLogo()
+		this.createTabs()
+		this.createSaveButton()
+		this.createPickButton()
 
-		this.updateWeaponPanel()
-		this.updateTabDisplay()
+		if (this.infoCardVisible) {
+			this.createInfoCard()
+		}
+
+		this.fighterCard = this.createFighterCard(
+			config.width / 4.1,
+			config.height / 2.1,
+		)
+		this.fighterCard.setVisible(this.selectedTab === 'fighter')
+
+		this.artifactCard = this.createArtifactCard(
+			config.width / 4.1,
+			config.height / 2.1,
+		)
+		this.artifactCard.setVisible(this.selectedTab === 'artifact')
+		/* ----------------------------UI SECTION---------------------------- */
+
+		/* ----------------------------UPDATE---------------------------- */
+		this.updateCardVisibility()
+		this.updateInfoCard()
+		/* ----------------------------UPDATE---------------------------- */
 	}
 
-	// Mock function to simulate fetching spaceship NFTs
+	/* ----------------------------GUI CREATE---------------------------- */
+	createSuilaxyTextAndLogo() {
+		this.suilaxyText = this.add.text(
+			config.width * 0.24,
+			config.height * 0.1,
+			'THE JOURNEY BEGINS',
+			{
+				fontFamily: 'Big Shoulders Stencil Display',
+				color: '#FFFFFF',
+				fontSize: '48px',
+				fontStyle: 'bold',
+				align: 'center',
+			},
+		)
+		this.suilaxyText.setOrigin(0.5).setShadow(0, 0, '#FFD700', 6, true, true)
+		this.logo = this.add.image(config.width * 0.01, config.width * 0.01, 'logo')
+		this.logo.setOrigin(0, 0).setDepth(1)
+	}
+
+	createSaveButton() {
+		const saveButton = this.add.image(
+			config.width / 5.5,
+			config.height / 1.233,
+			'button_save',
+		)
+		saveButton.setInteractive()
+
+		const hoverTween = {
+			scale: 1.05,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		const normalTween = {
+			scale: 1,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		saveButton.on('pointerdown', () => {
+			console.log(
+				'Fighter selected:',
+				this.selectedFighterName,
+				'Artifact selected:',
+				this.selectedArtifact,
+			)
+
+			// Save selections to localStorage
+			this.saveSelection(this.selectedFighterName, this.selectedArtifact)
+			this.interfaceManager.goToMainMenu(0)
+		})
+
+		saveButton.on('pointerover', () => {
+			this.tweens.killTweensOf(saveButton)
+
+			this.tweens.add({
+				targets: saveButton,
+				...hoverTween,
+			})
+			saveButton.setTexture('button_save_hover')
+		})
+
+		saveButton.on('pointerout', () => {
+			this.tweens.killTweensOf(saveButton)
+
+			this.tweens.add({
+				targets: saveButton,
+				...normalTween,
+			})
+			saveButton.setTexture('button_save')
+		})
+	}
+
+	createPickButton() {
+		const pickButton = this.add.image(
+			config.width / 3.3,
+			config.height / 1.233,
+			'button_pick',
+		)
+		pickButton.setInteractive()
+
+		const hoverTween = {
+			scale: 1.05,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		const normalTween = {
+			scale: 1,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		pickButton.on('pointerdown', () => {
+			console.log(
+				'Spaceship (Fighter) selected:',
+				this.selectedFighterName,
+				'Weapon selected:',
+				this.selectedArtifact,
+			)
+			this.saveSelection(this.selectedFighterName, this.selectedArtifact)
+		})
+
+		pickButton.on('pointerover', () => {
+			this.tweens.killTweensOf(pickButton)
+			this.tweens.add({
+				targets: pickButton,
+				...hoverTween,
+			})
+			pickButton.setTexture('button_pick_hover')
+		})
+
+		pickButton.on('pointerout', () => {
+			this.tweens.killTweensOf(pickButton)
+			this.tweens.add({
+				targets: pickButton,
+				...normalTween,
+			})
+			pickButton.setTexture('button_pick')
+		})
+	}
+	/* ----------------------------GUI CREATE---------------------------- */
+
+	/* ----------------------------TAB---------------------------- */
+	createTabs() {
+		// Calculate base tab positions
+		const baseX = config.width / 20
+		const baseY = config.height / 3.3
+		const spacing = 115
+
+		// Create both tab buttons with relative positioning
+		const fighterTabButton = this.createFighterTabButton(baseX, baseY)
+		const artifactTabButton = this.createArtifactTabButton(
+			baseX,
+			baseY + spacing,
+		)
+
+		this.updateTabDisplay()
+
+		return { fighterTabButton, artifactTabButton }
+	}
+
+	updateTabDisplay() {
+		if (this.fighterButton && this.artifactButton) {
+			if (this.selectedTab === 'fighter') {
+				this.fighterButton.setTexture('button_fighter_hover')
+				this.artifactButton.setTexture('button_artifact')
+			} else {
+				this.fighterButton.setTexture('button_fighter')
+				this.artifactButton.setTexture('button_artifact_hover')
+			}
+		}
+	}
+
+	updateCardVisibility() {
+		if (this.fighterCard && this.artifactCard) {
+			// Fighter card and grids
+			this.fighterCard.setVisible(this.selectedTab === 'fighter')
+			if (this.fighterGrids) {
+				this.fighterGrids.forEach((grid) =>
+					grid.setVisible(
+						grid === this.fighterGrids[this.currentFighterPage] &&
+							this.selectedTab === 'fighter',
+					),
+				)
+			}
+			if (this.fighterPaginationContainer) {
+				this.fighterPaginationContainer.setVisible(
+					this.selectedTab === 'fighter',
+				)
+			}
+
+			// Artifact card and grids
+			this.artifactCard.setVisible(this.selectedTab === 'artifact')
+			if (this.artifactGrids) {
+				this.artifactGrids.forEach((grid) =>
+					grid.setVisible(
+						grid === this.artifactGrids[this.currentArtifactPage] &&
+							this.selectedTab === 'artifact',
+					),
+				)
+			}
+			if (this.artifactPaginationContainer) {
+				this.artifactPaginationContainer.setVisible(
+					this.selectedTab === 'artifact',
+				)
+			}
+		}
+	}
+
+	createFighterTabButton(width, height) {
+		const fighterButton = this.add.image(width, height, 'button_fighter')
+		fighterButton.setInteractive()
+
+		// Store reference to button
+		this.fighterButton = fighterButton
+
+		const hoverTween = {
+			scale: 1.05,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		const normalTween = {
+			scale: 1,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		fighterButton.on('pointerdown', () => {
+			if (this.selectedTab !== 'fighter') {
+				// Kill any active tweens from artifact pagination
+				if (this.artifactPageIndicators) {
+					this.artifactPageIndicators.forEach((indicator) => {
+						this.tweens.killTweensOf(indicator.inner)
+					})
+				}
+
+				this.selectedTab = 'fighter'
+				this.currentFighterPage = 0
+				this.updateTabDisplay()
+				this.updateCardVisibility()
+				this.updateFighterPageIndicators()
+			}
+		})
+
+		fighterButton.on('pointerover', () => {
+			if (this.selectedTab !== 'fighter') {
+				// Only show hover if not active
+				this.tweens.killTweensOf(fighterButton)
+				this.tweens.add({
+					targets: fighterButton,
+					...hoverTween,
+				})
+				fighterButton.setTexture('button_fighter_hover')
+			}
+		})
+
+		fighterButton.on('pointerout', () => {
+			if (this.selectedTab !== 'fighter') {
+				// Only revert if not active
+				this.tweens.killTweensOf(fighterButton)
+				this.tweens.add({
+					targets: fighterButton,
+					...normalTween,
+				})
+				fighterButton.setTexture('button_fighter')
+			}
+		})
+
+		return fighterButton
+	}
+
+	createArtifactTabButton(width, height) {
+		const artifactButton = this.add.image(width, height, 'button_artifact')
+		artifactButton.setInteractive()
+
+		// Store reference to button
+		this.artifactButton = artifactButton
+
+		const hoverTween = {
+			scale: 1.05,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		const normalTween = {
+			scale: 1,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		artifactButton.on('pointerdown', () => {
+			if (this.fighterPageIndicators) {
+				this.fighterPageIndicators.forEach((indicator) => {
+					this.tweens.killTweensOf(indicator.inner)
+				})
+			}
+
+			this.selectedTab = 'artifact'
+			this.currentArtifactPage = 0
+			this.updateTabDisplay()
+			this.updateCardVisibility()
+			this.updateArtifactPageIndicators()
+		})
+
+		artifactButton.on('pointerover', () => {
+			if (this.selectedTab !== 'artifact') {
+				this.tweens.killTweensOf(artifactButton)
+				this.tweens.add({
+					targets: artifactButton,
+					...hoverTween,
+				})
+				artifactButton.setTexture('button_artifact_hover')
+			}
+		})
+
+		artifactButton.on('pointerout', () => {
+			if (this.selectedTab !== 'artifact') {
+				// Only revert if not active
+				this.tweens.killTweensOf(artifactButton)
+				this.tweens.add({
+					targets: artifactButton,
+					...normalTween,
+				})
+				artifactButton.setTexture('button_artifact')
+			}
+		})
+
+		return artifactButton
+	}
+	/* ----------------------------TAB---------------------------- */
+
+	/* ----------------------------FIGHTER CARD---------------------------- */
+	createFighterCard(x, y) {
+		const cardBackground = this.add.image(x, y, 'card_fighter')
+		this.fighterGrids = []
+		const itemsPerPage = 3
+		const itemsPerRow = 3
+		const gridSpacing = 100
+
+		const totalPages = Math.ceil(this.fighterDetails.length / itemsPerPage)
+		this.currentFighterPage = 0
+
+		for (let page = 0; page < totalPages; page++) {
+			const pageContainer = this.add.container(x, y)
+
+			// Create items for this page
+			for (let i = 0; i < itemsPerPage; i++) {
+				const itemIndex = page * itemsPerPage + i
+				if (itemIndex >= this.fighterDetails.length) break
+
+				const row = Math.floor(i / itemsPerRow)
+				const col = i % itemsPerRow
+
+				const itemX = -110 + col * gridSpacing * 1.1
+				const itemY = -95 + row * gridSpacing
+
+				const frame = this.add
+					.image(itemX, itemY, 'item_frame')
+					.setScale(1)
+					.setInteractive()
+
+				const fighterData = this.fighterDetails[itemIndex]
+				const fighterImage = this.add
+					.image(itemX, itemY, fighterData.name)
+					.setScale(1)
+
+				this.addFighterItemInteraction(
+					frame,
+					fighterImage,
+					fighterData.selectedPlayerIndex,
+				)
+				pageContainer.add([frame, fighterImage])
+			}
+
+			// Add the page container to grids array AFTER adding all items
+			this.fighterGrids.push(pageContainer)
+			pageContainer.setVisible(page === 0)
+		}
+
+		// Add pagination if needed
+		if (totalPages > 1) {
+			this.fighterPaginationContainer = this.addFighterPagination(
+				x,
+				y + 165,
+				totalPages,
+			)
+		}
+
+		return cardBackground
+	}
+
+	addFighterItemInteraction(frame, fighterImage) {
+		frame.on('pointerover', () => {
+			this.tweens.add({
+				targets: [frame, fighterImage],
+				scale: '1.05',
+				duration: 150,
+				ease: 'Power2',
+			})
+		})
+
+		frame.on('pointerout', () => {
+			this.tweens.add({
+				targets: [frame, fighterImage],
+				scale: '1',
+				duration: 150,
+				ease: 'Power2',
+			})
+		})
+
+		frame.on('pointerdown', () => {
+			this.selectedFighter(
+				this.fighterDetails.findIndex(
+					(f) => f.name === fighterImage.texture.key,
+				),
+			)
+		})
+	}
+
+	addFighterPagination(x, y, totalPages) {
+		const paginationContainer = this.add.container(x, y)
+		paginationContainer.setVisible(this.selectedTab === 'fighter')
+
+		const spacing = 25
+		const startX = -(spacing * (totalPages - 1)) / 2
+
+		this.fighterPageIndicators = []
+
+		for (let i = 0; i < totalPages; i++) {
+			const indicatorContainer = this.add.container(startX + i * spacing, 0)
+
+			const outerHex = this.add
+				.polygon(0, 0, [
+					[-8, 0],
+					[-4, -3],
+					[4, -3],
+					[8, 0],
+					[4, 3],
+					[-4, 3],
+				])
+				.setStrokeStyle(1, 0x335566)
+				.setFillStyle(0x111111, 0.3)
+
+			const innerHex = this.add
+				.polygon(0, 0, [
+					[-4, 0],
+					[-2, -1.5],
+					[2, -1.5],
+					[4, 0],
+					[2, 1.5],
+					[-2, 1.5],
+				])
+				.setFillStyle(0x335566, 0.2)
+
+			indicatorContainer.add([outerHex, innerHex])
+
+			indicatorContainer
+				.setSize(22, 20)
+				.setInteractive()
+				.on('pointerdown', () => this.changeFighterPage(i))
+				.on('pointerover', () => {
+					if (this.currentFighterPage !== i) {
+						outerHex.setStrokeStyle(1, 0x00ff99)
+						innerHex.setFillStyle(0x00ff99, 0.2)
+					}
+				})
+				.on('pointerout', () => {
+					if (this.currentFighterPage !== i) {
+						outerHex.setStrokeStyle(1, 0x335566)
+						innerHex.setFillStyle(0x335566, 0.2)
+					}
+				})
+
+			this.fighterPageIndicators.push({
+				container: indicatorContainer,
+				outer: outerHex,
+				inner: innerHex,
+			})
+		}
+
+		paginationContainer.add(this.fighterPageIndicators.map((p) => p.container))
+		this.updateFighterPageIndicators()
+		return paginationContainer
+	}
+
+	changeFighterPage(newPage) {
+		if (this.fighterPageIndicators[this.currentFighterPage]) {
+			this.tweens.killTweensOf(
+				this.fighterPageIndicators[this.currentFighterPage].inner,
+			)
+		}
+
+		this.fighterGrids[this.currentFighterPage].setVisible(false)
+		this.currentFighterPage = newPage
+		this.fighterGrids[this.currentFighterPage].setVisible(true)
+
+		this.updateFighterPageIndicators()
+	}
+
+	updateFighterPageIndicators() {
+		if (this.fighterPageIndicators) {
+			this.fighterPageIndicators.forEach((indicator, index) => {
+				if (index === this.currentFighterPage) {
+					indicator.outer
+						.setStrokeStyle(2, 0x00ff99)
+						.setFillStyle(0x002211, 0.6)
+					indicator.inner.setFillStyle(0x00ff99, 0.4)
+
+					this.tweens.add({
+						targets: indicator.inner,
+						fillAlpha: { from: 0.2, to: 0.6 },
+						duration: 750,
+						yoyo: true,
+						repeat: -1,
+						ease: 'Sine.easeInOut',
+					})
+				} else {
+					indicator.outer
+						.setStrokeStyle(1, 0x335566)
+						.setFillStyle(0x111111, 0.3)
+					indicator.inner.setFillStyle(0x335566, 0.2)
+					this.tweens.killTweensOf(indicator.inner)
+				}
+			})
+		}
+	}
+
+	selectedFighter(index) {
+		// Get the actual fighter data from the fighterDetails array
+		const fighter = this.fighterDetails[index]
+		if (fighter) {
+			// Store the actual fighter name/ID instead of just the index
+			this.selectedFighterName = fighter.selectedPlayerIndex.toString()
+			this.infoCardVisible = true
+			this.updateInfoCard()
+		}
+	}
+
+	/* ----------------------------FIGHTER CARD---------------------------- */
+
+	/* ----------------------------ARTIFACT CARD---------------------------- */
+	createArtifactCard(x, y) {
+		// Background with fixed size (417x410)
+		const cardBackground = this.add.image(x, y, 'card_artifact')
+
+		// Container for grid items that we can show/hide per page
+		this.artifactGrids = []
+		const itemsPerPage = 3
+		const itemsPerRow = 3
+		const gridSpacing = 100
+
+		// Calculate pages
+		const totalPages = Math.ceil(this.artifactDetails.length / itemsPerPage)
+		this.currentArtifactPage = 0
+
+		// Create items for each page
+		for (let page = 0; page < totalPages; page++) {
+			const pageContainer = this.add.container(x, y)
+
+			// Create grid items for this page
+			for (let i = 0; i < itemsPerPage; i++) {
+				const itemIndex = page * itemsPerPage + i
+				if (itemIndex >= this.artifactDetails.length) break
+
+				const row = Math.floor(i / itemsPerRow)
+				const col = i % itemsPerRow
+
+				// Calculate grid position
+				const itemX = -110 + col * gridSpacing * 1.1
+				const itemY = -95 + row * gridSpacing
+
+				// Create frame and artifact image
+				const frame = this.add
+					.image(itemX, itemY, 'item_frame')
+					.setScale(1)
+					.setInteractive()
+
+				const artifactImage = this.add
+					.image(itemX, itemY, `item_image_${itemIndex + 1}`)
+					.setScale(1)
+
+				this.addArtifactItemInteraction(frame, artifactImage, itemIndex + 1)
+				pageContainer.add([frame, artifactImage])
+			}
+
+			this.artifactGrids.push(pageContainer)
+			pageContainer.setVisible(page === 0)
+		}
+		// Add pagination if needed
+		if (totalPages > 1) {
+			this.artifactPaginationContainer = this.addArtifactPagination(
+				x,
+				y + 165,
+				totalPages,
+			)
+		}
+
+		return cardBackground
+	}
+
+	addArtifactItemInteraction(frame, artifactImage, index) {
+		frame.on('pointerover', () => {
+			this.tweens.add({
+				targets: [frame, artifactImage],
+				scale: '1.05',
+				duration: 150,
+				ease: 'Power2',
+			})
+		})
+
+		frame.on('pointerout', () => {
+			this.tweens.add({
+				targets: [frame, artifactImage],
+				scale: '1',
+				duration: 150,
+				ease: 'Power2',
+			})
+		})
+
+		frame.on('pointerdown', () => {
+			this.selectArtifact(index)
+		})
+	}
+
+	addArtifactPagination(x, y, totalPages) {
+		const paginationContainer = this.add.container(x, y)
+		paginationContainer.setVisible(this.selectedTab === 'artifact')
+
+		const spacing = 25
+		const startX = -(spacing * (totalPages - 1)) / 2
+
+		this.artifactPageIndicators = []
+
+		for (let i = 0; i < totalPages; i++) {
+			const indicatorContainer = this.add.container(startX + i * spacing, 0)
+
+			const outerHex = this.add
+				.polygon(0, 0, [
+					[-8, 0],
+					[-4, -3],
+					[4, -3],
+					[8, 0],
+					[4, 3],
+					[-4, 3],
+				])
+				.setStrokeStyle(1, 0x335566)
+				.setFillStyle(0x111111, 0.3)
+
+			const innerHex = this.add
+				.polygon(0, 0, [
+					[-4, 0],
+					[-2, -1.5],
+					[2, -1.5],
+					[4, 0],
+					[2, 1.5],
+					[-2, 1.5],
+				])
+				.setFillStyle(0x335566, 0.2)
+
+			indicatorContainer.add([outerHex, innerHex])
+
+			indicatorContainer
+				.setSize(22, 20)
+				.setInteractive()
+				.on('pointerdown', () => this.changeArtifactPage(i))
+				.on('pointerover', () => {
+					if (this.currentArtifactPage !== i) {
+						outerHex.setStrokeStyle(1, 0x00ff99)
+						innerHex.setFillStyle(0x00ff99, 0.2)
+					}
+				})
+				.on('pointerout', () => {
+					if (this.currentArtifactPage !== i) {
+						outerHex.setStrokeStyle(1, 0x335566)
+						innerHex.setFillStyle(0x335566, 0.2)
+					}
+				})
+
+			this.artifactPageIndicators.push({
+				container: indicatorContainer,
+				outer: outerHex,
+				inner: innerHex,
+			})
+		}
+
+		paginationContainer.add(this.artifactPageIndicators.map((p) => p.container))
+		this.updateArtifactPageIndicators()
+		return paginationContainer
+	}
+
+	changeArtifactPage(newPage) {
+		if (this.artifactPageIndicators[this.currentArtifactPage]) {
+			this.tweens.killTweensOf(
+				this.artifactPageIndicators[this.currentArtifactPage].inner,
+			)
+		}
+
+		this.artifactGrids[this.currentArtifactPage].setVisible(false)
+		this.currentArtifactPage = newPage
+		this.artifactGrids[this.currentArtifactPage].setVisible(true)
+
+		this.updateArtifactPageIndicators()
+	}
+
+	updateArtifactPageIndicators() {
+		if (this.artifactPageIndicators) {
+			this.artifactPageIndicators.forEach((indicator, index) => {
+				if (index === this.currentArtifactPage) {
+					indicator.outer
+						.setStrokeStyle(2, 0x00ff99)
+						.setFillStyle(0x002211, 0.6)
+					indicator.inner.setFillStyle(0x00ff99, 0.4)
+
+					this.tweens.add({
+						targets: indicator.inner,
+						fillAlpha: { from: 0.2, to: 0.6 },
+						duration: 750,
+						yoyo: true,
+						repeat: -1,
+						ease: 'Sine.easeInOut',
+					})
+				} else {
+					indicator.outer
+						.setStrokeStyle(1, 0x335566)
+						.setFillStyle(0x111111, 0.3)
+					indicator.inner.setFillStyle(0x335566, 0.2)
+					this.tweens.killTweensOf(indicator.inner)
+				}
+			})
+		}
+	}
+
+	selectArtifact(index) {
+		this.selectedArtifact = index
+		this.infoCardVisible = true
+
+		// Get the selected artifact details
+		const selectedArtifact = this.artifactDetails[index - 1]
+
+		if (selectedArtifact) {
+			// Reset to saved values first
+			const resetSettings =
+				artifactSettings.resetArtifactAttributes(gameSettings)
+			gameSettings.updateWithModifiedSettings(resetSettings)
+
+			// Apply new artifact attributes
+			const modifiedSettings = artifactSettings.applyArtifactAttributes(
+				gameSettings,
+				selectedArtifact,
+			)
+			gameSettings.updateWithModifiedSettings(modifiedSettings)
+		}
+
+		this.updateInfoCard()
+	}
+
+	/* ----------------------------ARTIFACT CARD---------------------------- */
+
+	/* ----------------------------INFO CARD---------------------------- */
+	createInfoCard() {
+		if (this.infoCard) {
+			// If info card already exists, destroy it first
+			this.infoCard.destroy()
+			this.infoName?.destroy()
+			this.infoImage?.destroy()
+			this.infoDescription?.destroy()
+			this.descriptionCard?.destroy()
+		}
+
+		const x = config.width / 1.74
+		const y = config.height / 1.31
+
+		// Create a container for all info card elements
+		this.infoCard = this.add.container(0, 0)
+
+		const cardBackground = this.add.image(x, y, 'card_info')
+
+		// Add description card background
+		this.descriptionCard = this.add.image(x, y + 90, 'card_desc')
+
+		// Add item name text with styling
+		this.infoName = this.add
+			.text(x, y - 290, '', {
+				fontFamily: 'Pixelify Sans',
+				fontSize: '24px',
+				color: '#FFFFFF',
+				align: 'center',
+				stroke: '#006752',
+				strokeThickness: 5,
+			})
+			.setOrigin(0.5)
+
+		// Add image
+		this.infoImage = this.add.image(x, y - 210, '').setScale(1)
+
+		// Add description text with word wrap
+		this.infoDescription = this.add
+			.text(x, y + 90, '', {
+				fontFamily: 'Pixelify Sans',
+				fontSize: '16px',
+				color: '#FFFFFF',
+				align: 'center',
+				wordWrap: { width: 280 },
+				lineSpacing: 6,
+			})
+			.setOrigin(0.5)
+
+		// Add all elements to the container
+		this.infoCard.add([
+			cardBackground,
+			this.descriptionCard,
+			this.infoName,
+			this.infoImage,
+			this.infoDescription,
+		])
+
+		// Set initial visibility based on infoCardVisible flag
+		this.infoCard.setVisible(this.infoCardVisible)
+
+		return this.infoCard
+	}
+
+	updateInfoCard() {
+		if (!this.infoCard) {
+			this.createInfoCard()
+		}
+
+		// Set visibility based on whether we have a selection
+		this.infoCardVisible =
+			(this.selectedTab === 'artifact' && this.selectedArtifact !== -1) ||
+			(this.selectedTab === 'fighter' && this.selectedFighterName !== null)
+
+		this.infoCard.setVisible(this.infoCardVisible)
+
+		if (!this.infoCardVisible) {
+			return
+		}
+
+		if (this.selectedTab === 'artifact') {
+			this.updateArtifactInfo()
+		} else {
+			this.updateFighterInfo()
+		}
+	}
+
+	updateFighterInfo() {
+		if (!this.selectedFighterName || !this.fighterDetails.length) {
+			return
+		}
+
+		// Clear any existing attribute containers from artifact view
+		if (this.attributeContainers) {
+			this.attributeContainers.forEach((container) => container.destroy())
+			this.attributeContainers = []
+		}
+
+		const selectedFighter = this.fighterDetails.find(
+			(fighter) =>
+				fighter.selectedPlayerIndex.toString() === this.selectedFighterName,
+		)
+
+		if (!selectedFighter) {
+			return
+		}
+
+		// Update the info card with the correct fighter data
+		this.infoName.setText(selectedFighter.name || '')
+
+		// Position description card and text
+		this.descriptionCard.setPosition(this.infoImage.x, this.infoImage.y + 160)
+		this.infoDescription
+			.setText(selectedFighter.description || selectedFighter.name)
+			.setPosition(this.infoImage.x, this.infoImage.y + 170)
+
+		if (this.textures.exists(selectedFighter.name)) {
+			this.infoImage.setTexture(selectedFighter.name)
+			this.infoImage.setVisible(true)
+			this.infoImage.setScale(1.3)
+		}
+	}
+
+	updateArtifactInfo() {
+		if (this.selectedArtifact === -1 || !this.artifactDetails.length) {
+			return
+		}
+
+		const selectedArtifact = this.artifactDetails[this.selectedArtifact - 1]
+		if (!selectedArtifact) {
+			return
+		}
+
+		this.infoName.setText(selectedArtifact.name || '')
+
+		const tierGroups = {
+			1: [], // Green
+			2: [], // Yellow
+			3: [], // Purple
+		}
+
+		if (selectedArtifact.attributes && selectedArtifact.attributes.length > 0) {
+			selectedArtifact.attributes.forEach((attr) => {
+				if (parseInt(attr.value) > 0) {
+					// Only include non-zero attributes
+					const tier = ATTRIBUTE_TIERS[attr.name] || 3
+					const shorthand =
+						ATTRIBUTE_SHORTHANDS[attr.name] || attr.name.toUpperCase()
+					tierGroups[tier].push({
+						shorthand,
+						value: attr.value,
+						name: attr.name,
+					})
+				}
+			})
+		}
+
+		// Clear existing attribute displays
+		if (this.attributeContainers) {
+			this.attributeContainers.forEach((container) => container.destroy())
+		}
+		this.attributeContainers = []
+
+		const GRID_CONFIG = {
+			startX: this.infoImage.x - 163,
+			startY: this.infoImage.y + 70,
+			columnWidth: 102, // Width of tier background
+			rowHeight: 40, // Height between rows
+			columns: 3, // Number of columns
+			columnSpacing: 10, // Space between columns
+		}
+
+		// Combine all non-zero attributes while maintaining tier order
+		const allAttributes = [...tierGroups[1], ...tierGroups[2], ...tierGroups[3]]
+
+		// Create grid layout
+		allAttributes.forEach((attr, index) => {
+			const column = index % GRID_CONFIG.columns
+			const row = Math.floor(index / GRID_CONFIG.columns)
+			const tier = ATTRIBUTE_TIERS[attr.name]
+
+			const x =
+				GRID_CONFIG.startX +
+				column * (GRID_CONFIG.columnWidth + GRID_CONFIG.columnSpacing)
+			const y = GRID_CONFIG.startY + row * GRID_CONFIG.rowHeight
+
+			const container = this.add.container(0, 0)
+
+			const bg = this.add
+				.image(x + GRID_CONFIG.columnWidth / 2, y + 17, `tier${tier}`)
+				.setOrigin(0.5)
+
+			// Add attribute text
+			const text = this.add
+				.text(x + 40, y + 8, `${attr.shorthand} ${attr.value}`, {
+					fontFamily: 'Pixelify Sans',
+					fontSize: '16px',
+					color: '#FFFFFF',
+					align: 'left',
+				})
+				.setOrigin(0)
+
+			container.add([bg, text])
+			this.attributeContainers.push(container)
+		})
+
+		// Calculate description position based on last row of attributes
+		const totalRows = Math.ceil(allAttributes.length / GRID_CONFIG.columns)
+		const descriptionY =
+			GRID_CONFIG.startY + totalRows * GRID_CONFIG.rowHeight + 90
+
+		// Update description card position
+		this.descriptionCard.setPosition(GRID_CONFIG.startX + 160, descriptionY)
+
+		// Update description text
+		const description = selectedArtifact.description || ''
+		this.infoDescription
+			.setText(this.truncateText(description, 160))
+			.setPosition(GRID_CONFIG.startX + 160, descriptionY + 10)
+
+		// Add all containers to the info card
+		this.attributeContainers.forEach((container) => {
+			this.infoCard.add(container)
+		})
+
+		// Update image
+		const imageKey = `item_image_${this.selectedArtifact}`
+		if (this.textures.exists(imageKey)) {
+			this.infoImage.setTexture(imageKey)
+			this.infoImage.setVisible(true)
+			this.infoImage.setScale(1.3)
+		}
+	}
+	/* ----------------------------INFO CARD---------------------------- */
+
+	/* ----------------------------SAVE/LOAD---------------------------- */
+	saveSelection(fighter, artifact) {
+		// Ensure we're working with valid numbers
+		const fighterIndex = parseInt(fighter, 10)
+		const artifactIndex = parseInt(artifact, 10)
+
+		if (!isNaN(fighterIndex)) {
+			localStorage.setItem('selectedFighter', fighterIndex)
+			gameSettings.selectedPlayerIndex = fighterIndex
+			// Also update the local state
+			this.selectedFighterName = fighterIndex.toString()
+			this.selectedSpaceship = fighterIndex
+		}
+
+		if (!isNaN(artifactIndex)) {
+			localStorage.setItem('selectedArtifact', artifactIndex)
+			gameSettings.selectedWeaponIndex = artifactIndex
+			this.selectedArtifact = artifactIndex
+		}
+
+		console.log('Selections saved:', {
+			fighter: fighterIndex,
+			artifact: artifactIndex,
+			gameSettings: {
+				selectedPlayerIndex: gameSettings.selectedPlayerIndex,
+				selectedArtifactIndex: gameSettings.selectedWeaponIndex,
+			},
+		})
+	}
+
+	loadSelection() {
+		const savedFighter = localStorage.getItem('selectedFighter')
+		const savedWeapon = localStorage.getItem('selectedArtifact')
+
+		// Set both selectedFighterName and selectedSpaceship
+		if (savedFighter) {
+			const fighterIndex = parseInt(savedFighter, 10)
+			this.selectedFighterName = fighterIndex.toString()
+			this.selectedSpaceship = fighterIndex
+			gameSettings.selectedPlayerIndex = fighterIndex
+		} else {
+			// Default values if nothing is saved
+			this.selectedFighterName = '1'
+			this.selectedSpaceship = 1
+			gameSettings.selectedPlayerIndex = 1
+		}
+
+		if (savedWeapon) {
+			const weaponIndex = parseInt(savedWeapon, 10)
+			this.selectedArtifact = weaponIndex
+			gameSettings.selectedWeaponIndex = weaponIndex
+		}
+	}
+	/* ----------------------------SAVE/LOAD---------------------------- */
+
+	/* ----------------------------ON-CHAIN FUNCTIONS---------------------------- */
 	async getMockSpaceshipNFTs() {
+		// Mock function to simulate fetching spaceship NFTs
 		return new Promise((resolve) => {
 			setTimeout(() => resolve(mockSpaceshipNFTs), 1000)
 		})
 	}
 
-	// Fetch the owned objects and weapon details
 	async getOwnedWeaponsAndDetails() {
-		const address =
-			'0xf3818b7fc2702b188659042fa845efab12ed8a9e37bbad7b506d70cb4728e512'
+		const userWalletAdress = gameSettings.userWalletAdress
+		const address = userWalletAdress
+
 		try {
 			const response = await axios.post(SUI_RPC_URL, {
 				jsonrpc: '2.0',
@@ -204,26 +1351,21 @@ class ChoosePlayer extends Phaser.Scene {
 
 			if (response.data?.result?.data) {
 				const ownedObjects = response.data.result.data
-
-				// Clear objectDetails to avoid duplication
-				this.objectDetails = []
+				this.artifactDetails = []
 
 				for (const obj of ownedObjects) {
 					const objectId = obj?.data?.objectId
 					if (objectId) {
-						await this.getWeaponDetails(objectId)
+						await this.getArtifactDetails(objectId)
 					}
 				}
-			} else {
-				console.log('No owned objects found.')
 			}
 		} catch (error) {
 			console.error('Error fetching owned objects:', error)
 		}
 	}
 
-	// Fetch the object details including the IPFS URL
-	async getWeaponDetails(objectId) {
+	async getArtifactDetails(objectId) {
 		try {
 			const response = await axios.post(SUI_RPC_URL, {
 				jsonrpc: '2.0',
@@ -245,389 +1387,94 @@ class ChoosePlayer extends Phaser.Scene {
 			const content = response.data?.result?.data?.content?.fields
 			const display = response.data?.result?.data?.display?.data
 
-			// Check if the object type matches the collection identifiers
 			if (objectType && weaponCollectionIdentifiers.includes(objectType)) {
-				// Extract the image URL from display or content
+				const name = content?.name || display?.name
 				const imageUrl = display?.image_url || content?.url
-				if (content && imageUrl) {
-					this.objectDetails.push({ name: content.name, url: imageUrl })
+				const frame = content?.frame
+				const description = content?.description
 
-					this.loadIPFSImage(
-						imageUrl,
-						`weapon_texture_${this.objectDetails.length}`,
-					)
-				} else {
-					console.warn('No display or content URL found for object:', objectId)
-				}
-			} else {
-				console.log(
-					`Object ID: ${objectId} does not belong to the target collection.`,
+				const attributes = content?.attributes?.fields || {}
+				const attributesArray = Object.entries(attributes).map(
+					([key, value]) => ({
+						name: key.replace(/_/g, ' '),
+						value: value,
+					}),
 				)
+
+				if (content && imageUrl) {
+					this.artifactDetails.push({
+						name: name,
+						url: imageUrl,
+						frame: frame,
+						description: description,
+						attributes: attributesArray,
+					})
+				}
 			}
 		} catch (error) {
 			console.error('Error fetching object details:', error)
 		}
 	}
+	/* ----------------------------ON-CHAIN FUNCTIONS---------------------------- */
 
-	// Load images from IPFS and resize them to 96x96
-	loadIPFSImage(url, key) {
+	/* ----------------------------HELPERS---------------------------- */
+	truncateText(text, maxLength) {
+		if (text.length > maxLength) {
+			return text.substring(0, maxLength) + '...'
+		}
+		return text
+	}
+
+	preloadAllArtifactImages() {
+		return new Promise((resolve) => {
+			let loadedImages = 0
+			const totalImages = this.artifactDetails.length
+
+			if (totalImages === 0) {
+				resolve()
+				return
+			}
+
+			this.artifactDetails.forEach((artifact, index) => {
+				this.loadIPFSImage(
+					artifact.url,
+					`item_image_${index + 1}`,
+					96,
+					96,
+					() => {
+						loadedImages++
+						if (loadedImages === totalImages) {
+							resolve()
+						}
+					},
+				)
+			})
+		})
+	}
+
+	loadIPFSImage(url, key, width, height, onLoad) {
 		const img = new Image()
 		img.crossOrigin = 'anonymous'
 		img.src = url
 
 		img.onload = () => {
 			const canvas = document.createElement('canvas')
-			canvas.width = 96
-			canvas.height = 96
+			canvas.width = width
+			canvas.height = height
 			const ctx = canvas.getContext('2d')
-			ctx.drawImage(img, 0, 0, 96, 96)
+			ctx.drawImage(img, 0, 0, width, height)
 			const resizedImage = canvas.toDataURL()
 
 			this.textures.addBase64(key, resizedImage)
-
-			// Update the weapon tab with the loaded texture
-			this.weaponTabImage.setTexture(key)
+			if (onLoad) onLoad()
 		}
 
 		img.onerror = (error) => {
 			console.error('Failed to load image from IPFS:', error)
+			if (onLoad) onLoad() // Still call onLoad to prevent hanging
 		}
 	}
-
-	updateWeaponPanel() {
-		this.weaponPanel?.destroy()
-		this.weaponPanel = this.createWeaponSelectionPanel(
-			config.width / 1.35,
-			config.height / 2,
-		)
-		this.updateTabDisplay()
-	}
-
-	// Create the Suilaxy title and logo
-	createSuilaxyTextAndLogo() {
-		this.suilaxyText = this.add.text(
-			config.width * 0.24,
-			config.height * 0.1,
-			'THE JOURNEY BEGINS',
-			{
-				fontFamily: 'Big Shoulders Stencil Display',
-				color: '#FFFFFF',
-				fontSize: '48px',
-				fontStyle: 'bold',
-				align: 'center',
-			},
-		)
-		this.suilaxyText.setOrigin(0.5).setShadow(0, 0, '#FFD700', 6, true, true)
-		this.logo = this.add.image(config.width * 0.01, config.width * 0.01, 'logo')
-		this.logo.setOrigin(0, 0).setDepth(1)
-	}
-
-	// Create UI tabs
-	createTabs() {
-		const fighterTab = this.add.image(
-			config.width / 7,
-			config.height / 2,
-			'fighter_tab',
-		)
-		fighterTab.setInteractive()
-
-		// Preselect "Falcon" as the default fighter
-		this.fighterTabImage = this.add
-			.image(
-				fighterTab.x,
-				fighterTab.y - 40,
-				`player_texture_1`, // Default fighter is Falcon
-			)
-			.setScale(2)
-			.setOrigin(0.5)
-			.setVisible(true) // Show the fighter image initially for the default
-
-		fighterTab.on('pointerdown', () => {
-			this.selectedTab = 'player_texture'
-			this.updateTabDisplay()
-		})
-
-		const weaponTab = this.add.image(
-			config.width / 2.67,
-			config.height / 2,
-			'weapon_tab',
-		)
-		weaponTab.setInteractive()
-
-		// Create default text and set it to visible by default
-		this.defaultText = this.add.text(weaponTab.x, weaponTab.y - 30, 'DEFAULT', {
-			fontFamily: 'Big Shoulders Stencil Display',
-			fontSize: '48px',
-			color: '#FFFFFF',
-			fontStyle: 'bold',
-			align: 'center',
-		})
-		this.defaultText.setOrigin(0.5).setShadow(0, 0, '#FFD700', 6, true, true)
-
-		// Create the image for the weapon and set it invisible initially
-		this.weaponTabImage = this.add
-			.image(
-				weaponTab.x,
-				weaponTab.y - 30,
-				`weapon_texture_1`, // Start with the first weapon or keep it hidden
-			)
-			.setScale(1.5)
-			.setOrigin(0.5)
-			.setVisible(false) // Hide the weapon image initially
-
-		weaponTab.on('pointerdown', () => {
-			this.selectedTab = 'weapon'
-			this.updateTabDisplay()
-		})
-	}
-
-	// Update the displayed panel based on selected tab
-	updateTabDisplay() {
-		this.fighterPanel.setVisible(this.selectedTab === 'player_texture')
-		this.weaponPanel.setVisible(this.selectedTab === 'weapon')
-	}
-
-	// Create a fighter selection panel (grid)
-	createFighterSelectionPanel(x, y) {
-		const panelWidth = 448
-		const panelHeight = 425
-		const panelBackground = this.add
-			.image(x, y, 'panel_background')
-			.setDisplaySize(panelWidth, panelHeight)
-			.setOrigin(0.5)
-		const scrollablePanel = this.rexUI.add
-			.scrollablePanel({
-				x,
-				y,
-				width: panelWidth,
-				height: panelHeight,
-				scrollMode: 0,
-				background: panelBackground,
-				panel: {
-					child: this.createGridForFighter(this),
-					mask: { mask: true, padding: 1 },
-				},
-				mouseWheelScroller: { focus: false, speed: 0.1 },
-				space: { left: 10, right: 10, top: 10, bottom: 10, panel: 10 },
-			})
-			.layout()
-
-		scrollablePanel.setChildrenInteractive().on('child.click', (child) => {
-			const fighterName =
-				this.fighterDetails[child.getData('index') - 1].selectedPlayerIndex
-			this.selectedFighterName = fighterName
-			this.fighterTabImage.setTexture(`player_texture_${fighterName}`)
-			console.log('Fighter selected: ', fighterName)
-		})
-
-		return scrollablePanel
-	}
-
-	// Create grid for displaying fighters
-	createGridForFighter(scene) {
-		const itemCount = this.fighterDetails.length
-		const itemsPerRow = 3
-		const rows = itemCount > 0 ? Math.ceil(itemCount / itemsPerRow) : 1
-
-		const sizer = scene.rexUI.add.gridSizer({
-			column: itemsPerRow, // Always 3 columns
-			row: rows, // Dynamically calculated or at least 1 row
-			space: {
-				left: 20,
-				right: 20,
-				top: 20,
-				bottom: 20,
-				column: 10, // Space between columns
-				row: 10, // Space between rows
-			},
-		})
-
-		// Loop through and add fighters dynamically to the grid
-		for (let i = 0; i < itemCount; i++) {
-			const fighter = this.fighterDetails[i]
-
-			// Create the frame and center it
-			const frame = scene.add
-				.image(0, 0, 'slot_frame')
-				.setOrigin(0.5) // Center the frame
-				.setScale(1) // Adjust frame scale if needed
-
-			// Create the fighter image, resize it to 96x96, and center it inside the frame
-			const fighterImage = scene.add
-				.image(0, 0, fighter.name)
-				.setDisplaySize(125, 125)
-				.setOrigin(0.5)
-
-			// Add both the frame and the image to a label, so they are grouped together
-			const item = scene.rexUI.add.label({
-				width: 125,
-				height: 125,
-				background: frame,
-				icon: fighterImage, // The image goes into the label's icon slot
-				space: { icon: 10 },
-			})
-
-			item.setData('index', i + 1) // Set fighter index
-			sizer.add(item) // Add the item to the grid
-		}
-
-		return sizer
-	}
-
-	// Create a weapon selection panel
-	createWeaponSelectionPanel(x, y) {
-		const panelWidth = 448
-		const panelHeight = 425
-		const panelBackground = this.add
-			.image(x, y, 'panel_background')
-			.setDisplaySize(panelWidth, panelHeight)
-			.setOrigin(0.5)
-
-		const scrollablePanel = this.rexUI.add
-			.scrollablePanel({
-				x,
-				y,
-				width: panelWidth,
-				height: panelHeight,
-				scrollMode: 0,
-				background: panelBackground,
-				panel: {
-					child: this.createGridForWeapon(this),
-					mask: { mask: true, padding: 1 },
-				},
-				mouseWheelScroller: { focus: false, speed: 0.1 },
-				space: { left: 10, right: 10, top: 10, bottom: 10, panel: 10 },
-			})
-			.layout()
-
-		scrollablePanel.setChildrenInteractive().on('child.click', (child) => {
-			const selectedWeaponIndex = child.getData('index')
-
-			// Hide the default text and show the selected weapon image
-			this.defaultText.setVisible(false)
-			this.weaponTabImage.setVisible(true)
-			this.weaponTabImage.setTexture(`weapon_texture_${selectedWeaponIndex}`)
-
-			// Update selected weapon state
-			this.selectedWeapon = selectedWeaponIndex
-		})
-
-		return scrollablePanel
-	}
-
-	createGridForWeapon(scene) {
-		const itemCount = this.objectDetails.length
-
-		// Set the number of items per row
-		const itemsPerRow = 3
-
-		// If there are no items, set rows to 1 to avoid invalid grid size
-		const rows = itemCount > 0 ? Math.ceil(itemCount / itemsPerRow) : 1
-
-		const sizer = scene.rexUI.add.gridSizer({
-			column: itemsPerRow, // Always 3 columns
-			row: rows, // Dynamically calculated or at least 1 row
-			space: {
-				left: 20,
-				right: 20,
-				top: 20,
-				bottom: 20,
-				column: 10, // Space between columns
-				row: 10, // Space between rows
-			},
-		})
-
-		// Loop through and add weapons dynamically to the grid
-		for (let i = 0; i < itemCount; i++) {
-			const itemKey = `weapon_texture_${i + 1}`
-
-			const frame = scene.add
-				.image(0, 0, 'slot_frame')
-				.setScale(1)
-				.setOrigin(0.5)
-
-			const item = scene.rexUI.add.label({
-				width: 60,
-				height: 60,
-				background: frame,
-				icon: scene.add.image(0, 0, itemKey).setScale(1.3),
-				space: { icon: 10 },
-			})
-
-			item.setData('index', i + 1) // Set weapon index
-			sizer.add(item) // Add item to the grid
-		}
-
-		return sizer // Return the dynamically built grid
-	}
-
-	createBackButton() {
-		const backButton = this.add.image(
-			config.width / 7,
-			config.height / 1.15,
-			'back_button',
-		)
-		backButton.setInteractive()
-
-		backButton.on('pointerdown', () => {
-			this.scene.start('mainMenu')
-		})
-
-		backButton.on('pointerover', () => {
-			backButton.setScale(1.05)
-		})
-
-		backButton.on('pointerout', () => {
-			backButton.setScale(1)
-		})
-	}
-
-	// Create save button
-	createSaveButton() {
-		const saveButton = this.add.image(
-			config.width / 2.67,
-			config.height / 1.15,
-			'save_button',
-		)
-		saveButton.setInteractive()
-
-		saveButton.on('pointerdown', () => {
-			console.log(
-				'Spaceship (Fighter) selected:',
-				this.selectedFighterName,
-				'Weapon selected:',
-				this.selectedWeapon,
-			)
-
-			// Save selections to localStorage
-			this.saveSelection(this.selectedFighterName, this.selectedWeapon)
-			this.interfaceManager.goToMainMenu(0)
-		})
-
-		saveButton.on('pointerover', () => {
-			saveButton.setScale(1.05)
-		})
-
-		saveButton.on('pointerout', () => {
-			saveButton.setScale(1)
-		})
-	}
-
-	saveSelection(fighter, weapon) {
-		localStorage.setItem('selectedFighter', fighter)
-		localStorage.setItem('selectedWeapon', weapon)
-		gameSettings.selectedPlayerIndex = fighter
-		gameSettings.selectedWeaponIndex = fighter
-		console.log('Selections saved:', { fighter, weapon })
-	}
-
-	loadSelection() {
-		const savedFighter = localStorage.getItem('selectedFighter')
-		const savedWeapon = localStorage.getItem('selectedWeapon')
-		if (savedFighter)
-			this.selectedSpaceship = savedFighter ? parseInt(savedFighter, 10) : 1
-		if (savedWeapon) this.selectedWeapon = parseInt(savedWeapon, 10)
-	}
+	/* ----------------------------HELPERS---------------------------- */
 }
 
-export default ChoosePlayer
+export default SelectUtility

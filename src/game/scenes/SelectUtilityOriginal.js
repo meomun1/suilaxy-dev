@@ -15,6 +15,7 @@ const weaponCollectionIdentifiers = [
 	'0xd1fdf1270ca89b28a68d02e1b0bf20b8438d72c51ca207ab3d1790ba528d6513::suilaxy_nft::TheFirstGun',
 ]
 
+// eslint-disable-next-line no-unused-vars
 const fighterAssetsMapping = {
 	Falcon: 'assets/spritesheets/players/planes_01A.png',
 	Eagle: 'assets/spritesheets/players/planes_02A.png',

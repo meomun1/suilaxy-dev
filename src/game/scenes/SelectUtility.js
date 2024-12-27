@@ -240,7 +240,7 @@ class SelectUtility extends Phaser.Scene {
 
 	async create() {
 		/* ----------------------------INIT---------------------------- */
-		this.cameras.main.fadeIn(1500)
+		this.cameras.main.fadeIn(3000)
 		this.interfaceManager = new InterfaceManager(this)
 
 		// Load saved selection from localStorage
@@ -248,11 +248,12 @@ class SelectUtility extends Phaser.Scene {
 		/* ----------------------------INIT---------------------------- */
 
 		/* ----------------------------DATA LOADING/FETCHING---------------------------- */
-
 		// Only fetch weapons if they haven't been fetched before
 		if (this.artifactDetails.length === 0) {
 			try {
 				await this.getOwnedWeaponsAndDetails()
+				// Wait for all images to load before creating the artifact card
+				await this.preloadAllArtifactImages()
 			} catch (error) {
 				console.error('Error loading weapons from IPFS:', error)
 			}
@@ -1334,8 +1335,9 @@ class SelectUtility extends Phaser.Scene {
 	}
 
 	async getOwnedWeaponsAndDetails() {
-		const address =
-			'0xc6e0b6f91f9f0b8fa9a9c67addefbd9e5bbae269ad5c8e20b501660a09669920'
+		const userWalletAdress = gameSettings.userWalletAdress
+		const address = userWalletAdress
+
 		try {
 			const response = await axios.post(SUI_RPC_URL, {
 				jsonrpc: '2.0',
@@ -1349,8 +1351,6 @@ class SelectUtility extends Phaser.Scene {
 
 			if (response.data?.result?.data) {
 				const ownedObjects = response.data.result.data
-
-				// Clear artifactDetails to avoid duplication
 				this.artifactDetails = []
 
 				for (const obj of ownedObjects) {
@@ -1359,8 +1359,6 @@ class SelectUtility extends Phaser.Scene {
 						await this.getArtifactDetails(objectId)
 					}
 				}
-			} else {
-				console.log('No owned objects found.')
 			}
 		} catch (error) {
 			console.error('Error fetching owned objects:', error)
@@ -1389,25 +1387,16 @@ class SelectUtility extends Phaser.Scene {
 			const content = response.data?.result?.data?.content?.fields
 			const display = response.data?.result?.data?.display?.data
 
-			// Log out only the object type matches the collection identifiers
-
-			// Check if the object type matches the collection identifiers
 			if (objectType && weaponCollectionIdentifiers.includes(objectType)) {
-				console.log('Object ID:', objectId, 'belongs to the target collection.')
-				console.log('Object details:', response.data.result.data)
-				console.log('Content:', content)
-
-				// Extract the image URL from display or content
 				const name = content?.name || display?.name
 				const imageUrl = display?.image_url || content?.url
 				const frame = content?.frame
 				const description = content?.description
 
-				// Extract attributes
 				const attributes = content?.attributes?.fields || {}
 				const attributesArray = Object.entries(attributes).map(
 					([key, value]) => ({
-						name: key.replace(/_/g, ' '), // Replace underscores with spaces
+						name: key.replace(/_/g, ' '),
 						value: value,
 					}),
 				)
@@ -1420,27 +1409,50 @@ class SelectUtility extends Phaser.Scene {
 						description: description,
 						attributes: attributesArray,
 					})
-
-					this.loadIPFSImage(
-						imageUrl,
-						`item_image_${this.artifactDetails.length}`,
-						96,
-						96,
-					)
-				} else {
-					console.warn('No display or content URL found for object:', objectId)
 				}
-			} else {
-				// console.log(
-				// 	`Object ID: ${objectId} does not belong to the target collection.`,
-				// )
 			}
 		} catch (error) {
 			console.error('Error fetching object details:', error)
 		}
 	}
+	/* ----------------------------ON-CHAIN FUNCTIONS---------------------------- */
 
-	loadIPFSImage(url, key, width, height) {
+	/* ----------------------------HELPERS---------------------------- */
+	truncateText(text, maxLength) {
+		if (text.length > maxLength) {
+			return text.substring(0, maxLength) + '...'
+		}
+		return text
+	}
+
+	preloadAllArtifactImages() {
+		return new Promise((resolve) => {
+			let loadedImages = 0
+			const totalImages = this.artifactDetails.length
+
+			if (totalImages === 0) {
+				resolve()
+				return
+			}
+
+			this.artifactDetails.forEach((artifact, index) => {
+				this.loadIPFSImage(
+					artifact.url,
+					`item_image_${index + 1}`,
+					96,
+					96,
+					() => {
+						loadedImages++
+						if (loadedImages === totalImages) {
+							resolve()
+						}
+					},
+				)
+			})
+		})
+	}
+
+	loadIPFSImage(url, key, width, height, onLoad) {
 		const img = new Image()
 		img.crossOrigin = 'anonymous'
 		img.src = url
@@ -1454,20 +1466,13 @@ class SelectUtility extends Phaser.Scene {
 			const resizedImage = canvas.toDataURL()
 
 			this.textures.addBase64(key, resizedImage)
+			if (onLoad) onLoad()
 		}
 
 		img.onerror = (error) => {
 			console.error('Failed to load image from IPFS:', error)
+			if (onLoad) onLoad() // Still call onLoad to prevent hanging
 		}
-	}
-	/* ----------------------------ON-CHAIN FUNCTIONS---------------------------- */
-
-	/* ----------------------------HELPERS---------------------------- */
-	truncateText(text, maxLength) {
-		if (text.length > maxLength) {
-			return text.substring(0, maxLength) + '...'
-		}
-		return text
 	}
 	/* ----------------------------HELPERS---------------------------- */
 }

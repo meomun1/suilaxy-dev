@@ -11,83 +11,83 @@ import { EventBus } from '../EventBus.js'
 
 // Sui full node endpoint
 const SUI_RPC_URL = 'https://fullnode.testnet.sui.io:443'
-const weaponCollectionIdentifiers = [
+const artifactCollectionIdentifiers = [
 	'0x4e3c52b995cc807025ee73b884d808c08c4f68533c9b1a37af62725a3feb2146::create_nft_with_random_attributes::NFT',
 ]
-// const spaceshipCollectionIdentifiers = [
+// const fighterCollectionIdentifiers = [
 // 	'0xd1fdf1270ca89b28a68d02e1b0bf20b8438d72c51ca207ab3d1790ba528d6513::suilaxy_nft::TheFirstFighter',
 // ]
 
-const mockSpaceshipNFTs = [
+const mockFighterNFTs = [
 	{
 		selectedPlayerIndex: 1,
-		objectId: '0xspaceship01',
+		objectId: '0xfighter01',
 		name: 'Falcon',
-		imageUrl: 'assets/nft-spaceships/plane_01.png',
+		imageUrl: 'assets/nft-fighters/plane_01.png',
 		description:
 			'A swift and agile fighter, the Falcon excels in hit-and-run tactics. Its advanced propulsion system allows for quick maneuvers in tight spaces.',
 	},
 	{
 		selectedPlayerIndex: 2,
-		objectId: '0xspaceship02',
+		objectId: '0xfighter02',
 		name: 'Eagle',
-		imageUrl: 'assets/nft-spaceships/plane_02.png',
+		imageUrl: 'assets/nft-fighters/plane_02.png',
 		description:
 			'The Eagle is a versatile combat vessel with balanced offensive and defensive capabilities. Its enhanced sensor suite provides superior tactical awareness.',
 	},
 	{
 		selectedPlayerIndex: 3,
-		objectId: '0xspaceship03',
+		objectId: '0xfighter03',
 		name: 'Hawk',
-		imageUrl: 'assets/nft-spaceships/plane_03.png',
+		imageUrl: 'assets/nft-fighters/plane_03.png',
 		description:
 			'A lightweight scout ship, the Hawk specializes in reconnaissance missions. Its stealth systems make it nearly invisible to enemy radar.',
 	},
 	{
 		selectedPlayerIndex: 4,
-		objectId: '0xspaceship04',
+		objectId: '0xfighter04',
 		name: 'Vulture',
-		imageUrl: 'assets/nft-spaceships/plane_04.png',
+		imageUrl: 'assets/nft-fighters/plane_04.png',
 		description:
 			'The Vulture is a heavy assault craft built for extended combat. Its reinforced hull and powerful shields can withstand significant damage.',
 	},
 	{
 		selectedPlayerIndex: 5,
-		objectId: '0xspaceship05',
+		objectId: '0xfighter05',
 		name: 'Phoenix',
-		imageUrl: 'assets/nft-spaceships/plane_05.png',
+		imageUrl: 'assets/nft-fighters/plane_05.png',
 		description:
 			'Rising from advanced alien technology, the Phoenix can regenerate its shields over time. Its unique design incorporates self-repairing nanomaterials.',
 	},
 	{
 		selectedPlayerIndex: 6,
-		objectId: '0xspaceship06',
+		objectId: '0xfighter06',
 		name: 'Mockingbird',
-		imageUrl: 'assets/nft-spaceships/plane_06.png',
+		imageUrl: 'assets/nft-fighters/plane_06.png',
 		description:
 			'The Mockingbird is a support vessel equipped with electronic warfare systems. It can disrupt enemy communications and weapons systems.',
 	},
 	{
 		selectedPlayerIndex: 7,
-		objectId: '0xspaceship07',
+		objectId: '0xfighter07',
 		name: 'Raven',
-		imageUrl: 'assets/nft-spaceships/plane_07.png',
+		imageUrl: 'assets/nft-fighters/plane_07.png',
 		description:
 			'A stealth bomber class ship, the Raven carries heavy ordnance while maintaining a low profile. Perfect for surgical strikes behind enemy lines.',
 	},
 	{
 		selectedPlayerIndex: 8,
-		objectId: '0xspaceship08',
+		objectId: '0xfighter08',
 		name: 'Condor',
-		imageUrl: 'assets/nft-spaceships/plane_08.png',
+		imageUrl: 'assets/nft-fighters/plane_08.png',
 		description:
 			'The Condor is a massive carrier vessel with extensive cargo capacity. It can deploy autonomous combat drones to support allies in battle.',
 	},
 	{
 		selectedPlayerIndex: 9,
-		objectId: '0xspaceship09',
+		objectId: '0xfighter09',
 		name: 'Albatross',
-		imageUrl: 'assets/nft-spaceships/plane_09.png',
+		imageUrl: 'assets/nft-fighters/plane_09.png',
 		description:
 			'An experimental quantum ship, the Albatross can briefly phase through space-time. Its advanced propulsion system enables short-range teleportation.',
 	},
@@ -260,9 +260,9 @@ class SelectUtility extends Phaser.Scene {
 			loadingText.destroy()
 		})
 
-		// Preload fighter assets from mapping
-		// Preload NFT images from mockSpaceshipNFTs
-		mockSpaceshipNFTs.forEach((nft) => {
+		// Preload Fighter assets from mapping
+		// Preload NFT images from mockFighterNFTs
+		mockFighterNFTs.forEach((nft) => {
 			this.load.image(nft.name, nft.imageUrl)
 		})
 	}
@@ -277,21 +277,21 @@ class SelectUtility extends Phaser.Scene {
 		/* ----------------------------INIT---------------------------- */
 
 		/* ----------------------------DATA LOADING/FETCHING---------------------------- */
-		// Only fetch weapons if they haven't been fetched before
+		// Only fetch artifacts if they haven't been fetched before
 		if (this.artifactDetails.length === 0) {
 			try {
-				await this.getOwnedWeaponsAndDetails()
+				await this.getOwnedArtifactsAndDetails()
 				// Wait for all images to load before creating the artifact card
 				await this.preloadAllArtifactImages()
 			} catch (error) {
-				console.error('Error loading weapons from IPFS:', error)
+				console.error('Error loading artifacts from IPFS:', error)
 			}
 		} else {
-			console.log('Weapons are already loaded.')
+			console.log('Artifacts are already loaded.')
 		}
 
-		// Fetch spaceship NFTs (mocked)
-		this.fighterDetails = await this.getMockSpaceshipNFTs()
+		// Fetch Fighter NFTs (mocked)
+		this.fighterDetails = await this.getMockFighterNFTs()
 		/* ----------------------------DATA LOADING/FETCHING---------------------------- */
 
 		/* ----------------------------UI SECTION---------------------------- */
@@ -365,15 +365,16 @@ class SelectUtility extends Phaser.Scene {
 		}
 
 		saveButton.on('pointerdown', () => {
-			console.log(
-				'Fighter selected:',
-				this.selectedFighterName,
-				'Artifact selected:',
-				this.selectedArtifact,
-			)
+			// Ensure valid values
+			const fighterIndex = parseInt(this.selectedFighterName) || 1
+			const artifactIndex = this.selectedArtifact || 1
 
-			// Save selections to localStorage
-			this.saveSelection(this.selectedFighterName, this.selectedArtifact)
+			// Update game settings
+			gameSettings.selectedPlayerIndex = fighterIndex
+			gameSettings.selectedArtifactIndex = artifactIndex
+
+			// Save to localStorage
+			this.saveSelection(fighterIndex, artifactIndex)
 			this.interfaceManager.goToMainMenu(0)
 		})
 
@@ -419,13 +420,16 @@ class SelectUtility extends Phaser.Scene {
 		}
 
 		pickButton.on('pointerdown', () => {
-			console.log(
-				'Spaceship (Fighter) selected:',
-				this.selectedFighterName,
-				'Weapon selected:',
-				this.selectedArtifact,
-			)
-			this.saveSelection(this.selectedFighterName, this.selectedArtifact)
+			// Ensure valid values
+			const fighterIndex = parseInt(this.selectedFighterName) || 1
+			const artifactIndex = this.selectedArtifact || 1
+
+			// Update game settings
+			gameSettings.selectedPlayerIndex = fighterIndex
+			gameSettings.selectedArtifactIndex = artifactIndex
+
+			// Save selection
+			this.saveSelection(fighterIndex, artifactIndex)
 		})
 
 		pickButton.on('pointerover', () => {
@@ -718,7 +722,7 @@ class SelectUtility extends Phaser.Scene {
 		})
 
 		frame.on('pointerdown', () => {
-			this.selectedFighter(
+			this.selectFighter(
 				this.fighterDetails.findIndex(
 					(f) => f.name === fighterImage.texture.key,
 				),
@@ -834,7 +838,7 @@ class SelectUtility extends Phaser.Scene {
 		}
 	}
 
-	selectedFighter(index) {
+	selectFighter(index) {
 		// Get the actual fighter data from the fighterDetails array
 		const fighter = this.fighterDetails[index]
 		if (fighter) {
@@ -1302,68 +1306,56 @@ class SelectUtility extends Phaser.Scene {
 
 	/* ----------------------------SAVE/LOAD---------------------------- */
 	saveSelection(fighter, artifact) {
-		// Ensure we're working with valid numbers
 		const fighterIndex = parseInt(fighter, 10)
 		const artifactIndex = parseInt(artifact, 10)
 
-		if (!isNaN(fighterIndex)) {
-			localStorage.setItem('selectedFighter', fighterIndex)
+		// First update gameSettings
+		if (fighterIndex > 0) {
 			gameSettings.selectedPlayerIndex = fighterIndex
-			// Also update the local state
+			localStorage.setItem('selectedFighter', fighterIndex)
 			this.selectedFighterName = fighterIndex.toString()
-			this.selectedSpaceship = fighterIndex
 		}
 
-		if (!isNaN(artifactIndex)) {
+		if (artifactIndex > 0) {
+			gameSettings.selectedArtifactIndex = artifactIndex
 			localStorage.setItem('selectedArtifact', artifactIndex)
-			gameSettings.selectedWeaponIndex = artifactIndex
-			this.selectedArtifact = artifactIndex
 		}
-
-		console.log('Selections saved:', {
-			fighter: fighterIndex,
-			artifact: artifactIndex,
-			gameSettings: {
-				selectedPlayerIndex: gameSettings.selectedPlayerIndex,
-				selectedArtifactIndex: gameSettings.selectedWeaponIndex,
-			},
-		})
 	}
 
 	loadSelection() {
 		const savedFighter = localStorage.getItem('selectedFighter')
-		const savedWeapon = localStorage.getItem('selectedArtifact')
+		const savedArtifact = localStorage.getItem('selectedArtifact')
 
-		// Set both selectedFighterName and selectedSpaceship
+		// Set both selectedFighterName and selectedFighter
 		if (savedFighter) {
 			const fighterIndex = parseInt(savedFighter, 10)
 			this.selectedFighterName = fighterIndex.toString()
-			this.selectedSpaceship = fighterIndex
+			this.selectedFighterIndex = fighterIndex
 			gameSettings.selectedPlayerIndex = fighterIndex
 		} else {
 			// Default values if nothing is saved
 			this.selectedFighterName = '1'
-			this.selectedSpaceship = 1
 			gameSettings.selectedPlayerIndex = 1
+			this.selectedFighterIndex = 1
 		}
 
-		if (savedWeapon) {
-			const weaponIndex = parseInt(savedWeapon, 10)
-			this.selectedArtifact = weaponIndex
-			gameSettings.selectedWeaponIndex = weaponIndex
+		if (savedArtifact) {
+			const artifactIndex = parseInt(savedArtifact, 10)
+			this.selectedArtifact = artifactIndex
+			gameSettings.selectedArtifactIndex = artifactIndex
 		}
 	}
 	/* ----------------------------SAVE/LOAD---------------------------- */
 
 	/* ----------------------------ON-CHAIN FUNCTIONS---------------------------- */
-	async getMockSpaceshipNFTs() {
-		// Mock function to simulate fetching spaceship NFTs
+	async getMockFighterNFTs() {
+		// Mock function to simulate fetching Fighter NFTs
 		return new Promise((resolve) => {
-			setTimeout(() => resolve(mockSpaceshipNFTs), 1000)
+			setTimeout(() => resolve(mockFighterNFTs), 1000)
 		})
 	}
 
-	async getOwnedWeaponsAndDetails() {
+	async getOwnedArtifactsAndDetails() {
 		const userWalletAdress = gameSettings.userWalletAdress
 		const address = userWalletAdress
 
@@ -1416,7 +1408,7 @@ class SelectUtility extends Phaser.Scene {
 			const content = response.data?.result?.data?.content?.fields
 			const display = response.data?.result?.data?.display?.data
 
-			if (objectType && weaponCollectionIdentifiers.includes(objectType)) {
+			if (objectType && artifactCollectionIdentifiers.includes(objectType)) {
 				const name = content?.name || display?.name
 				const imageUrl = display?.image_url || content?.url
 				const frame = content?.frame

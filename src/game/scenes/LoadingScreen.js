@@ -286,7 +286,7 @@ class LoadingScreen extends Phaser.Scene {
 		}
 
 		// Load the appropriate spritesheet based on selectedPlayerIndex
-		const bulletSprite = bulletSprites[gameSettings.selectedWeaponIndex] // temporary to default bullet
+		const bulletSprite = bulletSprites[gameSettings.selectedPlayerIndex]
 		if (bulletSprite) {
 			loadSpriteSheetIfNotExists.call(
 				this,

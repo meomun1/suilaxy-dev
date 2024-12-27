@@ -81,7 +81,7 @@ var gameSettings = {
 
 	/*============================= FIGHTER/ARTIFACT SETTINGS =============================*/
 	selectedPlayerIndex: 1,
-	selectedWeaponIndex: 1,
+	selectedArtifactIndex: 1,
 
 	// Method to update settings with modified values
 	updateWithModifiedSettings(modifiedSettings) {

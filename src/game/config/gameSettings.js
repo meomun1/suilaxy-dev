@@ -78,7 +78,7 @@ var gameSettings = {
 
 	// player settings
 	selectedPlayerIndex: 1,
-	selectedWeaponIndex: 1,
+	selectedArtifactIndex: 1,
 	userActive: false,
 	userWalletAdress: '',
 

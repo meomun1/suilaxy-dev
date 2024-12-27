@@ -7,6 +7,7 @@ import InterfaceManager from './InterfaceScene.js'
 import artifactSettings, {
 	ATTRIBUTE_SHORTHANDS,
 } from '../config/artifactSettings.js'
+import { EventBus } from '../EventBus.js'
 
 // Sui full node endpoint
 const SUI_RPC_URL = 'https://fullnode.testnet.sui.io:443'
@@ -123,6 +124,18 @@ class SelectUtility extends Phaser.Scene {
 		this.artifactPageIndicators = []
 		this.fighterPaginationContainer = null
 		this.artifactPaginationContainer = null
+	}
+
+	init() {
+		if (!this.checkAuth()) {
+			return
+		}
+
+		EventBus.on('wallet-connected', this.handleWalletConnected, this)
+	}
+
+	shutdown() {
+		EventBus.off('wallet-connected', this.handleWalletConnected, this)
 	}
 
 	async preload() {
@@ -1472,6 +1485,27 @@ class SelectUtility extends Phaser.Scene {
 		img.onerror = (error) => {
 			console.error('Failed to load image from IPFS:', error)
 			if (onLoad) onLoad() // Still call onLoad to prevent hanging
+		}
+	}
+
+	checkAuth() {
+		if (!gameSettings.userActive || !gameSettings.userWalletAdress) {
+			console.log('User not authenticated, redirecting to boot game')
+			if (this.sys.game.globals.bgMusic) {
+				this.sys.game.globals.bgMusic.stop()
+			}
+			this.scene.start('bootGame')
+			return false
+		}
+		return true
+	}
+
+	handleWalletConnected(data) {
+		if (!data.connected) {
+			if (this.sys.game.globals.bgMusic) {
+				this.sys.game.globals.bgMusic.stop()
+			}
+			this.scene.start('bootGame')
 		}
 	}
 	/* ----------------------------HELPERS---------------------------- */

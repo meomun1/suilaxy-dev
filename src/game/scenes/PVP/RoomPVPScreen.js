@@ -1,10 +1,10 @@
 import Phaser from 'phaser'
-import config from '../config/config.js'
-import Button from '../objects/Button.js'
-import Music from '../mode/Music.js'
-import GuiManager from '../manager/GuiManager.js'
-import { EventBus } from '../EventBus.js'
-import socket from '../objects/Socket.js'
+import config from '../../config/config.js'
+import Button from '../../objects/Button.js'
+import Music from '../../mode/Music.js'
+import GuiManager from '../../manager/GuiManager.js'
+import { EventBus } from '../../EventBus.js'
+import socket from '../../objects/Socket.js'
 
 class RoomPVPScreen extends Phaser.Scene {
 	constructor() {

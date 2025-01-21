@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
-import config from '../config/config.js'
-import GuiManager from '../manager/GuiManager.js'
-import { EventBus } from '../EventBus.js'
-import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
+import config from '../../config/config.js'
+import GuiManager from '../../manager/GuiManager.js'
+import { EventBus } from '../../EventBus.js'
+import handleWalletConnected from '../../mode/attachWalletConnectedHandler.js'
 class LoadingPvPScreen extends Phaser.Scene {
 	constructor() {
 		super('loadingPvPScreen')

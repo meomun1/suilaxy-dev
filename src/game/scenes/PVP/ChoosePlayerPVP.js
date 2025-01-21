@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
-import config from '../config/config.js'
-import gameSettings from '../config/gameSettings.js'
-import GuiManager from '../manager/GuiManager.js'
+import config from '../../config/config.js'
+import gameSettings from '../../config/gameSettings.js'
+import GuiManager from '../../manager/GuiManager.js'
 import { v4 as uuidv4 } from 'uuid'
 
 class ChoosePlayerPVP extends Phaser.Scene {

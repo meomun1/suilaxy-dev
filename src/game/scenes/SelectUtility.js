@@ -18,6 +18,9 @@ const artifactCollectionIdentifiers = [
 // 	'0xd1fdf1270ca89b28a68d02e1b0bf20b8438d72c51ca207ab3d1790ba528d6513::suilaxy_nft::TheFirstFighter',
 // ]
 
+const R2_BASE_URL =
+	'https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft'
+
 const mockFighterNFTs = [
 	{
 		selectedPlayerIndex: 1,
@@ -1410,8 +1413,14 @@ class SelectUtility extends Phaser.Scene {
 
 			if (objectType && artifactCollectionIdentifiers.includes(objectType)) {
 				const name = content?.name || display?.name
-				const imageUrl = display?.image_url || content?.url
 				const frame = content?.frame
+				const ipfsUrl = display?.image_url || content?.url
+
+				// Extract the path from IPFS URL (e.g., "/0/0.png" from full IPFS URL)
+				const pathMatch = ipfsUrl.match(/\/(\d+\/\d+\.png)$/)
+				const imagePath = pathMatch ? pathMatch[1] : null
+				const imageUrl = imagePath ? `${R2_BASE_URL}/${imagePath}` : null
+				// Construct R2 URL from extracted path
 				const description = content?.description
 
 				const attributes = content?.attributes?.fields || {}

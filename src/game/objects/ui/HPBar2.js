@@ -1,16 +1,9 @@
 import Phaser from 'phaser'
-import config from '../../config/config.js'
 class HPBar2 extends Phaser.GameObjects.Container {
-	constructor(scene, x, y, width, height, value, max) {
+	constructor(scene, x, y, value, max) {
 		super(scene, x, y)
 		// Create the health bar (filled with red)
-		this.foregroundBar = scene.add.rectangle(
-			-config.width / 64,
-			config.height / 16,
-			width,
-			height,
-			0xfa609e,
-		)
+		this.foregroundBar = scene.add.rectangle(-80, -20, 185, 40, 0xd94055)
 		this.foregroundBar.setOrigin(0)
 		this.foregroundBar.setDepth(1)
 

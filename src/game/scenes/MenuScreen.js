@@ -361,7 +361,8 @@ class MenuScreen extends Phaser.Scene {
 
 	startArcadeMode() {
 		// Start the Arcade mode scene
-		this.scene.start('loadingScreen')
+		// this.scene.start('loadingScreen')
+		this.scene.start('powerScreen')
 	}
 
 	startPVPMode() {

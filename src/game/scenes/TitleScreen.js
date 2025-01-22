@@ -20,6 +20,7 @@ class TitleScreen extends Phaser.Scene {
 	init() {
 		const music = new Music()
 		this.sys.game.globals = { music, bgMusic: null }
+		this.scene.stop('selectUtility')
 	}
 
 	preload() {
@@ -127,20 +128,6 @@ class TitleScreen extends Phaser.Scene {
 			}
 		}
 	}
-
-	// createPlayButton() {
-	// 	this.button_play = new Button(
-	// 		this,
-	// 		config.width / 2,
-	// 		config.height / 2 + config.height / 8,
-	// 		'button_play',
-	// 		'button_play_hover',
-	// 		'mainMenu',
-	// 	)
-	// 	this.button_play.setSize(config.width / 10, config.height / 20)
-	// 	this.button_play.setInteractive()
-	// 	this.button_play.setScale(1.5)
-	// }
 
 	createPlayButton() {
 		const playButton = this.add.image(

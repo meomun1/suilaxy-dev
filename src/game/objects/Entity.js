@@ -1,6 +1,5 @@
 import Phaser from 'phaser'
 import config from '../config/config.js'
-import gameSettings from '../config/gameSettings.js'
 import DamageNumber from './ui/DamageNumber.js'
 import SoundManager from '../manager/SoundManager.js'
 class Entity extends Phaser.GameObjects.Sprite {
@@ -31,7 +30,7 @@ class Entity extends Phaser.GameObjects.Sprite {
 		}
 	}
 
-	updateHealthBarValue(health, maxHealth) {
+	updateHealthBarValue() {
 		if (this.health < 0) {
 			this.hpBar.destroy()
 		} else {

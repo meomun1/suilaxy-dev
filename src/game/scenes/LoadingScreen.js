@@ -131,9 +131,9 @@ class LoadingScreen extends Phaser.Scene {
 		loadSpriteSheetIfNotExists.call(
 			this,
 			'healthBar_texture',
-			'assets/spritesheets/vfx/healthBar_01.png',
-			331,
-			154,
+			'assets/spritesheets/vfx/healthbar-scaled.png',
+			218,
+			44,
 			0,
 			0,
 		)

@@ -276,6 +276,7 @@ class SelectUtility extends Phaser.Scene {
 		this.interfaceManager = new InterfaceManager(this)
 
 		// Load saved selection from localStorage
+		// console.log('Current wallet:', gameSettings.userWalletAdress)
 		this.loadSelection()
 		/* ----------------------------INIT---------------------------- */
 
@@ -290,7 +291,7 @@ class SelectUtility extends Phaser.Scene {
 				console.error('Error loading artifacts from IPFS:', error)
 			}
 		} else {
-			console.log('Artifacts are already loaded.')
+			// console.log('Artifacts are already loaded.')
 		}
 
 		// Fetch Fighter NFTs (mocked)

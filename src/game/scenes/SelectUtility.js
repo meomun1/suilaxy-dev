@@ -120,6 +120,7 @@ class SelectUtility extends Phaser.Scene {
 		this.artifactDetails = []
 		this.fighterDetails = []
 		this.infoCard = null
+		this.callingScene = 'selectUtility'
 
 		// console.log(
 		// 	'Scene constructed with empty artifactDetails:',

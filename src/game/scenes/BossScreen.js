@@ -149,7 +149,7 @@ class BossScreen extends Phaser.Scene {
 			gameSettings.selectedPlayerIndex,
 		)
 		this.player.play('player_anim')
-		gameStats
+		gameStats()
 
 		//SHIELD
 		this.shield = new Shield(this, this.player)
@@ -415,7 +415,9 @@ class BossScreen extends Phaser.Scene {
 		}
 
 		this.projectiles.children.iterate((bullet) => {
-			bullet.update(this.player)
+			if (bullet && this.player) {
+				bullet.update(this.player)
+			}
 		})
 
 		this.projectilesEnemyEffects.children.iterate((effect) => {

@@ -14,7 +14,7 @@ import { MIST_PER_SUI } from '@mysten/sui/utils'
 const PACKAGE_ADDRESS =
 	'0x4e3c52b995cc807025ee73b884d808c08c4f68533c9b1a37af62725a3feb2146'
 
-const MintNFT = () => {
+const SuiLoginUI = () => {
 	const [name, setName] = useState('')
 	const [frame, setFrame] = useState('')
 	const [description, setDescription] = useState('')
@@ -170,4 +170,4 @@ const MintNFT = () => {
 	return <ConnectButton />
 }
 
-export default MintNFT
+export default SuiLoginUI

@@ -20,6 +20,7 @@ class TitleScreen extends Phaser.Scene {
 	init() {
 		const music = new Music()
 		this.sys.game.globals = { music, bgMusic: null }
+		this.scene.stop('selectUtility')
 	}
 
 	preload() {

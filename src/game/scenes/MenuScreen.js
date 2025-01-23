@@ -18,6 +18,21 @@ class MenuScreen extends Phaser.Scene {
 		this.guiManager = new GuiManager(this)
 	}
 
+	// Add handleWalletConnected as a class method
+	handleWalletConnected = (data) => {
+		if (!data.connected) {
+			if (this.sys.game.globals.bgMusic) {
+				this.sys.game.globals.bgMusic.stop()
+			}
+			this.scene.stop('mainMenu')
+			this.scene.start('bootGame')
+		}
+	}
+
+	init() {
+		EventBus.on('wallet-connected', this.handleWalletConnected)
+	}
+
 	preload() {
 		// Load the background and buttons
 		this.guiManager.loadImage('background', 'assets/main-menu/background.png')
@@ -425,7 +440,7 @@ class MenuScreen extends Phaser.Scene {
 	}
 
 	shutdown() {
-		EventBus.off('wallet-connected', this.handleWalletConnected, this)
+		EventBus.off('wallet-connected', this.handleWalletConnected)
 	}
 }
 

@@ -44,10 +44,8 @@ class Player extends Entity {
 
 		this.hpBar = new HPBar2(
 			scene,
-			config.width / 2 - config.width / 4 - config.width / 10,
-			config.height - config.height / 4 + config.height / 8,
-			config.width / 8,
-			config.height / 32,
+			config.width / 9,
+			config.height - config.height / 16,
 			this.health,
 			this.maxHealth,
 		)

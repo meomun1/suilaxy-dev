@@ -19,6 +19,9 @@ const artifactCollectionIdentifiers = [
 // 	'0xd1fdf1270ca89b28a68d02e1b0bf20b8438d72c51ca207ab3d1790ba528d6513::suilaxy_nft::TheFirstFighter',
 // ]
 
+const R2_BASE_URL =
+	'https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft'
+
 const mockFighterNFTs = [
 	{
 		selectedPlayerIndex: 1,
@@ -118,6 +121,11 @@ class SelectUtility extends Phaser.Scene {
 		this.fighterDetails = []
 		this.infoCard = null
 
+		// console.log(
+		// 	'Scene constructed with empty artifactDetails:',
+		// 	this.artifactDetails,
+		// )
+
 		// Pagination State
 		this.currentFighterPage = 0
 		this.currentArtifactPage = 0
@@ -137,6 +145,21 @@ class SelectUtility extends Phaser.Scene {
 
 	shutdown() {
 		EventBus.off('wallet-connected', this.handleWalletConnected, this)
+		this.artifactDetails = []
+
+		// Clear artifact textures from cache
+		this.artifactDetails.forEach((_, index) => {
+			const textureKey = `item_image_${index + 1}`
+			if (this.textures.exists(textureKey)) {
+				this.textures.remove(textureKey)
+			}
+		})
+
+		// Also clear any other generated textures
+		if (this.artifactGrids) {
+			this.artifactGrids.forEach((grid) => grid.destroy())
+		}
+		this.artifactGrids = []
 	}
 
 	async preload() {
@@ -278,7 +301,21 @@ class SelectUtility extends Phaser.Scene {
 		this.cameras.main.fadeIn(2000, 0, 0, 0)
 		this.interfaceManager = new InterfaceManager(this)
 
+		for (let i = 1; i <= 1000; i++) {
+			// assuming max 10 artifacts
+			const textureKey = `item_image_${i}`
+			if (this.textures.exists(textureKey)) {
+				this.textures.remove(textureKey)
+			}
+		}
+
+		// Reset artifact-related properties
+		this.artifactDetails = []
+		this.artifactGrids = []
+		this.currentArtifactPage = 0
+
 		// Load saved selection from localStorage
+		// console.log('Current wallet:', gameSettings.userWalletAdress)
 		this.loadSelection()
 		/* ----------------------------INIT---------------------------- */
 
@@ -286,14 +323,14 @@ class SelectUtility extends Phaser.Scene {
 		// Only fetch artifacts if they haven't been fetched before
 		if (this.artifactDetails.length === 0) {
 			try {
+				this.artifactDetails = []
 				await this.getOwnedArtifactsAndDetails()
-				// Wait for all images to load before creating the artifact card
 				await this.preloadAllArtifactImages()
 			} catch (error) {
-				console.error('Error loading artifacts from IPFS:', error)
+				console.error('Error loading artifact images from storage:', error)
 			}
 		} else {
-			console.log('Artifacts are already loaded.')
+			// console.log('Artifacts are already loaded.')
 		}
 
 		// Fetch Fighter NFTs (mocked)
@@ -1146,6 +1183,23 @@ class SelectUtility extends Phaser.Scene {
 			this.createInfoCard()
 		}
 
+		// Handle empty artifact case first
+		if (this.selectedTab === 'artifact' && this.artifactDetails.length === 0) {
+			if (this.infoCard) {
+				// Clear any existing content
+				this.infoName?.setText('')
+				this.infoImage?.setVisible(false)
+				this.infoDescription?.setText('No artifacts found')
+
+				// Clear any existing attribute containers
+				if (this.attributeContainers) {
+					this.attributeContainers.forEach((container) => container.destroy())
+					this.attributeContainers = []
+				}
+			}
+			return
+		}
+
 		// Set visibility based on whether we have a selection
 		this.infoCardVisible =
 			(this.selectedTab === 'artifact' && this.selectedArtifact !== -1) ||
@@ -1201,6 +1255,14 @@ class SelectUtility extends Phaser.Scene {
 	}
 
 	updateArtifactInfo() {
+		// Add early return for empty artifacts case
+		if (this.artifactDetails.length === 0) {
+			this.infoName?.setText('')
+			this.infoImage?.setVisible(false)
+			this.infoDescription?.setText('No artifacts found')
+			return
+		}
+
 		if (this.selectedArtifact === -1 || !this.artifactDetails.length) {
 			return
 		}
@@ -1367,6 +1429,9 @@ class SelectUtility extends Phaser.Scene {
 		const userWalletAdress = gameSettings.userWalletAdress
 		const address = userWalletAdress
 
+		// console.log('Fetching artifacts for wallet:', address)
+		// console.log('Current artifactDetails length:', this.artifactDetails.length)
+
 		try {
 			const response = await axios.post(SUI_RPC_URL, {
 				jsonrpc: '2.0',
@@ -1380,6 +1445,9 @@ class SelectUtility extends Phaser.Scene {
 
 			if (response.data?.result?.data) {
 				const ownedObjects = response.data.result.data
+				// console.log('Found owned objects:', ownedObjects.length)
+
+				// Clear existing artifacts before adding new ones
 				this.artifactDetails = []
 
 				for (const obj of ownedObjects) {
@@ -1388,6 +1456,11 @@ class SelectUtility extends Phaser.Scene {
 						await this.getArtifactDetails(objectId)
 					}
 				}
+
+				// console.log(
+				// 	'Final artifactDetails length:',
+				// 	this.artifactDetails.length,
+				// )
 			}
 		} catch (error) {
 			console.error('Error fetching owned objects:', error)
@@ -1418,8 +1491,14 @@ class SelectUtility extends Phaser.Scene {
 
 			if (objectType && artifactCollectionIdentifiers.includes(objectType)) {
 				const name = content?.name || display?.name
-				const imageUrl = display?.image_url || content?.url
 				const frame = content?.frame
+				const ipfsUrl = display?.image_url || content?.url
+
+				// Extract the path from IPFS URL (e.g., "/0/0.png" from full IPFS URL)
+				const pathMatch = ipfsUrl.match(/\/(\d+\/\d+\.png)$/)
+				const imagePath = pathMatch ? pathMatch[1] : null
+				const imageUrl = imagePath ? `${R2_BASE_URL}/${imagePath}` : null
+				// Construct R2 URL from extracted path
 				const description = content?.description
 
 				const attributes = content?.attributes?.fields || {}
@@ -1510,6 +1589,7 @@ class SelectUtility extends Phaser.Scene {
 			if (this.sys.game.globals.bgMusic) {
 				this.sys.game.globals.bgMusic.stop()
 			}
+			this.scene.stop('selectUtility')
 			this.scene.start('bootGame')
 			return false
 		}

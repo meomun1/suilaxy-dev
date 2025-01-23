@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { PhaserGame } from './game/PhaserGame'
 import { useCurrentAccount, useSuiClientQuery } from '@mysten/dapp-kit'
-import MintNFT from './sui/MintNFT'
+import SuiLoginUI from './sui/SuiLoginUI'
 import { MobileSite } from './MobileSite'
 import { useMediaQuery } from 'react-responsive'
 // eslint-disable-next-line no-unused-vars
@@ -55,7 +55,7 @@ function App() {
 								</a>
 							</div>
 							<div className="top-connect">
-								<MintNFT />
+								<SuiLoginUI />
 							</div>
 						</div>
 						<div className="game-canvas">

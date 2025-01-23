@@ -42,7 +42,7 @@ async function getOwnedObjects(address) {
 
 // Replace with the SUI address you want to query
 const address =
-	'0xc6e0b6f91f9f0b8fa9a9c67addefbd9e5bbae269ad5c8e20b501660a09669920'
+	'0xf3818b7fc2702b188659042fa845efab12ed8a9e37bbad7b506d70cb4728e512'
 
 // Call the function
 getOwnedObjects(address)

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { fetchObjectAttributes } from './getAttributes.js'
 
 // Sui full node endpoint
-const SUI_RPC_URL = 'https://fullnode.devnet.sui.io:443'
+const SUI_RPC_URL = 'https://fullnode.testnet.sui.io:443'
 
 // Function to fetch object details including its type
 async function fetchObjectDetails(objectId) {
@@ -49,7 +49,7 @@ async function fetchObjectDetails(objectId) {
 
 // Replace with the object ID you want to query
 const objectId =
-	'0x78360c22653a4a4d4f2238b12b151e79559b8d755933edbcc52533490dedc16a'
+	'0x5707bf42e3a3f8ed5a838b12998ec9e2ede2dee1fbf95b0cae5fad8e04eec8b9'
 
 // Call the function to fetch object details
 fetchObjectDetails(objectId)

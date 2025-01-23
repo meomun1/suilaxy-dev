@@ -85,37 +85,19 @@ class GuiManager {
 			config.width / 2,
 			config.height / 2 - 60,
 			'GAME OVER',
-			'32px',
+			'128px',
 			'#fff',
 			0.5,
 		)
-
-		// this.createSimpleText(
-		// 	config.width / 2,
-		// 	config.height / 2,
-		// 	'Press R to Restart',
-		// 	'24px',
-		// 	'#fff',
-		// 	0.5,
-		// )
 
 		this.createSimpleText(
 			config.width / 2,
 			config.height / 2 + 30,
-			'Press T to Menu',
+			'Artifact Searching in Progress',
 			'24px',
 			'#fff',
 			0.5,
 		)
-
-		// this.createSimpleText(
-		// 	config.width / 2,
-		// 	config.height / 2 + 60,
-		// 	'Press L to Leaderboard',
-		// 	'24px',
-		// 	'#fff',
-		// 	0.5,
-		// )
 	}
 
 	// TEXT SESSION

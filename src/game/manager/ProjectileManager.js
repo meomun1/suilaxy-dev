@@ -109,7 +109,7 @@ class ProjectileManager {
 		this.scene.time.addEvent({
 			delay: 750, // 1000 milliseconds = 1 second
 			callback: () => {
-				// this.scene.miniBoss.shootBoundBullet(this.scene, this.scene.miniBoss)
+				this.scene.miniBoss.shootChaseBullet(this.scene, this.scene.miniBoss)
 				this.scene.bug3_2.shootBoundBullet(this.scene, this.scene.bug3_2)
 				this.scene.bug3_4.shootBoundBullet(this.scene, this.scene.bug3_4)
 			},
@@ -123,13 +123,13 @@ class ProjectileManager {
 			callback: () => {
 				this.scene.bug3_1.shootBullet(this.scene, this.scene.bug3_1)
 
-				// if (this.scene.firstMini.y > config.height / 2) {
-				// 	this.scene.firstMini.shootBullet(this.scene, this.scene.firstMini)
-				// }
+				if (this.scene.firstMini.y > config.height / 2) {
+					this.scene.firstMini.shootBullet(this.scene, this.scene.firstMini)
+				}
 
-				// if (this.scene.secondMini.y > config.height / 2) {
-				// 	this.scene.secondMini.shootBullet(this.scene, this.scene.secondMini)
-				// }
+				if (this.scene.secondMini.y > config.height / 2) {
+					this.scene.secondMini.shootBullet(this.scene, this.scene.secondMini)
+				}
 			},
 			loop: true, // This makes the event repeat indefinitely
 		})

@@ -21,7 +21,7 @@ class Bug3 extends EnemyEntity {
 		this.maxHealth = health
 		this.hpBarWidth = 20
 		this.hpBarHeight = 5
-		this.damage = 100
+		this.damage = gameSettings.bug3Damage
 		this.setInteractiveEntity()
 		this.setActive(true)
 

@@ -7,19 +7,19 @@ class UpgradeManager {
 		this.createScoreText()
 
 		if (this.callingScene === 'playGame') {
-			this.upgradeScore = 1000
-		}
-
-		if (this.callingScene === 'playLevelTwo') {
 			this.upgradeScore = 1500
 		}
 
-		if (this.callingScene === 'playLevelThree') {
+		if (this.callingScene === 'playLevelTwo') {
 			this.upgradeScore = 2000
 		}
 
+		if (this.callingScene === 'playLevelThree') {
+			this.upgradeScore = 2500
+		}
+
 		if (this.callingScene === 'bossGame') {
-			this.upgradeScore = 2000
+			this.upgradeScore = 3000
 		}
 	}
 
@@ -41,10 +41,6 @@ class UpgradeManager {
 
 		this.displayScore()
 
-		// const playerUpgradeThreshold = this.countScoreByThreshhold(
-		// 	gameSettings.playerUpgradeThreshold,
-		// )
-
 		if (gameSettings.playerScore % this.upgradeScore === 0) {
 			if (this.scene.mobileManager.isMobile == true) {
 				this.scene.mobileManager.isMobile = false
@@ -56,10 +52,6 @@ class UpgradeManager {
 			gameSettings.playerUpgradeThreshold += 100
 		}
 	}
-
-	// countScoreByThreshhold(threshhold) {
-	// 	return threshhold ** 2 / 200 + threshhold / 2 - 300
-	// }
 
 	rewardByScore(callingScene) {
 		this.scene.input.setDragState(this.scene.player, 0)

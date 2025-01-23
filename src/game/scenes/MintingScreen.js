@@ -145,15 +145,28 @@ class MintingScreen extends Phaser.Scene {
 
 		this.button_mint = new Button(
 			this,
-			config.width / 2,
+			config.width / 2 - config.width / 10,
 			(config.height * 14) / 15,
 			'button_mint',
 			'button_mint_hover',
 		)
 
+		this.button_title = new Button(
+			this,
+			config.width / 2 + config.width / 10,
+			(config.height * 14) / 15,
+			'button_mint',
+			'button_mint_hover',
+			'mainMenu',
+		)
+
 		this.button_mint.setSize(config.width / 10, config.height / 20)
 		this.button_mint.setInteractive()
 		this.button_mint.setScale(1.3)
+
+		this.button_title.setSize(config.width / 10, config.height / 20)
+		this.button_title.setInteractive()
+		this.button_title.setScale(1.3)
 
 		// Listen for when the loader completes, then apply the texture
 		this.load.on(Phaser.Loader.Events.COMPLETE, () => {

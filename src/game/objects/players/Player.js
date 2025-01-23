@@ -216,64 +216,6 @@ class Player extends Entity {
 	getCurrentHealth() {
 		return this.health
 	}
-
-	savePlayer() {
-		gameSettings.savePlayerSpeed = this.speed
-		gameSettings.savePlayerBulletDamage = this.bulletDamage
-		gameSettings.savePlayerLifesteal = this.lifestealRate
-		gameSettings.savePlayerBulletSpeed = this.bulletSpeed
-		gameSettings.savePlayerScore = gameSettings.playerScore
-		gameSettings.savePlayerNumberOfBullets = this.numberOfBullets
-		gameSettings.savePlayerFireRate = this.fireRate
-		gameSettings.savePlayerDefaultBulletSize =
-			gameSettings.playerDefaultBulletSize
-		gameSettings.savePlayerBulletSize = this.bulletSize
-		gameSettings.savePlayerMaxHealth = gameSettings.playerMaxHealth
-		gameSettings.savePlayerUpgradeThreshold =
-			gameSettings.playerUpgradeThreshold
-		gameSettings.savePlayerSize = this.playerSize
-		gameSettings.savePlayerArmor = this.playerArmor
-		gameSettings.savePlayerHealthGeneration = this.healthGeneration
-		gameSettings.savePlayerBuffRate = this.playerBuffRate
-	}
-
-	restartToTile() {
-		gameSettings.savePlayerSpeed = 300
-		gameSettings.savePlayerBulletDamage = 5000
-		gameSettings.savePlayerLifesteal = 0
-		gameSettings.savePlayerBulletSpeed = 400
-		gameSettings.savePlayerScore = 0
-		gameSettings.savePlayerNumberOfBullets = 1
-		gameSettings.savePlayerFireRate = 700
-		gameSettings.savePlayerDefaultBulletSize = 1.2
-		gameSettings.savePlayerBulletSize = 1.2
-		gameSettings.savePlayerUpgradeThreshold = 300
-		gameSettings.savePlayerSize = 1
-		gameSettings.savePlayerArmor = 0
-		gameSettings.savePlayerHealthGeneration = 0
-		gameSettings.savePlayerBuffRate = 1
-		this.restartGameSettings()
-	}
-
-	restartGameSettings() {
-		gameSettings.playerSpeed = gameSettings.savePlayerSpeed
-		gameSettings.playerBulletDamage = gameSettings.savePlayerBulletDamage
-		gameSettings.playerLifesteal = gameSettings.savePlayerLifesteal
-		gameSettings.playerBulletSpeed = gameSettings.savePlayerBulletSpeed
-		gameSettings.playerScore = gameSettings.savePlayerScore
-		gameSettings.playerNumberOfBullets = gameSettings.savePlayerNumberOfBullets
-		gameSettings.playerFireRate = gameSettings.savePlayerFireRate
-		gameSettings.playerDefaultBulletSize =
-			gameSettings.savePlayerDefaultBulletSize
-		gameSettings.playerBulletSize = gameSettings.savePlayerBulletSize
-		gameSettings.playerUpgradeThreshold =
-			gameSettings.savePlayerUpgradeThreshold
-		gameSettings.playerSize = gameSettings.savePlayerSize
-		gameSettings.playerArmor = gameSettings.savePlayerArmor
-		gameSettings.playerHealthGeneration =
-			gameSettings.savePlayerHealthGeneration
-		gameSettings.playerBuffRate = gameSettings.savePlayerBuffRate
-	}
 }
 
 export default Player

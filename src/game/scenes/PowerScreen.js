@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import config from '../config/config'
 import gameSettings from '../config/gameSettings'
 import GuiManager from '../manager/GuiManager'
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 import { EventBus } from '../EventBus.js'
 
 class PowerScreen extends Phaser.Scene {
@@ -29,6 +30,8 @@ class PowerScreen extends Phaser.Scene {
 	}
 
 	create() {
+		EventBus.on('wallet-connected', handleWalletConnected, this)
+
 		this.input.setDefaultCursor(
 			'url(assets/cursors/custom-cursor.cur), pointer',
 		)

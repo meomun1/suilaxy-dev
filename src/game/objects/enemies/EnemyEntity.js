@@ -1,6 +1,5 @@
 import gameSettings from '../../config/gameSettings.js'
 import Entity from '../Entity.js'
-import Bug1 from './Bug1.js'
 import EnemyEffect from '../projectiles/EnemyEffects.js'
 
 class EnemyEntity extends Entity {
@@ -107,7 +106,7 @@ class EnemyEntity extends Entity {
 			duration,
 			() => {
 				damageEvent.remove(false)
-				if (enemy.health > 0 && enemy instanceof Bug1) {
+				if (enemy.health > 0) {
 					enemy.setVelocityY(gameSettings.enemySpeed / 2)
 				}
 			},

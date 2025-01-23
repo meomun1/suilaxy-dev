@@ -29,15 +29,15 @@ const artifactSettings = {
 		if (!artifact?.attributes) return gameSettings
 
 		const modifiedSettings = {
-			playerSpeed: gameSettings.playerSpeed,
-			playerBulletDamage: gameSettings.playerBulletDamage,
-			playerMaxHealth: gameSettings.playerMaxHealth,
-			playerArmor: gameSettings.playerArmor,
-			playerFireRate: gameSettings.playerFireRate,
-			playerBulletSize: gameSettings.playerBulletSize,
-			playerBuffRate: gameSettings.playerBuffRate,
-			playerLifesteal: gameSettings.playerLifesteal,
-			playerHealthGeneration: gameSettings.playerHealthGeneration,
+			basePlayerSpeed: gameSettings.basePlayerSpeed,
+			basePlayerBulletDamage: gameSettings.basePlayerBulletDamage,
+			basePlayerMaxHealth: gameSettings.basePlayerMaxHealth,
+			basePlayerArmor: gameSettings.basePlayerArmor,
+			basePlayerFireRate: gameSettings.basePlayerFireRate,
+			basePlayerBulletSize: gameSettings.basePlayerBulletSize,
+			basePlayerBuffRate: gameSettings.basePlayerBuffRate,
+			basePlayerLifesteal: gameSettings.basePlayerLifesteal,
+			basePlayerHealthGeneration: gameSettings.basePlayerHealthGeneration,
 		}
 
 		artifact.attributes.forEach((attr) => {
@@ -47,57 +47,57 @@ const artifactSettings = {
 			if (modifier) {
 				switch (shorthand) {
 					case 'SPD':
-						modifiedSettings.playerSpeed = modifier(
-							modifiedSettings.playerSpeed,
+						modifiedSettings.basePlayerSpeed = modifier(
+							modifiedSettings.basePlayerSpeed,
 							attr.value,
 						)
 						break
 					case 'DMG':
 					case 'BDMG':
-						modifiedSettings.playerBulletDamage = modifier(
-							modifiedSettings.playerBulletDamage,
+						modifiedSettings.basePlayerBulletDamage = modifier(
+							modifiedSettings.basePlayerBulletDamage,
 							attr.value,
 						)
 						break
 					case 'HP':
-						modifiedSettings.playerMaxHealth = modifier(
-							modifiedSettings.playerMaxHealth,
+						modifiedSettings.basePlayerMaxHealth = modifier(
+							modifiedSettings.basePlayerMaxHealth,
 							attr.value,
 						)
 						break
 					case 'ARM':
-						modifiedSettings.playerArmor = modifier(
-							modifiedSettings.playerArmor,
+						modifiedSettings.basePlayerArmor = modifier(
+							modifiedSettings.basePlayerArmor,
 							attr.value,
 						)
 						break
 					case 'FRAT':
-						modifiedSettings.playerFireRate = modifier(
-							modifiedSettings.playerFireRate,
+						modifiedSettings.basePlayerFireRate = modifier(
+							modifiedSettings.basePlayerFireRate,
 							attr.value,
 						)
 						break
 					case 'BSIZ':
-						modifiedSettings.playerBulletSize = modifier(
-							modifiedSettings.playerBulletSize,
+						modifiedSettings.basePlayerBulletSize = modifier(
+							modifiedSettings.basePlayerBulletSize,
 							attr.value,
 						)
 						break
 					case 'BUFF':
-						modifiedSettings.playerBuffRate = modifier(
-							modifiedSettings.playerBuffRate,
+						modifiedSettings.basePlayerBuffRate = modifier(
+							modifiedSettings.basePlayerBuffRate,
 							attr.value,
 						)
 						break
 					case 'LST':
-						modifiedSettings.playerLifesteal = modifier(
-							modifiedSettings.playerLifesteal,
+						modifiedSettings.basePlayerLifesteal = modifier(
+							modifiedSettings.basePlayerLifesteal,
 							attr.value,
 						)
 						break
 					case 'GEN':
-						modifiedSettings.playerHealthGeneration = modifier(
-							modifiedSettings.playerHealthGeneration,
+						modifiedSettings.basePlayerHealthGeneration = modifier(
+							modifiedSettings.basePlayerHealthGeneration,
 							attr.value,
 						)
 						break

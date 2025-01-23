@@ -8,7 +8,8 @@ import artifactSettings, {
 	ATTRIBUTE_SHORTHANDS,
 } from '../config/artifactSettings.js'
 import { EventBus } from '../EventBus.js'
-
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
+import { resetBase, saveBaseStats } from '../utils/adjustStats.js'
 // Sui full node endpoint
 const SUI_RPC_URL = 'https://fullnode.testnet.sui.io:443'
 const artifactCollectionIdentifiers = [
@@ -268,8 +269,13 @@ class SelectUtility extends Phaser.Scene {
 	}
 
 	async create() {
+		console.log('Player Index ', gameSettings.selectedPlayerIndex)
+		console.log('Artifact Index ', gameSettings.selectedArtifactIndex)
+		console.log('User Active ', gameSettings.userActive)
+		console.log('Wallet Connected ', gameSettings.userWalletAdress)
+
 		/* ----------------------------INIT---------------------------- */
-		this.cameras.main.fadeIn(3000, 0, 0, 0)
+		this.cameras.main.fadeIn(2000, 0, 0, 0)
 		this.interfaceManager = new InterfaceManager(this)
 
 		// Load saved selection from localStorage
@@ -323,6 +329,10 @@ class SelectUtility extends Phaser.Scene {
 		this.updateCardVisibility()
 		this.updateInfoCard()
 		/* ----------------------------UPDATE---------------------------- */
+
+		/* ----------------------------EVENT LISTENERS---------------------------- */
+		// Listen for wallet disconnection
+		EventBus.on('wallet-connected', handleWalletConnected, this)
 	}
 
 	/* ----------------------------GUI CREATE---------------------------- */
@@ -1051,17 +1061,15 @@ class SelectUtility extends Phaser.Scene {
 		const selectedArtifact = this.artifactDetails[index - 1]
 
 		if (selectedArtifact) {
-			// Reset to saved values first
-			const resetSettings =
-				artifactSettings.resetArtifactAttributes(gameSettings)
-			gameSettings.updateWithModifiedSettings(resetSettings)
-
+			resetBase()
 			// Apply new artifact attributes
 			const modifiedSettings = artifactSettings.applyArtifactAttributes(
 				gameSettings,
 				selectedArtifact,
 			)
-			gameSettings.updateWithModifiedSettings(modifiedSettings)
+
+			console.log('Modified settings: ', modifiedSettings)
+			saveBaseStats(modifiedSettings)
 		}
 
 		this.updateInfoCard()

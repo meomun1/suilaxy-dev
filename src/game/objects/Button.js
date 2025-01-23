@@ -17,6 +17,7 @@ class Button extends Phaser.GameObjects.Container {
 				this.scene.scene.start(targetScene)
 			} else {
 				EventBus.emit('mint-nft-clicked')
+				this.button.disableInteractive()
 			}
 		})
 

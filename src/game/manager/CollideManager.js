@@ -93,8 +93,8 @@ class CollideManager {
 			})
 		}
 
+		// Add collision between player and shield packs
 		if (this.shieldPacks) {
-			// Add collision between player and shield packs
 			this.shieldPacks.forEach((shieldPack) => {
 				this.scene.physics.add.overlap(
 					this.player,
@@ -107,6 +107,7 @@ class CollideManager {
 		}
 	}
 
+	// Shield collision with enemy
 	shieldCollideEnemy(shield, enemy) {
 		if (this.shieldActive) {
 			enemy.takeDamage(100)
@@ -115,6 +116,7 @@ class CollideManager {
 		}
 	}
 
+	// Shield collision with bullet
 	shieldCollideBullet(shield, enemyBullet) {
 		if (this.shieldActive) {
 			enemyBullet.destroy()
@@ -123,6 +125,7 @@ class CollideManager {
 		}
 	}
 
+	// Bullet collision with enemy
 	bulletHitEnemy(enemy, bullet) {
 		const currentTime = Date.now()
 

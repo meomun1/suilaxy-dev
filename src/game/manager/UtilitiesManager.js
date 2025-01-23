@@ -25,18 +25,6 @@ class UtilitiesManager {
 
 		return { x: randomX, y: randomY }
 	}
-
-	// addNftForPlayer() {
-	// 	const randomPos = this.generateRandomPosition()
-	// 	this.nftCollection = new NftCollection(
-	// 		this.scene,
-	// 		config.width / 2,
-	// 		config.height / 2,
-	// 	)
-	// 	this.nftCollection.setTexture('nft_texture')
-	// 	this.nftCollection.setScale(0.25)
-	// }
-
 	addUtilitiesForPlayingScreen(numHealth, numShield) {
 		for (let i = 0; i < numHealth; i++) {
 			const randomPos = this.generateRandomPosition()

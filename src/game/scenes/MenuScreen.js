@@ -3,6 +3,8 @@ import WebFont from 'webfontloader'
 import config from '../config/config.js'
 import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
+import gameSettings from '../config/gameSettings.js'
 
 class MenuScreen extends Phaser.Scene {
 	constructor() {
@@ -62,9 +64,51 @@ class MenuScreen extends Phaser.Scene {
 				},
 			})
 		}
+
+		console.log('Save Player Speed: ', gameSettings.savePlayerSpeed)
+		console.log(
+			'Save Player Bullet Damage: ',
+			gameSettings.savePlayerBulletDamage,
+		)
+		console.log('Save Player Lifesteal: ', gameSettings.savePlayerLifesteal)
+		console.log(
+			'Save Player Bullet Speed: ',
+			gameSettings.savePlayerBulletSpeed,
+		)
+		console.log('Save Player Score: ', gameSettings.savePlayerScore)
+		console.log(
+			'Save Player Number Of Bullets: ',
+			gameSettings.savePlayerNumberOfBullets,
+		)
+		console.log('Save Player Fire Rate: ', gameSettings.savePlayerFireRate)
+		console.log(
+			'Save Player Default Bullet Size: ',
+			gameSettings.savePlayerDefaultBulletSize,
+		)
+		console.log('Save Player Bullet Size: ', gameSettings.savePlayerBulletSize)
+		console.log('Save Player Max Health: ', gameSettings.savePlayerMaxHealth)
+		console.log(
+			'Save Player Upgrade Threshold: ',
+			gameSettings.savePlayerUpgradeThreshold,
+		)
+		console.log('Save Player Size: ', gameSettings.savePlayerSize)
+		console.log('Save Player Armor: ', gameSettings.savePlayerArmor)
+		console.log(
+			'Save Player Health Generation: ',
+			gameSettings.savePlayerHealthGeneration,
+		)
+		console.log('Save Player Buff Rate: ', gameSettings.savePlayerBuffRate)
+		console.log('Save Player Hard Mode: ', gameSettings.saveplayerHardMode)
+
+		console.log('Player Index ', gameSettings.selectedPlayerIndex)
+		console.log('Artifact Index ', gameSettings.selectedArtifactIndex)
+		console.log('User Active ', gameSettings.userActive)
+		console.log('Wallet Connected ', gameSettings.userWalletAdress)
 	}
 
 	create() {
+		EventBus.on('wallet-connected', handleWalletConnected, this)
+
 		this.input.setDefaultCursor(
 			'url(assets/cursors/custom-cursor.cur), pointer',
 		)
@@ -365,8 +409,8 @@ class MenuScreen extends Phaser.Scene {
 	}
 
 	startPVPMode() {
-		// Start the PvP mode scene
-		this.scene.start('chooseRoom')
+		// Start the PvP mode scene : temporary closed
+		// this.scene.start('chooseRoom')
 	}
 
 	loadWebFonts() {

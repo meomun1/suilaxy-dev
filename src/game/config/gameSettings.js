@@ -40,7 +40,7 @@ var gameSettings = {
 	savePlayerBuffRate: 1,
 	saveplayerHardMode: false,
 
-	// BASE STATS for player
+	// // BASE STATS for player ( Can be used in fututre for reseting player stats)
 	basePlayerSpeed: 250,
 	basePlayerBulletDamage: 5000,
 	basePlayerLifesteal: 0,
@@ -64,6 +64,9 @@ var gameSettings = {
 	enemySize: 1,
 	bulletSpeed: 400,
 	healthPackSpeed: 100,
+	bug1Damage: 100,
+	bug3Damage: 200,
+	bug5Damage: 300,
 
 	// boss settings
 	isBossDead: true,

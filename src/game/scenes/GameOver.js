@@ -4,6 +4,7 @@ import KeyboardManager from '../manager/KeyboardManager.js'
 import InterfaceManager from './InterfaceScene.js'
 import { EventBus } from '../EventBus.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
+import { resetSaveStatsToBaseStats } from '../utils/adjustStats.js'
 
 class GameOver extends Phaser.Scene {
 	constructor() {
@@ -19,27 +20,6 @@ class GameOver extends Phaser.Scene {
 		this.input.setDefaultCursor(
 			'url(assets/cursors/custom-cursor.cur), pointer',
 		)
-
-		// this.load.spritesheet({
-		// 	key: 'button_continue_hover',
-		// 	url: 'assets/gui/button_play_hover.png',
-		// 	frameConfig: {
-		// 		frameWidth: 93,
-		// 		frameHeight: 28,
-		// 		startFrame: 3,
-		// 		endFrame: 3,
-		// 	},
-		// })
-		// this.load.spritesheet({
-		// 	key: 'button_continue',
-		// 	url: 'assets/gui/button_play.png',
-		// 	frameConfig: {
-		// 		frameWidth: 93,
-		// 		frameHeight: 28,
-		// 		startFrame: 3,
-		// 		endFrame: 3,
-		// 	},
-		// })
 	}
 
 	create() {
@@ -58,10 +38,9 @@ class GameOver extends Phaser.Scene {
 		this.keyboardManager = new KeyboardManager(this)
 		this.guiManager = new GuiManager(this)
 		this.interfaceManager = new InterfaceManager(this)
-		// Define the "R", "T", "L" key
-		this.keyboardManager.restartGame()
-		this.keyboardManager.menuScreen()
-		// this.keyboardManager.showLeaderboard()
+
+		// Reset stats
+		resetSaveStatsToBaseStats()
 	}
 }
 

@@ -30,6 +30,46 @@ class TitleScreen extends Phaser.Scene {
 		// Load BUTTONS
 		this.load.image('button_play', 'assets/gui/button-play.png')
 		this.load.image('button_play_hover', 'assets/gui/button-play-hover.png')
+
+		console.log('Save Player Speed: ', gameSettings.savePlayerSpeed)
+		console.log(
+			'Save Player Bullet Damage: ',
+			gameSettings.savePlayerBulletDamage,
+		)
+		console.log('Save Player Lifesteal: ', gameSettings.savePlayerLifesteal)
+		console.log(
+			'Save Player Bullet Speed: ',
+			gameSettings.savePlayerBulletSpeed,
+		)
+		console.log('Save Player Score: ', gameSettings.savePlayerScore)
+		console.log(
+			'Save Player Number Of Bullets: ',
+			gameSettings.savePlayerNumberOfBullets,
+		)
+		console.log('Save Player Fire Rate: ', gameSettings.savePlayerFireRate)
+		console.log(
+			'Save Player Default Bullet Size: ',
+			gameSettings.savePlayerDefaultBulletSize,
+		)
+		console.log('Save Player Bullet Size: ', gameSettings.savePlayerBulletSize)
+		console.log('Save Player Max Health: ', gameSettings.savePlayerMaxHealth)
+		console.log(
+			'Save Player Upgrade Threshold: ',
+			gameSettings.savePlayerUpgradeThreshold,
+		)
+		console.log('Save Player Size: ', gameSettings.savePlayerSize)
+		console.log('Save Player Armor: ', gameSettings.savePlayerArmor)
+		console.log(
+			'Save Player Health Generation: ',
+			gameSettings.savePlayerHealthGeneration,
+		)
+		console.log('Save Player Buff Rate: ', gameSettings.savePlayerBuffRate)
+		console.log('Save Player Hard Mode: ', gameSettings.saveplayerHardMode)
+
+		console.log('Player Index ', gameSettings.selectedPlayerIndex)
+		console.log('Artifact Index ', gameSettings.selectedArtifactIndex)
+		console.log('User Active ', gameSettings.userActive)
+		console.log('Wallet Connected ', gameSettings.userWalletAdress)
 	}
 
 	create() {
@@ -128,27 +168,13 @@ class TitleScreen extends Phaser.Scene {
 		}
 	}
 
-	// createPlayButton() {
-	// 	this.button_play = new Button(
-	// 		this,
-	// 		config.width / 2,
-	// 		config.height / 2 + config.height / 8,
-	// 		'button_play',
-	// 		'button_play_hover',
-	// 		'mainMenu',
-	// 	)
-	// 	this.button_play.setSize(config.width / 10, config.height / 20)
-	// 	this.button_play.setInteractive()
-	// 	this.button_play.setScale(1.5)
-	// }
-
 	createPlayButton() {
-		const playButton = this.add.image(
+		this.button_play = this.add.image(
 			config.width / 2,
 			config.height / 2 + config.height / 8,
 			'button_play',
 		)
-		playButton.setInteractive()
+		this.button_play.setInteractive()
 
 		const hoverTween = {
 			scale: 1.05,
@@ -162,28 +188,28 @@ class TitleScreen extends Phaser.Scene {
 			ease: 'Power2',
 		}
 
-		playButton.on('pointerdown', () => {
+		this.button_play.on('pointerdown', () => {
 			this.scene.start('mainMenu')
 		})
 
-		playButton.on('pointerover', () => {
-			this.tweens.killTweensOf(playButton)
+		this.button_play.on('pointerover', () => {
+			this.tweens.killTweensOf(this.button_play)
 
 			this.tweens.add({
-				targets: playButton,
+				targets: this.button_play,
 				...hoverTween,
 			})
-			playButton.setTexture('button_play_hover')
+			this.button_play.setTexture('button_play_hover')
 		})
 
-		playButton.on('pointerout', () => {
-			this.tweens.killTweensOf(playButton)
+		this.button_play.on('pointerout', () => {
+			this.tweens.killTweensOf(this.button_play)
 
 			this.tweens.add({
-				targets: playButton,
+				targets: this.button_play,
 				...normalTween,
 			})
-			playButton.setTexture('button_play')
+			this.button_play.setTexture('button_play')
 		})
 	}
 

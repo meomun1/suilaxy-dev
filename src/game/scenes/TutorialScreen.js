@@ -1,6 +1,5 @@
 import Phaser from 'phaser'
 import config from '../config/config'
-import Player from '../objects/players/Player'
 import Shield from '../objects/utilities/Shield'
 import EnemyManager from '../manager/EnemyManager.js'
 import KeyboardManager from '../manager/KeyboardManager.js'
@@ -15,7 +14,8 @@ import gameSettings from '../config/gameSettings.js'
 import { EventBus } from '../EventBus.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 import SpecialPlayers from '../objects/players/SpecialPlayers.js'
-import Bullet from '../objects/projectiles/Bullet.js'
+import { resetSaveStatsToBaseStats, gameStats } from '../utils/adjustStats.js'
+import { shutdown } from '../utils/endGamescene.js'
 
 const BACKGROUND_SCROLL_SPEED = 0.5
 class TutorialScreen extends Phaser.Scene {
@@ -23,9 +23,6 @@ class TutorialScreen extends Phaser.Scene {
 		super('playTutorial')
 		this.callingScene = 'playTutorial'
 		this.guiManager = new GuiManager(this)
-	}
-
-	init(data) {
 		this.selectedPlayerIndex = gameSettings.selectedPlayerIndex
 	}
 
@@ -78,6 +75,9 @@ class TutorialScreen extends Phaser.Scene {
 	createTutorialText() {}
 
 	createObject() {
+		// reset save stats
+		resetSaveStatsToBaseStats()
+
 		// PLAYER
 		this.player = new SpecialPlayers(
 			this,
@@ -88,11 +88,54 @@ class TutorialScreen extends Phaser.Scene {
 			gameSettings.selectedPlayerIndex,
 		)
 		this.player.play('player_anim')
-		this.player.restartToTile()
+
+		// Apply stats in game
+		gameStats()
 
 		//SHIELD
 		this.shield = new Shield(this, this.player)
 		this.shield.play('shield_anim')
+
+		console.log('Save Player Speed: ', gameSettings.savePlayerSpeed)
+		console.log(
+			'Save Player Bullet Damage: ',
+			gameSettings.savePlayerBulletDamage,
+		)
+		console.log('Save Player Lifesteal: ', gameSettings.savePlayerLifesteal)
+		console.log(
+			'Save Player Bullet Speed: ',
+			gameSettings.savePlayerBulletSpeed,
+		)
+		console.log('Save Player Score: ', gameSettings.savePlayerScore)
+		console.log(
+			'Save Player Number Of Bullets: ',
+			gameSettings.savePlayerNumberOfBullets,
+		)
+		console.log('Save Player Fire Rate: ', gameSettings.savePlayerFireRate)
+		console.log(
+			'Save Player Default Bullet Size: ',
+			gameSettings.savePlayerDefaultBulletSize,
+		)
+		console.log('Save Player Bullet Size: ', gameSettings.savePlayerBulletSize)
+		console.log('Save Player Max Health: ', gameSettings.savePlayerMaxHealth)
+		console.log(
+			'Save Player Upgrade Threshold: ',
+			gameSettings.savePlayerUpgradeThreshold,
+		)
+		console.log('Save Player Size: ', gameSettings.savePlayerSize)
+		console.log('Save Player Armor: ', gameSettings.savePlayerArmor)
+		console.log('Base Player Armor: ', gameSettings.basePlayerArmor)
+		console.log(
+			'Save Player Health Generation: ',
+			gameSettings.savePlayerHealthGeneration,
+		)
+		console.log('Save Player Buff Rate: ', gameSettings.savePlayerBuffRate)
+		console.log('Save Player Hard Mode: ', gameSettings.saveplayerHardMode)
+
+		console.log('Player Index ', gameSettings.selectedPlayerIndex)
+		console.log('Artifact Index ', gameSettings.selectedArtifactIndex)
+		console.log('User Active ', gameSettings.userActive)
+		console.log('Wallet Connected ', gameSettings.userWalletAdress)
 	}
 
 	createMechanic() {
@@ -295,7 +338,7 @@ class TutorialScreen extends Phaser.Scene {
 			7000,
 			() => {
 				this.guiManager.createTextWithDelay(
-					'1000 / 1500 / 2000 points will give you an upgrade',
+					'1500 / 2000 / 2500 points will give you an upgrade',
 					enemy.x - config.width / 4,
 					enemy.y + config.height / 16,
 					'Pixelify Sans',
@@ -462,20 +505,6 @@ class TutorialScreen extends Phaser.Scene {
 		this.shield.updatePosition(this.player)
 	}
 
-	updateAudio() {
-		if (this.music.musicOn === false && this.music.soundOn === false) {
-			this.musicButton.setTexture('mute_texture')
-			this.sys.game.globals.bgMusic.pause()
-			this.music.bgMusicPlaying = false
-		} else if (this.music.musicOn === true && this.music.soundOn === true) {
-			this.musicButton.setTexture('sound_texture')
-			if (this.music.bgMusicPlaying === false) {
-				this.sys.game.globals.bgMusic.resume()
-				this.music.bgMusicPlaying = true
-			}
-		}
-	}
-
 	shutdown() {
 		// Remove entire texture along with all animations
 		this.textures.remove(`player_texture_${this.selectedPlayerIndex}`)
@@ -524,7 +553,7 @@ class TutorialScreen extends Phaser.Scene {
 				Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
 				(cam, effect) => {
 					this.scene.stop()
-					this.scene.start('nftGenerate', {
+					this.scene.start('playGame', {
 						callingScene: this.callingScene,
 						number: this.selectedPlayerIndex,
 					})

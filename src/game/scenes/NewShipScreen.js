@@ -1,21 +1,8 @@
 import Phaser from 'phaser'
 import config from '../config/config'
-import Player from '../objects/players/Player'
-import Shield from '../objects/utilities/Shield'
-import EnemyManager from '../manager/EnemyManager.js'
-import KeyboardManager from '../manager/KeyboardManager.js'
-import PlayerManager from '../manager/PlayerManager.js'
-import CollideManager from '../manager/CollideManager.js'
-import Bug1 from '../objects/enemies/Bug1'
-import Bug3 from '../objects/enemies/Bug3'
-import Bug5 from '../objects/enemies/Bug5'
 import GuiManager from '../manager/GuiManager.js'
-import UtilitiesManager from '../manager/UtilitiesManager.js'
-import ProjectileManager from '../manager/ProjectileManager.js'
-import UpgradeManager from '../manager/UpgradeManager.js'
-import SoundManager from '../manager/SoundManager.js'
-import MobileManager from '../manager/MobileManager.js'
-import gameSettings from '../config/gameSettings.js'
+import { EventBus } from '../EventBus.js'
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 
 class NewShipScreen extends Phaser.Scene {
 	constructor() {
@@ -77,6 +64,8 @@ class NewShipScreen extends Phaser.Scene {
 	}
 
 	create() {
+		EventBus.on('wallet-connected', handleWalletConnected, this)
+
 		this.input.setDefaultCursor(
 			'url(assets/cursors/custom-cursor.cur), pointer',
 		)

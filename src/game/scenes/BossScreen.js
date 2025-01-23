@@ -12,13 +12,14 @@ import UtilitiesManager from '../manager/UtilitiesManager.js'
 import ProjectileManager from '../manager/ProjectileManager.js'
 import UpgradeManager from '../manager/UpgradeManager.js'
 import Boss from '../objects/enemies/Boss.js'
-// import MiniBot from '../objects/enemies/Minibot.js'
+import MiniBot from '../objects/enemies/Minibot.js'
 import SoundManager from '../manager/SoundManager.js'
 import MobileManager from '../manager/MobileManager.js'
 import gameSettings from '../config/gameSettings.js'
 import { EventBus } from '../EventBus.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 import SpecialPlayers from '../objects/players/SpecialPlayers.js'
+import { gameStats } from '../utils/adjustStats.js'
 
 const BACKGROUND_SCROLL_SPEED = 0.5
 class BossScreen extends Phaser.Scene {
@@ -148,7 +149,7 @@ class BossScreen extends Phaser.Scene {
 			gameSettings.selectedPlayerIndex,
 		)
 		this.player.play('player_anim')
-		this.player.restartGameSettings()
+		gameStats
 
 		//SHIELD
 		this.shield = new Shield(this, this.player)
@@ -234,8 +235,8 @@ class BossScreen extends Phaser.Scene {
 		this.boss = new Boss(this, config.width / 2, 0, 50000)
 		this.boss.play('boss_move_anim')
 
-		// this.firstMini = new MiniBot(this, config.width / 5, -96, 10000)
-		// this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 10000)
+		this.firstMini = new MiniBot(this, config.width / 5, -96, 10000)
+		this.secondMini = new MiniBot(this, (config.width * 4) / 5, -96, 10000)
 
 		// Spawn the Enemies
 		this.bug3_1 = new Bug3(this, 50, 0, 2000)
@@ -256,8 +257,8 @@ class BossScreen extends Phaser.Scene {
 		this.EnemyManager.addEnemy(this.bug5)
 		this.EnemyManager.addEnemy(this.bug5_2)
 		this.EnemyManager.addEnemy(this.boss)
-		// this.EnemyManager.addEnemy(this.firstMini)
-		// this.EnemyManager.addEnemy(this.secondMini)
+		this.EnemyManager.addEnemy(this.firstMini)
+		this.EnemyManager.addEnemy(this.secondMini)
 
 		// spawn the enemies
 		if (this.boss.health < 800) {
@@ -329,6 +330,48 @@ class BossScreen extends Phaser.Scene {
 		this.timeHealth = 1
 
 		this.createMusic()
+
+		console.log('Boss')
+
+		console.log('Save Player Speed: ', gameSettings.savePlayerSpeed)
+		console.log(
+			'Save Player Bullet Damage: ',
+			gameSettings.savePlayerBulletDamage,
+		)
+		console.log('Save Player Lifesteal: ', gameSettings.savePlayerLifesteal)
+		console.log(
+			'Save Player Bullet Speed: ',
+			gameSettings.savePlayerBulletSpeed,
+		)
+		console.log('Save Player Score: ', gameSettings.savePlayerScore)
+		console.log(
+			'Save Player Number Of Bullets: ',
+			gameSettings.savePlayerNumberOfBullets,
+		)
+		console.log('Save Player Fire Rate: ', gameSettings.savePlayerFireRate)
+		console.log(
+			'Save Player Default Bullet Size: ',
+			gameSettings.savePlayerDefaultBulletSize,
+		)
+		console.log('Save Player Bullet Size: ', gameSettings.savePlayerBulletSize)
+		console.log('Save Player Max Health: ', gameSettings.savePlayerMaxHealth)
+		console.log(
+			'Save Player Upgrade Threshold: ',
+			gameSettings.savePlayerUpgradeThreshold,
+		)
+		console.log('Save Player Size: ', gameSettings.savePlayerSize)
+		console.log('Save Player Armor: ', gameSettings.savePlayerArmor)
+		console.log(
+			'Save Player Health Generation: ',
+			gameSettings.savePlayerHealthGeneration,
+		)
+		console.log('Save Player Buff Rate: ', gameSettings.savePlayerBuffRate)
+		console.log('Save Player Hard Mode: ', gameSettings.saveplayerHardMode)
+
+		console.log('Player Index ', gameSettings.selectedPlayerIndex)
+		console.log('Artifact Index ', gameSettings.selectedArtifactIndex)
+		console.log('User Active ', gameSettings.userActive)
+		console.log('Wallet Connected ', gameSettings.userWalletAdress)
 	}
 
 	update() {
@@ -470,13 +513,13 @@ class BossScreen extends Phaser.Scene {
 		) {
 			this.boss.bossBound()
 			if (this.timeHealth === 0) {
-				// this.callMini()
+				this.callMini()
 			}
 		}
 
 		if (this.boss.health < this.boss.maxHealth * 0.35 && this.boss.health > 0) {
 			this.boss.moveToCenter()
-			// this.callMini()
+			this.callMini()
 		}
 
 		if (
@@ -504,15 +547,15 @@ class BossScreen extends Phaser.Scene {
 		}
 	}
 
-	// callMini() {
-	// 	if (this.firstMini.health > 0) {
-	// 		this.firstMini.followPlayer(this.player, -100, -100)
-	// 	}
+	callMini() {
+		if (this.firstMini.health > 0) {
+			this.firstMini.followPlayer(this.player, -100, -100)
+		}
 
-	// 	if (this.secondMini.health > 0) {
-	// 		this.secondMini.followPlayer(this.player, 100, -100)
-	// 	}
-	// }
+		if (this.secondMini.health > 0) {
+			this.secondMini.followPlayer(this.player, 100, -100)
+		}
+	}
 
 	healthBoss() {
 		if (this.boss.health < this.boss.maxHealth * 0.35) {

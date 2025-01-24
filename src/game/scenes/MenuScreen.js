@@ -15,6 +15,7 @@ class MenuScreen extends Phaser.Scene {
 		this.modes = []
 		this.positions = []
 		this.transitioning = false
+		this.walletInfo = null
 		this.guiManager = new GuiManager(this)
 	}
 
@@ -40,11 +41,8 @@ class MenuScreen extends Phaser.Scene {
 		// Load the logo image
 		this.guiManager.loadImage('logo', 'assets/main-menu/logo.png')
 
-		// Load the NFT drop indicator
-		this.guiManager.loadImage(
-			'drop-indicator',
-			'assets/main-menu/drop-indicator.png',
-		)
+		// Load the Donate Us button
+		this.guiManager.loadImage('donate-us', 'assets/main-menu/donate-us.png')
 
 		this.guiManager.loadImage('gear-button', 'assets/main-menu/gear-button.png')
 
@@ -124,6 +122,16 @@ class MenuScreen extends Phaser.Scene {
 	create() {
 		EventBus.on('wallet-connected', handleWalletConnected, this)
 
+		EventBus.on('donation-modal-opened', () => {
+			this.scene.pause()
+			this.input.enabled = false
+		})
+
+		EventBus.on('donation-modal-closed', () => {
+			this.scene.resume()
+			this.input.enabled = true
+		})
+
 		this.input.setDefaultCursor(
 			'url(assets/cursors/custom-cursor.cur), pointer',
 		)
@@ -151,31 +159,34 @@ class MenuScreen extends Phaser.Scene {
 			// Add the background ================================================================
 			this.guiManager.createBackground('background')
 
-			// Add the NFT drop indicator ================================================================
-			this.dropIndicator = this.add.image(
+			// Add the donate us button ================================================================
+			this.donateUsButton = this.add.image(
 				0, // x coordinate, for left side of the screen
 				config.height / 3.5, // y coordinate, for vertical center
-				'drop-indicator',
+				'donate-us',
 			)
-			this.dropIndicator.setOrigin(0, 0.5)
-			this.dropIndicator.setInteractive()
-			this.dropIndicator.on('pointerover', () => {
+			this.donateUsButton.setOrigin(0, 0.5)
+			this.donateUsButton.setInteractive()
+			this.donateUsButton.on('pointerover', () => {
 				this.tweens.add({
-					targets: this.dropIndicator,
+					targets: this.donateUsButton,
 					scaleX: 1.03,
 					scaleY: 1.03,
 					duration: 200,
 					ease: 'Power2',
 				})
 			})
-			this.dropIndicator.on('pointerout', () => {
+			this.donateUsButton.on('pointerout', () => {
 				this.tweens.add({
-					targets: this.dropIndicator,
+					targets: this.donateUsButton,
 					scaleX: 1,
 					scaleY: 1,
 					duration: 200,
 					ease: 'Power2',
 				})
+			})
+			this.donateUsButton.on('pointerdown', () => {
+				EventBus.emit('donate-clicked')
 			})
 
 			// Add the Gear Up button ================================================================
@@ -440,6 +451,8 @@ class MenuScreen extends Phaser.Scene {
 	}
 
 	shutdown() {
+		EventBus.off('donation-modal-opened')
+		EventBus.off('donation-modal-closed')
 		EventBus.off('wallet-connected', this.handleWalletConnected)
 	}
 }

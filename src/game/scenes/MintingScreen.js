@@ -3,7 +3,7 @@ import config from '../config/config.js'
 import gameSettings from '../config/gameSettings.js'
 import { EventBus } from '../EventBus.js'
 import GuiManager from '../manager/GuiManager.js'
-import Button from '../objects/Button.js'
+import InterfaceManager from './InterfaceScene.js'
 
 class MintingScreen extends Phaser.Scene {
 	constructor() {
@@ -23,22 +23,15 @@ class MintingScreen extends Phaser.Scene {
 		)
 		this.load.image('pixel', 'assets/shaders/16x16.png')
 
-		this.guiManager.loadSpriteSheet(
-			'button_mint',
-			'assets/gui/button.png',
-			93,
-			28,
-			4,
-			4,
-		)
-
-		this.guiManager.loadSpriteSheet(
+		this.guiManager.loadImage('button_mint', 'assets/gui/button-mint.png')
+		this.guiManager.loadImage(
 			'button_mint_hover',
-			'assets/gui/button_hover.png',
-			93,
-			28,
-			4,
-			4,
+			'assets/gui/button-mint-hover.png',
+		)
+		this.guiManager.loadImage('button_title', 'assets/gui/button-title.png')
+		this.guiManager.loadImage(
+			'button_title_hover',
+			'assets/gui/button-title-hover.png',
 		)
 
 		this.input.setDefaultCursor(
@@ -66,6 +59,8 @@ class MintingScreen extends Phaser.Scene {
 	}
 
 	create() {
+		this.interfaceManager = new InterfaceManager(this)
+
 		// Create a black rectangle that covers the whole game
 		let blackCover = this.add.rectangle(
 			0,
@@ -143,30 +138,9 @@ class MintingScreen extends Phaser.Scene {
 			alpha: 0.2,
 		})
 
-		this.button_mint = new Button(
-			this,
-			config.width / 2 - config.width / 10,
-			(config.height * 14) / 15,
-			'button_mint',
-			'button_mint_hover',
-		)
-
-		this.button_title = new Button(
-			this,
-			config.width / 2 + config.width / 10,
-			(config.height * 14) / 15,
-			'button_mint',
-			'button_mint_hover',
-			'mainMenu',
-		)
-
-		this.button_mint.setSize(config.width / 10, config.height / 20)
-		this.button_mint.setInteractive()
-		this.button_mint.setScale(1.3)
-
-		this.button_title.setSize(config.width / 10, config.height / 20)
-		this.button_title.setInteractive()
-		this.button_title.setScale(1.3)
+		// Create buttons
+		this.createMintButton()
+		this.createTitleButton()
 
 		// Listen for when the loader completes, then apply the texture
 		this.load.on(Phaser.Loader.Events.COMPLETE, () => {
@@ -184,6 +158,97 @@ class MintingScreen extends Phaser.Scene {
 				url: gameSettings.nft_img_url,
 				frame: gameSettings.nft_frame,
 			},
+		})
+	}
+
+	createMintButton() {
+		const mintButton = this.add.image(
+			config.width / 2 - config.width / 10,
+			(config.height * 14) / 15,
+			'button_mint',
+		)
+		mintButton.setInteractive()
+
+		const hoverTween = {
+			scale: 1.05,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		const normalTween = {
+			scale: 1,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		mintButton.on('pointerdown', () => {
+			EventBus.emit('mint-nft-clicked')
+			mintButton.disableInteractive()
+		})
+
+		mintButton.on('pointerover', () => {
+			this.tweens.killTweensOf(mintButton)
+
+			this.tweens.add({
+				targets: mintButton,
+				...hoverTween,
+			})
+			mintButton.setTexture('button_mint_hover')
+		})
+
+		mintButton.on('pointerout', () => {
+			this.tweens.killTweensOf(mintButton)
+
+			this.tweens.add({
+				targets: mintButton,
+				...normalTween,
+			})
+			mintButton.setTexture('button_mint')
+		})
+	}
+
+	createTitleButton() {
+		const titleButton = this.add.image(
+			config.width / 2 + config.width / 10,
+			(config.height * 14) / 15,
+			'button_title',
+		)
+		titleButton.setInteractive()
+
+		const hoverTween = {
+			scale: 1.05,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		const normalTween = {
+			scale: 1,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		titleButton.on('pointerdown', () => {
+			this.interfaceManager.goToTitleScreen(0)
+		})
+
+		titleButton.on('pointerover', () => {
+			this.tweens.killTweensOf(titleButton)
+
+			this.tweens.add({
+				targets: titleButton,
+				...hoverTween,
+			})
+			titleButton.setTexture('button_title_hover')
+		})
+
+		titleButton.on('pointerout', () => {
+			this.tweens.killTweensOf(titleButton)
+
+			this.tweens.add({
+				targets: titleButton,
+				...normalTween,
+			})
+			titleButton.setTexture('button_title')
 		})
 	}
 

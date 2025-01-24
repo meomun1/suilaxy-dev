@@ -56,7 +56,7 @@ class LoadingPvPScreen extends Phaser.Scene {
 
 		this.guiManager.loadSpriteSheet(
 			'healthBar_texture',
-			'assets/spritesheets/vfx/healthBar_01.png',
+			'assets/spritesheets/vfx/healthbar-scaled.png',
 			331,
 			154,
 			0,

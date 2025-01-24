@@ -20,7 +20,7 @@ const artifactCollectionIdentifiers = [
 // ]
 
 const R2_BASE_URL =
-	'https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft'
+	'https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft-min'
 
 const mockFighterNFTs = [
 	{

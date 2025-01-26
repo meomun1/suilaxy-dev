@@ -269,10 +269,15 @@ class SelectUtility extends Phaser.Scene {
 			'url(assets/cursors/custom-cursor.cur), pointer',
 		)
 
+		// Preload Fighter assets from mapping
+		// Preload NFT images from mockFighterNFTs
+		mockFighterNFTs.forEach((nft) => {
+			this.load.image(nft.name, nft.imageUrl)
+		})
+
+		// Add loading text (temporary UI)
 		const width = this.cameras.main.width
 		const height = this.cameras.main.height
-
-		// Add loading text
 		const loadingText = this.add
 			.text(width / 2, height / 2 - 50, 'Loading...', {
 				fontFamily: 'Pixelify Sans',
@@ -281,15 +286,13 @@ class SelectUtility extends Phaser.Scene {
 			})
 			.setOrigin(0.5)
 
+		// Listen for the preload complete event
 		this.load.on('complete', () => {
-			loadingText.destroy()
+			loadingText.destroy() // Remove the loading text
 		})
 
-		// Preload Fighter assets from mapping
-		// Preload NFT images from mockFighterNFTs
-		mockFighterNFTs.forEach((nft) => {
-			this.load.image(nft.name, nft.imageUrl)
-		})
+		// Start loading assets
+		this.load.start() // Ensure preload starts immediately
 	}
 
 	async create() {
@@ -299,7 +302,7 @@ class SelectUtility extends Phaser.Scene {
 		console.log('Wallet Connected ', gameSettings.userWalletAdress)
 
 		/* ----------------------------INIT---------------------------- */
-		this.cameras.main.fadeIn(2000, 0, 0, 0)
+		this.cameras.main.fadeIn(1000, 0, 0, 0)
 		this.interfaceManager = new InterfaceManager(this)
 
 		for (let i = 1; i <= 1000; i++) {
@@ -1307,7 +1310,7 @@ class SelectUtility extends Phaser.Scene {
 			startX: this.infoImage.x - 163,
 			startY: this.infoImage.y + 70,
 			columnWidth: 102, // Width of tier background
-			rowHeight: 40, // Height between rows
+			rowHeight: 52, // Height between rows
 			columns: 3, // Number of columns
 			columnSpacing: 10, // Space between columns
 		}
@@ -1333,16 +1336,25 @@ class SelectUtility extends Phaser.Scene {
 				.setOrigin(0.5)
 
 			// Add attribute text
-			const text = this.add
-				.text(x + 40, y + 8, `${attr.shorthand} ${attr.value}`, {
+			const shorthandText = this.add
+				.text(x + 50, y + 5, `${attr.shorthand}`, {
 					fontFamily: 'Pixelify Sans',
 					fontSize: '16px',
 					color: '#FFFFFF',
-					align: 'left',
+					align: 'center',
 				})
-				.setOrigin(0)
+				.setOrigin(0.5, 0.5)
 
-			container.add([bg, text])
+			const valueText = this.add
+				.text(x + 50, y + 24, `${attr.value}`, {
+					fontFamily: 'Pixelify Sans',
+					fontSize: '16px',
+					color: '#FFF460',
+					align: 'center',
+				})
+				.setOrigin(0.5, 0.5)
+
+			container.add([bg, shorthandText, valueText])
 			this.attributeContainers.push(container)
 		})
 

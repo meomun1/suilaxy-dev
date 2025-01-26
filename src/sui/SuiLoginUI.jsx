@@ -15,104 +15,129 @@ const DONATION_ADDRESS =
 	'0xa84a74d18762c8981749f539849f72888ffe554069d6b37451aff73d6c20c171'
 
 const SuiLoginUI = () => {
-	const [name, setName] = useState('')
-	const [frame, setFrame] = useState('')
-	const [description, setDescription] = useState('')
-	const [url, setUrl] = useState('')
-	const [digest, setDigest] = useState('')
-	const [error, setError] = useState(null)
+	const [canMint, setCanMint] = useState(false)
+	const [nftState, setNftState] = useState({
+		name: '',
+		frame: '',
+		description: '',
+		url: '',
+		digest: '',
+		error: null,
+	})
 
 	const phaserRef = useRef()
 	const currentAccount = useCurrentAccount()
 	const { mutate: signAndExecuteTransaction } =
 		useSignAndExecuteTransactionBlock()
-	const { data } = useSuiClientQuery('getOwnedObjects', {
-		owner: currentAccount?.address,
-	})
+
+	const { data: ownedObjects } = useSuiClientQuery(
+		'getOwnedObjects',
+		{
+			owner: currentAccount?.address,
+		},
+		{
+			enabled: !!currentAccount?.address,
+		},
+	)
 
 	useEffect(() => {
-		if (currentAccount) {
-			gameSettings.userActive = true
-			gameSettings.userWalletAdress = currentAccount.address
-			EventBus.emit('wallet-connected', { connected: true })
-		} else {
-			gameSettings.userActive = false
-			gameSettings.userWalletAdress = ''
-			EventBus.emit('wallet-connected', { connected: false })
-		}
+		const isConnected = !!currentAccount
+		gameSettings.userActive = isConnected
+		gameSettings.userWalletAdress = currentAccount?.address || ''
+		EventBus.emit('wallet-connected', { connected: isConnected })
 	}, [currentAccount])
 
-	const handleMint = useCallback(
-		async (name, description, frame, url) => {
-			try {
-				if (!currentAccount) throw new Error('No account connected')
-				if (!name || !description || !url || !frame) {
-					const missingFields = []
-					if (!name) missingFields.push('name')
-					if (!description) missingFields.push('description')
-					if (!url) missingFields.push('url')
-					if (!frame) missingFields.push('frame')
-					throw new Error(
-						`All fields are required. Missing fields: ${missingFields.join(
-							', ',
-						)}`,
-					)
-				}
+	const validateNFTProperties = () => {
+		const { nft_weapon, nft_description, nft_img_url, nft_frame } = gameSettings
 
-				const txb = new Transaction()
-				txb.setSender(currentAccount.address)
-				const betAmountCoin = txb.splitCoins(txb.gas, [200000000])
-				if (!betAmountCoin) throw new Error('Failed to create betAmountCoin')
+		if (!nft_weapon || !nft_description || !nft_img_url || !nft_frame) {
+			throw new Error('Missing NFT properties')
+		}
 
-				txb.moveCall({
-					target: `${PACKAGE_ADDRESS}::suilaxy_nft::send_nft_to_sender`,
-					arguments: [
-						txb.pure.string(name),
-						txb.pure.string(description),
-						txb.pure.string(url),
-						txb.pure.string(frame),
-						txb.object('0x8'),
-						betAmountCoin,
-						txb.object(
-							'0xd624c06612c96e33827a15ae361b0e224e1015cd83d3ed5875b15ef9ac690247',
-						),
-						txb.object(
-							'0x69e362bd7b8a566cdba86da661c040d47663db28df773c43cc97c8158173b3c6',
-						),
-					],
-				})
+		return {
+			name: nft_weapon,
+			description: nft_description,
+			url: nft_img_url,
+			frame: nft_frame,
+		}
+	}
 
-				signAndExecuteTransaction(
-					{
-						transactionBlock: txb,
-						chain: 'sui:mainnet',
-					},
-					{
-						onSuccess: (result) => {
-							console.log('Executed transaction block', result)
-							setDigest(result.digest)
-						},
-						onError: (err) => {
-							setError(err.message)
-							console.error('Failed to mint NFT:', err)
-						},
-					},
-				)
-			} catch (err) {
-				setError(err.message)
-				console.error('Failed to mint NFT:', err)
+	const handleMint = useCallback(async () => {
+		try {
+			if (!currentAccount) {
+				throw new Error('No account connected')
 			}
-		},
-		[currentAccount, signAndExecuteTransaction],
-	)
+
+			if (!canMint) {
+				throw new Error('Minting not available in current scene')
+			}
+
+			const nftProps = validateNFTProperties()
+
+			const txb = new Transaction()
+			txb.setSender(currentAccount.address)
+
+			const betAmountCoin = txb.splitCoins(txb.gas, [200000000])
+			if (!betAmountCoin) {
+				throw new Error('Failed to create transaction coin')
+			}
+
+			txb.moveCall({
+				target: `${PACKAGE_ADDRESS}::suilaxy_nft::send_nft_to_sender`,
+				arguments: [
+					txb.pure.string(nftProps.name),
+					txb.pure.string(nftProps.description),
+					txb.pure.string(nftProps.url),
+					txb.pure.string(nftProps.frame),
+					txb.object('0x8'),
+					betAmountCoin,
+					txb.object(
+						'0xd624c06612c96e33827a15ae361b0e224e1015cd83d3ed5875b15ef9ac690247',
+					),
+					txb.object(
+						'0x69e362bd7b8a566cdba86da661c040d47663db28df773c43cc97c8158173b3c6',
+					),
+				],
+			})
+
+			await signAndExecuteTransaction(
+				{
+					transactionBlock: txb,
+					chain: 'sui:mainnet',
+				},
+				{
+					onSuccess: (result) => {
+						setNftState((prev) => ({
+							...prev,
+							digest: result.digest,
+							error: null,
+						}))
+						EventBus.emit('mint-success', { digest: result.digest })
+						console.log('Transaction successful:', result)
+					},
+					onError: (error) => {
+						setNftState((prev) => ({ ...prev, error: error.message }))
+						EventBus.emit('mint-error', { error: error.message })
+						console.error('Mint failed:', error)
+					},
+				},
+			)
+		} catch (error) {
+			setNftState((prev) => ({ ...prev, error: error.message }))
+			EventBus.emit('mint-error', { error: error.message })
+			console.error('Mint error:', error)
+		}
+	}, [currentAccount, signAndExecuteTransaction, canMint])
 
 	const handleDonation = useCallback(
 		async (donationAmountMist) => {
 			try {
 				if (!currentAccount) throw new Error('No account connected')
+
 				const txb = new Transaction()
 				txb.setSender(currentAccount.address)
 				txb.setGasBudget(10000000)
+
 				const donationCoin = txb.splitCoins(txb.gas, [donationAmountMist])
 				txb.transferObjects([donationCoin], txb.pure.address(DONATION_ADDRESS))
 
@@ -124,69 +149,61 @@ const SuiLoginUI = () => {
 					},
 					{
 						onSuccess: (result) => {
-							console.log('Donation successful:', result)
 							EventBus.emit('donation-success', {
 								amount: donationAmountMist,
 								digest: result.digest,
 							})
 						},
-						onError: (err) => {
-							console.error('Donation failed:', err)
-							EventBus.emit('donation-error', { error: err.message })
+						onError: (error) => {
+							EventBus.emit('donation-error', { error: error.message })
 						},
 					},
 				)
-			} catch (err) {
-				console.error('Donation error:', err)
-				EventBus.emit('donation-error', { error: err.message })
+			} catch (error) {
+				EventBus.emit('donation-error', { error: error.message })
 			}
 		},
 		[currentAccount, signAndExecuteTransaction],
 	)
 
 	useEffect(() => {
-		const handleProcessDonation = (data) => handleDonation(data.amount)
-		const handleMintClicked = () => handleMint(name, description, frame, url)
-
 		const handleSceneReady = (eventData) => {
-			if (currentAccount) {
-				gameSettings.userActive = true
-				gameSettings.userWalletAdress = currentAccount.address
-				EventBus.emit('wallet-connected', { connected: true })
-			} else {
-				gameSettings.userActive = false
-				gameSettings.userWalletAdress = ''
-				EventBus.emit('wallet-connected', { connected: false })
-			}
-
 			if (eventData?.key?.callingScene === 'mintingScreen') {
+				setCanMint(true)
 				phaserRef.current = eventData.key.callingScene
+
+				// Update NFT state when entering minting screen
 				const { name, frame, description, url } = eventData.nftProperties
-				setName(name || '')
-				setDescription(description || '')
-				setUrl(url || '')
-				setFrame(frame || '')
+				setNftState((prev) => ({
+					...prev,
+					name: name || '',
+					frame: frame || '',
+					description: description || '',
+					url: url || '',
+				}))
+			} else {
+				setCanMint(false)
 			}
 		}
 
-		EventBus.on('current-scene-ready', handleSceneReady)
-		EventBus.on('mint-nft-clicked', handleMintClicked)
-		EventBus.on('process-donation', handleProcessDonation)
-
-		return () => {
-			EventBus.off('current-scene-ready', handleSceneReady)
-			EventBus.off('mint-nft-clicked', handleMintClicked)
-			EventBus.off('process-donation', handleProcessDonation)
+		const eventHandlers = {
+			'current-scene-ready': handleSceneReady,
+			'mint-nft-clicked': handleMint,
+			'process-donation': (data) => handleDonation(data.amount),
 		}
-	}, [
-		currentAccount,
-		name,
-		description,
-		frame,
-		url,
-		handleMint,
-		handleDonation,
-	])
+
+		// Register all event handlers
+		Object.entries(eventHandlers).forEach(([event, handler]) => {
+			EventBus.on(event, handler)
+		})
+
+		// Cleanup function
+		return () => {
+			Object.entries(eventHandlers).forEach(([event, handler]) => {
+				EventBus.off(event, handler)
+			})
+		}
+	}, [handleMint, handleDonation])
 
 	return <ConnectButton />
 }

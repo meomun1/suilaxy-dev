@@ -117,9 +117,11 @@ class SelectUtility extends Phaser.Scene {
 		this.selectedFighterName = '1'
 		this.selectedArtifact = 1
 		this.infoCardVisible = false
+		this.powerCardVisible = true
 		this.artifactDetails = []
 		this.fighterDetails = []
 		this.infoCard = null
+		// this.powerCard = null
 		this.callingScene = 'selectUtility'
 
 		// console.log(
@@ -186,6 +188,10 @@ class SelectUtility extends Phaser.Scene {
 			'assets/main-menu/select-utility/card-artifact.png',
 		)
 		this.load.image(
+			'card_power',
+			'assets/main-menu/select-utility/card-power.png',
+		)
+		this.load.image(
 			'card_info',
 			'assets/main-menu/select-utility/card-info.png',
 		)
@@ -229,6 +235,21 @@ class SelectUtility extends Phaser.Scene {
 		this.load.image(
 			'tier3_hover',
 			'assets/main-menu/select-utility/tier3-hover.png',
+		)
+
+		this.load.image(
+			'tier1_powertag',
+			'assets/main-menu/select-utility/tier1-powertag.png',
+		)
+
+		this.load.image(
+			'tier2_powertag',
+			'assets/main-menu/select-utility/tier2-powertag.png',
+		)
+
+		this.load.image(
+			'tier3_powertag',
+			'assets/main-menu/select-utility/tier3-powertag.png',
 		)
 
 		// Load BUTTONS
@@ -319,7 +340,6 @@ class SelectUtility extends Phaser.Scene {
 		this.currentArtifactPage = 0
 
 		// Load saved selection from localStorage
-		// console.log('Current wallet:', gameSettings.userWalletAdress)
 		this.loadSelection()
 		/* ----------------------------INIT---------------------------- */
 
@@ -352,6 +372,7 @@ class SelectUtility extends Phaser.Scene {
 		if (this.infoCardVisible) {
 			this.createInfoCard()
 		}
+		this.createPowerCard()
 
 		this.fighterCard = this.createFighterCard(
 			config.width / 4.1,
@@ -364,11 +385,13 @@ class SelectUtility extends Phaser.Scene {
 			config.height / 2.1,
 		)
 		this.artifactCard.setVisible(this.selectedTab === 'artifact')
+
 		/* ----------------------------UI SECTION---------------------------- */
 
 		/* ----------------------------UPDATE---------------------------- */
 		this.updateCardVisibility()
 		this.updateInfoCard()
+		this.updatePowerCard()
 		/* ----------------------------UPDATE---------------------------- */
 
 		/* ----------------------------EVENT LISTENERS---------------------------- */
@@ -566,6 +589,11 @@ class SelectUtility extends Phaser.Scene {
 				this.artifactPaginationContainer.setVisible(
 					this.selectedTab === 'artifact',
 				)
+			}
+
+			// Power card visibility
+			if (this.powerCard) {
+				this.powerCard.setVisible(this.selectedTab === 'artifact')
 			}
 		}
 	}
@@ -1111,6 +1139,7 @@ class SelectUtility extends Phaser.Scene {
 
 			console.log('Modified settings: ', modifiedSettings)
 			saveBaseStats(modifiedSettings)
+			requestAnimationFrame(() => this.updatePowerCard())
 		}
 
 		this.updateInfoCard()
@@ -1259,6 +1288,11 @@ class SelectUtility extends Phaser.Scene {
 	}
 
 	updateArtifactInfo() {
+		// Clear any existing attribute containers from fighter view
+		if (this.attributeTooltips) {
+			this.attributeTooltips.forEach((tooltip) => tooltip.destroy())
+			this.attributeTooltips = []
+		}
 		// Add early return for empty artifacts case
 		if (this.artifactDetails.length === 0) {
 			this.infoName?.setText('')
@@ -1355,6 +1389,7 @@ class SelectUtility extends Phaser.Scene {
 				.setOrigin(0.5, 0.5)
 
 			container.add([bg, shorthandText, valueText])
+			this.addAttributeHoverEffects(container, bg, tier, attr.name, attr.value)
 			this.attributeContainers.push(container)
 		})
 
@@ -1385,7 +1420,224 @@ class SelectUtility extends Phaser.Scene {
 			this.infoImage.setScale(1.3)
 		}
 	}
+
+	addAttributeHoverEffects(container, bg, tier, name, value) {
+		container.setInteractive(
+			new Phaser.Geom.Rectangle(
+				bg.x - bg.width / 2,
+				bg.y - bg.height / 2,
+				bg.width,
+				bg.height,
+			),
+			Phaser.Geom.Rectangle.Contains,
+		)
+
+		// Create tooltip in scene rather than container
+		const tooltip = this.add
+			.text(0, 0, `${name}: ${value}`, {
+				fontFamily: 'Pixelify Sans',
+				fontSize: '14px',
+				color: '#FFFFFF',
+				backgroundColor: '#000000',
+				padding: { x: 5, y: 3 },
+			})
+			.setDepth(1000)
+			.setVisible(false)
+
+		// Add tooltip to scene's cleanup list
+		this.attributeTooltips = this.attributeTooltips || []
+		this.attributeTooltips.push(tooltip)
+
+		container.on('pointerover', (pointer) => {
+			bg.setTexture(`tier${tier}_hover`)
+			tooltip.setPosition(
+				Phaser.Math.Clamp(pointer.x + 10, 0, config.width - tooltip.width),
+				Phaser.Math.Clamp(
+					pointer.y - tooltip.height - 10,
+					0,
+					config.height - tooltip.height,
+				),
+			)
+			tooltip.setVisible(true)
+		})
+
+		container.on('pointermove', (pointer) => {
+			tooltip.setPosition(
+				Phaser.Math.Clamp(pointer.x + 10, 0, config.width - tooltip.width),
+				Phaser.Math.Clamp(
+					pointer.y - tooltip.height - 10,
+					0,
+					config.height - tooltip.height,
+				),
+			)
+		})
+
+		container.on('pointerout', () => {
+			bg.setTexture(`tier${tier}`)
+			tooltip.setVisible(false)
+		})
+	}
 	/* ----------------------------INFO CARD---------------------------- */
+
+	/* ----------------------------POWER CARD---------------------------- */
+
+	createPowerCard() {
+		const x = config.width - 135 // Right side positioning
+		const y = config.height / 2.24 // Vertical positioning
+
+		// Create main card container
+		this.powerCard = this.add.container(0, 0)
+
+		// Add background
+		const cardBackground = this.add.image(x, y, 'card_power')
+		this.powerCard.add(cardBackground)
+
+		// Create container for stats
+		this.statsContainer = this.add.container(0, 0)
+		this.powerCard.add(this.statsContainer)
+
+		// Initial update
+		this.updatePowerCard()
+
+		// Set visibility
+		this.powerCard.setVisible(this.selectedTab === 'artifact')
+
+		return this.powerCard
+	}
+
+	updatePowerCard() {
+		if (!this.statsContainer) return
+
+		// First, destroy all existing stats elements
+		while (this.statsContainer.length > 0) {
+			const child = this.statsContainer.getFirst()
+			if (child) {
+				child.destroy()
+				this.statsContainer.remove(child)
+			}
+		}
+
+		// Calculate stat differences
+		const statDifferences = {
+			speed:
+				((gameSettings.basePlayerSpeed - gameSettings.playerSpeed) /
+					gameSettings.playerSpeed) *
+				100,
+			'bullet dmg':
+				((gameSettings.basePlayerBulletDamage -
+					gameSettings.playerBulletDamage) /
+					gameSettings.playerBulletDamage) *
+				100,
+			lifesteal:
+				(gameSettings.basePlayerLifesteal - gameSettings.playerLifesteal) * 100,
+			'bullet size':
+				((gameSettings.basePlayerBulletSize - gameSettings.playerBulletSize) /
+					gameSettings.playerBulletSize) *
+				100,
+			'max health':
+				((gameSettings.basePlayerMaxHealth - gameSettings.playerMaxHealth) /
+					gameSettings.playerMaxHealth) *
+				100,
+			armor: gameSettings.basePlayerArmor - gameSettings.playerArmor,
+			'health generation':
+				gameSettings.basePlayerHealthGeneration -
+				gameSettings.playerHealthGeneration,
+			'buff rate':
+				(gameSettings.basePlayerBuffRate - gameSettings.playerBuffRate) * 100,
+			'fire rate':
+				(Math.abs(
+					gameSettings.basePlayerFireRate - gameSettings.playerFireRate,
+				) /
+					gameSettings.playerFireRate) *
+				100,
+		}
+
+		const x = config.width - 135
+		const startY = config.height / 3.75
+		const spacing = 28
+
+		// Create power tags for each modified stat
+		let index = 0
+		Object.entries(statDifferences).forEach(([name, difference]) => {
+			if (Math.abs(difference) < 0.0001) return // Skip unmodified stats
+
+			const tier = ATTRIBUTE_TIERS[name] || 1
+			const y = startY + index * spacing
+			index++
+
+			// Add background tag based on tier
+			const tagBg = this.add.image(x - 45, y, `tier${tier}_powertag`)
+
+			// Format the stat name
+			const displayName = name
+				.split(' ')
+				.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+				.join(' ')
+
+			// Add stat name - Adjusted position to align with powertag
+			const statName = this.add
+				.text(x - 50, y, displayName, {
+					fontFamily: 'Pixelify Sans',
+					fontSize: '16px',
+					color: '#FFFFFF',
+					align: 'center',
+				})
+				.setOrigin(0.5, 0.5)
+
+			// Format value based on stat type
+			let displayValue = ''
+			let finalValue = difference
+
+			// We have 2 categories of stats: percentage and flat values
+			// Handle each category separately (number of decimal places, sign, etc.)
+			if (
+				name === 'speed' ||
+				name === 'lifesteal' ||
+				name === 'max health' ||
+				name === 'bullet size' ||
+				name === 'fire rate' ||
+				name === 'bullet dmg' ||
+				name === 'buff rate'
+			) {
+				// Percentage values
+				if (Number.isInteger(finalValue)) {
+					displayValue = `+${finalValue.toFixed(0)}%`
+				} else {
+					displayValue = `+${finalValue.toFixed(1)}%`
+				}
+			} else if (name === 'armor' || name === 'health generation') {
+				// Flat values
+				if (Number.isInteger(finalValue)) {
+					displayValue = `+${finalValue.toFixed(0)}`
+				} else {
+					displayValue = `${finalValue.toFixed(1)}`
+				}
+			} else {
+				// Default to real values
+				if (Number.isInteger(finalValue)) {
+					displayValue = `${finalValue.toFixed(0)}`
+				} else {
+					displayValue = `${finalValue.toFixed(2)}`
+				}
+			}
+
+			// Add value with color based on tier
+			const valueColor =
+				tier === 3 ? '#FF00FF' : tier === 2 ? '#FFFF00' : '#00FF00'
+
+			const statValue = this.add
+				.text(x + 130, y, displayValue, {
+					fontFamily: 'Pixelify Sans',
+					fontSize: '16px',
+					color: valueColor,
+					align: 'right',
+				})
+				.setOrigin(1, 0.5)
+
+			this.statsContainer.add([tagBg, statName, statValue])
+		})
+	}
+	/* ----------------------------POWER CARD---------------------------- */
 
 	/* ----------------------------SAVE/LOAD---------------------------- */
 	saveSelection(fighter, artifact) {

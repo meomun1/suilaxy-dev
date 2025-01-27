@@ -190,7 +190,8 @@ class TitleScreen extends Phaser.Scene {
 		}
 
 		this.button_play.on('pointerdown', () => {
-			this.scene.start('mainMenu')
+			// this.scene.start('mainMenu')
+			this.scene.start('selectUtility')
 		})
 
 		this.button_play.on('pointerover', () => {

@@ -137,6 +137,7 @@ class CollideManager {
 		// Check if 0.5 seconds have passed since the last damage
 		if (currentTime - enemy.lastDamageTime >= 500) {
 			enemy.takeDamage(bullet.damage)
+			this.player.toLifeSteal()
 			enemy.lastDamageTime = currentTime
 		}
 
@@ -197,7 +198,7 @@ class CollideManager {
 
 	bulletHitPlayer(player, enemyBullet) {
 		enemyBullet.destroy()
-		const damageReduction = enemyBullet.damage * player.playerArmor * 0.1
+		const damageReduction = player.playerArmor
 		const finalDamage = enemyBullet.damage - damageReduction
 		player.takeDamage(finalDamage)
 	}
@@ -206,6 +207,7 @@ class CollideManager {
 		const damageReduction = enemy.damage * player.playerArmor * 0.1
 		const finalDamage = enemy.damage - damageReduction
 		player.takeDamage(finalDamage)
+		player.toLifeSteal()
 		enemy.takeDamage(player.damage)
 	}
 

@@ -3,6 +3,7 @@ import config from '../config/config'
 import Shield from '../objects/utilities/Shield'
 import EnemyManager from '../manager/EnemyManager.js'
 import KeyboardManager from '../manager/KeyboardManager.js'
+import SoundManager from '../manager/SoundManager.js'
 import PlayerManager from '../manager/PlayerManager.js'
 import CollideManager from '../manager/CollideManager.js'
 import GuiManager from '../manager/GuiManager.js'
@@ -384,6 +385,7 @@ class TutorialScreen extends Phaser.Scene {
 				this.spacebar = this.input.keyboard.addKey(
 					Phaser.Input.Keyboard.KeyCodes.SPACE,
 				)
+				this.SoundManager = new SoundManager(scene)
 			},
 			null,
 			this,
@@ -437,17 +439,17 @@ class TutorialScreen extends Phaser.Scene {
 		// Move the background
 		this.background.tilePositionY -= BACKGROUND_SCROLL_SPEED
 
-		this.time.delayedCall(
-			13500,
-			() => {
+		this.time.addEvent({
+			delay: 13500,
+			callback: () => {
 				if (this.PlayerManager) {
 					this.PlayerManager.movePlayer()
 					this.PlayerManager.healthPlayer()
 				}
 			},
-			null,
-			this,
-		)
+			callbackScope: this,
+			loop: true,
+		})
 
 		if (this.player.health <= 0) {
 			this.gameOver()

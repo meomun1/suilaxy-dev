@@ -223,32 +223,37 @@ class PowerScreen extends Phaser.Scene {
 	handleUpgradeChoice(choice) {
 		switch (choice) {
 			case 'all':
+				// Speed
 				gameSettings.savePlayerSpeed =
 					gameSettings.savePlayerSpeed * 1.25 * gameSettings.savePlayerBuffRate
+				// Bullet damage
 				gameSettings.savePlayerBulletDamage =
 					gameSettings.savePlayerBulletDamage *
 					1.25 *
 					gameSettings.savePlayerBuffRate
+				// Lifesteal
 				gameSettings.savePlayerLifesteal =
 					gameSettings.savePlayerLifesteal *
 					1.25 *
 					gameSettings.savePlayerBuffRate
+				// Bullet speed
 				gameSettings.savePlayerBulletSpeed =
 					gameSettings.savePlayerBulletSpeed *
 					1.25 *
 					gameSettings.savePlayerBuffRate
+				// Max health
 				gameSettings.savePlayerMaxHealth =
 					gameSettings.savePlayerMaxHealth *
 					1.25 *
 					gameSettings.savePlayerBuffRate
+				// Bullet size
 				gameSettings.savePlayerBulletSize =
 					gameSettings.savePlayerBulletSize *
 					1.25 *
 					gameSettings.savePlayerBuffRate
-				gameSettings.savePlayerFireRate =
-					gameSettings.savePlayerFireRate *
-					1.25 *
-					gameSettings.savePlayerBuffRate
+				// Fire rate
+				gameSettings.savePlayerFireRate = gameSettings.savePlayerFireRate / 1.25
+				// Number of bullets
 				gameSettings.savePlayerNumberOfBullets =
 					gameSettings.savePlayerNumberOfBullets + 1
 				break

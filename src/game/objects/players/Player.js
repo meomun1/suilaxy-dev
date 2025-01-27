@@ -214,6 +214,10 @@ class Player extends Entity {
 	getCurrentHealth() {
 		return this.health
 	}
+
+	toLifeSteal() {
+		this.getHeal(this.lifestealRate * this.bulletDamage)
+	}
 }
 
 export default Player

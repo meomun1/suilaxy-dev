@@ -13,16 +13,16 @@ export const ATTRIBUTE_SHORTHANDS = {
 // Create the settings object
 const artifactSettings = {
 	attributeModifiers: {
-		SPD: (currentValue, count) => currentValue + count * 10,
+		SPD: (currentValue, count) => currentValue + count * 50,
 		DMG: (currentValue, count) => currentValue + count * 100,
 		HP: (currentValue, count) => currentValue + count * 500,
-		ARM: (currentValue, count) => currentValue + count * 5,
-		BDMG: (currentValue, count) => currentValue + count * 200,
+		ARM: (currentValue, count) => currentValue + count * 15,
+		BDMG: (currentValue, count) => currentValue + count * 150,
 		FRAT: (currentValue, count) => Math.max(currentValue - count * 100, 100),
 		BSIZ: (currentValue, count) => currentValue + count * 0.2,
-		BUFF: (currentValue, count) => currentValue + count * 0.1,
+		BUFF: (currentValue, count) => currentValue + count * 0.5,
 		LST: (currentValue, count) => currentValue + count * 0.05,
-		GEN: (currentValue, count) => currentValue + count * 2,
+		GEN: (currentValue, count) => currentValue + count * 0.05,
 	},
 
 	applyArtifactAttributes(gameSettings, artifact) {

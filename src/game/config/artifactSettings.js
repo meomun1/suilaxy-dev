@@ -20,7 +20,11 @@ const artifactSettings = {
 		BDMG: (currentValue, count) => currentValue + count * 150,
 		FRAT: (currentValue, count) => Math.max(currentValue - count * 100, 100),
 		BSIZ: (currentValue, count) => currentValue + count * 0.2,
-		BUFF: (currentValue, count) => currentValue + count * 0.5,
+		BUFF: (currentValue, count) => {
+			currentValue = Number(currentValue) || 0
+			count = Number(count) || 0
+			return currentValue + count * 0.5
+		},
 		LST: (currentValue, count) => currentValue + count * 0.05,
 		GEN: (currentValue, count) => currentValue + count * 0.05,
 	},
@@ -84,9 +88,8 @@ const artifactSettings = {
 						)
 						break
 					case 'BUFF':
-						modifiedSettings.basePlayerBuffRate = modifier(
-							modifiedSettings.basePlayerBuffRate,
-							attr.value,
+						modifiedSettings.basePlayerBuffRate = Math.round(
+							modifier(modifiedSettings.basePlayerBuffRate, attr.value),
 						)
 						break
 					case 'LST':

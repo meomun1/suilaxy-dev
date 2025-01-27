@@ -6,20 +6,20 @@ var gameSettings = {
 
 	// MODIFY STATS with artifacts/upgrades/or fighter selection
 	playerSpeed: 250, // original 250
-	playerBulletDamage: 5000, // original 100
+	playerBulletDamage: 300, // original 100
 	playerLifesteal: 0,
 	playerBulletSpeed: 400,
 	playerScore: 0,
 	playerNumberOfBullets: 1,
-	playerFireRate: 1500,
+	playerFireRate: 1000,
 	playerDefaultBulletSize: 1.2,
 	playerBulletSize: 1.2,
-	playerMaxHealth: 5000,
+	playerMaxHealth: 1000,
 	playerUpgradeThreshold: 300,
 	playerSize: 1,
 	playerArmor: 0,
 	playerHealthGeneration: 0,
-	playerBuffRate: 1,
+	playerBuffRate: 0,
 	playerHardMode: false,
 
 	// SAVE STATS player in levels
@@ -29,15 +29,15 @@ var gameSettings = {
 	savePlayerBulletSpeed: 400,
 	savePlayerScore: 0,
 	savePlayerNumberOfBullets: 1,
-	savePlayerFireRate: 1500,
+	savePlayerFireRate: 1000,
 	savePlayerDefaultBulletSize: 1.2,
 	savePlayerBulletSize: 1.2,
-	savePlayerMaxHealth: 5000,
+	savePlayerMaxHealth: 1000,
 	savePlayerUpgradeThreshold: 500,
 	savePlayerSize: 1,
 	savePlayerArmor: 0,
 	savePlayerHealthGeneration: 0,
-	savePlayerBuffRate: 1,
+	savePlayerBuffRate: 0,
 	saveplayerHardMode: false,
 
 	// Default player settings
@@ -54,8 +54,8 @@ var gameSettings = {
 	defaultPlayerUpgradeThreshold: 500,
 	defaultPlayerSize: 1,
 	defaultPlayerArmor: 0,
-	defaultPlayerHealthGeneration: 0.1,
-	defaultPlayerBuffRate: 1,
+	defaultPlayerHealthGeneration: 0,
+	defaultPlayerBuffRate: 0,
 	defaultplayerHardMode: false,
 
 	// // BASE STATS for player ( Can be used in fututre for reseting player stats)
@@ -72,9 +72,20 @@ var gameSettings = {
 	basePlayerUpgradeThreshold: 500, // ko quan tam
 	basePlayerSize: 1,
 	basePlayerArmor: 0, // 10-150
-	basePlayerHealthGeneration: 0.1, // 0.1 - 0.5
-	basePlayerBuffRate: 1, // 1 - 5
+	basePlayerHealthGeneration: 0, // 0.1 - 0.5
+	basePlayerBuffRate: 0, // 1 - 5
 	baseplayerHardMode: false, // ko quan tam
+
+	// MAX STATS for player
+	maxPlayerSpeed: 750,
+	maxPlayerBulletDamage: 1500,
+	maxPlayerLifesteal: 0.5,
+	maxPlayerFireRate: 500,
+	maxPlayerBulletSize: 3,
+	maxPlayerMaxHealth: 5000,
+	maxPlayerArmor: 150,
+	maxPlayerHealthGeneration: 0.5,
+	maxPlayerBuffRate: 5,
 
 	// enemy settings
 	// speed / bullet speed / health pack speed

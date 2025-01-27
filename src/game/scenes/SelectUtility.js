@@ -1520,35 +1520,48 @@ class SelectUtility extends Phaser.Scene {
 		// Calculate stat differences
 		const statDifferences = {
 			speed:
-				((gameSettings.basePlayerSpeed - gameSettings.playerSpeed) /
-					gameSettings.playerSpeed) *
+				((gameSettings.basePlayerSpeed - gameSettings.defaultPlayerSpeed) /
+					(gameSettings.maxPlayerSpeed - gameSettings.defaultPlayerSpeed)) *
 				100,
 			'bullet dmg':
 				((gameSettings.basePlayerBulletDamage -
-					gameSettings.playerBulletDamage) /
-					gameSettings.playerBulletDamage) *
+					gameSettings.defaultPlayerBulletDamage) /
+					(gameSettings.maxPlayerBulletDamage -
+						gameSettings.defaultPlayerBulletDamage)) *
 				100,
 			lifesteal:
-				(gameSettings.basePlayerLifesteal - gameSettings.playerLifesteal) * 100,
+				((gameSettings.basePlayerLifesteal -
+					gameSettings.defaultPlayerLifesteal) /
+					(gameSettings.maxPlayerLifesteal -
+						gameSettings.defaultPlayerLifesteal)) *
+				100,
 			'bullet size':
-				((gameSettings.basePlayerBulletSize - gameSettings.playerBulletSize) /
-					gameSettings.playerBulletSize) *
+				((gameSettings.basePlayerBulletSize -
+					gameSettings.defaultPlayerBulletSize) /
+					(gameSettings.maxPlayerBulletSize -
+						gameSettings.defaultPlayerBulletSize)) *
 				100,
 			'max health':
-				((gameSettings.basePlayerMaxHealth - gameSettings.playerMaxHealth) /
-					gameSettings.playerMaxHealth) *
+				((gameSettings.basePlayerMaxHealth -
+					gameSettings.defaultPlayerMaxHealth) /
+					(gameSettings.maxPlayerMaxHealth -
+						gameSettings.defaultPlayerMaxHealth)) *
 				100,
-			armor: gameSettings.basePlayerArmor - gameSettings.playerArmor,
-			'health generation':
-				gameSettings.basePlayerHealthGeneration -
-				gameSettings.playerHealthGeneration,
+			armor: gameSettings.basePlayerArmor,
+			'health generation': gameSettings.basePlayerHealthGeneration,
 			'buff rate':
-				(gameSettings.basePlayerBuffRate - gameSettings.playerBuffRate) * 100,
+				((gameSettings.basePlayerBuffRate -
+					gameSettings.defaultPlayerBuffRate) /
+					(gameSettings.maxPlayerBuffRate -
+						gameSettings.defaultPlayerBuffRate)) *
+				100,
 			'fire rate':
 				(Math.abs(
-					gameSettings.basePlayerFireRate - gameSettings.playerFireRate,
+					gameSettings.defaultPlayerFireRate - gameSettings.basePlayerFireRate,
 				) /
-					gameSettings.playerFireRate) *
+					Math.abs(
+						gameSettings.defaultPlayerFireRate - gameSettings.maxPlayerFireRate,
+					)) *
 				100,
 		}
 
@@ -1602,8 +1615,10 @@ class SelectUtility extends Phaser.Scene {
 				// Percentage values
 				if (Number.isInteger(finalValue)) {
 					displayValue = `+${finalValue.toFixed(0)}%`
+					console.log('finalValue one:', finalValue)
 				} else {
 					displayValue = `+${finalValue.toFixed(1)}%`
+					console.log('finalValue second:', finalValue)
 				}
 			} else if (name === 'armor' || name === 'health generation') {
 				// Flat values

@@ -1,7 +1,10 @@
+import gameSettings from '../config/gameSettings.js'
+
 class PlayerManager {
 	constructor(scene, player, selectedPlayerIndex, roomNumber) {
 		this.scene = scene
 		this.player = player
+		this.player.speed = gameSettings.savePlayerSpeed
 		this.cursorKeys = scene.input.keyboard.createCursorKeys()
 		// Add WASD keys
 		this.wasdKeys = scene.input.keyboard.addKeys({
@@ -10,7 +13,7 @@ class PlayerManager {
 			left: 'A',
 			right: 'D',
 		})
-		this.selectedPlayerIndex = selectedPlayerIndex
+		this.selectedPlayerIndex = selectedPlayerIndex // for PVP
 		this.roomNumber = roomNumber
 		this.frameCounter = 0
 	}
@@ -18,9 +21,9 @@ class PlayerManager {
 	healthPlayer() {
 		this.frameCounter++
 		// Check if one second has passed (60 frames)
-		if (this.frameCounter >= 60) {
-			this.player.health += this.player.healthGeneration * this.player.maxHealth
+		if (this.frameCounter >= 60 && this.player.health < this.player.maxHealth) {
 			this.frameCounter = 0 // Reset the counter
+			this.player.getHeal(this.player.healthGeneration * this.player.maxHealth)
 		}
 	}
 

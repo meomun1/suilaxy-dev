@@ -20,7 +20,7 @@ class BoundBullet extends Entity {
 		scene.physics.world.enableBody(this)
 		scene.enemyProjectiles.add(this)
 
-		this.damage = 50
+		this.damage = gameSettings.enemyBulletDamage
 		this.setDepth(1)
 
 		this.body.setSize(16, 16, true)

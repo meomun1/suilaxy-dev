@@ -1,6 +1,6 @@
 import gameSettings from '../config/gameSettings'
 
-// This will apply stats to game from save stats
+// setting = save
 export const gameStats = () => {
 	gameSettings.playerSpeed = gameSettings.savePlayerSpeed
 	gameSettings.playerBulletDamage = gameSettings.savePlayerBulletDamage
@@ -19,7 +19,7 @@ export const gameStats = () => {
 	gameSettings.playerBuffRate = gameSettings.savePlayerBuffRate
 }
 
-// This will save stats after each game
+// save = setting
 export const saveStats = (player) => {
 	gameSettings.savePlayerSpeed = player.speed
 	gameSettings.savePlayerBulletDamage = player.bulletDamage
@@ -53,13 +53,16 @@ export const saveBaseStats = (base) => {
 	gameSettings.basePlayerBuffRate = base.basePlayerBuffRate //
 
 	// Default
-	gameSettings.basePlayerScore = 0
-	gameSettings.basePlayerNumberOfBullets = 1
-	gameSettings.basePlayerSize = 1
-	gameSettings.basePlayerBulletSpeed = 250
-	gameSettings.basePlayerDefaultBulletSize = 1.2
-	gameSettings.basePlayerUpgradeThreshold = 500
-	gameSettings.baseplayerHardMode = false
+	gameSettings.basePlayerScore = gameSettings.defaultPlayerScore
+	gameSettings.basePlayerNumberOfBullets =
+		gameSettings.defaultPlayerNumberOfBullets
+	gameSettings.basePlayerSize = gameSettings.defaultPlayerSize
+	gameSettings.basePlayerBulletSpeed = gameSettings.defaultPlayerBulletSpeed
+	gameSettings.basePlayerDefaultBulletSize =
+		gameSettings.defaultPlayerDefaultBulletSize
+	gameSettings.basePlayerUpgradeThreshold =
+		gameSettings.defaultPlayerUpgradeThreshold
+	gameSettings.baseplayerHardMode = gameSettings.defaultplayerHardMode
 }
 
 // This will set save stats to base stats
@@ -87,41 +90,30 @@ export const resetSaveStatsToBaseStats = () => {
 }
 
 export const resetBase = () => {
-	gameSettings.basePlayerSpeed = 250
-	gameSettings.basePlayerBulletDamage = 5000
-	gameSettings.basePlayerLifesteal = 0
-	gameSettings.basePlayerBulletSpeed = 400
-	gameSettings.basePlayerScore = 0
-	gameSettings.basePlayerNumberOfBullets = 1
-	gameSettings.basePlayerFireRate = 1500
-	gameSettings.basePlayerDefaultBulletSize = 1.2
-	gameSettings.basePlayerBulletSize = 1.2
-	gameSettings.basePlayerMaxHealth = 5000
-	gameSettings.basePlayerUpgradeThreshold = 500
-	gameSettings.basePlayerSize = 1
-	gameSettings.basePlayerArmor = 0
-	gameSettings.basePlayerHealthGeneration = 0
-	gameSettings.basePlayerBuffRate = 1
-	gameSettings.baseplayerHardMode = false
+	gameSettings.basePlayerSpeed = gameSettings.defaultPlayerSpeed
+	gameSettings.basePlayerBulletDamage = gameSettings.defaultPlayerBulletDamage
+	gameSettings.basePlayerLifesteal = gameSettings.defaultPlayerLifesteal
+	gameSettings.basePlayerBulletSpeed = gameSettings.defaultPlayerBulletSpeed
+	gameSettings.basePlayerScore = gameSettings.defaultPlayerScore
+	gameSettings.basePlayerNumberOfBullets =
+		gameSettings.defaultPlayerNumberOfBullets
+	gameSettings.basePlayerFireRate = gameSettings.defaultPlayerFireRate
+	gameSettings.basePlayerDefaultBulletSize =
+		gameSettings.defaultPlayerDefaultBulletSize
+	gameSettings.basePlayerBulletSize = gameSettings.defaultPlayerBulletSize
+	gameSettings.basePlayerMaxHealth = gameSettings.defaultPlayerMaxHealth
+	gameSettings.basePlayerUpgradeThreshold =
+		gameSettings.defaultPlayerUpgradeThreshold
+	gameSettings.basePlayerSize = gameSettings.defaultPlayerSize
+	gameSettings.basePlayerArmor = gameSettings.defaultPlayerArmor
+	gameSettings.basePlayerHealthGeneration =
+		gameSettings.defaultPlayerHealthGeneration
+	gameSettings.basePlayerBuffRate = gameSettings
+	gameSettings.baseplayerHardMode = gameSettings.defaultplayerHardMode
 }
 
 export const resetEverything = () => {
-	gameSettings.basePlayerSpeed = 250
-	gameSettings.basePlayerBulletDamage = 5000
-	gameSettings.basePlayerLifesteal = 0
-	gameSettings.basePlayerBulletSpeed = 400
-	gameSettings.basePlayerScore = 0
-	gameSettings.basePlayerNumberOfBullets = 1
-	gameSettings.basePlayerFireRate = 1500
-	gameSettings.basePlayerDefaultBulletSize = 1.2
-	gameSettings.basePlayerBulletSize = 1.2
-	gameSettings.basePlayerMaxHealth = 5000
-	gameSettings.basePlayerUpgradeThreshold = 500
-	gameSettings.basePlayerSize = 1
-	gameSettings.basePlayerArmor = 0
-	gameSettings.basePlayerHealthGeneration = 0
-	gameSettings.basePlayerBuffRate = 1
-	gameSettings.baseplayerHardMode = false
+	resetBase()
 
 	resetSaveStatsToBaseStats()
 

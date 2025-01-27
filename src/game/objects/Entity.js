@@ -24,7 +24,6 @@ class Entity extends Phaser.GameObjects.Sprite {
 			this.hpBar.y = this.y + 30
 		} else if (this.y >= config.height + 1000 || this.y < -1000) {
 			this.hpBar.destroy()
-			console.log('con co be be ')
 		} else {
 			this.hpBar.y = this.y + 120
 		}

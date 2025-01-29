@@ -9,6 +9,7 @@ import {
 	bulletSprites,
 	effectSprites,
 	additionalEffectSprites,
+	loadPlayerSpriteSheetNormal,
 } from '../utils/loadSpriteSheets.js'
 import { loadAudio } from '../utils/loadAudio.js'
 import { createAnimationForLoading } from '../utils/loadAnimations.js'
@@ -28,6 +29,7 @@ class LoadingScreen extends Phaser.Scene {
 	preload() {
 		loadImages(this)
 		loadSpriteSheets(this)
+		loadPlayerSpriteSheetNormal(this)
 		loadAudio(this)
 
 		// Load the appropriate spritesheet based on selectedPlayerIndex

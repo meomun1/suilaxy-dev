@@ -16,6 +16,7 @@ import { EventBus } from '../EventBus.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 import SpecialPlayers from '../objects/players/SpecialPlayers.js'
 import { resetSaveStatsToBaseStats, gameStats } from '../utils/adjustStats.js'
+import { createShipAnimations } from '../utils/initForGameScene.js'
 import { shutdown } from '../utils/endGamescene.js'
 
 const BACKGROUND_SCROLL_SPEED = 0.5
@@ -50,6 +51,8 @@ class TutorialScreen extends Phaser.Scene {
 		this.background.setOrigin(0, 0)
 
 		this.createTutorialText()
+
+		createShipAnimations(this)
 
 		this.createObject()
 
@@ -96,47 +99,6 @@ class TutorialScreen extends Phaser.Scene {
 		//SHIELD
 		this.shield = new Shield(this, this.player)
 		this.shield.play('shield_anim')
-
-		console.log('Save Player Speed: ', gameSettings.savePlayerSpeed)
-		console.log(
-			'Save Player Bullet Damage: ',
-			gameSettings.savePlayerBulletDamage,
-		)
-		console.log('Save Player Lifesteal: ', gameSettings.savePlayerLifesteal)
-		console.log(
-			'Save Player Bullet Speed: ',
-			gameSettings.savePlayerBulletSpeed,
-		)
-		console.log('Save Player Score: ', gameSettings.savePlayerScore)
-		console.log(
-			'Save Player Number Of Bullets: ',
-			gameSettings.savePlayerNumberOfBullets,
-		)
-		console.log('Save Player Fire Rate: ', gameSettings.savePlayerFireRate)
-		console.log(
-			'Save Player Default Bullet Size: ',
-			gameSettings.savePlayerDefaultBulletSize,
-		)
-		console.log('Save Player Bullet Size: ', gameSettings.savePlayerBulletSize)
-		console.log('Save Player Max Health: ', gameSettings.savePlayerMaxHealth)
-		console.log(
-			'Save Player Upgrade Threshold: ',
-			gameSettings.savePlayerUpgradeThreshold,
-		)
-		console.log('Save Player Size: ', gameSettings.savePlayerSize)
-		console.log('Save Player Armor: ', gameSettings.savePlayerArmor)
-		console.log('Base Player Armor: ', gameSettings.basePlayerArmor)
-		console.log(
-			'Save Player Health Generation: ',
-			gameSettings.savePlayerHealthGeneration,
-		)
-		console.log('Save Player Buff Rate: ', gameSettings.savePlayerBuffRate)
-		console.log('Save Player Hard Mode: ', gameSettings.saveplayerHardMode)
-
-		console.log('Player Index ', gameSettings.selectedPlayerIndex)
-		console.log('Artifact Index ', gameSettings.selectedArtifactIndex)
-		console.log('User Active ', gameSettings.userActive)
-		console.log('Wallet Connected ', gameSettings.userWalletAdress)
 	}
 
 	createMechanic() {
@@ -385,7 +347,7 @@ class TutorialScreen extends Phaser.Scene {
 				this.spacebar = this.input.keyboard.addKey(
 					Phaser.Input.Keyboard.KeyCodes.SPACE,
 				)
-				this.SoundManager = new SoundManager(scene)
+				this.SoundManager = new SoundManager(this)
 			},
 			null,
 			this,
@@ -439,17 +401,10 @@ class TutorialScreen extends Phaser.Scene {
 		// Move the background
 		this.background.tilePositionY -= BACKGROUND_SCROLL_SPEED
 
-		this.time.addEvent({
-			delay: 13500,
-			callback: () => {
-				if (this.PlayerManager) {
-					this.PlayerManager.movePlayer()
-					this.PlayerManager.healthPlayer()
-				}
-			},
-			callbackScope: this,
-			loop: true,
-		})
+		// if (this.PlayerManager !== undefined) {
+		// 	this.PlayerManager.movePlayer()
+		// 	this.PlayerManager.healthPlayer()
+		// }
 
 		if (this.player.health <= 0) {
 			this.gameOver()

@@ -107,7 +107,7 @@ class ProjectileManager {
 
 	callEnemyBulletLv2() {
 		this.scene.time.addEvent({
-			delay: 750, // 1000 milliseconds = 1 second
+			delay: 1000, // 1000 milliseconds = 1 second
 			callback: () => {
 				this.scene.miniBoss.shootChaseBullet(this.scene, this.scene.miniBoss)
 				this.scene.bug3_2.shootBoundBullet(this.scene, this.scene.bug3_2)

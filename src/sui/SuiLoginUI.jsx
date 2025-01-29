@@ -10,7 +10,7 @@ import { EventBus } from '../game/EventBus'
 import gameSettings from '../game/config/gameSettings'
 
 const PACKAGE_ADDRESS =
-	'0x4e3c52b995cc807025ee73b884d808c08c4f68533c9b1a37af62725a3feb2146'
+	'0x040766b24fccda3b09298c2551d6ef9cb513cefba99ba343ce3a7b4d72106f81'
 const DONATION_ADDRESS =
 	'0xa84a74d18762c8981749f539849f72888ffe554069d6b37451aff73d6c20c171'
 
@@ -77,7 +77,7 @@ const SuiLoginUI = () => {
 			const txb = new Transaction()
 			txb.setSender(currentAccount.address)
 
-			const betAmountCoin = txb.splitCoins(txb.gas, [200000000])
+			const betAmountCoin = txb.splitCoins(txb.gas, [600000000])
 			if (!betAmountCoin) {
 				throw new Error('Failed to create transaction coin')
 			}
@@ -92,10 +92,10 @@ const SuiLoginUI = () => {
 					txb.object('0x8'),
 					betAmountCoin,
 					txb.object(
-						'0xd624c06612c96e33827a15ae361b0e224e1015cd83d3ed5875b15ef9ac690247',
+						'0xd0997ccc3fef6200ace9b5997059deedcff9fa5923f1eb4929e7e65d9ff8945e',
 					),
 					txb.object(
-						'0x69e362bd7b8a566cdba86da661c040d47663db28df773c43cc97c8158173b3c6',
+						'0x61df57646c283a22b8e35e628f6259560c8ee5b9ed3d06f172765d0b4c43f8d8',
 					),
 				],
 			})

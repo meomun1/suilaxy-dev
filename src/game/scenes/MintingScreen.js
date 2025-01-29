@@ -4,6 +4,8 @@ import gameSettings from '../config/gameSettings.js'
 import { EventBus } from '../EventBus.js'
 import GuiManager from '../manager/GuiManager.js'
 import InterfaceManager from './InterfaceScene.js'
+import { resetFromMint } from '../utils/adjustStats'
+import { shutdown } from '../utils/endGamescene.js'
 
 class MintingScreen extends Phaser.Scene {
 	constructor() {
@@ -228,6 +230,9 @@ class MintingScreen extends Phaser.Scene {
 		}
 
 		titleButton.on('pointerdown', () => {
+			this.sys.game.globals.bgMusic.stop()
+			this.events.once('shutdown', () => shutdown(this), this)
+			resetFromMint()
 			this.interfaceManager.goToTitleScreen(0)
 		})
 

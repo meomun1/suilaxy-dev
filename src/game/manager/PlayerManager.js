@@ -77,9 +77,10 @@ class PlayerManager {
 		}
 
 		// Set velocities
-		this.player.setVelocityX(xVelocity)
-		this.player.setVelocityY(yVelocity)
-
+		if (this.player.body) {
+			this.player.body.velocity.x = xVelocity
+			this.player.body.velocity.y = yVelocity
+		}
 		// Play animation based on the velocities
 		if (this.player.anims.currentAnim.key !== animationKey) {
 			this.player.play(animationKey)

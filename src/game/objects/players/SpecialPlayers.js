@@ -29,14 +29,14 @@ class SpecialPlayers extends Player {
 
 	setDefaultAttributes() {
 		this.setScale(1)
-		this.maxHealth = gameSettings.playerMaxHealth
-		this.healthGeneration = 0
-		this.playerArmor = 1
-		this.lifestealRate = 0
-		this.playerBuffRate = 1
-		this.speed = 300
-		this.bulletDamage = gameSettings.playerBulletDamage
-		this.health = gameSettings.playerMaxHealth
+		this.maxHealth = gameSettings.savePlayerMaxHealth
+		this.healthGeneration = 0.05
+		this.playerArmor = gameSettings.savePlayerArmor
+		this.lifestealRate = gameSettings.savePlayerLifesteal
+		this.playerBuffRate = gameSettings.savePlayerBuffRate
+		this.speed = gameSettings.savePlayerSpeed
+		this.bulletDamage = gameSettings.savePlayerBulletDamage
+		this.health = gameSettings.savePlayerMaxHealth
 	}
 
 	resetGameSettings() {
@@ -52,25 +52,25 @@ class SpecialPlayers extends Player {
 
 	increaseSizeIncreaseHealth() {
 		this.setScale(1.5)
-		this.maxHealth = gameSettings.playerMaxHealth * 2
+		this.maxHealth = gameSettings.savePlayerMaxHealth * 3
 	}
 
 	enableHealthGeneration() {
-		this.healthGeneration = 0.1
+		this.healthGeneration = 0.1 + gameSettings.savePlayerHealthGeneration
 	}
 
 	increaseArmorDecreaseSpeed() {
-		this.playerArmor = 2
-		this.speed = 250
+		this.playerArmor = 20 + gameSettings.savePlayerArmor
+		this.speed = gameSettings.savePlayerSpeed - 150
 	}
 
 	enableLifeStealDecreaseHealth() {
 		this.lifestealRate = 0.5 + gameSettings.savePlayerLifesteal
-		this.health = gameSettings.playerMaxHealth / 2
+		this.health = gameSettings.savePlayerMaxHealth * 0.5
 	}
 
 	increaseBuffEffect() {
-		this.playerBuffRate = 1.5
+		this.playerBuffRate = 1 + gameSettings.savePlayerBuffRate
 	}
 
 	decreaseEnemyBulletSpeedIncreaseSize() {
@@ -80,7 +80,7 @@ class SpecialPlayers extends Player {
 
 	enableHardMode() {
 		this.health = 300
-		this.bulletDamage = gameSettings.playerBulletDamage * 2
+		this.bulletDamage = gameSettings.savePlayerBulletDamage * 2
 	}
 }
 

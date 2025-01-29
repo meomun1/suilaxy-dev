@@ -23,7 +23,7 @@ if (rootElement) {
 	ReactDOM.createRoot(rootElement).render(
 		<React.StrictMode>
 			<QueryClientProvider client={queryClient}>
-				<SuiClientProvider networks={networks} defaultNetwork="testnet">
+				<SuiClientProvider networks={networks} defaultNetwork="mainnet">
 					<WalletProvider>
 						<App />
 					</WalletProvider>

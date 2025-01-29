@@ -78,7 +78,6 @@ class KeyboardManager {
 			this.scene.scene.stop(this.scene.callingScene)
 			this.scene.scene.stop('pauseScreen')
 			gameSettings.playerScore = 0
-			this.scene.sys.game.globals.bgMusic.stop()
 		})
 	}
 }

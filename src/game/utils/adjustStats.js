@@ -113,10 +113,20 @@ export const resetBase = () => {
 }
 
 export const resetEverything = () => {
-	resetBase()
+	resetBase() // base to default
 
 	resetSaveStatsToBaseStats()
 
+	resetFromMint()
+
+	gameSettings.selectedPlayerIndex = 1
+	gameSettings.selectedArtifactIndex = 1
+	gameSettings.userActive = false
+
+	gameSettings.userWalletAdress = ''
+}
+
+export const resetFromMint = () => {
 	gameSettings.isBossDead = true
 	gameSettings.nft_id = 0
 	gameSettings.nft_hastag = 0
@@ -126,10 +136,4 @@ export const resetEverything = () => {
 	gameSettings.nft_frame_index = 0
 	gameSettings.nft_description = 'nft_description'
 	gameSettings.nft_img_url = 'nft_img_url'
-
-	gameSettings.selectedPlayerIndex = 1
-	gameSettings.selectedArtifactIndex = 1
-	gameSettings.userActive = false
-
-	gameSettings.userWalletAdress = ''
 }

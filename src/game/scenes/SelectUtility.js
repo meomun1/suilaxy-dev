@@ -11,9 +11,9 @@ import { EventBus } from '../EventBus.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 import { resetBase, saveBaseStats } from '../utils/adjustStats.js'
 // Sui full node endpoint
-const SUI_RPC_URL = 'https://fullnode.testnet.sui.io:443'
+const SUI_RPC_URL = 'https://fullnode.mainnet.sui.io:443'
 const artifactCollectionIdentifiers = [
-	'0x4e3c52b995cc807025ee73b884d808c08c4f68533c9b1a37af62725a3feb2146::create_nft_with_random_attributes::NFT',
+	'0x040766b24fccda3b09298c2551d6ef9cb513cefba99ba343ce3a7b4d72106f81::create_nft_with_random_attributes::NFT',
 ]
 // const fighterCollectionIdentifiers = [
 // 	'0xd1fdf1270ca89b28a68d02e1b0bf20b8438d72c51ca207ab3d1790ba528d6513::suilaxy_nft::TheFirstFighter',

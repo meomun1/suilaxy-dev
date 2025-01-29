@@ -68,7 +68,7 @@ const config = {
 	physics: {
 		default: 'arcade',
 		arcade: {
-			debug: true,
+			debug: false,
 		},
 	},
 	plugins: {

@@ -1,39 +1,43 @@
 {
-	"name": "template-react",
-	"description": "A Phaser 3 project template that demonstrates React communication and uses Vite for bundling.",
-	"version": "1.0.2",
+	"name": "suilaxy-dev",
+	"description": "A web-based game using Phaser 3 and React, bundled with Vite. Tailwind CSS and SCSS are used for styling.",
+	"version": "1.0.0",
 	"type": "module",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/phaserjs/template-react.git"
+		"url": "https://github.com/meomun1/suilaxy-dev"
 	},
-	"author": "Phaser Studio <support@phaser.io> (https://phaser.io/)",
-	"license": "MIT",
-	"licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
+	"author": "info@suilaxy.io",
+	"license": "",
 	"bugs": {
-		"url": "https://github.com/phaserjs/template-react/issues"
+		"url": "https://github.com/meomun1/suilaxy-dev/issues"
 	},
-	"homepage": "https://github.com/phaserjs/template-react#readme",
+	"homepage": "https://github.com/meomun1/suilaxy-dev#readme",
 	"keywords": [
 		"phaser",
 		"phaser3",
 		"react",
-		"vite"
+		"vite",
+		"tailwindcss",
+		"scss"
 	],
 	"scripts": {
 		"dev": "vite --config vite/config.dev.mjs",
-		"build": "npx vite build --config vite/config.prod.mjs",
-		"build:css": "sass --watch public/input.scss public/output.css"
+		"build": "vite build --config vite/config.prod.mjs",
+		"build:css": "sass --watch ./src/input.scss ./dist/output.css"
 	},
 	"dependencies": {
 		"@apollo/client": "^3.10.4",
+		"@fontsource/nova-square": "^5.1.1",
 		"@mysten/bcs": "^1.0.2",
 		"@mysten/dapp-kit": "^0.13.2",
 		"@mysten/enoki": "^0.4.0",
 		"@mysten/sui": "^1.7.0",
 		"@mysten/sui.js": "^0.54.1",
 		"@suiet/wallet-kit": "^0.2.24",
+		"@tailwindcss/vite": "^4.0.0",
 		"@tanstack/react-query": "^5.52.0",
+		"autoprefixer": "^10.4.20",
 		"axios": "^1.7.2",
 		"cors": "^2.8.5",
 		"datauri": "^1.1.0",
@@ -43,6 +47,7 @@
 		"graphql": "^16.8.1",
 		"jsdom": "^24.1.0",
 		"phaser": "^3.80.1",
+		"postcss": "^8.4.41",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-responsive": "^10.0.0",
@@ -67,6 +72,7 @@
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"eslint-plugin-react-refresh": "^0.4.5",
 		"sass": "^1.77.2",
+		"tailwindcss": "^3.4.17",
 		"terser": "^5.28.1",
 		"vite": "^5.3.4"
 	}

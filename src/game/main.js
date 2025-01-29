@@ -1,14 +1,10 @@
 import Phaser from 'phaser'
 import TitleScreen from './scenes/TitleScreen.js'
 import LoadingScreen from './scenes/LoadingScreen.js'
-import LoadingPvPScreen from './scenes/LoadingPVPScreen.js'
 import PlayingScreen from './scenes/PlayingScreen.js'
 import ChooseRoomScreen from './scenes/ChooseRoomScreen.js'
 import GameOver from './scenes/GameOver.js'
 import PauseScreen from './scenes/PauseScreen.js'
-import ChoosePlayer from './scenes/ChoosePlayer.js'
-import ChoosePlayerPVP from './scenes/ChoosePlayerPVP.js'
-import RoomPVPScreen from './scenes/RoomPVPScreen.js'
 import UpgradeScreen from './scenes/UpgradeScreen.js'
 import TutorialScreen from './scenes/TutorialScreen.js'
 import LevelTwoScreen from './scenes/LevelTwoScreen.js'
@@ -16,9 +12,17 @@ import LevelThreeScreen from './scenes/LevelThreeScreen.js'
 import BossScreen from './scenes/BossScreen.js'
 import CreditScreen from './scenes/CreditScreen.js'
 import NewShipScreen from './scenes/NewShipScreen.js'
-import NftScreen from './scenes/NftScreen.js'
-import PVPScreen from './scenes/PVPScreen.js'
+import MintingScreen from './scenes/MintingScreen.js'
 import PowerScreen from './scenes/PowerScreen.js'
+import MenuScreen from './scenes/MenuScreen.js'
+import SelectUtility from './scenes/SelectUtility.js'
+import NFTGenerate from './scenes/NFTGenerate.js'
+
+import PVPScreen from './scenes/PVP/PVPScreen.js'
+import LoadingPvPScreen from './scenes/PVP/LoadingPVPScreen.js'
+import ChoosePlayerPVP from './scenes/PVP/ChoosePlayerPVP.js'
+import RoomPVPScreen from './scenes/PVP/RoomPVPScreen.js'
+// import TestScene from './scenes/TestScene.js'
 
 const config = {
 	type: Phaser.AUTO,
@@ -32,11 +36,12 @@ const config = {
 	},
 	scene: [
 		TitleScreen,
+		MenuScreen,
 		LoadingScreen,
 		LoadingPvPScreen,
+		SelectUtility,
 		PlayingScreen,
 		ChooseRoomScreen,
-		ChoosePlayer,
 		ChoosePlayerPVP,
 		RoomPVPScreen,
 		PVPScreen,
@@ -50,7 +55,8 @@ const config = {
 		PowerScreen,
 		GameOver,
 		CreditScreen,
-		NftScreen,
+		NFTGenerate,
+		MintingScreen,
 	],
 	pixelArt: true,
 	input: {
@@ -62,7 +68,7 @@ const config = {
 	physics: {
 		default: 'arcade',
 		arcade: {
-			debug: false,
+			debug: true,
 		},
 	},
 	plugins: {

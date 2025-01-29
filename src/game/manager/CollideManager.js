@@ -1,3 +1,8 @@
+import Effect from '../objects/projectiles/Effect'
+import gameSettings from '../config/gameSettings.js'
+import Bug1 from '../objects/enemies/Bug1.js'
+import Boss from '../objects/enemies/Boss.js'
+
 class CollideManager {
 	constructor(
 		scene,
@@ -16,6 +21,15 @@ class CollideManager {
 		this.shield = shield
 		this.shieldActive = false
 		this.soundManager = soundManager
+
+		// add collision between effects and enemies
+		this.scene.physics.add.overlap(
+			this.scene.projectilesEffects,
+			this.enemies,
+			this.effectHitEnemy,
+			null,
+			this,
+		)
 
 		// Add collision between bullets and enemies
 		this.scene.physics.add.overlap(
@@ -79,8 +93,8 @@ class CollideManager {
 			})
 		}
 
+		// Add collision between player and shield packs
 		if (this.shieldPacks) {
-			// Add collision between player and shield packs
 			this.shieldPacks.forEach((shieldPack) => {
 				this.scene.physics.add.overlap(
 					this.player,
@@ -93,6 +107,7 @@ class CollideManager {
 		}
 	}
 
+	// Shield collision with enemy
 	shieldCollideEnemy(shield, enemy) {
 		if (this.shieldActive) {
 			enemy.takeDamage(100)
@@ -101,6 +116,7 @@ class CollideManager {
 		}
 	}
 
+	// Shield collision with bullet
 	shieldCollideBullet(shield, enemyBullet) {
 		if (this.shieldActive) {
 			enemyBullet.destroy()
@@ -109,18 +125,89 @@ class CollideManager {
 		}
 	}
 
+	// Bullet collision with enemy
 	bulletHitEnemy(enemy, bullet) {
-		bullet.destroy()
-		enemy.takeDamage(bullet.damage)
+		const currentTime = Date.now()
+
+		// Initialize lastDamageTime if it doesn't exist
+		if (!enemy.lastDamageTime) {
+			enemy.lastDamageTime = 0
+		}
+
+		// Check if 0.5 seconds have passed since the last damage
+		if (currentTime - enemy.lastDamageTime >= 500) {
+			enemy.takeDamage(bullet.damage)
+			this.player.toLifeSteal()
+			enemy.lastDamageTime = currentTime
+		}
+
+		if (
+			gameSettings.selectedPlayerIndex === 1 ||
+			gameSettings.selectedPlayerIndex === 6 ||
+			gameSettings.selectedPlayerIndex === 8
+		) {
+			return
+		} else if (enemy instanceof Boss) {
+			bullet.destroy()
+			let effect = new Effect(this.scene, bullet.x, bullet.y, 1)
+			effect.setTexture(`effect${gameSettings.selectedPlayerIndex}_texture`)
+			effect.play(`effect${gameSettings.selectedPlayerIndex}_anim`)
+
+			effect.on('animationcomplete', () => {
+				effect.destroy()
+			})
+
+			return
+		} else {
+			bullet.destroy()
+			let effect = new Effect(this.scene, bullet.x, bullet.y, 1)
+			effect.setTexture(`effect${gameSettings.selectedPlayerIndex}_texture`)
+			effect.play(`effect${gameSettings.selectedPlayerIndex}_anim`)
+
+			// Pass the effect to the effectHitEnemy method
+			this.effectHitEnemy(enemy, effect)
+
+			effect.on('animationcomplete', () => {
+				effect.destroy()
+				// Remove the effect from the enemy when the animation completes
+				enemy.setNotAffected()
+				// Reset the enemy's velocity
+			})
+		}
+
+		// Check for continued collision after 0.5 seconds
+		setTimeout(() => {
+			if (this.scene.physics.overlap(bullet, enemy)) {
+				this.bulletHitEnemy(enemy, bullet)
+			}
+		}, 1000)
+	}
+
+	effectHitEnemy(enemy, effect) {
+		if (
+			!(enemy instanceof Boss) &&
+			enemy &&
+			effect &&
+			!enemy.affectedStatus()
+		) {
+			// Check if the enemy is already affected by the effect
+			enemy.setIsAffected()
+			enemy.applyEffects(effect, gameSettings.selectedPlayerIndex)
+		}
 	}
 
 	bulletHitPlayer(player, enemyBullet) {
 		enemyBullet.destroy()
-		player.takeDamage(enemyBullet.damage)
+		const damageReduction = player.playerArmor
+		const finalDamage = enemyBullet.damage - damageReduction
+		player.takeDamage(finalDamage)
 	}
 
 	playerHitEnemy(player, enemy) {
-		player.takeDamage(enemy.damage)
+		const damageReduction = enemy.damage * player.playerArmor * 0.1
+		const finalDamage = enemy.damage - damageReduction
+		player.takeDamage(finalDamage)
+		player.toLifeSteal()
 		enemy.takeDamage(player.damage)
 	}
 

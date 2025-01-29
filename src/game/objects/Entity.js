@@ -1,6 +1,5 @@
 import Phaser from 'phaser'
 import config from '../config/config.js'
-import gameSettings from '../config/gameSettings.js'
 import DamageNumber from './ui/DamageNumber.js'
 import SoundManager from '../manager/SoundManager.js'
 class Entity extends Phaser.GameObjects.Sprite {
@@ -25,13 +24,12 @@ class Entity extends Phaser.GameObjects.Sprite {
 			this.hpBar.y = this.y + 30
 		} else if (this.y >= config.height + 1000 || this.y < -1000) {
 			this.hpBar.destroy()
-			console.log('con co be be ')
 		} else {
 			this.hpBar.y = this.y + 120
 		}
 	}
 
-	updateHealthBarValue(health, maxHealth) {
+	updateHealthBarValue() {
 		if (this.health < 0) {
 			this.hpBar.destroy()
 		} else {
@@ -101,14 +99,17 @@ class Entity extends Phaser.GameObjects.Sprite {
 	takeDamage(damage) {
 		if (!this.getData('isDead')) {
 			this.health -= damage
-			new DamageNumber(this.scene, this.x, this.y, damage)
+
+			if (this.health > 0) {
+				new DamageNumber(this.scene, this.x, this.y, damage)
+			}
 
 			// Check if the entity has a health bar before updating it
 			if (this.updateHealthBarValue) {
 				this.updateHealthBarValue()
 			}
 
-			if (this.health <= 0) {
+			if (this.health <= 0 && this) {
 				this.explode(true)
 				// Check if the entity has a health bar before destroying it
 				if (this.hpBar) {

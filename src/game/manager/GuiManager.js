@@ -46,7 +46,7 @@ class GuiManager {
 		this.createSimpleText(
 			config.width / 2,
 			config.height / 2 - 50,
-			'Pause',
+			'PAUSED',
 			'32px',
 			'#fff',
 			0.5,
@@ -64,7 +64,7 @@ class GuiManager {
 		this.createSimpleText(
 			config.width / 2,
 			config.height / 2 + 30,
-			'Press T to TitleScreen',
+			'Press T to Menu',
 			'24px',
 			'#fff',
 			0.5,
@@ -84,17 +84,8 @@ class GuiManager {
 		this.createSimpleText(
 			config.width / 2,
 			config.height / 2 - 60,
-			'Game Over',
-			'32px',
-			'#fff',
-			0.5,
-		)
-
-		this.createSimpleText(
-			config.width / 2,
-			config.height / 2,
-			'Press R to Restart',
-			'24px',
+			'GAME OVER',
+			'128px',
 			'#fff',
 			0.5,
 		)
@@ -102,16 +93,7 @@ class GuiManager {
 		this.createSimpleText(
 			config.width / 2,
 			config.height / 2 + 30,
-			'Press T back to title',
-			'24px',
-			'#fff',
-			0.5,
-		)
-
-		this.createSimpleText(
-			config.width / 2,
-			config.height / 2 + 60,
-			'Press L to Leaderboard',
+			'Artifact Searching in Progress',
 			'24px',
 			'#fff',
 			0.5,
@@ -170,7 +152,7 @@ class GuiManager {
 			},
 		)
 		textObject.setOrigin(0.5)
-		textObject.setShadow(3, 3, '#F27CA4', 2, false, true)
+		textObject.setShadow(3, 3, '#EFBA0C', 2, false, true)
 
 		this.scene.tweens.add({
 			targets: textObject,
@@ -180,6 +162,22 @@ class GuiManager {
 			yoyo: true,
 			alpha: 0.2,
 		})
+	}
+
+	createAnimatedTextMiddleNoTween(text, yOffset) {
+		const textObject = this.scene.add.text(
+			config.width / 2,
+			config.height / 2 + yOffset,
+			text,
+			{
+				fontFamily: 'Pixelify Sans',
+				fontSize: `${middleWidth / 5}px`,
+				color: '#F3F8FF',
+				align: 'center',
+			},
+		)
+		textObject.setOrigin(0.5)
+		textObject.setShadow(3, 3, '#EFBA0C', 2, false, true)
 	}
 
 	createAnimatedTextSize(text, yOffset, size) {

@@ -1,6 +1,8 @@
 import Phaser from 'phaser'
 import config from '../config/config'
 import gameSettings from '../config/gameSettings'
+import { shutdown } from '../utils/endGamescene'
+import { resetSaveStatsToBaseStats } from '../utils/adjustStats'
 
 class KeyboardManager {
 	constructor(scene, music) {
@@ -52,48 +54,30 @@ class KeyboardManager {
 		// Access keys using this.keys.spacebar and this.keys.P
 		if (Phaser.Input.Keyboard.JustDown(this.keys.P)) {
 			// Assuming config.pauseGame is a global variable
-			config.pauseGame = !config.pauseGame
-
-			if (config.pauseGame == true) {
-				this.scene.scene.launch('pauseScreen', {
-					key: this.scene.callingScene,
-				})
-				this.scene.scene.pause()
-			}
+			this.scene.scene.pause()
+			this.scene.scene.launch('pauseScreen', {
+				key: this.scene.callingScene,
+			})
 		}
 	}
 
 	unpauseGame() {
 		this.keys.P.on('down', () => {
-			config.pauseGame = false
 			this.scene.scene.resume(this.scene.callingScene)
 			this.scene.scene.stop()
 		})
 	}
 
-	titleScreen() {
+	menuScreen() {
 		this.keys.T.on('down', () => {
-			this.scene.scene.start('bootGame')
+			// reset stats
+			resetSaveStatsToBaseStats()
+			this.scene.scene.start('mainMenu')
 			let otherScene = this.scene.scene.get(this.scene.callingScene)
-			otherScene.shutdownPlayer()
+			otherScene.events.once('shutdown', () => shutdown(otherScene), otherScene)
 			this.scene.scene.stop(this.scene.callingScene)
 			this.scene.scene.stop('pauseScreen')
 			gameSettings.playerScore = 0
-			this.scene.sys.game.globals.bgMusic.stop()
-		})
-	}
-
-	restartGame() {
-		this.keys.R.on('down', () => {
-			this.scene.scene.start(this.scene.callingScene)
-			this.scene.scene.stop('gameOver')
-		})
-	}
-
-	showLeaderboard() {
-		this.keys.L.on('down', () => {
-			this.scene.scene.start('leaderboard')
-			this.scene.scene.stop('gameOver')
 		})
 	}
 }

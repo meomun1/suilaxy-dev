@@ -18,7 +18,6 @@ export const MobileSite = () => {
 					<span></span>
 					<span></span>
 				</a>
-				<h1 className="middle-barcode">this is suilaxy</h1>
 			</div>
 
 			{/* Bottom Section */}

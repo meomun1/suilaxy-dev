@@ -1,0 +1,522 @@
+[
+	{
+		"id": 0,
+		"name": "Red Nova",
+		"description": "The Red Nova was discovered on the ashes of Kronvaar Prime, a planet consumed by its own sun when it turned into a red giant. The Kronvaar forged this artifact as their world crumbled, infusing it with the last remnants of their civilization's energy. This weapon is a tribute to their resilience and rage against the encroaching darkness. It radiates the wrath of a world lost to fire, a reminder of the Kronvaar’s indomitable spirit. Those who wield it find themselves connected to the Kronvaar's final moments, feeling an insatiable urge for retribution against all who threaten them.",
+		"url": [
+			{
+				"id": 0,
+				"frame": "Bronze",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/0/0.png"
+			},
+			{
+				"id": 1,
+				"frame": "Silver",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/0/1.png"
+			},
+			{
+				"id": 2,
+				"frame": "Gold",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/0/2.png"
+			},
+			{
+				"id": 3,
+				"frame": "Platinum",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/0/3.png"
+			},
+			{
+				"id": 4,
+				"frame": "Diamond",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/0/4.png"
+			},
+			{
+				"id": 5,
+				"frame": "Master",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/0/5.png"
+			},
+			{
+				"id": 6,
+				"frame": "Grandmaster",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/0/6.png"
+			},
+			{
+				"id": 7,
+				"frame": "Challenger",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/0/7.png"
+			},
+			{
+				"id": 8,
+				"frame": "Legendary",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/0/8.png"
+			}
+		]
+	},
+	{
+		"id": 1,
+		"name": "Celestial Pulsecaster",
+		"description": "The Celestial Pulsecaster is a lost artifact of the Astrylian, an ancient species that once ruled the galaxy eons before the dawn of recorded history. Crafted using their deep knowledge of cosmic energy and temporal manipulation, this artifact channels the boundless power of starlight, firing pulses that resonate with the very frequencies of the universe. Encased in resilient alloy and infused with star-dust circuits, the Celestial Pulsecaster is a weapon of precision and awe, whispering secrets of the Astrylian legacy to those deemed worthy to wield it.",
+		"url": [
+			{
+				"id": 0,
+				"frame": "Bronze",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/1/0.png"
+			},
+			{
+				"id": 1,
+				"frame": "Silver",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/1/1.png"
+			},
+			{
+				"id": 2,
+				"frame": "Gold",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/1/2.png"
+			},
+			{
+				"id": 3,
+				"frame": "Platinum",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/1/3.png"
+			},
+			{
+				"id": 4,
+				"frame": "Diamond",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/1/4.png"
+			},
+			{
+				"id": 5,
+				"frame": "Master",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/1/5.png"
+			},
+			{
+				"id": 6,
+				"frame": "Grandmaster",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/1/6.png"
+			},
+			{
+				"id": 7,
+				"frame": "Challenger",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/1/7.png"
+			},
+			{
+				"id": 8,
+				"frame": "Legendary",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/1/8.png"
+			}
+		]
+	},
+	{
+		"id": 2,
+		"name": "Voidseeker",
+		"description": "The Voidseeker was found drifting near a collapsing wormhole on the edge of the known universe, believed to be a relic of the Or'kai, masters of Void manipulation. Scholars speculate that the weapon's core contains a fragment of a black hole, stabilized by ancient alien tech. Legends say that those who wield the Voidseeker can catch glimpses of alternate realities, and some claim it can even open pathways to hidden realms. It is not merely a weapon but a key to the mysteries of the cosmos, coveted by those brave (or foolish) enough to touch the Void.",
+		"url": [
+			{
+				"id": 0,
+				"frame": "Bronze",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/2/0.png"
+			},
+			{
+				"id": 1,
+				"frame": "Silver",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/2/1.png"
+			},
+			{
+				"id": 2,
+				"frame": "Gold",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/2/2.png"
+			},
+			{
+				"id": 3,
+				"frame": "Platinum",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/2/3.png"
+			},
+			{
+				"id": 4,
+				"frame": "Diamond",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/2/4.png"
+			},
+			{
+				"id": 5,
+				"frame": "Master",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/2/5.png"
+			},
+			{
+				"id": 6,
+				"frame": "Grandmaster",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/2/6.png"
+			},
+			{
+				"id": 7,
+				"frame": "Challenger",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/2/7.png"
+			},
+			{
+				"id": 8,
+				"frame": "Legendary",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/2/8.png"
+			}
+		]
+	},
+	{
+		"id": 3,
+		"name": "Nebula Enforcer",
+		"description": "The Nebula Enforcer was developed by the Astroforge Syndicate for use in their most covert operations, where precision and reliability could mean the difference between life and death. It has been a trusted sidearm of interstellar peacekeepers for decades, and each unit is uniquely calibrated to its wielder, enhancing synergy between human reflexes and energy-based technology. Legends tell of a Syndicate officer who used the Nebula Enforcer to end a multi-system conflict without taking a single life, using only the Electro Stun function to bring entire fleets to a halt. The Nebula Enforcer is not just a weapon; it's a statement of control in the chaos of the cosmos.",
+		"url": [
+			{
+				"id": 0,
+				"frame": "Bronze",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/3/0.png"
+			},
+			{
+				"id": 1,
+				"frame": "Silver",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/3/1.png"
+			},
+			{
+				"id": 2,
+				"frame": "Gold",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/3/2.png"
+			},
+			{
+				"id": 3,
+				"frame": "Platinum",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/3/3.png"
+			},
+			{
+				"id": 4,
+				"frame": "Diamond",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/3/4.png"
+			},
+			{
+				"id": 5,
+				"frame": "Master",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/3/5.png"
+			},
+			{
+				"id": 6,
+				"frame": "Grandmaster",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/3/6.png"
+			},
+			{
+				"id": 7,
+				"frame": "Challenger",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/3/7.png"
+			},
+			{
+				"id": 8,
+				"frame": "Legendary",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/3/8.png"
+			}
+		]
+	},
+	{
+		"id": 4,
+		"name": "Solaris Edge",
+		"description": "The Solaris Edge was once the prized weapon of the Solari Order, used to protect the galaxy from cosmic threats and uphold justice across the stars. Legends say it was crafted from the core of a dying sun, tempered by the last breath of a Solari High Priest. Only those who possess the courage and purity of spirit can wield it, for its power is as dangerous as it is magnificent. Many have sought the Solaris Edge, but only a chosen few have been able to withstand the intense solar energy coursing through the blade. It is a legacy of the Solari Order and a testament to their undying vigilance against the darkness of the universe.",
+		"url": [
+			{
+				"id": 0,
+				"frame": "Bronze",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/4/0.png"
+			},
+			{
+				"id": 1,
+				"frame": "Silver",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/4/1.png"
+			},
+			{
+				"id": 2,
+				"frame": "Gold",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/4/2.png"
+			},
+			{
+				"id": 3,
+				"frame": "Platinum",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/4/3.png"
+			},
+			{
+				"id": 4,
+				"frame": "Diamond",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/4/4.png"
+			},
+			{
+				"id": 5,
+				"frame": "Master",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/4/5.png"
+			},
+			{
+				"id": 6,
+				"frame": "Grandmaster",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/4/6.png"
+			},
+			{
+				"id": 7,
+				"frame": "Challenger",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/4/7.png"
+			},
+			{
+				"id": 8,
+				"frame": "Legendary",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/4/8.png"
+			}
+		]
+	},
+	{
+		"id": 5,
+		"name": "Galdera Aegis",
+		"description": "The Galdera Aegis was crafted in the final days of the Galderian civilization, during a time of galactic conflict. Forged within the heart of a dying star, it embodies the resilience and protective spirit of the Galderian people. Legends say that only those with a steadfast heart can wield its power, for the shield tests the strength and resolve of its bearer. The Galdera Aegis remains a symbol of hope, a relic of an ancient people's will to protect against the forces of darkness.",
+		"url": [
+			{
+				"id": 0,
+				"frame": "Bronze",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/5/0.png"
+			},
+			{
+				"id": 1,
+				"frame": "Silver",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/5/1.png"
+			},
+			{
+				"id": 2,
+				"frame": "Gold",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/5/2.png"
+			},
+			{
+				"id": 3,
+				"frame": "Platinum",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/5/3.png"
+			},
+			{
+				"id": 4,
+				"frame": "Diamond",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/5/4.png"
+			},
+			{
+				"id": 5,
+				"frame": "Master",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/5/5.png"
+			},
+			{
+				"id": 6,
+				"frame": "Grandmaster",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/5/6.png"
+			},
+			{
+				"id": 7,
+				"frame": "Challenger",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/5/7.png"
+			},
+			{
+				"id": 8,
+				"frame": "Legendary",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/5/8.png"
+			}
+		]
+	},
+	{
+		"id": 6,
+		"name": "Red Sentinel",
+		"description": "The Red Sentinel was crafted by the Titan Forge in response to an era of interstellar conflict, when conventional defenses could no longer withstand the advanced weaponry of their adversaries. Embedded with a plasma core derived from a captured supernova fragment, the shield’s energy source is virtually limitless. The Red Sentinel is a symbol of resilience and unyielding strength, feared by those who stand against it and respected by all who wield it. Few have the skill to control its immense power, and only the most disciplined warriors are entrusted with this relic.",
+		"url": [
+			{
+				"id": 0,
+				"frame": "Bronze",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/6/0.png"
+			},
+			{
+				"id": 1,
+				"frame": "Silver",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/6/1.png"
+			},
+			{
+				"id": 2,
+				"frame": "Gold",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/6/2.png"
+			},
+			{
+				"id": 3,
+				"frame": "Platinum",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/6/3.png"
+			},
+			{
+				"id": 4,
+				"frame": "Diamond",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/6/4.png"
+			},
+			{
+				"id": 5,
+				"frame": "Master",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/6/5.png"
+			},
+			{
+				"id": 6,
+				"frame": "Grandmaster",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/6/6.png"
+			},
+			{
+				"id": 7,
+				"frame": "Challenger",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/6/7.png"
+			},
+			{
+				"id": 8,
+				"frame": "Legendary",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/6/8.png"
+			}
+		]
+	},
+	{
+		"id": 7,
+		"name": "Starcrusher",
+		"description": "The Starcrusher was created by the Celestial Smiths in an age when their kind sought to defend the galaxy from marauding forces. Legends say it was wielded by Orin the Starbreaker, a warrior who could bring entire fleets to their knees with a single strike. It is a weapon that responds only to those with a boundless spirit and a firm resolve, as the energy within can be volatile. The Starcrusher is not merely a hammer—it is a fragment of the cosmos, a piece of the universe’s wrath waiting to be unleashed.",
+		"url": [
+			{
+				"id": 0,
+				"frame": "Bronze",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/7/0.png"
+			},
+			{
+				"id": 1,
+				"frame": "Silver",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/7/1.png"
+			},
+			{
+				"id": 2,
+				"frame": "Gold",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/7/2.png"
+			},
+			{
+				"id": 3,
+				"frame": "Platinum",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/7/3.png"
+			},
+			{
+				"id": 4,
+				"frame": "Diamond",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/7/4.png"
+			},
+			{
+				"id": 5,
+				"frame": "Master",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/7/5.png"
+			},
+			{
+				"id": 6,
+				"frame": "Grandmaster",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/7/6.png"
+			},
+			{
+				"id": 7,
+				"frame": "Challenger",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/7/7.png"
+			},
+			{
+				"id": 8,
+				"frame": "Legendary",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/7/8.png"
+			}
+		]
+	},
+	{
+		"id": 8,
+		"name": "Solarflare Scepter",
+		"description": "The Solarflare Scepter was created in the Helion Order's golden age as a tool of both protection and destruction. Legend has it that the first wielder of the scepter was a High Priest who could summon the power of the sun itself to vanquish darkness. The weapon’s core is said to contain a fragment of a sun, stabilized within a containment field designed by the Order’s most skilled engineers. Only those with a strong will and a clear purpose can wield the Solarflare Scepter, for it demands focus and discipline to control its fiery power.",
+		"url": [
+			{
+				"id": 0,
+				"frame": "Bronze",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/8/0.png"
+			},
+			{
+				"id": 1,
+				"frame": "Silver",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/8/1.png"
+			},
+			{
+				"id": 2,
+				"frame": "Gold",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/8/2.png"
+			},
+			{
+				"id": 3,
+				"frame": "Platinum",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/8/3.png"
+			},
+			{
+				"id": 4,
+				"frame": "Diamond",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/8/4.png"
+			},
+			{
+				"id": 5,
+				"frame": "Master",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/8/5.png"
+			},
+			{
+				"id": 6,
+				"frame": "Grandmaster",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/8/6.png"
+			},
+			{
+				"id": 7,
+				"frame": "Challenger",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/8/7.png"
+			},
+			{
+				"id": 8,
+				"frame": "Legendary",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/8/8.png"
+			}
+		]
+	},
+	{
+		"id": 9,
+		"name": "Nebula Fang",
+		"description": "The Nebula Fang was crafted during the Celestians' Golden Age, intended as a weapon of beauty and power for their greatest warriors. Legends say it was forged in the heart of a vibrant nebula, capturing its cosmic essence within a containment matrix to create a weapon of unparalleled elegance and lethality. Only those with a deep connection to the stars can wield the Nebula Fang, as its power is tied to the energy of the cosmos. It is said that wielders of the Fang feel the heartbeat of the universe itself, guiding their strikes and lending them strength beyond mortal limits.",
+		"url": [
+			{
+				"id": 0,
+				"frame": "Bronze",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/9/0.png"
+			},
+			{
+				"id": 1,
+				"frame": "Silver",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/9/1.png"
+			},
+			{
+				"id": 2,
+				"frame": "Gold",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/9/2.png"
+			},
+			{
+				"id": 3,
+				"frame": "Platinum",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/9/3.png"
+			},
+			{
+				"id": 4,
+				"frame": "Diamond",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/9/4.png"
+			},
+			{
+				"id": 5,
+				"frame": "Master",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/9/5.png"
+			},
+			{
+				"id": 6,
+				"frame": "Grandmaster",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/9/6.png"
+			},
+			{
+				"id": 7,
+				"frame": "Challenger",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/9/7.png"
+			},
+			{
+				"id": 8,
+				"frame": "Legendary",
+				"image": "https://pub-6fe5b035dcc2464fb086ecf502050173.r2.dev/artifact-nft/9/8.png"
+			}
+		]
+	}
+]

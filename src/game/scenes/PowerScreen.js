@@ -2,12 +2,17 @@ import Phaser from 'phaser'
 import config from '../config/config'
 import gameSettings from '../config/gameSettings'
 import GuiManager from '../manager/GuiManager'
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 import { EventBus } from '../EventBus.js'
 
 class PowerScreen extends Phaser.Scene {
 	constructor() {
 		super('powerScreen')
 		this.guiManager = new GuiManager(this)
+		this.upgradeKeys = []
+		this.selectedPowers = []
+		this.currentImages = []
+		this.currentTexts = []
 	}
 
 	preload() {
@@ -29,7 +34,11 @@ class PowerScreen extends Phaser.Scene {
 	}
 
 	create() {
-		// Get the calling scene name
+		EventBus.on('wallet-connected', handleWalletConnected, this)
+
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
 		this.guiManager.createBackground('background')
 
 		this.cameras.main.fadeIn(500, 0, 0, 0)
@@ -63,20 +72,46 @@ class PowerScreen extends Phaser.Scene {
 		// Display three random images
 		const centerX = config.width / 2
 		const centerY = config.height / 2 - config.height / 32
-		const imageWidth = 100 // Assuming each image has an approximate width of 100 pixels
+		const imageWidth = 100
 		const totalWidth = 3 * imageWidth
-		const spacing = (config.width - totalWidth) / 4 // Calculate spacing dynamically
+		const spacing = (config.width - totalWidth) / 4
 
 		const images = []
 		const texts = []
+		const hotkeyBoxes = []
+		const hotkeyTexts = []
+
+		this.selectedPowers = []
 
 		for (let i = 0; i < 3; i++) {
 			const imageKey = getRandomImageKey()
+			this.selectedPowers.push(imageKey)
+
 			const image = this.add
 				.image(centerX + (i - 1) * (imageWidth + spacing), centerY, imageKey)
 				.setInteractive()
-			image.setScale(1 / 2.3) // Scale down the image to one-third of its original size
+			image.setScale(1 / 2.3)
 			images.push(image)
+
+			// Add hotkey box
+			const hotkeyBox = this.add.rectangle(
+				image.x + 75,
+				image.y - 160,
+				40,
+				40,
+				0x444444,
+			)
+			hotkeyBox.setStrokeStyle(2, 0xffffff)
+			hotkeyBoxes.push(hotkeyBox)
+
+			// Add hotkey number
+			const hotkeyText = this.add.text(hotkeyBox.x, hotkeyBox.y, `${i + 1}`, {
+				fontSize: '24px',
+				fontFamily: 'Pixelify Sans',
+				fill: '#fff',
+			})
+			hotkeyText.setOrigin(0.5)
+			hotkeyTexts.push(hotkeyText)
 
 			const text = this.add.text(
 				image.x,
@@ -93,6 +128,10 @@ class PowerScreen extends Phaser.Scene {
 			texts.push(text)
 		}
 
+		// Store references to images and texts
+		this.currentImages = images
+		this.currentTexts = texts
+
 		// Create emit zones for each image
 		const emitZones = images.map(
 			(image) =>
@@ -106,7 +145,7 @@ class PowerScreen extends Phaser.Scene {
 			quantity: 5,
 			scale: { start: 0.1, end: 0 },
 			advance: 2000,
-			emitZone: [emitZones[0], emitZones[1], emitZones[2]], // Default to the first image's zone
+			emitZone: [emitZones[0], emitZones[1], emitZones[2]],
 		})
 
 		// Add pointerover events to each image
@@ -117,17 +156,45 @@ class PowerScreen extends Phaser.Scene {
 			})
 
 			image.on('pointerdown', () => {
-				images.forEach((img, idx) => {
-					if (idx !== index) {
-						img.setVisible(false)
-						texts[idx].setVisible(false)
-					} else {
-						texts[idx].setVisible(true)
-					}
-				})
-				this.handleUpgradeChoice(image.texture.key)
+				this.selectPower(index)
 			})
 		})
+
+		// Enable keyboard controls
+		this.enableHotKeys()
+	}
+
+	enableHotKeys() {
+		// Add keyboard input for keys 1, 2, 3
+		this.upgradeKeys = [
+			this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE),
+			this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO),
+			this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE),
+		]
+
+		// Add event listeners for key presses
+		this.upgradeKeys.forEach((key, index) => {
+			key.on('down', () => {
+				if (this.selectedPowers[index]) {
+					this.selectPower(index)
+				}
+			})
+		})
+	}
+
+	selectPower(index) {
+		// Hide other images and texts
+		this.currentImages.forEach((img, idx) => {
+			if (idx !== index) {
+				img.setVisible(false)
+				this.currentTexts[idx].setVisible(false)
+			} else {
+				this.currentTexts[idx].setVisible(true)
+			}
+		})
+
+		// Handle the power selection
+		this.handleUpgradeChoice(this.selectedPowers[index])
 	}
 
 	getUpgradeText(upgradeType) {
@@ -156,31 +223,55 @@ class PowerScreen extends Phaser.Scene {
 	handleUpgradeChoice(choice) {
 		switch (choice) {
 			case 'all':
-				gameSettings.savePlayerSpeed = gameSettings.savePlayerSpeed * 1.25
+				// Speed
+				gameSettings.savePlayerSpeed =
+					gameSettings.savePlayerSpeed * 1.25 * gameSettings.savePlayerBuffRate
+				// Bullet damage
 				gameSettings.savePlayerBulletDamage =
-					gameSettings.savePlayerBulletDamage * 1.25
+					gameSettings.savePlayerBulletDamage *
+					1.25 *
+					gameSettings.savePlayerBuffRate
+				// Lifesteal
 				gameSettings.savePlayerLifesteal =
-					gameSettings.savePlayerLifesteal * 1.25
+					gameSettings.savePlayerLifesteal *
+					1.25 *
+					gameSettings.savePlayerBuffRate
+				// Bullet speed
 				gameSettings.savePlayerBulletSpeed =
-					gameSettings.savePlayerBulletSpeed * 1.25
+					gameSettings.savePlayerBulletSpeed *
+					1.25 *
+					gameSettings.savePlayerBuffRate
+				// Max health
 				gameSettings.savePlayerMaxHealth =
-					gameSettings.savePlayerMaxHealth * 1.25
+					gameSettings.savePlayerMaxHealth *
+					1.25 *
+					gameSettings.savePlayerBuffRate
+				// Bullet size
 				gameSettings.savePlayerBulletSize =
-					gameSettings.savePlayerBulletSize * 1.25
-				gameSettings.savePlayerFireRate = gameSettings.savePlayerFireRate * 1.25
+					gameSettings.savePlayerBulletSize *
+					1.25 *
+					gameSettings.savePlayerBuffRate
+				// Fire rate
+				gameSettings.savePlayerFireRate = gameSettings.savePlayerFireRate / 1.25
+				// Number of bullets
 				gameSettings.savePlayerNumberOfBullets =
 					gameSettings.savePlayerNumberOfBullets + 1
 				break
 
 			case 'dark':
 				gameSettings.savePlayerMaxHealth =
-					gameSettings.savePlayerMaxHealth * 0.5
+					gameSettings.savePlayerMaxHealth *
+					0.5 *
+					gameSettings.savePlayerBuffRate
 				gameSettings.savePlayerBulletDamage =
-					gameSettings.savePlayerBulletDamage * 2
+					gameSettings.savePlayerBulletDamage *
+					2 *
+					gameSettings.savePlayerBuffRate
 				break
 
 			case 'earth':
-				gameSettings.savePlayerMaxHealth = gameSettings.savePlayerMaxHealth * 2
+				gameSettings.savePlayerMaxHealth =
+					gameSettings.savePlayerMaxHealth * 2 * gameSettings.savePlayerBuffRate
 				break
 
 			case 'moon':
@@ -190,25 +281,31 @@ class PowerScreen extends Phaser.Scene {
 				} else {
 					gameSettings.savePlayerNumberOfBullets = 10
 				}
-
 				break
 
 			case 'ocean':
 				gameSettings.savePlayerBulletSize =
-					gameSettings.savePlayerBulletSize * 2
+					gameSettings.savePlayerBulletSize *
+					2 *
+					gameSettings.savePlayerBuffRate
 				break
 
 			case 'sky':
-				gameSettings.savePlayerSpeed = gameSettings.savePlayerSpeed * 2
+				gameSettings.savePlayerSpeed =
+					gameSettings.savePlayerSpeed * 2 * gameSettings.savePlayerBuffRate
 				break
 
 			case 'star':
-				gameSettings.savePlayerFireRate = gameSettings.savePlayerFireRate / 2
+				gameSettings.savePlayerFireRate =
+					gameSettings.savePlayerFireRate /
+					(2 * gameSettings.savePlayerBuffRate)
 				break
 
 			case 'sun':
 				gameSettings.savePlayerBulletDamage =
-					gameSettings.savePlayerBulletDamage * 1.5
+					gameSettings.savePlayerBulletDamage *
+					1.5 *
+					gameSettings.savePlayerBuffRate
 				break
 
 			default:
@@ -223,7 +320,7 @@ class PowerScreen extends Phaser.Scene {
 			this.cameras.main.fadeOut(1000, 0, 0, 0)
 			this.cameras.main.once(
 				Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
-				(cam, effect) => {
+				() => {
 					this.scene.stop()
 					if (this.callingScene === 'playGame') {
 						this.scene.start('playLevelTwo', {

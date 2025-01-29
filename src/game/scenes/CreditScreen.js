@@ -10,6 +10,10 @@ class CreditsScene extends Phaser.Scene {
 		this.music = this.sys.game.globals.music
 		this.cameras.main.setBackgroundColor('#000') // Set the background color to black
 
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		let creditsText = `
         SPACE GUARDIAN
         by FLY TEAM

@@ -27,7 +27,12 @@ class VictoryScreen extends Phaser.Scene {
 		this.load.audio('victoryMusic', 'assets/audio/victory.mp3')
 	}
 	create() {
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		this.music = this.sys.game.globals.music
+
 		if (this.music.musicOn === true) {
 			this.sys.game.globals.bgMusic.stop()
 			this.bgMusic = this.sound.add('victoryMusic', {

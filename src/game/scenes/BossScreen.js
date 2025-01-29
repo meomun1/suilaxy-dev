@@ -1,6 +1,5 @@
 import Phaser from 'phaser'
 import config from '../config/config.js'
-import Player from '../objects/players/Player.js'
 import Shield from '../objects/utilities/Shield.js'
 import EnemyManager from '../manager/EnemyManager.js'
 import KeyboardManager from '../manager/KeyboardManager.js'
@@ -19,6 +18,8 @@ import MobileManager from '../manager/MobileManager.js'
 import gameSettings from '../config/gameSettings.js'
 import { EventBus } from '../EventBus.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
+import SpecialPlayers from '../objects/players/SpecialPlayers.js'
+import { gameStats } from '../utils/adjustStats.js'
 
 const BACKGROUND_SCROLL_SPEED = 0.5
 class BossScreen extends Phaser.Scene {
@@ -30,10 +31,22 @@ class BossScreen extends Phaser.Scene {
 	}
 
 	init(data) {
-		this.selectedPlayerIndex = data.number
+		this.callingScene = data.key
+		this.selectedPlayerIndex = gameSettings.selectedPlayerIndex
 	}
 
-	preload() {}
+	preload() {
+		this.load.spritesheet({
+			key: `player_texture_${this.selectedPlayerIndex}`,
+			url: `assets/spritesheets/players/planes_0${this.selectedPlayerIndex}B.png`,
+			frameConfig: {
+				frameWidth: 96,
+				frameHeight: 96,
+				startFrame: 0,
+				endFrame: 19,
+			},
+		})
+	}
 
 	createText() {
 		const bossText = this.add
@@ -127,19 +140,18 @@ class BossScreen extends Phaser.Scene {
 
 	createObject() {
 		// PLAYER
-		this.player = new Player(
+		this.player = new SpecialPlayers(
 			this,
 			config.width / 2,
-			config.height - 100,
+			config.height - config.height / 4,
 			`player_texture_${this.selectedPlayerIndex}`,
 			gameSettings.playerMaxHealth,
+			gameSettings.selectedPlayerIndex,
 		)
-
 		this.player.play('player_anim')
-		this.player.restartGameSettings()
-		this.player.selectedPlayer = this.selectedPlayerIndex
+		gameStats()
 
-		// Spawn the Shield
+		//SHIELD
 		this.shield = new Shield(this, this.player)
 		this.shield.play('shield_anim')
 	}
@@ -154,7 +166,18 @@ class BossScreen extends Phaser.Scene {
 		)
 
 		this.projectileManager = new ProjectileManager(this)
-		this.projectileManager.createPlayerBullet()
+		if (this.selectedPlayerIndex === 6) {
+			this.projectileManager.createShieldCover()
+		} else if (this.selectedPlayerIndex === 8) {
+			this.projectileManager.createWingCover()
+		} else if (this.selectedPlayerIndex === 1) {
+			this.projectileManager.createRandomBullet()
+		} else {
+			this.projectileManager.createPlayerBullet()
+		}
+
+		this.projectileManager.createEnemyEffect()
+		this.projectileManager.createEffect()
 		this.projectileManager.createEnemyBullet()
 		this.projectileManager.createChaseBullet()
 		this.projectileManager.callEnemyBulletBoss()
@@ -168,7 +191,7 @@ class BossScreen extends Phaser.Scene {
 		this.keyboardManager.MuteGame()
 		// Score System
 		this.UpgradeManager = new UpgradeManager(this, this.callingScene)
-		this.playerManager = new PlayerManager(
+		this.PlayerManager = new PlayerManager(
 			this,
 			this.player,
 			this.selectedPlayerIndex,
@@ -272,6 +295,10 @@ class BossScreen extends Phaser.Scene {
 		// Creat GUI for PlayingScreen ( Changes in BG except Player and Enemy )
 		EventBus.on('wallet-connected', handleWalletConnected, this)
 
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		this.guiManager.createBackground('background_texture_04')
 
 		this.music = this.sys.game.globals.music
@@ -303,6 +330,48 @@ class BossScreen extends Phaser.Scene {
 		this.timeHealth = 1
 
 		this.createMusic()
+
+		console.log('Boss')
+
+		console.log('Save Player Speed: ', gameSettings.savePlayerSpeed)
+		console.log(
+			'Save Player Bullet Damage: ',
+			gameSettings.savePlayerBulletDamage,
+		)
+		console.log('Save Player Lifesteal: ', gameSettings.savePlayerLifesteal)
+		console.log(
+			'Save Player Bullet Speed: ',
+			gameSettings.savePlayerBulletSpeed,
+		)
+		console.log('Save Player Score: ', gameSettings.savePlayerScore)
+		console.log(
+			'Save Player Number Of Bullets: ',
+			gameSettings.savePlayerNumberOfBullets,
+		)
+		console.log('Save Player Fire Rate: ', gameSettings.savePlayerFireRate)
+		console.log(
+			'Save Player Default Bullet Size: ',
+			gameSettings.savePlayerDefaultBulletSize,
+		)
+		console.log('Save Player Bullet Size: ', gameSettings.savePlayerBulletSize)
+		console.log('Save Player Max Health: ', gameSettings.savePlayerMaxHealth)
+		console.log(
+			'Save Player Upgrade Threshold: ',
+			gameSettings.savePlayerUpgradeThreshold,
+		)
+		console.log('Save Player Size: ', gameSettings.savePlayerSize)
+		console.log('Save Player Armor: ', gameSettings.savePlayerArmor)
+		console.log(
+			'Save Player Health Generation: ',
+			gameSettings.savePlayerHealthGeneration,
+		)
+		console.log('Save Player Buff Rate: ', gameSettings.savePlayerBuffRate)
+		console.log('Save Player Hard Mode: ', gameSettings.saveplayerHardMode)
+
+		console.log('Player Index ', gameSettings.selectedPlayerIndex)
+		console.log('Artifact Index ', gameSettings.selectedArtifactIndex)
+		console.log('User Active ', gameSettings.userActive)
+		console.log('Wallet Connected ', gameSettings.userWalletAdress)
 	}
 
 	update() {
@@ -319,7 +388,10 @@ class BossScreen extends Phaser.Scene {
 		this.background.tilePositionY -= BACKGROUND_SCROLL_SPEED
 
 		// Move the player and enemies
-		this.playerManager.movePlayer()
+		if (this.player.health > 0) {
+			this.PlayerManager.movePlayer()
+			this.PlayerManager.healthPlayer()
+		}
 
 		this.EnemyManager.moveEnemies()
 
@@ -327,12 +399,31 @@ class BossScreen extends Phaser.Scene {
 			enemy.updateHealthBarPosition()
 		})
 
-		if (this.spacebar.isDown) {
-			this.player.shootBullet(this.selectedPlayerIndex)
+		if (
+			this.spacebar.isDown &&
+			this.selectedPlayerIndex !== 1 &&
+			this.selectedPlayerIndex !== 6 &&
+			this.selectedPlayerIndex !== 8
+		) {
+			this.player.shootBullet(this.selectedPlayerIndex) // Use the converted number
+		} else if (this.spacebar.isDown && this.selectedPlayerIndex === 6) {
+			this.player.createShield(this.player)
+		} else if (this.spacebar.isDown && this.selectedPlayerIndex === 8) {
+			this.player.createWing(this.player)
+		} else if (this.spacebar.isDown && this.selectedPlayerIndex === 1) {
+			this.player.createRandomBullet(this.player)
 		}
 
 		this.projectiles.children.iterate((bullet) => {
-			bullet.update()
+			if (bullet && this.player) {
+				bullet.update(this.player)
+			}
+		})
+
+		this.projectilesEnemyEffects.children.iterate((effect) => {
+			if (effect) {
+				effect.update()
+			}
 		})
 
 		if (this.player.health <= 0) {
@@ -354,15 +445,12 @@ class BossScreen extends Phaser.Scene {
 			})
 
 			if (gameSettings.isBossDead === true) {
-				this.UtilitiesManager.addNftForPlayer()
-
 				this.CollideManager1 = new CollideManager(
 					this,
 					this.player,
 					this.EnemyManager.enemies,
 					this.UtilitiesManager.HealthPacks,
 					this.UtilitiesManager.shieldPacks,
-
 					this.shield,
 					this.SoundManager,
 				)
@@ -373,7 +461,7 @@ class BossScreen extends Phaser.Scene {
 			this.time.delayedCall(
 				5000,
 				() => {
-					this.scene.start('createNft')
+					this.scene.start('nftGenerate')
 				},
 				null,
 				this,

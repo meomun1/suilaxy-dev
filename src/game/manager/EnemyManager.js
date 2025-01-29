@@ -20,17 +20,18 @@ class EnemyManager {
 		}
 	}
 
+	// Check if all enemies are inactive
+	// If all enemies are inactive and the game has started, return true
+	// Otherwise, return false
 	checkToFinishLevel() {
-		// Check if all enemies are inactive
 		const allEnemiesInactive = this.enemies.every((enemy) => !enemy.active)
-		// If all enemies are inactive and the game has started, return true
 		if (allEnemiesInactive && this.gameStarted) {
 			return true
 		}
-		// Otherwise, return false
 		return false
 	}
 
+	// Check if all enemies are inactive
 	destroyEnemyMoveOutOfScreen() {
 		let offScreenEnemyIndex = this.enemies.findIndex(
 			(enemy) =>
@@ -40,15 +41,13 @@ class EnemyManager {
 				enemy.x > config.width + 300,
 		)
 		if (offScreenEnemyIndex !== -1) {
-			// this.enemies[offScreenEnemyIndex].hpBar.destroy();
 			this.enemies[offScreenEnemyIndex].destroy() // call destroy directly
 			this.enemies.splice(offScreenEnemyIndex, 1) // remove the enemy from the array
 		}
 	}
 
+	// Init move enemies and random respawn
 	moveEnemies(time) {
-		// Move enemies
-
 		let offScreenEnemy = this.enemies.find((enemy) => enemy.y >= config.height)
 		let offScreenEnemyIndex = this.enemies.findIndex(
 			(enemy) => enemy.y >= config.height,
@@ -70,7 +69,7 @@ class EnemyManager {
 		}
 	}
 
-	// this can make the enemies respawn
+	// Add enemy to pool
 	addEnemy(enemy) {
 		// When adding a new enemy, initialize its random delay and last respawn time
 		this.enemies.push(enemy)
@@ -78,10 +77,12 @@ class EnemyManager {
 		this.lastRespawnTimes.push(0)
 	}
 
+	// Add enemies to pool
 	addEnemyForOnce(enemy) {
 		this.enemies.push(enemy)
 	}
 
+	// Spawn a single enemy with the given type, position, health, and scale
 	spawnSingleEnemy(type, x, y, health, scale = 1) {
 		let newEnemy
 

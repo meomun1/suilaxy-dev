@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
 import HealthPack from '../objects/utilities/HealthPack'
 import ShieldPack from '../objects/utilities/ShieldPack'
-import NftCollection from '../objects/utilities/NftCollection'
-import config from '../config/config'
+// import NftCollection from '../objects/utilities/NftCollection'
+// import config from '../config/config'
 class UtilitiesManager {
 	constructor(scene) {
 		this.scene = scene
@@ -25,18 +25,6 @@ class UtilitiesManager {
 
 		return { x: randomX, y: randomY }
 	}
-
-	addNftForPlayer() {
-		const randomPos = this.generateRandomPosition()
-		this.nftCollection = new NftCollection(
-			this.scene,
-			config.width / 2,
-			config.height / 2,
-		)
-		this.nftCollection.setTexture('nft_texture')
-		this.nftCollection.setScale(0.25)
-	}
-
 	addUtilitiesForPlayingScreen(numHealth, numShield) {
 		for (let i = 0; i < numHealth; i++) {
 			const randomPos = this.generateRandomPosition()
@@ -50,20 +38,16 @@ class UtilitiesManager {
 			const randomPos = this.generateRandomPosition()
 			const healthPack = new HealthPack(this.scene, randomPos.x, randomPos.y)
 			healthPack.play('healthPack_anim')
-			// const shieldPack3 = new ShieldPack(this.scene, config.width / 2, 30);
-			// shieldPack3.play("shieldPack_anim");
 			this.addHealthPack(healthPack)
 		}
 	}
 
 	addHealthPack(HealthPack) {
 		this.HealthPacks.push(HealthPack)
-		// ... other code for managing respawn delays, etc.
 	}
 
 	addShieldPack(ShieldPack) {
 		this.shieldPacks.push(ShieldPack)
-		// ... other code for managing respawn delays, etc.
 	}
 }
 

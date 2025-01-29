@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 
-import '../public/input.scss'
+import './styles/input.scss'
 import '@mysten/dapp-kit/dist/index.css'
 
 import { SuiClientProvider, WalletProvider } from '@mysten/dapp-kit'
@@ -23,7 +23,7 @@ if (rootElement) {
 	ReactDOM.createRoot(rootElement).render(
 		<React.StrictMode>
 			<QueryClientProvider client={queryClient}>
-				<SuiClientProvider networks={networks} defaultNetwork="testnet">
+				<SuiClientProvider networks={networks} defaultNetwork="mainnet">
 					<WalletProvider>
 						<App />
 					</WalletProvider>

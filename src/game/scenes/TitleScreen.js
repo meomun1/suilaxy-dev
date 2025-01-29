@@ -1,7 +1,6 @@
 import Phaser from 'phaser'
 import WebFont from 'webfontloader'
 import config from '../config/config.js'
-import Button from '../objects/Button.js'
 import Music from '../mode/Music.js'
 import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
@@ -15,59 +14,70 @@ class TitleScreen extends Phaser.Scene {
 		this.walletConnected = false
 		this.connectWalletText = null
 		this.button_play = null
-		this.button_pvp = null
 		this.guiManager = new GuiManager(this)
 	}
 
 	init() {
 		const music = new Music()
 		this.sys.game.globals = { music, bgMusic: null }
+		this.scene.stop('selectUtility')
 	}
 
 	preload() {
 		this.load.audio('main_menu_music', 'assets/audio/backgroundMusic.mp3')
 
-		this.guiManager.loadImage(
-			'background',
-			// 'assets/images/backgrounds/background_title.png',
-			'background.png',
-		)
-		this.guiManager.loadSpriteSheet(
-			'button_play',
-			'assets/gui/button.png',
-			93,
-			28,
-			2,
-			2,
-		)
-		this.guiManager.loadSpriteSheet(
-			'button_play_hover',
-			'assets/gui/button_hover.png',
-			93,
-			28,
-			2,
-			2,
-		)
+		this.guiManager.loadImage('background', 'assets/main-menu/background.png')
 
-		this.guiManager.loadSpriteSheet(
-			'button_pvp',
-			'assets/gui/button.png',
-			93,
-			28,
-			9,
-			9,
+		// Load BUTTONS
+		this.load.image('button_play', 'assets/gui/button-play.png')
+		this.load.image('button_play_hover', 'assets/gui/button-play-hover.png')
+
+		console.log('Save Player Speed: ', gameSettings.savePlayerSpeed)
+		console.log(
+			'Save Player Bullet Damage: ',
+			gameSettings.savePlayerBulletDamage,
 		)
-		this.guiManager.loadSpriteSheet(
-			'button_pvp_hover',
-			'assets/gui/button_hover.png',
-			93,
-			28,
-			9,
-			9,
+		console.log('Save Player Lifesteal: ', gameSettings.savePlayerLifesteal)
+		console.log(
+			'Save Player Bullet Speed: ',
+			gameSettings.savePlayerBulletSpeed,
 		)
+		console.log('Save Player Score: ', gameSettings.savePlayerScore)
+		console.log(
+			'Save Player Number Of Bullets: ',
+			gameSettings.savePlayerNumberOfBullets,
+		)
+		console.log('Save Player Fire Rate: ', gameSettings.savePlayerFireRate)
+		console.log(
+			'Save Player Default Bullet Size: ',
+			gameSettings.savePlayerDefaultBulletSize,
+		)
+		console.log('Save Player Bullet Size: ', gameSettings.savePlayerBulletSize)
+		console.log('Save Player Max Health: ', gameSettings.savePlayerMaxHealth)
+		console.log(
+			'Save Player Upgrade Threshold: ',
+			gameSettings.savePlayerUpgradeThreshold,
+		)
+		console.log('Save Player Size: ', gameSettings.savePlayerSize)
+		console.log('Save Player Armor: ', gameSettings.savePlayerArmor)
+		console.log(
+			'Save Player Health Generation: ',
+			gameSettings.savePlayerHealthGeneration,
+		)
+		console.log('Save Player Buff Rate: ', gameSettings.savePlayerBuffRate)
+		console.log('Save Player Hard Mode: ', gameSettings.saveplayerHardMode)
+
+		console.log('Player Index ', gameSettings.selectedPlayerIndex)
+		console.log('Artifact Index ', gameSettings.selectedArtifactIndex)
+		console.log('User Active ', gameSettings.userActive)
+		console.log('Wallet Connected ', gameSettings.userWalletAdress)
 	}
 
 	create() {
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+
 		this.loadWebFonts().then(() => {
 			let blackCover = this.add.rectangle(
 				0,
@@ -100,8 +110,8 @@ class TitleScreen extends Phaser.Scene {
 			}
 
 			this.guiManager.createBackground('background')
-			this.guiManager.createAnimatedTextMiddle('GUARDIAN', -30)
-			this.guiManager.createAnimatedTextMiddle('SPACE', -130)
+			this.guiManager.createAnimatedTextMiddleNoTween('GUARDIAN', -30)
+			this.guiManager.createAnimatedTextMiddleNoTween('SPACE', -130)
 
 			this.connectWalletText = this.add.text(
 				config.width / 2,
@@ -115,7 +125,15 @@ class TitleScreen extends Phaser.Scene {
 				},
 			)
 			this.connectWalletText.setOrigin(0.5)
-			this.connectWalletText.setShadow(3, 3, '#F27CA4', 2, false, true)
+			this.connectWalletText.setShadow(3, 3, '#EFBA0C', 2, false, true)
+			this.tweens.add({
+				targets: this.connectWalletText,
+				duration: 1000,
+				ease: 'Sine.easeInOut',
+				repeat: -1,
+				yoyo: true,
+				alpha: 0.2,
+			})
 
 			this.handleWalletConnected()
 
@@ -137,52 +155,64 @@ class TitleScreen extends Phaser.Scene {
 	}
 
 	handleWalletConnected() {
-		console.log('hehe', gameSettings.userActive)
 		if (gameSettings.userActive) {
-			console.log('one')
 			this.connectWalletText.setVisible(false)
 			if (!this.button_play || gameSettings.userActive) {
 				this.createPlayButton()
-				this.createPVPButton()
 			}
 		} else {
-			console.log('two')
 			this.connectWalletText.setVisible(true)
-			if (this.button_play && this.button_pvp) {
+			if (this.button_play) {
 				this.button_play.destroy()
 				this.button_play = null
-				this.button_pvp.destroy()
-				this.button_pvp = null
 			}
 		}
 	}
 
 	createPlayButton() {
-		this.button_play = new Button(
-			this,
+		this.button_play = this.add.image(
 			config.width / 2,
 			config.height / 2 + config.height / 8,
 			'button_play',
-			'button_play_hover',
-			'choosePlayer',
 		)
-		this.button_play.setSize(config.width / 10, config.height / 20)
 		this.button_play.setInteractive()
-		this.button_play.setScale(1.5)
-	}
 
-	createPVPButton() {
-		this.button_pvp = new Button(
-			this,
-			config.width / 2,
-			config.height / 2 + config.height / 4,
-			'button_pvp',
-			'button_pvp_hover',
-			'chooseRoom',
-		)
-		this.button_pvp.setSize(config.width / 10, config.height / 20)
-		this.button_pvp.setInteractive()
-		this.button_pvp.setScale(1.5)
+		const hoverTween = {
+			scale: 1.05,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		const normalTween = {
+			scale: 1,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		this.button_play.on('pointerdown', () => {
+			this.scene.start('mainMenu')
+			// this.scene.start('selectUtility')
+		})
+
+		this.button_play.on('pointerover', () => {
+			this.tweens.killTweensOf(this.button_play)
+
+			this.tweens.add({
+				targets: this.button_play,
+				...hoverTween,
+			})
+			this.button_play.setTexture('button_play_hover')
+		})
+
+		this.button_play.on('pointerout', () => {
+			this.tweens.killTweensOf(this.button_play)
+
+			this.tweens.add({
+				targets: this.button_play,
+				...normalTween,
+			})
+			this.button_play.setTexture('button_play')
+		})
 	}
 
 	shutdown() {

@@ -9,7 +9,7 @@ class ChasingBullet extends Entity {
 		scene.physics.world.enableBody(this)
 		scene.enemyProjectiles.add(this)
 		this.initializeVelocity()
-		this.damage = 50
+		this.damage = gameSettings.enemyBulletDamage
 		this.setDepth(1)
 		this.changeUpdateVelocity = true
 

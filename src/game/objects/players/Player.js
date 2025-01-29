@@ -6,40 +6,46 @@ import HPBar2 from '../ui/HPBar2'
 import SoundManager from '../../manager/SoundManager'
 import PVPBulletOpponent from '../projectiles/PVPBulletOpponent'
 import config from '../../config/config'
+import ShieldCover from '../projectiles/ShieldCover'
+import WingCover from '../projectiles/WingCover'
+import RandomBullet from '../projectiles/RandomBullet'
 
 class Player extends Entity {
 	constructor(scene, x, y, key, health) {
 		super(scene, x, y, key, health)
+
 		this.body.velocity.x = 0
 		this.body.velocity.y = 0
 		this.health = health
 		this.maxHealth = health
 		this.damage = 300
-		this.bulletDamage = gameSettings.savePlayerBulletDamage
-		this.speed = gameSettings.savePlayerSpeed
-
+		this.lastShootTime = 0
+		this.lastWingTime = 0
+		this.lastShieldTime = 0
 		this.shield = null
 		this.setInteractiveEntity()
 		this.setPhysics(scene)
-		this.body.setSize(72, 72)
+		this.setScale(gameSettings.savePlayerSize)
 		this.setDepth(3)
-		this.bulletSize = gameSettings.savePlayerBulletSize
 
-		this.fireRate = gameSettings.savePlayerFireRate
-		this.lastShootTime = 0
+		this.speed = gameSettings.savePlayerSpeed
+		this.bulletDamage = gameSettings.savePlayerBulletDamage
 		this.lifestealRate = gameSettings.savePlayerLifesteal
-		this.numberOfBullets = gameSettings.savePlayerNumberOfBullets
 		this.bulletSpeed = gameSettings.savePlayerBulletSpeed
-		this.selectedPlayer = 0
+		this.numberOfBullets = gameSettings.savePlayerNumberOfBullets
+		this.fireRate = gameSettings.savePlayerFireRate
+		this.bulletSize = gameSettings.savePlayerBulletSize
+		this.playerSize = gameSettings.savePlayerSize
+		this.playerArmor = gameSettings.savePlayerArmor
+		this.healthGeneration = gameSettings.savePlayerHealthGeneration
+		this.playerBuffRate = gameSettings.savePlayerBuffRate
 
 		this.SoundManager = new SoundManager(scene)
 
 		this.hpBar = new HPBar2(
 			scene,
-			config.width / 2 - config.width / 4 - config.width / 10,
-			config.height - config.height / 4 + config.height / 8,
-			config.width / 8,
-			config.height / 32,
+			config.width / 9,
+			config.height - config.height / 16,
 			this.health,
 			this.maxHealth,
 		)
@@ -59,35 +65,6 @@ class Player extends Entity {
 
 	explode(canDestroy) {
 		super.explode(canDestroy)
-	}
-
-	setInteractiveEntity() {
-		if (this.scene.sys.game.device.os.desktop) {
-			this.setInteractive({ draggable: false })
-			return
-		}
-
-		this.setInteractive({ draggable: true })
-		this.scene.input.setDraggable(this)
-
-		this.on('drag', function (pointer, dragX, dragY) {
-			this.x = dragX
-			this.y = dragY
-
-			this.shootBullet(this.selectedPlayer)
-		})
-
-		this.on('dragend', function (pointer) {
-			// You can add code here to execute when the drag ends.
-		})
-
-		this.scene.input.on(
-			'pointerup',
-			function (pointer) {
-				this.scene.input.setDragState(this, 0)
-			},
-			this,
-		)
 	}
 
 	shootBullet(number, player, check) {
@@ -160,6 +137,67 @@ class Player extends Entity {
 		}
 	}
 
+	createShield(player) {
+		const currentTime = this.scene.time.now
+		const elapsedTime = currentTime - this.lastShieldTime
+
+		if (elapsedTime > this.fireRate * 1.5) {
+			this.lastShieldTime = currentTime
+
+			if (player) {
+				let shield = new ShieldCover(this.scene, 1)
+				shield.setTexture(`effect${gameSettings.selectedPlayerIndex}_texture`)
+				shield.play(`effect${gameSettings.selectedPlayerIndex}_anim`)
+				shield.damage = gameSettings.savePlayerBulletDamage
+
+				// Listen for the animation complete event to destroy the shield
+				shield.on('animationcomplete', () => {
+					shield.destroy()
+				})
+			}
+		}
+	}
+
+	createWing(player) {
+		const currentTime = this.scene.time.now
+		const elapsedTime = currentTime - this.lastWingTime
+
+		if (elapsedTime > this.fireRate) {
+			this.lastWingTime = currentTime
+
+			if (player) {
+				let wing = new WingCover(this.scene, 1)
+				wing.setTexture(`effect${gameSettings.selectedPlayerIndex}_texture`)
+				wing.play(`effect${gameSettings.selectedPlayerIndex}_anim`)
+				wing.damage = gameSettings.savePlayerBulletDamage
+
+				wing.on('animationcomplete', () => {
+					wing.destroy()
+				})
+			}
+		}
+	}
+
+	createRandomBullet(player) {
+		const currentTime = this.scene.time.now
+		const elapsedTime = currentTime - this.lastShootTime
+
+		if (elapsedTime > this.fireRate / 1.25) {
+			this.lastShootTime = currentTime
+
+			if (player) {
+				let bullet = new RandomBullet(this.scene, 1)
+				bullet.setTexture(`effect${gameSettings.selectedPlayerIndex}_texture`)
+				bullet.play(`effect${gameSettings.selectedPlayerIndex}_anim`)
+				bullet.damage = gameSettings.savePlayerBulletDamage
+
+				bullet.on('animationcomplete', () => {
+					bullet.destroy()
+				})
+			}
+		}
+	}
+
 	setPhysics(scene) {
 		super.setPhysics(scene)
 	}
@@ -177,49 +215,8 @@ class Player extends Entity {
 		return this.health
 	}
 
-	savePlayer() {
-		gameSettings.savePlayerSpeed = this.speed
-		gameSettings.savePlayerBulletDamage = this.bulletDamage
-		gameSettings.savePlayerLifesteal = this.lifestealRate
-		gameSettings.savePlayerBulletSpeed = this.bulletSpeed
-		gameSettings.savePlayerScore = gameSettings.playerScore
-		gameSettings.savePlayerNumberOfBullets = this.numberOfBullets
-		gameSettings.savePlayerFireRate = this.fireRate
-		gameSettings.savePlayerDefaultBulletSize =
-			gameSettings.playerDefaultBulletSize
-		gameSettings.savePlayerBulletSize = this.bulletSize
-		gameSettings.savePlayerMaxHealth = gameSettings.playerMaxHealth
-		gameSettings.savePlayerUpgradeThreshold =
-			gameSettings.playerUpgradeThreshold
-	}
-
-	restartToTile() {
-		gameSettings.savePlayerSpeed = 300
-		gameSettings.savePlayerBulletDamage = 5000
-		gameSettings.savePlayerLifesteal = 0
-		gameSettings.savePlayerBulletSpeed = 400
-		gameSettings.savePlayerScore = 0
-		gameSettings.savePlayerNumberOfBullets = 1
-		gameSettings.savePlayerFireRate = 700
-		gameSettings.savePlayerDefaultBulletSize = 1.2
-		gameSettings.savePlayerBulletSize = 1.2
-		gameSettings.savePlayerUpgradeThreshold = 300
-		this.restartGameSettings()
-	}
-
-	restartGameSettings() {
-		gameSettings.playerSpeed = gameSettings.savePlayerSpeed
-		gameSettings.playerBulletDamage = gameSettings.savePlayerBulletDamage
-		gameSettings.playerLifesteal = gameSettings.savePlayerLifesteal
-		gameSettings.playerBulletSpeed = gameSettings.savePlayerBulletSpeed
-		gameSettings.playerScore = gameSettings.savePlayerScore
-		gameSettings.playerNumberOfBullets = gameSettings.savePlayerNumberOfBullets
-		gameSettings.playerFireRate = gameSettings.savePlayerFireRate
-		gameSettings.playerDefaultBulletSize =
-			gameSettings.savePlayerDefaultBulletSize
-		gameSettings.playerBulletSize = gameSettings.savePlayerBulletSize
-		gameSettings.playerUpgradeThreshold =
-			gameSettings.savePlayerUpgradeThreshold
+	toLifeSteal() {
+		this.getHeal(this.lifestealRate * this.bulletDamage)
 	}
 }
 

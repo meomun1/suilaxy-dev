@@ -1,7 +1,10 @@
+import gameSettings from '../config/gameSettings.js'
+
 class PlayerManager {
 	constructor(scene, player, selectedPlayerIndex, roomNumber) {
 		this.scene = scene
 		this.player = player
+		this.player.speed = gameSettings.savePlayerSpeed
 		this.cursorKeys = scene.input.keyboard.createCursorKeys()
 		// Add WASD keys
 		this.wasdKeys = scene.input.keyboard.addKeys({
@@ -10,13 +13,21 @@ class PlayerManager {
 			left: 'A',
 			right: 'D',
 		})
-		this.selectedPlayerIndex = selectedPlayerIndex
+		this.selectedPlayerIndex = selectedPlayerIndex // for PVP
 		this.roomNumber = roomNumber
+		this.frameCounter = 0
+	}
+
+	healthPlayer() {
+		this.frameCounter++
+		// Check if one second has passed (60 frames)
+		if (this.frameCounter >= 60 && this.player.health < this.player.maxHealth) {
+			this.frameCounter = 0 // Reset the counter
+			this.player.getHeal(this.player.healthGeneration * this.player.maxHealth)
+		}
 	}
 
 	movePlayer() {
-		const currentTime = this.scene.time.now
-
 		let xVelocity = 0
 		let yVelocity = 0
 		let animationKey = 'player_anim'
@@ -66,9 +77,10 @@ class PlayerManager {
 		}
 
 		// Set velocities
-		this.player.setVelocityX(xVelocity)
-		this.player.setVelocityY(yVelocity)
-
+		if (this.player.body) {
+			this.player.body.velocity.x = xVelocity
+			this.player.body.velocity.y = yVelocity
+		}
 		// Play animation based on the velocities
 		if (this.player.anims.currentAnim.key !== animationKey) {
 			this.player.play(animationKey)
@@ -76,8 +88,6 @@ class PlayerManager {
 	}
 
 	movePlayerPVP(socket) {
-		const currentTime = this.scene.time.now
-
 		let xVelocity = 0
 		let yVelocity = 0
 		let animationKey = `player_anim_${this.selectedPlayerIndex}`

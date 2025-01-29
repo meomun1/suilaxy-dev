@@ -6,21 +6,22 @@ import config from '../../config/config'
 import Phaser from 'phaser'
 import ChasingBullet from '../projectiles/ChasingBullet'
 import BoundBullet from '../projectiles/BoundBullet'
-class Bug3 extends Entity {
+import EnemyEntity from './EnemyEntity'
+class Bug3 extends EnemyEntity {
 	constructor(scene, x, y, health, scale) {
 		super(scene, x, y, 'bug3_texture', health)
 
 		if (scale === undefined) {
 			scale = 1
 		}
-		this.setScale(scale)
+		this.setScale(gameSettings.enemySize * scale)
 
 		this.body.velocity.y = gameSettings.enemySpeed
 		this.health = health
 		this.maxHealth = health
 		this.hpBarWidth = 20
 		this.hpBarHeight = 5
-		this.damage = 100
+		this.damage = gameSettings.bug3Damage
 		this.setInteractiveEntity()
 		this.setActive(true)
 
@@ -74,6 +75,7 @@ class Bug3 extends Entity {
 	shootChaseBullet(scene, enemy) {
 		if (this.health > 0) {
 			const enemyBullet = new ChasingBullet(scene, enemy)
+			enemyBullet.play('bulletChase_anim')
 		}
 	}
 

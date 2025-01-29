@@ -2,8 +2,9 @@ import Entity from '../Entity'
 import gameSettings from '../../config/gameSettings'
 import HPBar from '../ui/HPBar'
 import config from '../../config/config'
+import EnemyEntity from './EnemyEntity'
 
-class Bug5 extends Entity {
+class Bug5 extends EnemyEntity {
 	constructor(scene, x, y, health, scale) {
 		super(scene, x, y, 'bug5_texture', health)
 
@@ -11,7 +12,7 @@ class Bug5 extends Entity {
 		if (scale === undefined) {
 			scale = 1
 		}
-		this.setScale(scale)
+		this.setScale(gameSettings.enemySize * scale)
 
 		this.body.velocity.y = gameSettings.enemySpeed
 		this.health = health

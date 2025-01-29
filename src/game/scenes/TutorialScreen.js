@@ -1,9 +1,9 @@
 import Phaser from 'phaser'
 import config from '../config/config'
-import Player from '../objects/players/Player'
 import Shield from '../objects/utilities/Shield'
 import EnemyManager from '../manager/EnemyManager.js'
 import KeyboardManager from '../manager/KeyboardManager.js'
+import SoundManager from '../manager/SoundManager.js'
 import PlayerManager from '../manager/PlayerManager.js'
 import CollideManager from '../manager/CollideManager.js'
 import GuiManager from '../manager/GuiManager.js'
@@ -14,6 +14,10 @@ import MobileManager from '../manager/MobileManager.js'
 import gameSettings from '../config/gameSettings.js'
 import { EventBus } from '../EventBus.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
+import SpecialPlayers from '../objects/players/SpecialPlayers.js'
+import { resetSaveStatsToBaseStats, gameStats } from '../utils/adjustStats.js'
+import { createShipAnimations } from '../utils/initForGameScene.js'
+import { shutdown } from '../utils/endGamescene.js'
 
 const BACKGROUND_SCROLL_SPEED = 0.5
 class TutorialScreen extends Phaser.Scene {
@@ -21,10 +25,7 @@ class TutorialScreen extends Phaser.Scene {
 		super('playTutorial')
 		this.callingScene = 'playTutorial'
 		this.guiManager = new GuiManager(this)
-	}
-
-	init(data) {
-		this.selectedPlayerIndex = data.number
+		this.selectedPlayerIndex = gameSettings.selectedPlayerIndex
 	}
 
 	preload() {
@@ -32,6 +33,9 @@ class TutorialScreen extends Phaser.Scene {
 	}
 
 	create() {
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
 		gameSettings.isBossDead = true
 		// global music
 		this.music = this.sys.game.globals.music
@@ -47,6 +51,8 @@ class TutorialScreen extends Phaser.Scene {
 		this.background.setOrigin(0, 0)
 
 		this.createTutorialText()
+
+		createShipAnimations(this)
 
 		this.createObject()
 
@@ -73,17 +79,22 @@ class TutorialScreen extends Phaser.Scene {
 	createTutorialText() {}
 
 	createObject() {
+		// reset save stats
+		resetSaveStatsToBaseStats()
+
 		// PLAYER
-		this.player = new Player(
+		this.player = new SpecialPlayers(
 			this,
 			config.width / 2,
 			config.height - config.height / 4,
 			`player_texture_${this.selectedPlayerIndex}`,
 			gameSettings.playerMaxHealth,
+			gameSettings.selectedPlayerIndex,
 		)
 		this.player.play('player_anim')
-		this.player.restartToTile()
-		this.player.selectedPlayer = this.selectedPlayerIndexs
+
+		// Apply stats in game
+		gameStats()
 
 		//SHIELD
 		this.shield = new Shield(this, this.player)
@@ -94,7 +105,18 @@ class TutorialScreen extends Phaser.Scene {
 		// Create keyboard inputs
 		// Create a group to manage bullets
 		this.projectileManager = new ProjectileManager(this)
-		this.projectileManager.createPlayerBullet()
+		if (this.selectedPlayerIndex === 6) {
+			this.projectileManager.createShieldCover()
+		} else if (this.selectedPlayerIndex === 8) {
+			this.projectileManager.createWingCover()
+		} else if (this.selectedPlayerIndex === 1) {
+			this.projectileManager.createRandomBullet()
+		} else {
+			this.projectileManager.createPlayerBullet()
+		}
+
+		this.projectileManager.createEnemyEffect()
+		this.projectileManager.createEffect()
 		this.projectileManager.createEnemyBullet()
 		this.projectileManager.createChaseBullet()
 	}
@@ -279,7 +301,7 @@ class TutorialScreen extends Phaser.Scene {
 			7000,
 			() => {
 				this.guiManager.createTextWithDelay(
-					'1000 / 1500 / 2000 points will give you an upgrade',
+					'1500 / 2000 / 2500 points will give you an upgrade',
 					enemy.x - config.width / 4,
 					enemy.y + config.height / 16,
 					'Pixelify Sans',
@@ -325,6 +347,7 @@ class TutorialScreen extends Phaser.Scene {
 				this.spacebar = this.input.keyboard.addKey(
 					Phaser.Input.Keyboard.KeyCodes.SPACE,
 				)
+				this.SoundManager = new SoundManager(this)
 			},
 			null,
 			this,
@@ -348,6 +371,8 @@ class TutorialScreen extends Phaser.Scene {
 			null,
 			this,
 		)
+
+		this.selectedPlayerIndex = Number(gameSettings.selectedPlayerIndex)
 	}
 
 	update() {
@@ -369,36 +394,58 @@ class TutorialScreen extends Phaser.Scene {
 		// Pause the game or go to title screen
 		if (this.keyboardManager === undefined) {
 		} else {
-			this.keyboardManager.pauseGame()
-			this.keyboardManager.titleScreen()
+			// this.keyboardManager.pauseGame()
+			// this.keyboardManager.titleScreen()
 		}
 
 		// Move the background
 		this.background.tilePositionY -= BACKGROUND_SCROLL_SPEED
 
-		this.time.delayedCall(
-			13500,
-			() => {
-				if (this.PlayerManager) {
-					this.PlayerManager.movePlayer()
-				}
-			},
-			null,
-			this,
-		)
+		// if (this.PlayerManager !== undefined) {
+		// 	this.PlayerManager.movePlayer()
+		// 	this.PlayerManager.healthPlayer()
+		// }
 
 		if (this.player.health <= 0) {
 			this.gameOver()
 		}
-
-		if (this.spacebar && this.spacebar.isDown) {
-			this.player.shootBullet(this.selectedPlayerIndex)
+		if (
+			this.spacebar &&
+			this.spacebar.isDown &&
+			this.selectedPlayerIndex !== 1 &&
+			this.selectedPlayerIndex !== 6 &&
+			this.selectedPlayerIndex !== 8
+		) {
+			this.player.shootBullet(this.selectedPlayerIndex) // Use the converted number
+		} else if (
+			this.spacebar &&
+			this.spacebar.isDown &&
+			this.selectedPlayerIndex === 6
+		) {
+			this.player.createShield(this.player)
+		} else if (
+			this.spacebar &&
+			this.spacebar.isDown &&
+			this.selectedPlayerIndex === 8
+		) {
+			this.player.createWing(this.player)
+		} else if (
+			this.spacebar &&
+			this.spacebar.isDown &&
+			this.selectedPlayerIndex === 1
+		) {
+			this.player.createRandomBullet(this.player)
 		}
 
 		this.projectiles.children.iterate((bullet) => {
-			bullet.update()
+			bullet.update(this.player)
 		})
 
+		this.projectilesEnemyEffects.children.iterate((effect) => {
+			if (effect) {
+				effect.update()
+			}
+		})
 		// ENEMY
 		this.EnemyManager.enemies.forEach((enemy) => {
 			enemy.updateHealthBarPosition()
@@ -413,20 +460,6 @@ class TutorialScreen extends Phaser.Scene {
 
 		//SHIELD
 		this.shield.updatePosition(this.player)
-	}
-
-	updateAudio() {
-		if (this.music.musicOn === false && this.music.soundOn === false) {
-			this.musicButton.setTexture('mute_texture')
-			this.sys.game.globals.bgMusic.pause()
-			this.music.bgMusicPlaying = false
-		} else if (this.music.musicOn === true && this.music.soundOn === true) {
-			this.musicButton.setTexture('sound_texture')
-			if (this.music.bgMusicPlaying === false) {
-				this.sys.game.globals.bgMusic.resume()
-				this.music.bgMusicPlaying = true
-			}
-		}
 	}
 
 	shutdown() {
@@ -470,7 +503,7 @@ class TutorialScreen extends Phaser.Scene {
 	startGame() {
 		this.scene.stop('upgradeScreen')
 
-		this.time.delayedCall(3000, () => {
+		this.time.delayedCall(4000, () => {
 			this.cameras.main.fadeOut(1000, 0, 0, 0)
 
 			this.cameras.main.once(

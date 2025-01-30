@@ -21,52 +21,63 @@ class NFTGenerate extends Phaser.Scene {
 		)
 
 		// Load the NFT mapping data
-		this.load.json('nftMapping', '../src/data/nft_mapping.json')
+		fetch(
+			'https://suilaxy-backend-616316054601.asia-southeast1.run.app/data/nft_mapping',
+		)
+			.then((response) => response.json())
+			.then((data) => {
+				this.nftMapping = data
+				this.events.emit('nftMappingLoaded')
+			})
+			.catch((error) => console.error('Error fetching JSON:', error))
 	}
 
 	create() {
-		// ===============================================================
-		EventBus.on('wallet-connected', handleWalletConnected, this)
+		// Wait for the NFT mapping data to be loaded
+		this.events.once('nftMappingLoaded', () => {
+			// ===============================================================
+			EventBus.on('wallet-connected', handleWalletConnected, this)
 
-		// Initialize InterfaceManager
-		this.interfaceManager = new InterfaceManager(this)
+			// Initialize InterfaceManager
+			this.interfaceManager = new InterfaceManager(this)
 
-		const searchText = this.add.text(
-			this.cameras.main.centerX,
-			this.cameras.main.centerY - 50,
-			'<Saving your record>',
-			{
-				fontFamily: 'Pixelify Sans',
-				fontSize: '32px',
-				fill: '#FFFFFF',
-			},
-		)
-		searchText.setOrigin(0.5)
+			const searchText = this.add.text(
+				this.cameras.main.centerX,
+				this.cameras.main.centerY - 50,
+				'<Saving your record>',
+				{
+					fontFamily: 'Pixelify Sans',
+					fontSize: '32px',
+					fill: '#FFFFFF',
+				},
+			)
+			searchText.setOrigin(0.5)
 
-		// ===============================================================
-		// Post the score to the mockapi
-		postScore(gameSettings.userWalletAdress, gameSettings.playerScore)
+			// ===============================================================
+			// Post the score to the mockapi
+			postScore(gameSettings.userWalletAdress, gameSettings.playerScore)
 
-		// Generate the NFT properties
-		const nftProperties = this.generateNFTProperties()
+			// Generate the NFT properties
+			const nftProperties = this.generateNFTProperties()
 
-		// Set the NFT properties to the game settings
-		gameSettings.nft_weapon = nftProperties.name
-		gameSettings.nft_frame = nftProperties.frame
-		gameSettings.nft_description = nftProperties.description
-		gameSettings.nft_img_url = nftProperties.url
-		// ===============================================================
+			// Set the NFT properties to the game settings
+			gameSettings.nft_weapon = nftProperties.name
+			gameSettings.nft_frame = nftProperties.frame
+			gameSettings.nft_description = nftProperties.description
+			gameSettings.nft_img_url = nftProperties.url
+			// ===============================================================
 
-		// Delay logic to simulate searching
-		this.time.delayedCall(
-			2000, // 2 seconds delay
-			() => {
-				searchText.destroy()
-				this.interfaceManager.goToNFTMint(1000)
-			},
-			null,
-			this,
-		)
+			// Delay logic to simulate searching
+			this.time.delayedCall(
+				2000, // 2 seconds delay
+				() => {
+					searchText.destroy()
+					this.interfaceManager.goToNFTMint(1000)
+				},
+				null,
+				this,
+			)
+		})
 	}
 
 	randomNFTFrameIndex(score) {
@@ -95,13 +106,17 @@ class NFTGenerate extends Phaser.Scene {
 	}
 
 	generateNFTProperties() {
-		const nftMapping = this.cache.json.get('nftMapping')
+		if (!this.nftMapping) {
+			console.error('NFT mapping data is not loaded')
+			return {}
+		}
+
 		gameSettings.nft_weapon_index = this.randomNFTIndex()
 		gameSettings.nft_frame_index = this.randomNFTFrameIndex(
 			gameSettings.playerScore,
 		)
 
-		const selectedNFT = nftMapping[gameSettings.nft_weapon_index]
+		const selectedNFT = this.nftMapping[gameSettings.nft_weapon_index]
 		const selectedFrame = selectedNFT.url[gameSettings.nft_frame_index]
 
 		return {

@@ -506,7 +506,7 @@ class TutorialScreen extends Phaser.Scene {
 				Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
 				(cam, effect) => {
 					this.scene.stop()
-					this.scene.start('bossGame', {
+					this.scene.start('playGame', {
 						callingScene: this.callingScene,
 						number: this.selectedPlayerIndex,
 					})

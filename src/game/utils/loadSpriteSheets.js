@@ -33,7 +33,7 @@ export const loadPlayerSpriteSheetNormal = (scene) => {
 }
 
 // Load common spritesheets
-export const loadSpriteSheets = (scene) => {
+export const loadSpriteSheetsLoading = (scene) => {
 	loadSpriteSheetIfNotExists(
 		scene,
 		'boss_texture',
@@ -187,6 +187,70 @@ export const loadSpriteSheets = (scene) => {
 		0,
 		11,
 	)
+	loadSpriteSheetIfNotExists(
+		scene,
+		'bounce_effect_texture',
+		'assets/spritesheets/effects/bounce_effect.png',
+		64,
+		64,
+		0,
+		41,
+	)
+	loadSpriteSheetIfNotExists(
+		scene,
+		'electric_effect_texture',
+		'assets/spritesheets/effects/electric_effect.png',
+		64,
+		64,
+		0,
+		41,
+	)
+	loadSpriteSheetIfNotExists(
+		scene,
+		'time_effect_texture',
+		'assets/spritesheets/effects/time_effect.png',
+		64,
+		64,
+		0,
+		45,
+	)
+	loadSpriteSheetIfNotExists(
+		scene,
+		'poison_effect_texture',
+		'assets/spritesheets/effects/poison_effect.png',
+		64,
+		64,
+		0,
+		41,
+	)
+}
+
+export const loadBulletSpriteSheet = (scene, bulletSprite) => {
+	if (bulletSprite) {
+		loadSpriteSheetIfNotExists(
+			scene,
+			bulletSprite.key,
+			bulletSprite.path,
+			bulletSprite.frameWidth,
+			bulletSprite.frameHeight,
+			bulletSprite.margin,
+			bulletSprite.spacing,
+		)
+	}
+}
+
+export const loadEffectSpriteSheet = (scene, effectSprite) => {
+	if (effectSprite) {
+		loadSpriteSheetIfNotExists(
+			scene,
+			effectSprite.key,
+			effectSprite.path,
+			effectSprite.frameWidth,
+			effectSprite.frameHeight,
+			effectSprite.margin,
+			effectSprite.spacing,
+		)
+	}
 }
 
 const bulletSprites = {
@@ -339,39 +403,4 @@ const effectSprites = {
 	},
 }
 
-const additionalEffectSprites = [
-	{
-		key: 'bounce_effect_texture',
-		path: 'assets/spritesheets/effects/bounce_effect.png',
-		frameWidth: 64,
-		frameHeight: 64,
-		margin: 0,
-		spacing: 41,
-	},
-	{
-		key: 'electric_effect_texture',
-		path: 'assets/spritesheets/effects/electric_effect.png',
-		frameWidth: 64,
-		frameHeight: 64,
-		margin: 0,
-		spacing: 41,
-	},
-	{
-		key: 'time_effect_texture',
-		path: 'assets/spritesheets/effects/time_effect.png',
-		frameWidth: 64,
-		frameHeight: 64,
-		margin: 0,
-		spacing: 45,
-	},
-	{
-		key: 'poison_effect_texture',
-		path: 'assets/spritesheets/effects/poison_effect.png',
-		frameWidth: 64,
-		frameHeight: 64,
-		margin: 0,
-		spacing: 41,
-	},
-]
-
-export { bulletSprites, effectSprites, additionalEffectSprites }
+export { bulletSprites, effectSprites }

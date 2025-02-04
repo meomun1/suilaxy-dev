@@ -221,57 +221,81 @@ class PowerScreen extends Phaser.Scene {
 	}
 
 	handleUpgradeChoice(choice) {
+		let bonusSpeed = 0
+		let bonusBulletDamage = 0
+		let bonusLifesteal = 0
+		let bonusBulletSpeed = 0
+		let bonusMaxHealth = 0
+		let bonusBulletSize = 0
+		let decreaseHealth = 0
+		let bonusDamage = 0
+
 		switch (choice) {
 			case 'all':
 				// Speed
+				bonusSpeed = gameSettings.savePlayerSpeed * 0.25
 				gameSettings.savePlayerSpeed =
-					gameSettings.savePlayerSpeed * 1.25 * gameSettings.savePlayerBuffRate
+					gameSettings.savePlayerSpeed +
+					bonusSpeed +
+					bonusSpeed * gameSettings.savePlayerBuffRate
 				// Bullet damage
-				gameSettings.savePlayerBulletDamage =
-					gameSettings.savePlayerBulletDamage *
-					1.25 *
-					gameSettings.savePlayerBuffRate
+				bonusBulletDamage = gameSettings.savePlayerBulletDamage * 0.25
+				gameSettings.savePlayerBulletDamage = Math.round(
+					gameSettings.savePlayerBulletDamage +
+						bonusBulletDamage +
+						bonusBulletDamage * gameSettings.savePlayerBuffRate,
+				)
 				// Lifesteal
+				bonusLifesteal = gameSettings.savePlayerLifesteal * 0.25
 				gameSettings.savePlayerLifesteal =
-					gameSettings.savePlayerLifesteal *
-					1.25 *
-					gameSettings.savePlayerBuffRate
+					gameSettings.savePlayerLifesteal +
+					bonusLifesteal +
+					bonusLifesteal * gameSettings.savePlayerBuffRate
 				// Bullet speed
+				bonusBulletSpeed = gameSettings.savePlayerBulletSpeed * 0.25
 				gameSettings.savePlayerBulletSpeed =
-					gameSettings.savePlayerBulletSpeed *
-					1.25 *
-					gameSettings.savePlayerBuffRate
+					gameSettings.savePlayerBulletSpeed +
+					bonusBulletSpeed +
+					bonusBulletSpeed * gameSettings.savePlayerBuffRate
 				// Max health
+				bonusMaxHealth = gameSettings.savePlayerMaxHealth * 0.25
 				gameSettings.savePlayerMaxHealth =
-					gameSettings.savePlayerMaxHealth *
-					1.25 *
-					gameSettings.savePlayerBuffRate
+					gameSettings.savePlayerMaxHealth +
+					bonusMaxHealth +
+					bonusMaxHealth * gameSettings.savePlayerBuffRate
 				// Bullet size
+				bonusBulletSize = gameSettings.savePlayerBulletSize * 0.25
 				gameSettings.savePlayerBulletSize =
-					gameSettings.savePlayerBulletSize *
-					1.25 *
-					gameSettings.savePlayerBuffRate
+					gameSettings.savePlayerBulletSize +
+					bonusBulletSize +
+					bonusBulletSize * gameSettings.savePlayerBuffRate
 				// Fire rate
-				gameSettings.savePlayerFireRate = gameSettings.savePlayerFireRate / 1.25
+				gameSettings.savePlayerFireRate =
+					gameSettings.savePlayerFireRate /
+					(1.25 + gameSettings.savePlayerBuffRate / 5)
 				// Number of bullets
 				gameSettings.savePlayerNumberOfBullets =
 					gameSettings.savePlayerNumberOfBullets + 1
 				break
 
 			case 'dark':
+				decreaseHealth = gameSettings.savePlayerMaxHealth / 2
+				bonusDamage = gameSettings.savePlayerBulletDamage
 				gameSettings.savePlayerMaxHealth =
-					gameSettings.savePlayerMaxHealth *
-					0.5 *
-					gameSettings.savePlayerBuffRate
-				gameSettings.savePlayerBulletDamage =
-					gameSettings.savePlayerBulletDamage *
-					2 *
-					gameSettings.savePlayerBuffRate
+					gameSettings.savePlayerMaxHealth - decreaseHealth
+				gameSettings.savePlayerBulletDamage = Math.round(
+					gameSettings.savePlayerBulletDamage +
+						bonusDamage +
+						bonusDamage * gameSettings.savePlayerBuffRate,
+				)
 				break
 
 			case 'earth':
+				bonusMaxHealth = gameSettings.savePlayerMaxHealth * 2
 				gameSettings.savePlayerMaxHealth =
-					gameSettings.savePlayerMaxHealth * 2 * gameSettings.savePlayerBuffRate
+					gameSettings.savePlayerMaxHealth +
+					bonusMaxHealth +
+					bonusMaxHealth * gameSettings.savePlayerBuffRate
 				break
 
 			case 'moon':
@@ -284,28 +308,34 @@ class PowerScreen extends Phaser.Scene {
 				break
 
 			case 'ocean':
+				bonusBulletSize = gameSettings.savePlayerBulletSize
 				gameSettings.savePlayerBulletSize =
-					gameSettings.savePlayerBulletSize *
-					2 *
-					gameSettings.savePlayerBuffRate
+					gameSettings.savePlayerBulletSize +
+					bonusBulletSize +
+					bonusBulletSize * (gameSettings.savePlayerBuffRate / 5)
 				break
 
 			case 'sky':
+				bonusSpeed = gameSettings.savePlayerSpeed
 				gameSettings.savePlayerSpeed =
-					gameSettings.savePlayerSpeed * 2 * gameSettings.savePlayerBuffRate
+					gameSettings.savePlayerSpeed +
+					bonusSpeed +
+					bonusSpeed * (gameSettings.savePlayerBuffRate / 5)
 				break
 
 			case 'star':
 				gameSettings.savePlayerFireRate =
 					gameSettings.savePlayerFireRate /
-					(2 * gameSettings.savePlayerBuffRate)
+					(2 + gameSettings.savePlayerBuffRate / 5)
 				break
 
 			case 'sun':
-				gameSettings.savePlayerBulletDamage =
-					gameSettings.savePlayerBulletDamage *
-					1.5 *
-					gameSettings.savePlayerBuffRate
+				bonusDamage = gameSettings.savePlayerBulletDamage * 0.5
+				gameSettings.savePlayerBulletDamage = Math.round(
+					gameSettings.savePlayerBulletDamage +
+						bonusDamage +
+						bonusDamage * gameSettings.savePlayerBuffRate,
+				)
 				break
 
 			default:

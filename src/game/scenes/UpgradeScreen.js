@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 import config from '../config/config'
-import GameSettings from '../config/gameSettings'
+import gameSettings from '../config/gameSettings'
 
 class UpgradeScreen extends Phaser.Scene {
 	constructor() {
@@ -186,55 +186,55 @@ class UpgradeScreen extends Phaser.Scene {
 
 		switch (choice) {
 			case 'upgrade1':
-				GameSettings.playerMaxHealth += 300
-				player.maxHealth = GameSettings.playerMaxHealth
-				player.health = GameSettings.playerMaxHealth
+				gameSettings.playerMaxHealth += 300
+				player.maxHealth = gameSettings.playerMaxHealth
+				player.health = gameSettings.playerMaxHealth
 				player.updateHealthBarValue()
 				break
 
 			case 'upgrade2':
-				GameSettings.playerSpeed += 50
-				player.speed = GameSettings.playerSpeed
+				gameSettings.playerSpeed += 50
+				player.speed = gameSettings.playerSpeed
 				break
 
 			case 'upgrade3':
-				GameSettings.playerBulletDamage += 50
-				player.bulletDamage = GameSettings.playerBulletDamage
+				gameSettings.playerBulletDamage += 50
+				player.bulletDamage = gameSettings.playerBulletDamage
 				break
 
 			case 'upgrade4':
 				player.takeDamage(player.health * 0.9)
-				GameSettings.playerBulletDamage += 100
-				GameSettings.playerBulletSize *= 1.22
-				player.bulletDamage = GameSettings.playerBulletDamage
-				player.bulletSize = GameSettings.playerBulletSize
+				gameSettings.playerBulletDamage = gameSettings.playerBulletDamage * 2
+				gameSettings.playerBulletSize *= 1.22
+				player.bulletDamage = gameSettings.playerBulletDamage
+				player.bulletSize = gameSettings.playerBulletSize
 				break
 
 			case 'upgrade5':
-				GameSettings.playerLifesteal += 0.1
+				gameSettings.playerLifesteal += 0.01
 				player.lifestealRate =
-					(GameSettings.playerLifesteal * player.bulletDamage) /
+					(gameSettings.playerLifesteal * player.bulletDamage) /
 					player.numberOfBullets
 				break
 
 			case 'upgrade6':
-				if (GameSettings.playerNumberOfBullets < 10) {
-					GameSettings.playerNumberOfBullets += 1
-					player.numberOfBullets = GameSettings.playerNumberOfBullets
+				if (gameSettings.playerNumberOfBullets < 10) {
+					gameSettings.playerNumberOfBullets += 1
+					player.numberOfBullets = gameSettings.playerNumberOfBullets
 				}
 				break
 
 			case 'upgrade7':
-				GameSettings.playerFireRate -= this.increaseValue(
-					GameSettings.playerFireRate,
+				gameSettings.playerFireRate -= this.increaseValue(
+					gameSettings.playerFireRate,
 					10000,
 				)
-				player.fireRate = GameSettings.playerFireRate
+				player.fireRate = gameSettings.playerFireRate
 				break
 
 			case 'upgrade8':
-				GameSettings.playerBulletSpeed += 100
-				player.bulletSpeed = GameSettings.playerBulletSpeed
+				gameSettings.playerBulletSpeed += 100
+				player.bulletSpeed = gameSettings.playerBulletSpeed
 				break
 		}
 

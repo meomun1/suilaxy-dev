@@ -52,9 +52,7 @@ function App() {
 		EventBus.emit('process-donation', { amount: mistAmount })
 	}
 
-	const onCurrentActiveScene = (scene) => {
-		console.log(scene)
-	}
+	const onCurrentActiveScene = (scene) => {}
 
 	return (
 		<>

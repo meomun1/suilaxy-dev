@@ -2,14 +2,14 @@ import Phaser from 'phaser'
 import config from '../config/config.js'
 import GuiManager from '../manager/GuiManager.js'
 import gameSettings from '../config/gameSettings.js'
-import { loadImages } from '../utils/loadImage.js'
+import { loadImageLoading } from '../utils/loadImage.js'
 import {
-	loadSpriteSheets,
-	loadSpriteSheetIfNotExists,
+	loadSpriteSheetsLoading,
 	bulletSprites,
 	effectSprites,
-	additionalEffectSprites,
 	loadPlayerSpriteSheetNormal,
+	loadBulletSpriteSheet,
+	loadEffectSpriteSheet,
 } from '../utils/loadSpriteSheets.js'
 import { loadAudio } from '../utils/loadAudio.js'
 import { createAnimationForLoading } from '../utils/loadAnimations.js'
@@ -27,62 +27,18 @@ class LoadingScreen extends Phaser.Scene {
 	}
 
 	preload() {
-		loadImages(this)
-		loadSpriteSheets(this)
+		loadImageLoading(this)
+		loadSpriteSheetsLoading(this)
 		loadPlayerSpriteSheetNormal(this)
 		loadAudio(this)
 
 		// Load the appropriate spritesheet based on selectedPlayerIndex
 		const bulletSprite = bulletSprites[gameSettings.selectedPlayerIndex]
-		if (bulletSprite) {
-			loadSpriteSheetIfNotExists(
-				this,
-				bulletSprite.key,
-				bulletSprite.path,
-				bulletSprite.frameWidth,
-				bulletSprite.frameHeight,
-				bulletSprite.margin,
-				bulletSprite.spacing,
-			)
-		}
-
-		// Load enemy Bullet Spritesheet
-		loadSpriteSheetIfNotExists(
-			this,
-			'bullet_texture',
-			'assets/spritesheets/vfx/bullet.png',
-			12,
-			26,
-			0,
-			2,
-		)
+		loadBulletSpriteSheet(this, bulletSprite)
 
 		// Load Effect Spritesheets
 		const effectSprite = effectSprites[gameSettings.selectedPlayerIndex]
-		if (effectSprite) {
-			loadSpriteSheetIfNotExists(
-				this,
-				effectSprite.key,
-				effectSprite.path,
-				effectSprite.frameWidth,
-				effectSprite.frameHeight,
-				effectSprite.margin,
-				effectSprite.spacing,
-			)
-		}
-
-		// Load additional effect sprites
-		additionalEffectSprites.forEach((sprite) => {
-			loadSpriteSheetIfNotExists(
-				this,
-				sprite.key,
-				sprite.path,
-				sprite.frameWidth,
-				sprite.frameHeight,
-				sprite.margin,
-				sprite.spacing,
-			)
-		})
+		loadEffectSpriteSheet(this, effectSprite)
 	}
 
 	create() {

@@ -317,10 +317,10 @@ class SelectUtility extends Phaser.Scene {
 	}
 
 	async create() {
-		console.log('Player Index ', gameSettings.selectedPlayerIndex)
-		console.log('Artifact Index ', gameSettings.selectedArtifactIndex)
-		console.log('User Active ', gameSettings.userActive)
-		console.log('Wallet Connected ', gameSettings.userWalletAdress)
+		// console.log('Player Index ', gameSettings.selectedPlayerIndex)
+		// console.log('Artifact Index ', gameSettings.selectedArtifactIndex)
+		// console.log('User Active ', gameSettings.userActive)
+		// console.log('Wallet Connected ', gameSettings.userWalletAdress)
 
 		/* ----------------------------INIT---------------------------- */
 		this.cameras.main.fadeIn(1000, 0, 0, 0)
@@ -1137,7 +1137,7 @@ class SelectUtility extends Phaser.Scene {
 				selectedArtifact,
 			)
 
-			console.log('Modified settings: ', modifiedSettings)
+			// console.log('Modified settings: ', modifiedSettings)
 			saveBaseStats(modifiedSettings)
 			requestAnimationFrame(() => this.updatePowerCard())
 		}
@@ -1615,10 +1615,8 @@ class SelectUtility extends Phaser.Scene {
 				// Percentage values
 				if (Number.isInteger(finalValue)) {
 					displayValue = `+${finalValue.toFixed(0)}%`
-					console.log('finalValue one:', finalValue)
 				} else {
 					displayValue = `+${finalValue.toFixed(1)}%`
-					console.log('finalValue second:', finalValue)
 				}
 			} else if (name === 'armor' || name === 'health generation') {
 				// Flat values

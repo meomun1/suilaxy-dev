@@ -50,8 +50,6 @@ class TutorialScreen extends Phaser.Scene {
 		)
 		this.background.setOrigin(0, 0)
 
-		this.createTutorialText()
-
 		createShipAnimations(this)
 
 		this.createObject()
@@ -75,8 +73,6 @@ class TutorialScreen extends Phaser.Scene {
 			this.shield,
 		)
 	}
-
-	createTutorialText() {}
 
 	createObject() {
 		// reset save stats
@@ -510,7 +506,7 @@ class TutorialScreen extends Phaser.Scene {
 				Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
 				(cam, effect) => {
 					this.scene.stop()
-					this.scene.start('playGame', {
+					this.scene.start('bossGame', {
 						callingScene: this.callingScene,
 						number: this.selectedPlayerIndex,
 					})

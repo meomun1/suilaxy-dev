@@ -16,6 +16,14 @@ import PlayingScreen from '../scenes/PlayingScreen.js'
 import LevelTwoScreen from '../scenes/LevelTwoScreen.js'
 import BossScreen from '../scenes/BossScreen.js'
 
+export const createScene = (scene) => {
+	createObject(scene)
+	createMechanic(scene)
+	createManager(scene)
+	createMusic(scene)
+	createShipAnimations(scene)
+}
+
 const createObject = (scene) => {
 	scene.player = new SpecialPlayers(
 		scene,
@@ -203,12 +211,4 @@ export const createShipAnimations = (scene) => {
 			repeat: -1,
 		})
 	}
-}
-
-export const createScene = (scene) => {
-	createObject(scene)
-	createMechanic(scene)
-	createManager(scene)
-	createMusic(scene)
-	createShipAnimations(scene)
 }

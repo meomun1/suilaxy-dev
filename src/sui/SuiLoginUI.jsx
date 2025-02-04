@@ -77,7 +77,7 @@ const SuiLoginUI = () => {
 			const txb = new Transaction()
 			txb.setSender(currentAccount.address)
 
-			const betAmountCoin = txb.splitCoins(txb.gas, [600000000])
+			const betAmountCoin = txb.splitCoins(txb.gas, [500000000])
 			if (!betAmountCoin) {
 				throw new Error('Failed to create transaction coin')
 			}

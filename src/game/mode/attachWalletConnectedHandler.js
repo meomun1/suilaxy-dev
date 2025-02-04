@@ -2,6 +2,7 @@ import { resetEverything } from '../utils/adjustStats'
 import { shutdown } from '../utils/endGamescene'
 import MenuScreen from '../scenes/MenuScreen'
 import SelectUtility from '../scenes/SelectUtility'
+import TitleScreen from '../scenes/TitleScreen'
 
 function handleWalletConnected(data) {
 	if (!data.connected) {
@@ -19,12 +20,19 @@ function handleWalletConnected(data) {
 
 			this.artifactDetails = []
 		}
-		this.scene.stop(this.callingScene)
 
 		if (this instanceof MenuScreen) {
 			this.events.once('shutdown', () => shutdown(this), this)
 		}
+
+		if (this instanceof TitleScreen) {
+			this.scene.stop(this.callingScene)
+		}
+
+		this.scene.stop(this.callingScene)
+
 		this.scene.start('bootGame')
+
 		resetEverything()
 	}
 }

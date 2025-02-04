@@ -19,12 +19,12 @@ var gameSettings = {
 	playerSize: 1,
 	playerArmor: 0,
 	playerHealthGeneration: 0,
-	playerBuffRate: 0,
+	playerBuffRate: 1,
 	playerHardMode: false,
 
 	// SAVE STATS player in levels
 	savePlayerSpeed: 250,
-	savePlayerBulletDamage: 5000,
+	savePlayerBulletDamage: 300,
 	savePlayerLifesteal: 0,
 	savePlayerBulletSpeed: 400,
 	savePlayerScore: 0,
@@ -37,7 +37,7 @@ var gameSettings = {
 	savePlayerSize: 1,
 	savePlayerArmor: 0,
 	savePlayerHealthGeneration: 0,
-	savePlayerBuffRate: 0,
+	savePlayerBuffRate: 1,
 	saveplayerHardMode: false,
 
 	// Default player settings
@@ -55,7 +55,7 @@ var gameSettings = {
 	defaultPlayerSize: 1,
 	defaultPlayerArmor: 0,
 	defaultPlayerHealthGeneration: 0,
-	defaultPlayerBuffRate: 0,
+	defaultPlayerBuffRate: 1,
 	defaultplayerHardMode: false,
 
 	// // BASE STATS for player ( Can be used in fututre for reseting player stats)
@@ -73,7 +73,7 @@ var gameSettings = {
 	basePlayerSize: 1,
 	basePlayerArmor: 0, // 10-150
 	basePlayerHealthGeneration: 0, // 0.1 - 0.5
-	basePlayerBuffRate: 0, // 1 - 5
+	basePlayerBuffRate: 1, // 1 - 5
 	baseplayerHardMode: false, // ko quan tam
 
 	// MAX STATS for player

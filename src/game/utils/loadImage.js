@@ -5,7 +5,41 @@ export const loadImageIfNotExists = (scene, key, path) => {
 	}
 }
 
-export const loadImages = (scene) => {
+export const loadImageTitleScreen = (scene) => {
+	loadImageIfNotExists(scene, 'background', 'assets/main-menu/background.png')
+	loadImageIfNotExists(scene, 'button_play', 'assets/gui/button-play.png')
+	loadImageIfNotExists(
+		scene,
+		'button_play_hover',
+		'assets/gui/button-play-hover.png',
+	)
+}
+
+export const loadImageMenu = (scene) => {
+	loadImageIfNotExists(scene, 'background', 'assets/main-menu/background.png')
+	loadImageIfNotExists(scene, 'logo', 'assets/main-menu/logo.png')
+	loadImageIfNotExists(scene, 'donate-us', 'assets/main-menu/donate-us.png')
+	loadImageIfNotExists(scene, 'gear-button', 'assets/main-menu/gear-button.png')
+	loadImageIfNotExists(scene, 'arcade-card', 'assets/main-menu/arcade-card.png')
+	loadImageIfNotExists(
+		scene,
+		'endless-card',
+		'assets/main-menu/endless-card.png',
+	)
+	loadImageIfNotExists(scene, 'pvp-card', 'assets/main-menu/pvp-card.png')
+	loadImageIfNotExists(
+		scene,
+		'next-mode-right',
+		'assets/main-menu/next-mode-right.png',
+	)
+	loadImageIfNotExists(
+		scene,
+		'next-mode-left',
+		'assets/main-menu/next-mode-left.png',
+	)
+}
+
+export const loadImageLoading = (scene) => {
 	loadImageIfNotExists(
 		scene,
 		'background_texture',

@@ -204,11 +204,12 @@ class CollideManager {
 	}
 
 	playerHitEnemy(player, enemy) {
-		const damageReduction = enemy.damage * player.playerArmor * 0.1
-		const finalDamage = enemy.damage - damageReduction
-		player.takeDamage(finalDamage)
-		player.toLifeSteal()
-		enemy.takeDamage(player.damage)
+		player.takeDamage(enemy.damage)
+		if (enemy instanceof Boss) {
+			enemy.takeDamage(100)
+		} else {
+			enemy.takeDamage(player.damage)
+		}
 	}
 
 	playerCollideHealthPack(player, healthPack) {

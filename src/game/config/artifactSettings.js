@@ -21,7 +21,7 @@ const artifactSettings = {
 		FRAT: (currentValue, count) => Math.max(currentValue - count * 100, 100),
 		BSIZ: (currentValue, count) => currentValue + count * 0.2,
 		BUFF: (currentValue, count) => {
-			currentValue = Number(currentValue) || 0
+			currentValue = Number(currentValue) || 1
 			count = Number(count) || 0
 			return currentValue + count * 0.5
 		},

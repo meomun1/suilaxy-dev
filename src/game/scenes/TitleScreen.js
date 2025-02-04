@@ -5,13 +5,12 @@ import Music from '../mode/Music.js'
 import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
 import gameSettings from '../config/gameSettings.js'
+import { loadImageTitleScreen } from '../utils/loadImage.js'
 
 class TitleScreen extends Phaser.Scene {
 	constructor() {
 		super('bootGame')
 		this.music = null
-		this.bgMusic = null
-		this.walletConnected = false
 		this.connectWalletText = null
 		this.button_play = null
 		this.guiManager = new GuiManager(this)
@@ -26,51 +25,7 @@ class TitleScreen extends Phaser.Scene {
 	preload() {
 		this.load.audio('main_menu_music', 'assets/audio/backgroundMusic.mp3')
 
-		this.guiManager.loadImage('background', 'assets/main-menu/background.png')
-
-		// Load BUTTONS
-		this.load.image('button_play', 'assets/gui/button-play.png')
-		this.load.image('button_play_hover', 'assets/gui/button-play-hover.png')
-
-		console.log('Save Player Speed: ', gameSettings.savePlayerSpeed)
-		console.log(
-			'Save Player Bullet Damage: ',
-			gameSettings.savePlayerBulletDamage,
-		)
-		console.log('Save Player Lifesteal: ', gameSettings.savePlayerLifesteal)
-		console.log(
-			'Save Player Bullet Speed: ',
-			gameSettings.savePlayerBulletSpeed,
-		)
-		console.log('Save Player Score: ', gameSettings.savePlayerScore)
-		console.log(
-			'Save Player Number Of Bullets: ',
-			gameSettings.savePlayerNumberOfBullets,
-		)
-		console.log('Save Player Fire Rate: ', gameSettings.savePlayerFireRate)
-		console.log(
-			'Save Player Default Bullet Size: ',
-			gameSettings.savePlayerDefaultBulletSize,
-		)
-		console.log('Save Player Bullet Size: ', gameSettings.savePlayerBulletSize)
-		console.log('Save Player Max Health: ', gameSettings.savePlayerMaxHealth)
-		console.log(
-			'Save Player Upgrade Threshold: ',
-			gameSettings.savePlayerUpgradeThreshold,
-		)
-		console.log('Save Player Size: ', gameSettings.savePlayerSize)
-		console.log('Save Player Armor: ', gameSettings.savePlayerArmor)
-		console.log(
-			'Save Player Health Generation: ',
-			gameSettings.savePlayerHealthGeneration,
-		)
-		console.log('Save Player Buff Rate: ', gameSettings.savePlayerBuffRate)
-		console.log('Save Player Hard Mode: ', gameSettings.saveplayerHardMode)
-
-		console.log('Player Index ', gameSettings.selectedPlayerIndex)
-		console.log('Artifact Index ', gameSettings.selectedArtifactIndex)
-		console.log('User Active ', gameSettings.userActive)
-		console.log('Wallet Connected ', gameSettings.userWalletAdress)
+		loadImageTitleScreen(this)
 	}
 
 	create() {
@@ -101,7 +56,7 @@ class TitleScreen extends Phaser.Scene {
 			this.music = this.sys.game.globals.music
 			if (this.music.musicOn === true && !this.music.bgMusicPlaying) {
 				this.bgMusic = this.sound.add('main_menu_music', {
-					volume: 0.5,
+					volume: 0.2,
 					loop: true,
 				})
 				this.bgMusic.play()
@@ -191,7 +146,7 @@ class TitleScreen extends Phaser.Scene {
 
 		this.button_play.on('pointerdown', () => {
 			this.scene.start('mainMenu')
-			// this.scene.start('selectUtility')
+			this.scene.stop()
 		})
 
 		this.button_play.on('pointerover', () => {

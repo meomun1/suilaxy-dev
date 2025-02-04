@@ -5,6 +5,7 @@ import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 import gameSettings from '../config/gameSettings.js'
+import { loadImageMenu } from '../utils/loadImage.js'
 
 class MenuScreen extends Phaser.Scene {
 	constructor() {
@@ -17,106 +18,15 @@ class MenuScreen extends Phaser.Scene {
 		this.transitioning = false
 		this.walletInfo = null
 		this.guiManager = new GuiManager(this)
-	}
-
-	// Add handleWalletConnected as a class method
-	handleWalletConnected = (data) => {
-		if (!data.connected) {
-			if (this.sys.game.globals.bgMusic) {
-				this.sys.game.globals.bgMusic.stop()
-			}
-			this.scene.stop('mainMenu')
-			this.scene.start('bootGame')
-		}
+		this.callingScene = 'mainMenu'
 	}
 
 	init() {
-		EventBus.on('wallet-connected', this.handleWalletConnected)
+		EventBus.on('wallet-connected', handleWalletConnected, this)
 	}
 
 	preload() {
-		// Load the background and buttons
-		this.guiManager.loadImage('background', 'assets/main-menu/background.png')
-
-		// Load the logo image
-		this.guiManager.loadImage('logo', 'assets/main-menu/logo.png')
-
-		// Load the Donate Us button
-		this.guiManager.loadImage('donate-us', 'assets/main-menu/donate-us.png')
-
-		this.guiManager.loadImage('gear-button', 'assets/main-menu/gear-button.png')
-
-		// Load the Mode Cards
-		this.guiManager.loadImage('arcade-card', 'assets/main-menu/arcade-card.png')
-		this.guiManager.loadImage(
-			'endless-card',
-			'assets/main-menu/endless-card.png',
-		)
-		this.guiManager.loadImage('pvp-card', 'assets/main-menu/pvp-card.png')
-
-		// Load the next mode arrow button
-		this.guiManager.loadImage(
-			'next-mode-right',
-			'assets/main-menu/next-mode-right.png',
-		)
-		this.guiManager.loadImage(
-			'next-mode-left',
-			'assets/main-menu/next-mode-left.png',
-		)
-
-		// init the player sprites in menu
-		for (let i = 1; i <= 9; i++) {
-			this.load.spritesheet({
-				key: `player_texture_${i}`,
-				url: `assets/spritesheets/players/planes_0${i}A.png`,
-				frameConfig: {
-					frameWidth: 96,
-					frameHeight: 96,
-					startFrame: 0,
-					endFrame: 19,
-				},
-			})
-		}
-
-		console.log('Save Player Speed: ', gameSettings.savePlayerSpeed)
-		console.log(
-			'Save Player Bullet Damage: ',
-			gameSettings.savePlayerBulletDamage,
-		)
-		console.log('Save Player Lifesteal: ', gameSettings.savePlayerLifesteal)
-		console.log(
-			'Save Player Bullet Speed: ',
-			gameSettings.savePlayerBulletSpeed,
-		)
-		console.log('Save Player Score: ', gameSettings.savePlayerScore)
-		console.log(
-			'Save Player Number Of Bullets: ',
-			gameSettings.savePlayerNumberOfBullets,
-		)
-		console.log('Save Player Fire Rate: ', gameSettings.savePlayerFireRate)
-		console.log(
-			'Save Player Default Bullet Size: ',
-			gameSettings.savePlayerDefaultBulletSize,
-		)
-		console.log('Save Player Bullet Size: ', gameSettings.savePlayerBulletSize)
-		console.log('Save Player Max Health: ', gameSettings.savePlayerMaxHealth)
-		console.log(
-			'Save Player Upgrade Threshold: ',
-			gameSettings.savePlayerUpgradeThreshold,
-		)
-		console.log('Save Player Size: ', gameSettings.savePlayerSize)
-		console.log('Save Player Armor: ', gameSettings.savePlayerArmor)
-		console.log(
-			'Save Player Health Generation: ',
-			gameSettings.savePlayerHealthGeneration,
-		)
-		console.log('Save Player Buff Rate: ', gameSettings.savePlayerBuffRate)
-		console.log('Save Player Hard Mode: ', gameSettings.saveplayerHardMode)
-
-		console.log('Player Index ', gameSettings.selectedPlayerIndex)
-		console.log('Artifact Index ', gameSettings.selectedArtifactIndex)
-		console.log('User Active ', gameSettings.userActive)
-		console.log('Wallet Connected ', gameSettings.userWalletAdress)
+		loadImageMenu(this)
 	}
 
 	create() {
@@ -431,6 +341,7 @@ class MenuScreen extends Phaser.Scene {
 
 	startArcadeMode() {
 		// Start the Arcade mode scene
+		this.scene.stop()
 		this.scene.start('loadingScreen')
 	}
 

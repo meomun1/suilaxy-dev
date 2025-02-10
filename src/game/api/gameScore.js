@@ -9,7 +9,6 @@ export const postScore = async (user_address, score) => {
 				score,
 			},
 		)
-		console.log('Score posted successfully')
 	} catch (error) {
 		console.error('Error posting score:', error)
 	}

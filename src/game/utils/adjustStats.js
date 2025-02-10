@@ -136,4 +136,5 @@ export const resetFromMint = () => {
 	gameSettings.nft_frame_index = 0
 	gameSettings.nft_description = 'nft_description'
 	gameSettings.nft_img_url = 'nft_img_url'
+	gameSettings.playerScore = 0
 }

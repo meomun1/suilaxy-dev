@@ -56,7 +56,7 @@ class TitleScreen extends Phaser.Scene {
 			this.music = this.sys.game.globals.music
 			if (this.music.musicOn === true && !this.music.bgMusicPlaying) {
 				this.bgMusic = this.sound.add('main_menu_music', {
-					volume: 0.2,
+					volume: 0.05,
 					loop: true,
 				})
 				this.bgMusic.play()

@@ -180,7 +180,7 @@ class LevelTwoScreen extends Phaser.Scene {
 
 	handleCollision(player, asteroid) {
 		asteroid.destroy()
-		player.takeDamage(50)
+		player.takeDamage(250)
 	}
 
 	startFinalWave() {

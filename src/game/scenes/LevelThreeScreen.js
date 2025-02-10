@@ -384,7 +384,7 @@ class LevelThreeScreen extends Phaser.Scene {
 					) &&
 					!this.collisionCooldown
 				) {
-					this.player.takeDamage(100)
+					this.player.takeDamage(350)
 					this.collisionCooldown = true
 
 					// Reset cooldown after a delay (e.g., 1 second)

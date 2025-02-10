@@ -22,21 +22,21 @@ class SoundManager extends Phaser.GameObjects.Sprite {
 
 	playHealthSound() {
 		if (this.scene.sys.game.globals.music.soundOn) {
-			const healthSound = this.scene.sound.add('health', { volume: 0.2 })
+			const healthSound = this.scene.sound.add('health', { volume: 0.1 })
 			healthSound.play()
 		}
 	}
 
 	playShieldSound() {
 		if (this.scene.sys.game.globals.music.soundOn) {
-			const shieldSound = this.scene.sound.add('shield', { volume: 0.2 })
+			const shieldSound = this.scene.sound.add('shield', { volume: 0.1 })
 			shieldSound.play()
 		}
 	}
 
 	playBulletSound() {
 		if (this.scene.sys.game.globals.music.soundOn) {
-			const BulletSound = this.scene.sound.add('shootSound', { volume: 0.05 })
+			const BulletSound = this.scene.sound.add('shootSound', { volume: 0.01 })
 			BulletSound.play()
 		}
 	}
@@ -44,7 +44,7 @@ class SoundManager extends Phaser.GameObjects.Sprite {
 	playExplosionSound() {
 		if (this.scene.sys.game.globals.music.soundOn) {
 			const explosionSound = this.scene.sound.add('explosionSound', {
-				volume: 0.05,
+				volume: 0.01,
 			})
 			explosionSound.play()
 		}

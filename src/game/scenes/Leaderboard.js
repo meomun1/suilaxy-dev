@@ -1,15 +1,30 @@
 import Phaser from 'phaser'
 import config from '../config/config'
 import gameSettings from '../config/gameSettings'
-
+import InterfaceManager from './InterfaceScene'
+import GuiManager from '../manager/GuiManager.js'
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 class Leaderboard extends Phaser.Scene {
 	constructor() {
 		super('leaderboard')
+		this.guiManager = new GuiManager(this)
 	}
 
-	preload() {}
+	preload() {
+		this.guiManager.loadImage('button_title', 'assets/gui/button-title.png')
+		this.guiManager.loadImage(
+			'button_title_hover',
+			'assets/gui/button-title-hover.png',
+		)
+
+		this.input.setDefaultCursor(
+			'url(assets/cursors/custom-cursor.cur), pointer',
+		)
+	}
 
 	create() {
+		this.interfaceManager = new InterfaceManager(this)
+
 		this.music = this.sys.game.globals.music
 
 		this.input.setDefaultCursor(
@@ -91,29 +106,7 @@ class Leaderboard extends Phaser.Scene {
 		scoreText.setShadow(2, 2, '#FFFB73', 2, true, true)
 
 		// Create Play Button
-
-		this.button_exit = this.add.image(
-			config.width / 2,
-			config.height / 2 + 270,
-			'button_exit',
-		)
-		this.button_exit.setScale(1.5)
-		this.button_exit.setInteractive()
-
-		// Event listeners for the play button
-		this.button_exit.on('pointerdown', () => {
-			this.sys.game.globals.bgMusic.stop()
-			this.scene.start('bootGame')
-		})
-
-		this.button_exit.on('pointerover', () => {
-			this.button_exit.setTexture('button_exit_hover')
-		})
-
-		this.button_exit.on('pointerout', () => {
-			this.button_exit.setTexture('button_exit')
-		})
-
+		this.createTitleButton()
 		this.fetchSuilaxyEntries()
 	}
 
@@ -131,9 +124,7 @@ class Leaderboard extends Phaser.Scene {
 			})
 			.then((data) => {
 				// Access the documents property
-				console.log('Leaderboard data:', data)
 				const documents = data.documents
-				console.log('Leaderboard data:', documents)
 
 				// Sort the data by score in descending order
 				const sortedData = this.sortLeaderboard(documents)
@@ -246,6 +237,51 @@ class Leaderboard extends Phaser.Scene {
 			return address.slice(0, 6) + '...' + address.slice(-4)
 		}
 		return address
+	}
+
+	createTitleButton() {
+		const titleButton = this.add.image(
+			config.width / 2,
+			(config.height * 14) / 15,
+			'button_title',
+		)
+		titleButton.setInteractive()
+
+		const hoverTween = {
+			scale: 1.05,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		const normalTween = {
+			scale: 1,
+			duration: 150,
+			ease: 'Power2',
+		}
+
+		titleButton.on('pointerdown', () => {
+			this.interfaceManager.goToMainMenu(0)
+		})
+
+		titleButton.on('pointerover', () => {
+			this.tweens.killTweensOf(titleButton)
+
+			this.tweens.add({
+				targets: titleButton,
+				...hoverTween,
+			})
+			titleButton.setTexture('button_title_hover')
+		})
+
+		titleButton.on('pointerout', () => {
+			this.tweens.killTweensOf(titleButton)
+
+			this.tweens.add({
+				targets: titleButton,
+				...normalTween,
+			})
+			titleButton.setTexture('button_title')
+		})
 	}
 }
 

@@ -203,32 +203,28 @@ class BossScreen extends Phaser.Scene {
 	}
 
 	createMusic() {
-		// create pause button
-		this.pic = this.add.image(config.width - 20, 30, 'pause')
-		this.pic.setInteractive()
-
-		this.pic.on(
-			'pointerdown',
-			function () {
-				this.scene.pause()
-				this.scene.launch('pauseScreen', { key: 'playLevelTwo' })
-			},
-			this,
-		)
-
-		this.musicButton = this.add.image(config.width - 60, 30, 'sound_texture')
-		this.musicButton.setInteractive()
-
-		this.musicButton.on(
-			'pointerdown',
-			function () {
-				this.music.soundOn = !this.music.soundOn
-				this.music.musicOn = !this.music.musicOn
-
-				this.updateAudio()
-			},
-			this,
-		)
+		// // create pause button
+		// this.pic = this.add.image(config.width - 20, 30, 'pause')
+		// this.pic.setInteractive()
+		// this.pic.on(
+		// 	'pointerdown',
+		// 	function () {
+		// 		this.scene.pause()
+		// 		this.scene.launch('pauseScreen', { key: 'playLevelTwo' })
+		// 	},
+		// 	this,
+		// )
+		// this.musicButton = this.add.image(config.width - 60, 30, 'sound_texture')
+		// this.musicButton.setInteractive()
+		// this.musicButton.on(
+		// 	'pointerdown',
+		// 	function () {
+		// 		this.music.soundOn = !this.music.soundOn
+		// 		this.music.musicOn = !this.music.musicOn
+		// 		this.updateAudio()
+		// 	},
+		// 	this,
+		// )
 	}
 
 	addEnemyLevelBoss() {
@@ -334,11 +330,11 @@ class BossScreen extends Phaser.Scene {
 
 	update() {
 		// update for mute and sound button
-		if (this.music.musicOn === false && this.music.soundOn === false) {
-			this.musicButton = this.add.image(config.width - 60, 30, 'mute_texture')
-		} else if (this.music.musicOn === true && this.music.soundOn === true) {
-			this.musicButton = this.add.image(config.width - 60, 30, 'sound_texture')
-		}
+		// if (this.music.musicOn === false && this.music.soundOn === false) {
+		// 	this.musicButton = this.add.image(config.width - 60, 30, 'mute_texture')
+		// } else if (this.music.musicOn === true && this.music.soundOn === true) {
+		// 	this.musicButton = this.add.image(config.width - 60, 30, 'sound_texture')
+		// }
 		// Pause the game
 		this.keyboardManager.pauseGame()
 

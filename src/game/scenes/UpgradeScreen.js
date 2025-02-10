@@ -212,9 +212,7 @@ class UpgradeScreen extends Phaser.Scene {
 
 			case 'upgrade5':
 				gameSettings.playerLifesteal += 0.01
-				player.lifestealRate =
-					(gameSettings.playerLifesteal * player.bulletDamage) /
-					player.numberOfBullets
+				player.lifestealRate = gameSettings.playerLifesteal
 				break
 
 			case 'upgrade6':

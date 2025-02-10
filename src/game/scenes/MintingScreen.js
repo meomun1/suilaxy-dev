@@ -6,6 +6,7 @@ import GuiManager from '../manager/GuiManager.js'
 import InterfaceManager from './InterfaceScene.js'
 import { resetFromMint } from '../utils/adjustStats'
 import { shutdown } from '../utils/endGamescene.js'
+import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 
 class MintingScreen extends Phaser.Scene {
 	constructor() {
@@ -61,6 +62,8 @@ class MintingScreen extends Phaser.Scene {
 	}
 
 	create() {
+		EventBus.on('wallet-connected', handleWalletConnected, this)
+
 		this.interfaceManager = new InterfaceManager(this)
 
 		// Create a black rectangle that covers the whole game
@@ -230,10 +233,10 @@ class MintingScreen extends Phaser.Scene {
 		}
 
 		titleButton.on('pointerdown', () => {
-			this.sys.game.globals.bgMusic.stop()
+			// this.sys.game.globals.bgMusic.stop()
 			this.events.once('shutdown', () => shutdown(this), this)
 			resetFromMint()
-			this.interfaceManager.goToTitleScreen(0)
+			this.interfaceManager.goToLeaderboard(0)
 		})
 
 		titleButton.on('pointerover', () => {

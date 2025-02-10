@@ -113,33 +113,29 @@ const createManager = (scene) => {
 }
 
 const createMusic = (scene) => {
-	// create pause button
-	scene.pic = scene.add.image(config.width - 20, 30, 'pause')
-	// scene.button = scene.scene.add.sprite(60, 30, 'pause');
-	scene.pic.setInteractive()
-
-	scene.pic.on(
-		'pointerdown',
-		function () {
-			scene.scene.pause()
-			scene.scene.launch('pauseScreen', { key: 'playGame' })
-		},
-		scene,
-	)
-
-	scene.musicButton = scene.add.image(config.width - 60, 30, 'sound_texture')
-	scene.musicButton.setInteractive()
-
-	scene.musicButton.on(
-		'pointerdown',
-		function () {
-			scene.music.soundOn = !scene.music.soundOn
-			scene.music.musicOn = !scene.music.musicOn
-
-			scene.updateAudio()
-		},
-		scene,
-	)
+	// // create pause button
+	// scene.pic = scene.add.image(config.width - 20, 30, 'pause')
+	// // scene.button = scene.scene.add.sprite(60, 30, 'pause');
+	// scene.pic.setInteractive()
+	// scene.pic.on(
+	// 	'pointerdown',
+	// 	function () {
+	// 		scene.scene.pause()
+	// 		scene.scene.launch('pauseScreen', { key: 'playGame' })
+	// 	},
+	// 	scene,
+	// )
+	// scene.musicButton = scene.add.image(config.width - 60, 30, 'sound_texture')
+	// scene.musicButton.setInteractive()
+	// scene.musicButton.on(
+	// 	'pointerdown',
+	// 	function () {
+	// 		scene.music.soundOn = !scene.music.soundOn
+	// 		scene.music.musicOn = !scene.music.musicOn
+	// 		scene.updateAudio()
+	// 	},
+	// 	scene,
+	// )
 }
 
 export const createShipAnimations = (scene) => {

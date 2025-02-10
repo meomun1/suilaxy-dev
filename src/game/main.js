@@ -17,7 +17,7 @@ import PowerScreen from './scenes/PowerScreen.js'
 import MenuScreen from './scenes/MenuScreen.js'
 import SelectUtility from './scenes/SelectUtility.js'
 import NFTGenerate from './scenes/NFTGenerate.js'
-
+import Leaderboard from './scenes/Leaderboard.js'
 import PVPScreen from './scenes/PVP/PVPScreen.js'
 import LoadingPvPScreen from './scenes/PVP/LoadingPVPScreen.js'
 import ChoosePlayerPVP from './scenes/PVP/ChoosePlayerPVP.js'
@@ -57,6 +57,7 @@ const config = {
 		CreditScreen,
 		NFTGenerate,
 		MintingScreen,
+		Leaderboard,
 	],
 	pixelArt: true,
 	input: {

@@ -237,38 +237,38 @@ class PowerScreen extends Phaser.Scene {
 				gameSettings.savePlayerSpeed =
 					gameSettings.savePlayerSpeed +
 					bonusSpeed +
-					bonusSpeed * gameSettings.savePlayerBuffRate
+					(bonusSpeed * gameSettings.savePlayerBuffRate) / 5
 				// Bullet damage
 				bonusBulletDamage = gameSettings.savePlayerBulletDamage * 0.25
 				gameSettings.savePlayerBulletDamage = Math.round(
 					gameSettings.savePlayerBulletDamage +
 						bonusBulletDamage +
-						bonusBulletDamage * gameSettings.savePlayerBuffRate,
+						(bonusBulletDamage * gameSettings.savePlayerBuffRate) / 5,
 				)
 				// Lifesteal
 				bonusLifesteal = gameSettings.savePlayerLifesteal * 0.25
 				gameSettings.savePlayerLifesteal =
 					gameSettings.savePlayerLifesteal +
 					bonusLifesteal +
-					bonusLifesteal * gameSettings.savePlayerBuffRate
+					(bonusLifesteal * gameSettings.savePlayerBuffRate) / 5
 				// Bullet speed
 				bonusBulletSpeed = gameSettings.savePlayerBulletSpeed * 0.25
 				gameSettings.savePlayerBulletSpeed =
 					gameSettings.savePlayerBulletSpeed +
 					bonusBulletSpeed +
-					bonusBulletSpeed * gameSettings.savePlayerBuffRate
+					(bonusBulletSpeed * gameSettings.savePlayerBuffRate) / 5
 				// Max health
 				bonusMaxHealth = gameSettings.savePlayerMaxHealth * 0.25
 				gameSettings.savePlayerMaxHealth =
 					gameSettings.savePlayerMaxHealth +
 					bonusMaxHealth +
-					bonusMaxHealth * gameSettings.savePlayerBuffRate
+					(bonusMaxHealth * gameSettings.savePlayerBuffRate) / 5
 				// Bullet size
 				bonusBulletSize = gameSettings.savePlayerBulletSize * 0.25
 				gameSettings.savePlayerBulletSize =
 					gameSettings.savePlayerBulletSize +
 					bonusBulletSize +
-					bonusBulletSize * gameSettings.savePlayerBuffRate
+					(bonusBulletSize * gameSettings.savePlayerBuffRate) / 5
 				// Fire rate
 				gameSettings.savePlayerFireRate =
 					gameSettings.savePlayerFireRate /
@@ -281,12 +281,13 @@ class PowerScreen extends Phaser.Scene {
 			case 'dark':
 				decreaseHealth = gameSettings.savePlayerMaxHealth / 2
 				bonusDamage = gameSettings.savePlayerBulletDamage
+
 				gameSettings.savePlayerMaxHealth =
 					gameSettings.savePlayerMaxHealth - decreaseHealth
 				gameSettings.savePlayerBulletDamage = Math.round(
 					gameSettings.savePlayerBulletDamage +
 						bonusDamage +
-						bonusDamage * gameSettings.savePlayerBuffRate,
+						(bonusDamage * gameSettings.savePlayerBuffRate) / 5,
 				)
 				break
 
@@ -295,7 +296,7 @@ class PowerScreen extends Phaser.Scene {
 				gameSettings.savePlayerMaxHealth =
 					gameSettings.savePlayerMaxHealth +
 					bonusMaxHealth +
-					bonusMaxHealth * gameSettings.savePlayerBuffRate
+					(bonusMaxHealth * gameSettings.savePlayerBuffRate) / 5
 				break
 
 			case 'moon':
@@ -324,9 +325,21 @@ class PowerScreen extends Phaser.Scene {
 				break
 
 			case 'star':
-				gameSettings.savePlayerFireRate =
-					gameSettings.savePlayerFireRate /
-					(2 + gameSettings.savePlayerBuffRate / 5)
+			case 'star':
+				if (
+					typeof gameSettings.savePlayerBuffRate === 'number' &&
+					!isNaN(gameSettings.savePlayerBuffRate)
+				) {
+					gameSettings.savePlayerFireRate =
+						gameSettings.savePlayerFireRate /
+						(2 + gameSettings.savePlayerBuffRate / 5)
+				} else {
+					gameSettings.savePlayerFireRate = 450
+				}
+
+				if (isNaN(gameSettings.savePlayerFireRate)) {
+					gameSettings.savePlayerFireRate = 450
+				}
 				break
 
 			case 'sun':
@@ -334,7 +347,7 @@ class PowerScreen extends Phaser.Scene {
 				gameSettings.savePlayerBulletDamage = Math.round(
 					gameSettings.savePlayerBulletDamage +
 						bonusDamage +
-						bonusDamage * gameSettings.savePlayerBuffRate,
+						(bonusDamage * gameSettings.savePlayerBuffRate) / 5,
 				)
 				break
 

@@ -72,6 +72,12 @@ class NFTGenerate extends Phaser.Scene {
 				2000, // 2 seconds delay
 				() => {
 					searchText.destroy()
+
+					// Clear previous NFT texture if it exists
+					if (this.textures.exists('nft_texture')) {
+						this.textures.remove('nft_texture')
+					}
+
 					this.interfaceManager.goToNFTMint(1000)
 				},
 				null,
@@ -118,6 +124,9 @@ class NFTGenerate extends Phaser.Scene {
 
 		const selectedNFT = this.nftMapping[gameSettings.nft_weapon_index]
 		const selectedFrame = selectedNFT.url[gameSettings.nft_frame_index]
+
+		console.log(selectedNFT)
+		console.log(selectedFrame)
 
 		return {
 			name: selectedNFT.name,

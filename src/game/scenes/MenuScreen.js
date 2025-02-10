@@ -4,7 +4,6 @@ import config from '../config/config.js'
 import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
-import gameSettings from '../config/gameSettings.js'
 import { loadImageMenu } from '../utils/loadImage.js'
 
 class MenuScreen extends Phaser.Scene {

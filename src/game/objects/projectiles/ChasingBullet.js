@@ -25,7 +25,6 @@ class ChasingBullet extends Entity {
 	}
 
 	initializeVelocity() {
-		// Calculate the direction vector from enemy to player
 		let direction = new Phaser.Math.Vector2(
 			this.scene.player.x - this.x,
 			this.scene.player.y - this.y,

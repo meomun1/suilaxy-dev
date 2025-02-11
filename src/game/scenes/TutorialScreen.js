@@ -127,23 +127,7 @@ class TutorialScreen extends Phaser.Scene {
 		this.UpgradeManager = new UpgradeManager(this, this.callingScene)
 	}
 
-	createMusic() {
-		// this.musicButton = this.add.image(
-		// 	config.width - config.width / 16,
-		// 	config.height / 16,
-		// 	'sound_texture',
-		// )
-		// this.musicButton.setInteractive()
-		// this.musicButton.on(
-		// 	'pointerdown',
-		// 	function () {
-		// 		this.music.soundOn = !this.music.soundOn
-		// 		this.music.musicOn = !this.music.musicOn
-		// 		this.updateAudio()
-		// 	},
-		// 	this,
-		// )
-	}
+	createMusic() {}
 
 	addEnemyTutorial() {
 		this.time.delayedCall(
@@ -340,7 +324,6 @@ class TutorialScreen extends Phaser.Scene {
 				}
 
 				this.keyboardManager = new KeyboardManager(this)
-				this.keyboardManager.MuteGame()
 				this.PlayerManager = new PlayerManager(this, this.player)
 
 				this.spacebar = this.input.keyboard.addKey(
@@ -375,21 +358,6 @@ class TutorialScreen extends Phaser.Scene {
 	}
 
 	update() {
-		// update for mute and sound button
-		// if (this.music.musicOn === false && this.music.soundOn === false) {
-		// 	this.musicButton = this.add.image(
-		// 		config.width - config.width / 16,
-		// 		config.height / 16,
-		// 		'mute_texture',
-		// 	)
-		// } else if (this.music.musicOn === true && this.music.soundOn === true) {
-		// 	this.musicButton = this.add.image(
-		// 		config.width - config.width / 16,
-		// 		config.height / 16,
-		// 		'sound_texture',
-		// 	)
-		// }
-
 		// Pause the game or go to title screen
 		if (this.keyboardManager === undefined) {
 		} else {

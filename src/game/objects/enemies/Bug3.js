@@ -16,7 +16,7 @@ class Bug3 extends EnemyEntity {
 		}
 		this.setScale(gameSettings.enemySize * scale)
 
-		this.body.velocity.y = gameSettings.enemySpeed
+		this.body.velocity.y = gameSettings.enemySpeed * 1.5
 		this.health = health
 		this.maxHealth = health
 		this.hpBarWidth = 20

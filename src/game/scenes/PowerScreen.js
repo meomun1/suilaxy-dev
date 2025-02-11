@@ -4,6 +4,7 @@ import gameSettings from '../config/gameSettings'
 import GuiManager from '../manager/GuiManager'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 import { EventBus } from '../EventBus.js'
+import KeyboardManager from '../manager/KeyboardManager.js'
 
 class PowerScreen extends Phaser.Scene {
 	constructor() {
@@ -162,6 +163,10 @@ class PowerScreen extends Phaser.Scene {
 
 		// Enable keyboard controls
 		this.enableHotKeys()
+
+		this.music = this.sys.game.globals.music
+		this.keyboardManager = new KeyboardManager(this, this.music)
+		this.keyboardManager.MuteGame()
 	}
 
 	enableHotKeys() {

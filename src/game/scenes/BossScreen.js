@@ -188,7 +188,6 @@ class BossScreen extends Phaser.Scene {
 		// Create managers
 		this.keyboardManager = new KeyboardManager(this, this.music)
 		this.mobileManager = new MobileManager(this)
-		this.keyboardManager.MuteGame()
 		// Score System
 		this.UpgradeManager = new UpgradeManager(this, this.callingScene)
 		this.PlayerManager = new PlayerManager(

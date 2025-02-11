@@ -4,6 +4,7 @@ import gameSettings from '../config/gameSettings'
 import InterfaceManager from './InterfaceScene'
 import GuiManager from '../manager/GuiManager.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
+import KeyboardManager from '../manager/KeyboardManager.js'
 class Leaderboard extends Phaser.Scene {
 	constructor() {
 		super('leaderboard')
@@ -108,6 +109,10 @@ class Leaderboard extends Phaser.Scene {
 		// Create Play Button
 		this.createTitleButton()
 		this.fetchSuilaxyEntries()
+
+		this.music = this.sys.game.globals.music
+		this.keyboardManager = new KeyboardManager(this, this.music)
+		this.keyboardManager.MuteGame()
 	}
 
 	fetchSuilaxyEntries() {

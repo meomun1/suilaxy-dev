@@ -98,7 +98,6 @@ const createManager = (scene) => {
 	// Create managers
 	scene.keyboardManager = new KeyboardManager(scene, scene.music)
 	scene.mobileManager = new MobileManager(scene)
-	scene.keyboardManager.MuteGame()
 	// Score System
 	scene.UpgradeManager = new UpgradeManager(scene, scene.callingScene)
 	scene.PlayerManager = new PlayerManager(

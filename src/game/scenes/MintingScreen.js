@@ -7,6 +7,7 @@ import InterfaceManager from './InterfaceScene.js'
 import { resetFromMint } from '../utils/adjustStats'
 import { shutdown } from '../utils/endGamescene.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
+import KeyboardManager from '../manager/KeyboardManager.js'
 
 class MintingScreen extends Phaser.Scene {
 	constructor() {
@@ -164,6 +165,10 @@ class MintingScreen extends Phaser.Scene {
 				frame: gameSettings.nft_frame,
 			},
 		})
+
+		this.music = this.sys.game.globals.music
+		this.keyboardManager = new KeyboardManager(this, this.music)
+		this.keyboardManager.MuteGame()
 	}
 
 	createMintButton() {

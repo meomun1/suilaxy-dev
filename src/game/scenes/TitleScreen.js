@@ -6,6 +6,7 @@ import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
 import gameSettings from '../config/gameSettings.js'
 import { loadImageTitleScreen } from '../utils/loadImage.js'
+import KeyboardManager from '../manager/KeyboardManager.js'
 
 class TitleScreen extends Phaser.Scene {
 	constructor() {
@@ -96,6 +97,10 @@ class TitleScreen extends Phaser.Scene {
 				EventBus.on('wallet-connected', this.handleWalletConnected, this)
 			}
 		})
+
+		this.music = this.sys.game.globals.music
+		this.keyboardManager = new KeyboardManager(this, this.music)
+		this.keyboardManager.MuteGame()
 	}
 
 	loadWebFonts() {

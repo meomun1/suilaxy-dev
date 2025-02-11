@@ -10,6 +10,7 @@ import artifactSettings, {
 import { EventBus } from '../EventBus.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 import { resetBase, saveBaseStats } from '../utils/adjustStats.js'
+import KeyboardManager from '../manager/KeyboardManager.js'
 // Sui full node endpoint
 const SUI_RPC_URL = 'https://fullnode.mainnet.sui.io:443'
 const artifactCollectionIdentifiers = [
@@ -321,6 +322,10 @@ class SelectUtility extends Phaser.Scene {
 		// console.log('Artifact Index ', gameSettings.selectedArtifactIndex)
 		// console.log('User Active ', gameSettings.userActive)
 		// console.log('Wallet Connected ', gameSettings.userWalletAdress)
+
+		this.music = this.sys.game.globals.music
+		this.keyboardManager = new KeyboardManager(this, this.music)
+		this.keyboardManager.MuteGame()
 
 		/* ----------------------------INIT---------------------------- */
 		this.cameras.main.fadeIn(1000, 0, 0, 0)

@@ -5,6 +5,7 @@ import GuiManager from '../manager/GuiManager.js'
 import { EventBus } from '../EventBus.js'
 import handleWalletConnected from '../mode/attachWalletConnectedHandler.js'
 import { loadImageMenu } from '../utils/loadImage.js'
+import KeyboardManager from '../manager/KeyboardManager.js'
 
 class MenuScreen extends Phaser.Scene {
 	constructor() {
@@ -299,6 +300,10 @@ class MenuScreen extends Phaser.Scene {
 			this.nextModeRight.on('pointerdown', () => this.switchMode(-1))
 			this.nextModeLeft.on('pointerdown', () => this.switchMode(1))
 		})
+
+		this.music = this.sys.game.globals.music
+		this.keyboardManager = new KeyboardManager(this, this.music)
+		this.keyboardManager.MuteGame()
 	}
 
 	switchMode(direction) {

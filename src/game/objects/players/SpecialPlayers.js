@@ -65,7 +65,7 @@ class SpecialPlayers extends Player {
 	}
 
 	enableLifeStealDecreaseHealth() {
-		this.lifestealRate = 0.5 + gameSettings.savePlayerLifesteal
+		this.lifestealRate = 0.2 + gameSettings.savePlayerLifesteal
 		this.health = gameSettings.savePlayerMaxHealth * 0.5
 	}
 
@@ -79,7 +79,7 @@ class SpecialPlayers extends Player {
 	}
 
 	enableHardMode() {
-		this.health = 300
+		this.maxHealth = 500
 		this.bulletDamage = gameSettings.savePlayerBulletDamage * 2
 	}
 }

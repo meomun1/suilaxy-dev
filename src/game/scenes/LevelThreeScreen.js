@@ -513,11 +513,11 @@ class LevelThreeScreen extends Phaser.Scene {
 
 	update() {
 		// update for mute and sound button
-		if (this.music.musicOn === false && this.music.soundOn === false) {
-			this.musicButton = this.add.image(config.width - 60, 30, 'mute_texture')
-		} else if (this.music.musicOn === true && this.music.soundOn === true) {
-			this.musicButton = this.add.image(config.width - 60, 30, 'sound_texture')
-		}
+		// if (this.music.musicOn === false && this.music.soundOn === false) {
+		// 	this.musicButton = this.add.image(config.width - 60, 30, 'mute_texture')
+		// } else if (this.music.musicOn === true && this.music.soundOn === true) {
+		// 	this.musicButton = this.add.image(config.width - 60, 30, 'sound_texture')
+		// }
 		// Pause the game
 		this.keyboardManager.pauseGame()
 
